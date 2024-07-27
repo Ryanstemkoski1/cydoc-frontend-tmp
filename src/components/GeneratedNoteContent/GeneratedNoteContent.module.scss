@@ -29,6 +29,7 @@
         letter-spacing: 0.46px;
         text-align: left;
         color: #000000;
+        cursor: pointer;
     }
 }
 
@@ -115,4 +116,79 @@
     padding: 12px 0;
     overflow-y: auto;
     max-height: calc(100vh - 280px);
+}
+
+.genNoteSource {
+    padding: 12px 0;
+
+    h1 {
+        margin: 0;
+        font-family: Nunito;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 22.88px;
+        letter-spacing: -0.2px;
+        text-align: left;
+        color: black;
+        padding-bottom: 10px;
+    }
+
+    &__Item {
+        border: 1px solid var(--Divider, #D7E5E9);
+        border-radius: 10px;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        cursor: pointer;
+    }
+
+    &__ItemIcon {
+        display: flex;
+        align-items: center;
+
+        img {
+            width: 18px;
+            height: 18px;
+        }
+
+        h3 {
+            font-family: Nunito;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 24px;
+            letter-spacing: 0.15px;
+            text-align: left;
+            color: black;
+            margin: 0;
+            padding-left: 10px;
+        }
+    }
+
+    &__ItemStatus {
+        padding: 4px 10px;
+        border-radius: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #F5F5F5;
+
+        &__circle {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #7F8485;
+        }
+
+        p {
+            font-family: Roboto;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 18px;
+            letter-spacing: 0.16px;
+            text-align: left;
+            padding-left: 10px;
+        }
+    }
 }
