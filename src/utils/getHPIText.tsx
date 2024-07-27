@@ -14,7 +14,6 @@ import {
     HPI,
     createHPI,
     createInitialHPI,
-    createInitialAdvancedReport,
 } from '@screens/EditNote/content/generatenote/generateHpiText';
 import { ChiefComplaintsState } from '@redux/reducers/chiefComplaintsReducer';
 import { FamilyHistoryState } from '@redux/reducers/familyHistoryReducer';
@@ -667,7 +666,7 @@ export interface HPIReduxValues {
 function getHPIText(
     bulletNoteView = false,
     state: HPIReduxValues,
-    isReportView = false
+    isAdvancedReport = false
 ) {
     /*
     formattedHpis is a dictionary in which each key is the chief complaint
@@ -701,17 +700,11 @@ function getHPIText(
     const initialPara = Object.keys(formattedHpis).map((key) => {
         const formattedHpi = formattedHpis[key];
         // TODO: use actual patient info to populate fields
-        if (isReportView) {
-            return new Set(
-                createInitialAdvancedReport(formattedHpi)
-                    .split('. ')
-                    .filter(Boolean)
-            );
-        } else {
-            return new Set(
-                createInitialHPI(formattedHpi).split('. ').filter(Boolean)
-            );
-        }
+        return new Set(
+            createInitialHPI(formattedHpi, isAdvancedReport)
+                .split('. ')
+                .filter(Boolean)
+        );
     });
     for (let i = 0; i < initialPara.length - 1; i++) {
         for (let j = i + 1; j < initialPara.length; j++) {
@@ -730,7 +723,7 @@ function getHPIText(
                     Array.from(hpiStringSet).join('. '),
                     state.patientInformation.patientName,
                     state.patientInformation.pronouns,
-                    isReportView
+                    isAdvancedReport
                 ),
             ];
         }
