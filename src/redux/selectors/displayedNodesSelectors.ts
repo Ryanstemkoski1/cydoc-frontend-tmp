@@ -99,12 +99,10 @@ export function nodesToDisplayInOrder(
 
     const maxLimit =
         productDefinition.definitions &&
-        productDefinition.definitions.productType !==
-            ProductType.ADVANCED_REPORT_GENERATION
-            ? displayedNodesCutOff
-            : displayedNodesCutOffForAdvancedReport;
+        productDefinition.definitions.useAdvancedReportTextGeneration
+            ? displayedNodesCutOffForAdvancedReport
+            : displayedNodesCutOff;
 
-    // TODO: console.log('checking', maxLimit, productDefinition, state);
     if (totalNodes.length < maxLimit) {
         let nodesArr = totalNodes, // for the count
             nodesSoFar: string[] = [];

@@ -6,5 +6,5 @@ export enum ProductName {
 export interface ProductDefinitions {
     showAppointmentTemplates: boolean;
     showNewPatientGeneration: boolean;
-    productType?: string;
+    useAdvancedReportTextGeneration: boolean;
 }
