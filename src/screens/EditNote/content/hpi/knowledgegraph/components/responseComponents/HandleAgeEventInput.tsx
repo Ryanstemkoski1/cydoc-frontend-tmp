@@ -119,19 +119,19 @@ const HandleAgeEventInput: React.FC<Props> = ({
                     }}
                 />
             </Grid>
-            {birthday ? (
-                <Grid
-                    item
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        margin: '5px',
-                        color: 'green',
-                    }}
-                >
-                    <p>based on reported birthday {birthday}</p>
-                </Grid>
-            ) : null}
+            <Grid
+                item
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    margin: '5px',
+                }}
+            >
+                <p>
+                    based on reported birthday{' '}
+                    {birthday ? birthday : 'January 1, 1990'}
+                </p>
+            </Grid>
         </div>
     );
 };
