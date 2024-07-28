@@ -56,7 +56,7 @@ function Dropdown({
             document.removeEventListener('mousedown', handleMouseDown);
         };
     }, [showDropdown]);
-
+    
     return (
         <div
             className={`${style.input} ${style.inputDropdown}`}
@@ -74,7 +74,7 @@ function Dropdown({
                         setShowDropdown(true);
                     }}
                     placeholder={placeholder}
-                    value={value}
+                    value={defaultValue}
                 />
             </div>
 
