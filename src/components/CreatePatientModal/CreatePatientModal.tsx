@@ -54,36 +54,40 @@ const CreatePatientModal = ({
             ...patientDetails,
             dateOfAppointment: todayDate,
         });
-    }
+    };
 
     const onSelected = (value: string) => {
         setPatientDetails({
             ...patientDetails,
             typeOfAppointment: value,
         });
-    }
+    };
 
     const onCloseModal = () => {
         setShowModal(false);
-    }
+    };
 
-    const onCreatePatient = () => {
-        
-    }
+    const onCreatePatient = () => {};
 
     return (
         <div
             onClick={handleClickOutsideModal}
-            className={`${style.modal} flex-wrap align-center justify-center ${!showModal ? style.modalClose : ''
-                }`}
+            className={`${style.modal} flex-wrap align-center justify-center ${
+                !showModal ? style.modalClose : ''
+            }`}
         >
             <div className={style.modal__inner} ref={modalRef}>
                 <div className={style.modal__header}>
                     <h3>Create patient</h3>
-                    <CloseIcon style={{ cursor: 'pointer' }} onClick={onCloseModal} />
+                    <CloseIcon
+                        style={{ cursor: 'pointer' }}
+                        onClick={onCloseModal}
+                    />
                 </div>
                 <div className={style.modal__innerContent}>
-                    <form className={`${style.modal__innerContent__form} flex-wrap`}>
+                    <form
+                        className={`${style.modal__innerContent__form} flex-wrap`}
+                    >
                         <h4>Patient Info</h4>
                         <Input
                             style={{ marginBottom: '10px' }}
@@ -138,7 +142,9 @@ const CreatePatientModal = ({
                                 onChange={handleChange}
                             />
                             <Button
-                                className={style.modal__innerContent__form__date__today}
+                                className={
+                                    style.modal__innerContent__form__date__today
+                                }
                                 onClick={handleTodayClick}
                             >
                                 Today
@@ -157,7 +163,9 @@ const CreatePatientModal = ({
                             style={{ marginTop: '10px' }}
                             className={style.modal__innerContent__form__submit}
                             onClick={onCreatePatient}
-                        >Create patient</Button>
+                        >
+                            Create patient
+                        </Button>
                     </form>
                 </div>
             </div>

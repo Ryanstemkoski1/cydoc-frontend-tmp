@@ -56,7 +56,7 @@ function Dropdown({
             document.removeEventListener('mousedown', handleMouseDown);
         };
     }, [showDropdown]);
-    
+
     return (
         <div
             className={`${style.input} ${style.inputDropdown}`}

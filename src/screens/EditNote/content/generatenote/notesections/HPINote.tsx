@@ -113,49 +113,53 @@ const HpiNote = ({
 
     const notes = !bulletNoteView
         ? text.map((item) => {
-            return (
-                <p key={item.title}>
-                    <b style={{ textDecoration: 'underline' }}>{capitalizeFirstLetter(item.title)}</b>
-                    <br />
-                    {capitalizeFirstLetter(item.text)}
-                    {item.miscNote ? (
-                        <>
-                            {' '}
-                            <br />
-                            <br />
-                            {capitalizeFirstLetter(item.miscNote)}
-                        </>
-                    ) : (
-                        ''
-                    )}
-                </p>
-            );
-        })
+              return (
+                  <p key={item.title}>
+                      <b style={{ textDecoration: 'underline' }}>
+                          {capitalizeFirstLetter(item.title)}
+                      </b>
+                      <br />
+                      {capitalizeFirstLetter(item.text)}
+                      {item.miscNote ? (
+                          <>
+                              {' '}
+                              <br />
+                              <br />
+                              {capitalizeFirstLetter(item.miscNote)}
+                          </>
+                      ) : (
+                          ''
+                      )}
+                  </p>
+              );
+          })
         : text.map((item) => {
-            return (
-                <li key={item.title} className={styles.listItem}>
-                    <b style={{ textDecoration: 'underline' }}>{item.title}</b>
-                    <ul className={styles.noBullets}>
-                        {item.text.split('. ').map((sentence, index, arr) => (
-                            <li key={index}>
-                                {processSentence(
-                                    capitalizeFirstLetter(sentence)
-                                )}
-                                {index < arr.length - 1 && '.'}
-                            </li>
-                        ))}
-                    </ul>
+              return (
+                  <li key={item.title} className={styles.listItem}>
+                      <b style={{ textDecoration: 'underline' }}>
+                          {item.title}
+                      </b>
+                      <ul className={styles.noBullets}>
+                          {item.text.split('. ').map((sentence, index, arr) => (
+                              <li key={index}>
+                                  {processSentence(
+                                      capitalizeFirstLetter(sentence)
+                                  )}
+                                  {index < arr.length - 1 && '.'}
+                              </li>
+                          ))}
+                      </ul>
 
-                    {item.miscNote &&
-                        item.miscNote.split('. ').map((sentence, index) => (
-                            <li key={index}>
-                                {capitalizeFirstLetter(sentence.trim())}
-                                {sentence.trim().endsWith('.') ? '' : '.'}
-                            </li>
-                        ))}
-                </li>
-            );
-        });
+                      {item.miscNote &&
+                          item.miscNote.split('. ').map((sentence, index) => (
+                              <li key={index}>
+                                  {capitalizeFirstLetter(sentence.trim())}
+                                  {sentence.trim().endsWith('.') ? '' : '.'}
+                              </li>
+                          ))}
+                  </li>
+              );
+          });
 
     if (bulletNoteView) {
         return <ul className={styles.noBullets}>{notes}</ul>;

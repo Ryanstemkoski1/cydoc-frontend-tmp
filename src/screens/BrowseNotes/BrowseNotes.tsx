@@ -155,8 +155,11 @@ const BrowseNotes = () => {
     function renderUsers(users: AppointmentUser[]) {
         return (
             <div className={`${style.notesBlock__tableWrapper}`}>
-                <div className={style.notesBlock__tableWrapper__addBtn} onClick={openModal}>
-                    <AddIcon style={{color: '#047A9B'}} />
+                <div
+                    className={style.notesBlock__tableWrapper__addBtn}
+                    onClick={openModal}
+                >
+                    <AddIcon style={{ color: '#047A9B' }} />
                     <p>Add patient</p>
                 </div>
                 <List>
@@ -164,7 +167,10 @@ const BrowseNotes = () => {
                         <ListItem>
                             <ListItemText
                                 primary={
-                                    <Typography variant="body1" className={style.nodata}>
+                                    <Typography
+                                        variant='body1'
+                                        className={style.nodata}
+                                    >
                                         No users found
                                     </Typography>
                                 }
@@ -176,23 +182,56 @@ const BrowseNotes = () => {
                                 key={index}
                                 onClick={() => handleListItemClick(index, user)}
                                 style={{
-                                    backgroundColor: selectedIndex === index ? '#047A9B' : 'inherit',
+                                    backgroundColor:
+                                        selectedIndex === index
+                                            ? '#047A9B'
+                                            : 'inherit',
                                     border: '1px solid var(--Divider, #D7E5E9)',
                                     borderRadius: '10px',
                                     marginBottom: '5px',
-                                    padding: '12px 20px'
+                                    padding: '12px 20px',
                                 }}
                             >
-                                <div className={style.notesBlock__tableWrapper__itemWrapper}>
-                                    <div className={style.notesBlock__tableWrapper__left}>
-                                        <img src={'/images/patient.svg'} alt={`${index} patient image`} />
-                                        <p style={{ color: selectedIndex === index ? 'white' : 'black' }}>
-                                            {formatFullName(user?.firstName, user?.middleName ?? '', user?.lastName)}
+                                <div
+                                    className={
+                                        style.notesBlock__tableWrapper__itemWrapper
+                                    }
+                                >
+                                    <div
+                                        className={
+                                            style.notesBlock__tableWrapper__left
+                                        }
+                                    >
+                                        <img
+                                            src={'/images/patient.svg'}
+                                            alt={`${index} patient image`}
+                                        />
+                                        <p
+                                            style={{
+                                                color:
+                                                    selectedIndex === index
+                                                        ? 'white'
+                                                        : 'black',
+                                            }}
+                                        >
+                                            {formatFullName(
+                                                user?.firstName,
+                                                user?.middleName ?? '',
+                                                user?.lastName
+                                            )}
                                         </p>
                                     </div>
                                     <p
-                                        style={{ color: selectedIndex === index ? 'white' : '#00000099' }}
-                                        className={style.notesBlock__tableWrapper__right}>
+                                        style={{
+                                            color:
+                                                selectedIndex === index
+                                                    ? 'white'
+                                                    : '#00000099',
+                                        }}
+                                        className={
+                                            style.notesBlock__tableWrapper__right
+                                        }
+                                    >
                                         {formatDateOfBirth(user.dob)}
                                     </p>
                                 </div>
@@ -222,11 +261,23 @@ const BrowseNotes = () => {
                                 onChange={handleChange}
                             />
                         </div>
-                        <a className='flex align-center justify-center' onClick={goBack}>
-                            <img src={'/images/left-arrow.svg'} alt='Left arrow' />
+                        <a
+                            className='flex align-center justify-center'
+                            onClick={goBack}
+                        >
+                            <img
+                                src={'/images/left-arrow.svg'}
+                                alt='Left arrow'
+                            />
                         </a>
-                        <a className='flex align-center justify-center' onClick={goForward}>
-                            <img src={'/images/right-arrow.svg'} alt='Right arrow' />
+                        <a
+                            className='flex align-center justify-center'
+                            onClick={goForward}
+                        >
+                            <img
+                                src={'/images/right-arrow.svg'}
+                                alt='Right arrow'
+                            />
                         </a>
                     </div>
 
@@ -236,7 +287,9 @@ const BrowseNotes = () => {
                 </div>
                 {selectedAppointment && (
                     <div className={style.notesBlock__notesDescription}>
-                        <GeneratedNoteContent selectedAppointment={selectedAppointment} />
+                        <GeneratedNoteContent
+                            selectedAppointment={selectedAppointment}
+                        />
                     </div>
                 )}
             </div>
@@ -246,7 +299,7 @@ const BrowseNotes = () => {
                     style={{
                         borderStyle: 'none',
                         backgroundColor: 'transparent',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
                     }}
                 >
                     <Box
@@ -276,7 +329,7 @@ const BrowseNotes = () => {
                         Check for new notes
                     </Box>
                 </button>
-            </div >
+            </div>
             <CreatePatientModal
                 showModal={showModal}
                 setShowModal={setShowModal}
