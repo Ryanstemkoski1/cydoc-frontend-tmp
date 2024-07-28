@@ -16,6 +16,15 @@ import Input from '@components/Input/Input';
 import GeneratedNoteContent from '@components/GeneratedNoteContent/GeneratedNoteContent';
 import CreatePatientModal from '@components/CreatePatientModal/CreatePatientModal';
 import AddIcon from '@mui/icons-material/Add';
+import {
+    CustomRadioLabelProps,
+    CustomSwitchProps,
+    DefaultFormSwitchLabels,
+    DefaultFormType,
+    MAX_LIMIT_TO_ADD_DEFAULT_FORMS,
+    ProductRadioLabels,
+    ProductType,
+} from '@constants/FormPreferencesConstant';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
     return `${lastName}, ${firstName} ${middleName}`;
@@ -85,21 +94,26 @@ export interface AppointmentUser {
 
 const BrowseNotes = () => {
     useSignInRequired(); // this route is private, sign in required
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState(new Date());
+    const [dateAdvance, setDateAdvance] = useState('');
     const [users, setUsers] = useState<AppointmentUser[]>([]);
     const { user } = useUser();
     const { cognitoUser } = useAuth();
     const dispatch = useDispatch();
 
     const [showModal, setShowModal] = useState<boolean>(false);
+    const [showModalAdvance, setShowModalAdvance] = useState<boolean>(false);
     const [selectedAppointment, setSelectedAppointment] =
         useState<AppointmentUser>();
     const loadingStatus = useSelector(selectLoadingStatus);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const [productType, setProductType] = useState<string>(
+        ProductType.ADVANCED_REPORT_GENERATION
+    );
 
     useEffect(() => {
         const initialDate = new Date().toISOString().slice(0, 10); // yyyy-mm-dd format
-        setDate(initialDate);
+        setDateAdvance(initialDate);
     }, []);
 
     const handleListItemClick = (index: number, user: AppointmentUser) => {
@@ -107,21 +121,33 @@ const BrowseNotes = () => {
         setSelectedAppointment(user);
     };
 
-    const openModal = () => {
-        console.log('open modal');
+    const openModal = (user: AppointmentUser) => {
+        setSelectedAppointment(user);
         setShowModal(true);
     };
 
+    const openModalAdvance = () => {
+        setShowModalAdvance(true);
+    };
+
     const goBack = () => {
-        const currentDate = new Date(date);
-        currentDate.setDate(currentDate.getDate() - 1);
-        setDate(currentDate.toISOString().slice(0, 10));
+        setDate(new Date(date.getTime() - 86400000));
     };
 
     const goForward = () => {
-        const currentDate = new Date(date);
+        setDate(new Date(date.getTime() + 86400000));
+    };
+
+    const goBackAdvance = () => {
+        const currentDate = new Date(dateAdvance);
+        currentDate.setDate(currentDate.getDate() - 1);
+        setDateAdvance(currentDate.toISOString().slice(0, 10));
+    };
+
+    const goForwardAdvance = () => {
+        const currentDate = new Date(dateAdvance);
         currentDate.setDate(currentDate.getDate() + 1);
-        setDate(currentDate.toISOString().slice(0, 10));
+        setDateAdvance(currentDate.toISOString().slice(0, 10));
     };
 
     const loadPatientHistory = useCallback(async () => {
@@ -132,7 +158,11 @@ const BrowseNotes = () => {
         }
         try {
             const users = await getAppointment(
-                formatDateOfBirth(date),
+                formatDateOfBirth(
+                    productType === ProductType.SMART_PATIENT_INTAKE_FORM
+                        ? date
+                        : dateAdvance
+                ),
                 user?.institutionId,
                 cognitoUser
             );
@@ -142,22 +172,65 @@ const BrowseNotes = () => {
             setUsers([]);
             dispatch(setLoadingStatus(false));
         }
-    }, [cognitoUser, date, dispatch, user]);
+    }, [cognitoUser, dateAdvance, dispatch, user]);
 
     useEffect(() => {
         loadPatientHistory();
     }, [loadPatientHistory]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setDate(e.target.value);
+        setDateAdvance(e.target.value);
     };
 
     function renderUsers(users: AppointmentUser[]) {
         return (
             <div className={`${style.notesBlock__tableWrapper}`}>
+                <table>
+                    <tbody>
+                        {!loadingStatus && users.length == 0 ? (
+                            <tr>
+                                <td colSpan={2} className={style.nodata}>
+                                    No users found
+                                </td>
+                            </tr>
+                        ) : (
+                            <>
+                                {users.map((user, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>
+                                                <span
+                                                    onClick={() =>
+                                                        openModal(user)
+                                                    }
+                                                >
+                                                    {formatFullName(
+                                                        user?.firstName,
+                                                        user?.middleName ?? '',
+                                                        user?.lastName
+                                                    )}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                {formatDateOfBirth(user.dob)}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        );
+    }
+
+    function renderUsersAdvance(users: AppointmentUser[]) {
+        return (
+            <div className={`${style.notesBlockAdvance__tableWrapper}`}>
                 <div
-                    className={style.notesBlock__tableWrapper__addBtn}
-                    onClick={openModal}
+                    className={style.notesBlockAdvance__tableWrapper__addBtn}
+                    onClick={openModalAdvance}
                 >
                     <AddIcon style={{ color: '#047A9B' }} />
                     <p>Add patient</p>
@@ -194,12 +267,12 @@ const BrowseNotes = () => {
                             >
                                 <div
                                     className={
-                                        style.notesBlock__tableWrapper__itemWrapper
+                                        style.notesBlockAdvance__tableWrapper__itemWrapper
                                     }
                                 >
                                     <div
                                         className={
-                                            style.notesBlock__tableWrapper__left
+                                            style.notesBlockAdvance__tableWrapper__left
                                         }
                                     >
                                         <img
@@ -229,7 +302,7 @@ const BrowseNotes = () => {
                                                     : '#00000099',
                                         }}
                                         className={
-                                            style.notesBlock__tableWrapper__right
+                                            style.notesBlockAdvance__tableWrapper__right
                                         }
                                     >
                                         {formatDateOfBirth(user.dob)}
@@ -245,95 +318,178 @@ const BrowseNotes = () => {
 
     return (
         <>
-            <div className={style.notesBlock}>
-                <div className={style.notesBlock__notesWrap}>
-                    <div
-                        className={` ${style.notesBlock__header} flex align-center justify-between`}
-                    >
-                        <div className={style.notesBlock__header__dateWrapper}>
-                            <Input
-                                required={true}
-                                type='date'
-                                name='dateOfBirth'
-                                placeholder='mm/dd/yyyy'
-                                max={new Date().toJSON().slice(0, 10)}
-                                value={date}
-                                onChange={handleChange}
-                            />
+            {productType === ProductType.SMART_PATIENT_INTAKE_FORM ? (
+                <div className={style.notesBlock}>
+                    <h1>Generated Notes</h1>
+                    <div className={style.notesBlock__notesWrap}>
+                        <div
+                            className={` ${style.notesBlock__header} flex align-center justify-between`}
+                        >
+                            <a
+                                className='flex align-center justify-center'
+                                onClick={goBack}
+                            >
+                                <img
+                                    src={'/images/left-arrow.svg'}
+                                    alt='Left arrow'
+                                />
+                            </a>
+                            <span>{formatDate(date)}</span>
+                            <a
+                                className='flex align-center justify-center'
+                                onClick={goForward}
+                            >
+                                <img
+                                    src={'/images/right-arrow.svg'}
+                                    alt='Right arrow'
+                                />
+                            </a>
                         </div>
-                        <a
-                            className='flex align-center justify-center'
-                            onClick={goBack}
-                        >
-                            <img
-                                src={'/images/left-arrow.svg'}
-                                alt='Left arrow'
-                            />
-                        </a>
-                        <a
-                            className='flex align-center justify-center'
-                            onClick={goForward}
-                        >
-                            <img
-                                src={'/images/right-arrow.svg'}
-                                alt='Right arrow'
-                            />
-                        </a>
-                    </div>
 
-                    <div className={` ${style.notesBlock__content} `}>
-                        {renderUsers(users)}
+                        <div className={` ${style.notesBlock__content} `}>
+                            <div className={style.notesBlock__contentInner}>
+                                {renderUsers(users)}
+                            </div>
+                            <div className={`${style.notesBlock__reload}`}>
+                                <button
+                                    onClick={loadPatientHistory}
+                                    style={{ borderStyle: 'none' }}
+                                >
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            paddingY: '.5em',
+                                        }}
+                                    >
+                                        <img
+                                            alt='Refresh'
+                                            height={14}
+                                            width={14}
+                                            style={{
+                                                marginRight: '10px',
+                                                marginLeft: '7px',
+                                            }}
+                                            src={'/images/refresh.png'}
+                                        />
+                                        Check for new questionnaires
+                                    </Box>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                {selectedAppointment && (
-                    <div className={style.notesBlock__notesDescription}>
-                        <GeneratedNoteContent
+                    {selectedAppointment && (
+                        <Modal
+                            key={selectedAppointment.id}
+                            showModal={showModal}
+                            setShowModal={setShowModal}
                             selectedAppointment={selectedAppointment}
                         />
+                    )}
+                </div>
+            ) : (
+                <>
+                    <div className={style.notesBlockAdvance}>
+                        <div className={style.notesBlockAdvance__notesWrap}>
+                            <div
+                                className={` ${style.notesBlockAdvance__header} flex align-center justify-between`}
+                            >
+                                <div
+                                    className={
+                                        style.notesBlockAdvance__header__dateWrapper
+                                    }
+                                >
+                                    <Input
+                                        required={true}
+                                        type='date'
+                                        name='dateOfBirth'
+                                        placeholder='mm/dd/yyyy'
+                                        max={new Date().toJSON().slice(0, 10)}
+                                        value={dateAdvance}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <a
+                                    className='flex align-center justify-center'
+                                    onClick={goBackAdvance}
+                                >
+                                    <img
+                                        src={'/images/left-arrow.svg'}
+                                        alt='Left arrow'
+                                    />
+                                </a>
+                                <a
+                                    className='flex align-center justify-center'
+                                    onClick={goForwardAdvance}
+                                >
+                                    <img
+                                        src={'/images/right-arrow.svg'}
+                                        alt='Right arrow'
+                                    />
+                                </a>
+                            </div>
+
+                            <div
+                                className={` ${style.notesBlockAdvance__content} `}
+                            >
+                                {renderUsersAdvance(users)}
+                            </div>
+                        </div>
+                        {selectedAppointment && (
+                            <div
+                                className={
+                                    style.notesBlockAdvance__notesDescription
+                                }
+                            >
+                                <GeneratedNoteContent
+                                    selectedAppointment={selectedAppointment}
+                                />
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
-            <div className={`${style.checkReload}`}>
-                <button
-                    onClick={loadPatientHistory}
-                    style={{
-                        borderStyle: 'none',
-                        backgroundColor: 'transparent',
-                        cursor: 'pointer',
-                    }}
-                >
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            paddingY: '.5em',
-                            color: '#047A9B',
-                            fontSize: '16px',
-                            fontWeight: '500',
-                            lineHeight: '26px',
-                            letterSpacing: '0.46px',
-                            textAlign: 'left',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <img
-                            alt='Refresh'
-                            height={14}
-                            width={14}
+                    <div className={`${style.checkReload}`}>
+                        <button
+                            onClick={loadPatientHistory}
                             style={{
-                                marginRight: '10px',
-                                marginLeft: '7px',
+                                borderStyle: 'none',
+                                backgroundColor: 'transparent',
+                                cursor: 'pointer',
                             }}
-                            src={'/images/refresh.png'}
-                        />
-                        Check for new notes
-                    </Box>
-                </button>
-            </div>
-            <CreatePatientModal
-                showModal={showModal}
-                setShowModal={setShowModal}
-            />
+                        >
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    paddingY: '.5em',
+                                    color: '#047A9B',
+                                    fontSize: '16px',
+                                    fontWeight: '500',
+                                    lineHeight: '26px',
+                                    letterSpacing: '0.46px',
+                                    textAlign: 'left',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <img
+                                    alt='Refresh'
+                                    height={14}
+                                    width={14}
+                                    style={{
+                                        marginRight: '10px',
+                                        marginLeft: '7px',
+                                    }}
+                                    src={'/images/refresh.png'}
+                                />
+                                Check for new notes
+                            </Box>
+                        </button>
+                    </div>
+                    <CreatePatientModal
+                        showModal={showModalAdvance}
+                        setShowModal={setShowModalAdvance}
+                    />
+                </>
+            )}
         </>
     );
 };
