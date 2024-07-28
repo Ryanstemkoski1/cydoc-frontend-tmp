@@ -15,6 +15,7 @@ import MobileDatePicker from '@components/Input/MobileDatePicker';
 import Input from '@components/Input/Input';
 import GeneratedNoteContent from '@components/GeneratedNoteContent/GeneratedNoteContent';
 import CreatePatientModal from '@components/CreatePatientModal/CreatePatientModal';
+import AddIcon from '@mui/icons-material/Add';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
     return `${lastName}, ${firstName} ${middleName}`;
@@ -155,7 +156,7 @@ const BrowseNotes = () => {
         return (
             <div className={`${style.notesBlock__tableWrapper}`}>
                 <div className={style.notesBlock__tableWrapper__addBtn} onClick={openModal}>
-                    <img src={'/images/add.svg'} alt='Add' />
+                    <AddIcon style={{color: '#047A9B'}} />
                     <p>Add patient</p>
                 </div>
                 <List>
