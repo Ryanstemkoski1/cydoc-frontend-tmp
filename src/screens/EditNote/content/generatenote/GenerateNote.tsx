@@ -16,6 +16,7 @@ import { PlanState } from '@redux/reducers/planReducer';
 import { ReviewOfSystemsState } from '@redux/reducers/reviewOfSystemsReducer';
 import { SocialHistoryState } from '@redux/reducers/socialHistoryReducer';
 import { SurgicalHistoryState } from '@redux/reducers/surgicalHistoryReducer';
+import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
 import { selectAllergiesState } from '@redux/selectors/allergiesSelectors';
 import { selectFamilyHistoryState } from '@redux/selectors/familyHistorySelectors';
 import { selectMedicationsState } from '@redux/selectors/medicationsSelectors';
@@ -328,6 +329,10 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                                 }) as HPIText[]
                             }
                             bulletNoteView={isBulletNoteView}
+                            isAdvancedReport={
+                                props.productDefinition
+                                    ?.useAdvancedReportTextGeneration
+                            }
                         />
                         <h3> Patient History </h3>
                         <h4> Medical History </h4>
@@ -396,6 +401,7 @@ const mapStateToProps = (state: CurrentNoteState) => ({
     surgicalHistory: selectSurgicalHistoryProcedures(state),
     chiefComplaints: selectChiefComplaintsState(state),
     userSurvey: selectInitialPatientSurvey(state),
+    productDefinition: selectProductDefinitions(state),
 });
 
 const mapDispatchToProps = {

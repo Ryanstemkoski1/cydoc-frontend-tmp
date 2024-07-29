@@ -3,7 +3,6 @@ import {
     displayedNodesCutOffForAdvancedReport,
 } from '@constants/displayedNodesCutOff';
 import { YesNoResponse } from '@constants/enums';
-import { ProductType } from '@constants/FormPreferencesConstant';
 import {
     ResponseTypes,
     SelectManyInput,
