@@ -103,13 +103,35 @@ function processSentence(sentence: string) {
 const HpiNote = ({
     text,
     bulletNoteView = false,
+    isAdvancedReport = false,
 }: {
     text: HPIText[] | string;
     bulletNoteView?: boolean;
+    isAdvancedReport?: boolean; // A boolean flag to identify Advanced Report generation.
 }) => {
     if (typeof text === 'string') {
         return <p>{text}</p>;
     }
+
+    // This note is generated for the Advanced Report with changing any capitalization and punctuation.
+    const notesForAdvancedReport = text.map((item) => {
+        return (
+            <li key={item.title} className={styles.listItem}>
+                <b>{item.title}</b>
+                <ul className={styles.noBullets}>
+                    <span>{item.text}</span>
+                </ul>
+
+                {item.miscNote &&
+                    item.miscNote.split('. ').map((sentence, index) => (
+                        <li key={index}>
+                            {capitalizeFirstLetter(sentence.trim())}
+                            {sentence.trim().endsWith('.') ? '' : '.'}
+                        </li>
+                    ))}
+            </li>
+        );
+    });
 
     const notes = !bulletNoteView
         ? text.map((item) => {
@@ -136,14 +158,26 @@ const HpiNote = ({
                   <li key={item.title} className={styles.listItem}>
                       <b>{item.title}</b>
                       <ul className={styles.noBullets}>
-                          {item.text.split('. ').map((sentence, index, arr) => (
-                              <li key={index}>
-                                  {processSentence(
-                                      capitalizeFirstLetter(sentence)
-                                  )}
-                                  {index < arr.length - 1 && '.'}
-                              </li>
-                          ))}
+                          {
+                              // TODO: this hard code should be removed.
+                              item.title ===
+                              'Connell and Associates Adult Evaluation' ? (
+                                  <span>{item.text}</span>
+                              ) : (
+                                  item.text
+                                      .split('. ')
+                                      .map((sentence, index, arr) => (
+                                          <li key={index}>
+                                              {processSentence(
+                                                  capitalizeFirstLetter(
+                                                      sentence
+                                                  )
+                                              )}
+                                              {index < arr.length - 1 && '.'}
+                                          </li>
+                                      ))
+                              )
+                          }
                       </ul>
 
                       {item.miscNote &&
@@ -157,9 +191,15 @@ const HpiNote = ({
               );
           });
 
-    if (bulletNoteView) {
-        return <ul className={styles.noBullets}>{notes}</ul>;
-    }
-    return <>{notes}</>;
+    // Display Notes
+    const renderNotes =
+        isAdvancedReport || bulletNoteView ? (
+            <ul className={styles.noBullets}>
+                {isAdvancedReport ? notesForAdvancedReport : notes}
+            </ul>
+        ) : (
+            <>{notes}</>
+        );
+    return renderNotes;
 };
 export default HpiNote;

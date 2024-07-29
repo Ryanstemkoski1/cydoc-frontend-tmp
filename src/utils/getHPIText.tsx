@@ -104,6 +104,7 @@ export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
             return node.response === '';
 
         case ResponseTypes.SELECTMANYDENSE:
+        case ResponseTypes.PRONOUN:
         case ResponseTypes.SELECTONE: {
             const response = node?.response as SelectOneInput;
             return Object?.keys(response).every((key) => !response[key]);
@@ -296,6 +297,7 @@ export const extractNode = (
 
         case ResponseTypes.SELECTMANYDENSE:
         case ResponseTypes.SELECTMANY:
+        case ResponseTypes.PRONOUN:
         case ResponseTypes.SELECTONE:
             const clickBoxesRes = response as SelectOneInput;
             updatedRes = Object.keys(clickBoxesRes).filter(
@@ -493,6 +495,7 @@ export const checkParent = (
         }
         case ResponseTypes.SELECTMANYDENSE:
         case ResponseTypes.SELECTMANY:
+        case ResponseTypes.PRONOUN:
         case ResponseTypes.SELECTONE: {
             if (!isHPIResponseValid(response, responseType)) {
                 childNodesToHide = childNodes;
@@ -509,7 +512,9 @@ export const checkParent = (
                     state.hpi.nodes[childNodeId]
                 );
                 if (
-                    conditions.some((item) => !validNodeResponse.includes(item))
+                    conditions.some((item) => {
+                        !validNodeResponse.includes(item);
+                    })
                 ) {
                     childNodesToHide.push(childNodeId);
                 }
@@ -661,7 +666,11 @@ export interface HPIReduxValues {
     userSurvey: UserSurveyState;
 }
 
-function getHPIText(bulletNoteView = false, state: HPIReduxValues) {
+function getHPIText(
+    bulletNoteView = false,
+    state: HPIReduxValues,
+    isAdvancedReport = false
+) {
     /*
     formattedHpis is a dictionary in which each key is the chief complaint
     and the value is an array of template sentences.
@@ -695,7 +704,9 @@ function getHPIText(bulletNoteView = false, state: HPIReduxValues) {
         const formattedHpi = formattedHpis[key];
         // TODO: use actual patient info to populate fields
         return new Set(
-            createInitialHPI(formattedHpi).split('. ').filter(Boolean)
+            createInitialHPI(formattedHpi, isAdvancedReport)
+                .split('. ')
+                .filter(Boolean)
         );
     });
     for (let i = 0; i < initialPara.length - 1; i++) {
@@ -714,7 +725,8 @@ function getHPIText(bulletNoteView = false, state: HPIReduxValues) {
                 createHPI(
                     Array.from(hpiStringSet).join('. '),
                     state.patientInformation.patientName,
-                    state.patientInformation.pronouns
+                    state.patientInformation.pronouns,
+                    isAdvancedReport
                 ),
             ];
         }
