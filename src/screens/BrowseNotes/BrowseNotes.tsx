@@ -16,15 +16,9 @@ import Input from '@components/Input/Input';
 import GeneratedNoteContent from '@components/GeneratedNoteContent/GeneratedNoteContent';
 import CreatePatientModal from '@components/CreatePatientModal/CreatePatientModal';
 import AddIcon from '@mui/icons-material/Add';
-import {
-    CustomRadioLabelProps,
-    CustomSwitchProps,
-    DefaultFormSwitchLabels,
-    DefaultFormType,
-    MAX_LIMIT_TO_ADD_DEFAULT_FORMS,
-    ProductRadioLabels,
-    ProductType,
-} from '@constants/FormPreferencesConstant';
+import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
+import { setProductDefinitionAction } from '@redux/actions/productDefinitionAction';
+import { ProductName } from '@constants/ProductDefinitions/ProductDefinitionType';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
     return `${lastName}, ${firstName} ${middleName}`;
@@ -100,16 +94,20 @@ const BrowseNotes = () => {
     const { user } = useUser();
     const { cognitoUser } = useAuth();
     const dispatch = useDispatch();
-
+    const definitions = useSelector(selectProductDefinitions);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [showModalAdvance, setShowModalAdvance] = useState<boolean>(false);
     const [selectedAppointment, setSelectedAppointment] =
         useState<AppointmentUser>();
     const loadingStatus = useSelector(selectLoadingStatus);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-    const [productType, setProductType] = useState<string>(
-        ProductType.ADVANCED_REPORT_GENERATION
-    );
+
+    useEffect(() => {
+        // set the product definition(SMART_PATIENT_INTAKE_FORM, ADVANCED_REPORT_GENERATION)
+        dispatch(
+            setProductDefinitionAction(ProductName.ADVANCED_REPORT_GENERATION)
+        );
+    }, [dispatch]);
 
     useEffect(() => {
         const initialDate = new Date().toISOString().slice(0, 10); // yyyy-mm-dd format
@@ -159,9 +157,7 @@ const BrowseNotes = () => {
         try {
             const users = await getAppointment(
                 formatDateOfBirth(
-                    productType === ProductType.SMART_PATIENT_INTAKE_FORM
-                        ? date
-                        : dateAdvance
+                    definitions?.showNewPatientGeneration ? dateAdvance : date
                 ),
                 user?.institutionId,
                 cognitoUser
@@ -172,7 +168,7 @@ const BrowseNotes = () => {
             setUsers([]);
             dispatch(setLoadingStatus(false));
         }
-    }, [cognitoUser, dateAdvance, dispatch, user]);
+    }, [cognitoUser, date, dateAdvance, dispatch, user]);
 
     useEffect(() => {
         loadPatientHistory();
@@ -318,7 +314,7 @@ const BrowseNotes = () => {
 
     return (
         <>
-            {productType === ProductType.SMART_PATIENT_INTAKE_FORM ? (
+            {!definitions?.showNewPatientGeneration ? (
                 <div className={style.notesBlock}>
                     <h1>Generated Notes</h1>
                     <div className={style.notesBlock__notesWrap}>
