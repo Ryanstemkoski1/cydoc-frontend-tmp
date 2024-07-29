@@ -7,5 +7,5 @@ export enum WhoCompletes {
 
 export enum TaskType {
     Smart_Form = 'Smart Form',
-    Synthesize_All_forms_into_Report = 'Synthesize All forms into Report',
+    Synthesize_All_forms_into_Report = 'Synthesize All Forms into Report',
 }

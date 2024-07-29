@@ -258,9 +258,9 @@ const AppointmentTemplatePage = () => {
                             bgcolor: 'white',
                         }}
                     >
-                        <InputLabel id={`demo-simple-select-label-${idx}`}>
+                        {/* <InputLabel id={`demo-simple-select-label-${idx}`}>
                             Select
-                        </InputLabel>
+                        </InputLabel> */}
                         <Select
                             labelId={`demo-simple-select-label-${idx}`}
                             id={`demo-simple-select-${idx}`}
@@ -296,12 +296,14 @@ const AppointmentTemplatePage = () => {
                             <Typography
                                 component='label'
                                 htmlFor={`task-type-select-label-${idx}`}
-                                sx={{
-                                    color: '#000',
-                                }}
                             >
-                                Task type:
-                                <span style={{ marginLeft: '10px' }}>
+                                <span>Task type:</span>
+                                <span
+                                    style={{
+                                        marginLeft: '10px',
+                                        fontWeight: '400',
+                                    }}
+                                >
                                     {selectedTaskTypeValue[idx] ||
                                         TaskType.Smart_Form}
                                 </span>
@@ -314,16 +316,15 @@ const AppointmentTemplatePage = () => {
                                         bgcolor: 'white',
                                     }}
                                 >
-                                    <InputLabel
+                                    {/* <InputLabel
                                         id={`task-type-select-label-${idx}`}
                                     >
                                         Select specific form
-                                    </InputLabel>
+                                    </InputLabel> */}
                                     <Select
                                         labelId={`task-type-select-label-${idx}`}
                                         id={`task-type-select-${idx}`}
                                         value={selectedTaskTypeValue[idx] || ''}
-                                        label='Select specific form'
                                         onChange={(event) =>
                                             handleTaskTypeValue(event, idx)
                                         }
@@ -381,6 +382,13 @@ const AppointmentTemplatePage = () => {
                             id='new-temp-title'
                             label='Enter'
                             variant='outlined'
+                            sx={{
+                                '& div:hover': {
+                                    '& .MuiOutlinedInput-notchedOutline': {
+                                        borderColor: '#047A9B',
+                                    },
+                                },
+                            }}
                         />
                     </Box>
                     <Box
