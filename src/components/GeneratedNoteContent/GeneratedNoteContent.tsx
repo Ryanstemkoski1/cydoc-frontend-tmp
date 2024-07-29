@@ -15,6 +15,7 @@ const GeneratedNoteContent = (
 ) => {
     const { firstName, middleName, lastName, hpiText } =
         selectedAppointment.selectedAppointment;
+
     const data = {
         Name: 'Sara K.',
         'Date of Evaluation': 'June 15, 2024',
@@ -28,17 +29,17 @@ const GeneratedNoteContent = (
     };
     const sourcesData = [
         {
-            icon: '/images/doctor.svg',
+            reporter: 'clinician',
             title: 'Clinician survey',
             Status: 'Not started',
         },
         {
-            icon: '/images/patient.svg',
+            reporter: 'staff',
             title: 'Evaluation results',
             Status: 'Finished',
         },
         {
-            icon: '/images/doctor.svg',
+            reporter: 'patient',
             title: 'Patient survey',
             Status: 'In progress',
         },
@@ -60,6 +61,25 @@ const GeneratedNoteContent = (
             });
         }
     };
+
+    function handleReporterChange(reporter: string) {
+        switch (reporter) {
+            case 'cydoc':
+                return '/images/reporter-staff.svg';
+                break;
+            case 'clinician':
+                return '/images/reporter-clinician.svg';
+                break;
+            case 'staff':
+                return '/images/reporter-staff.svg';
+                break;
+            case 'patient':
+                return '/images/reporter-patient.svg';
+                break;
+            default:
+                return '/images/reporter-staff.svg';
+        }
+    }
 
     return (
         <Box>
@@ -137,8 +157,10 @@ const GeneratedNoteContent = (
                             >
                                 <Box className={style.genNoteSource__ItemIcon}>
                                     <img
-                                        src={sourcesData[item].icon}
-                                        alt='icon'
+                                        src={handleReporterChange(
+                                            sourcesData[item].reporter
+                                        )}
+                                        alt={`${sourcesData[item].reporter}`}
                                     />
                                     <Typography variant='h3'>
                                         {sourcesData[item].title}
