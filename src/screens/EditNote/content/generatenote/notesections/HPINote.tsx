@@ -103,17 +103,17 @@ function processSentence(sentence: string) {
 const HpiNote = ({
     text,
     bulletNoteView = false,
-    isReportView = false,
+    isAdvancedReport = false,
 }: {
     text: HPIText[] | string;
     bulletNoteView?: boolean;
-    isReportView?: boolean; // A boolean flag to identify Advanced Report generation.
+    isAdvancedReport?: boolean; // A boolean flag to identify Advanced Report generation.
 }) => {
     if (typeof text === 'string') {
         return <p>{text}</p>;
     }
 
-    // This note is generated for the Advanced Report
+    // This note is generated for the Advanced Report with changing any capitalization and punctuation.
     const notesForAdvancedReport = text.map((item) => {
         return (
             <li key={item.title} className={styles.listItem}>
@@ -191,14 +191,15 @@ const HpiNote = ({
               );
           });
 
-    // Display notes for advanced report product
-    if (isReportView) {
-        return <ul className={styles.noBullets}>{notesForAdvancedReport}</ul>;
-    }
-
-    if (bulletNoteView) {
-        return <ul className={styles.noBullets}>{notes}</ul>;
-    }
-    return <>{notes}</>;
+    // Display Notes
+    const renderNotes =
+        isAdvancedReport || bulletNoteView ? (
+            <ul className={styles.noBullets}>
+                {isAdvancedReport ? notesForAdvancedReport : notes}
+            </ul>
+        ) : (
+            <>{notes}</>
+        );
+    return renderNotes;
 };
 export default HpiNote;

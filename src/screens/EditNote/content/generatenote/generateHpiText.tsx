@@ -362,21 +362,26 @@ export const capitalize = (hpiString: string): string => {
     return capitalizedWords.join(' ');
 };
 
-export const createInitialHPI = (hpi: HPI): string => {
-    return fillAnswers(hpi);
+export const createInitialHPI = (
+    hpi: HPI,
+    isAdvancedReport: boolean
+): string => {
+    return isAdvancedReport
+        ? fillAnswersForAdvancedReport(hpi)
+        : fillAnswers(hpi);
 };
 
 export const createHPI = (
     hpiString: string,
     patientName: string,
     pronouns: PatientPronouns,
-    isReport?: boolean
+    isAdvancedReport?: boolean
 ): string => {
     const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
     hpiString = fillNameAndPronouns(hpiString, patientInfo);
     hpiString = partOfSpeechCorrection(hpiString);
     // hpiString = combineHpiString(hpiString, 3);
-    if (!isReport) {
+    if (!isAdvancedReport) {
         hpiString = fillMedicalTerms(hpiString);
         hpiString = conjugateThirdPerson(hpiString);
         hpiString = abbreviate(hpiString);
@@ -392,7 +397,7 @@ export const createHPI = (
  *
  * @returns {string} The original texts filled with original answers.
  */
-export const createInitialAdvancedReport = (hpi: HPI): string => {
+export const fillAnswersForAdvancedReport = (hpi: HPI): string => {
     if (hpi && typeof hpi === 'object') {
         const sortedKeys: number[] = Object.keys(hpi).map((val) =>
             parseInt(val)
