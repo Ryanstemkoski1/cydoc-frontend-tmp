@@ -6,7 +6,6 @@ import {
     Button,
     FormControl,
     IconButton,
-    InputLabel,
     List,
     ListItem,
     ListItemButton,
@@ -33,7 +32,7 @@ import {
     WhoCompletes,
 } from '@constants/appointmentTemplatesConstants';
 
-const tempData = [
+const ApptTempData = [
     {
         header: 'Annual visit',
         body: [
@@ -75,6 +74,7 @@ const tempData = [
 ];
 
 const AppointmentTemplatePage = () => {
+    const [tempData, setTempData] = useState(ApptTempData);
     const [viewMoreOpen, setViewMoreOpen] = useState<number>(0);
     const [openedPopover, setOpenedPopover] = useState<number>(0);
     const [stepCount, setStepCount] = useState<number>(1);
@@ -92,10 +92,8 @@ const AppointmentTemplatePage = () => {
         left: 0,
     });
 
-    const popupOpen = Boolean(anchorEl);
-    const popupId = popupOpen
-        ? `edit-apptTemp-popover ${openedPopover}`
-        : undefined;
+    // const popupOpen = Boolean(anchorEl);
+    const popupId = openedPopover > 0 ? 'edit-apptTemp-popover' : undefined;
 
     const handleViewMoreOpen = (index: number) => {
         setViewMoreOpen(index);
@@ -174,6 +172,15 @@ const AppointmentTemplatePage = () => {
 
     const handlePopupClose = () => {
         setAnchorEl(null);
+        setOpenedPopover(0);
+    };
+
+    const handleApptTemplateDelete = () => {
+        const tempDataTemp = [...tempData];
+        tempDataTemp.splice(openedPopover - 1, 1);
+        setTempData(tempDataTemp);
+        setOpenedPopover(0);
+        handlePopupClose();
     };
 
     const ViewMoreModal = () => (
@@ -428,10 +435,11 @@ const AppointmentTemplatePage = () => {
         </Modal>
     );
 
-    const PopoverBox = () => (
+    const PopoverBox = ({ idx }: { idx: number }) => (
         <Popover
             id={popupId}
-            open={popupOpen}
+            key={idx}
+            open={!!openedPopover && openedPopover === idx + 1}
             anchorEl={anchorEl}
             onClose={handlePopupClose}
             anchorReference='anchorPosition'
@@ -448,7 +456,7 @@ const AppointmentTemplatePage = () => {
                     </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
-                    <ListItemButton>
+                    <ListItemButton onClick={handleApptTemplateDelete}>
                         <ListItemIcon sx={{ minWidth: '32px' }}>
                             <DeleteRoundedIcon />
                         </ListItemIcon>
@@ -465,10 +473,21 @@ const AppointmentTemplatePage = () => {
                 <Box key={index} className={style.apptTempCard}>
                     <Box className={style.apptTempCard__header}>
                         <Typography component='p'>{temp.header}</Typography>
-                        <IconButton onClick={handlePopupClick}>
-                            <MoreVertIcon />
+                        <IconButton
+                            id={`${index + 1}`}
+                            onClick={handlePopupClick}
+                        >
+                            <MoreVertIcon
+                                sx={
+                                    openedPopover === index + 1
+                                        ? {
+                                              fill: '#047A9B',
+                                          }
+                                        : {}
+                                }
+                            />
                         </IconButton>
-                        <PopoverBox />
+                        <PopoverBox idx={index} />
                     </Box>
                     <Box className={style.apptTempCard__body}>
                         {temp.body.slice(0, 3).map((item, idx) => (
