@@ -41,6 +41,13 @@
 
         h3 {
             margin: 0;
+            font-family: $font-family-primary;
+            font-size: 20px;
+            font-weight: $font-weight-semibold;
+            line-height: 28.6px;
+            letter-spacing: -0.2px;
+            text-align: left;
+            color: rgba($color-black, 0.87);
         }
     }
 
@@ -52,9 +59,15 @@
         }
 
         &__form {
-
             h4 {
                 width: 100%;
+                font-family: $font-family-primary;
+                font-size: 20px;
+                font-weight: $font-weight-semibold;
+                line-height: 28.6px;
+                letter-spacing: -0.2px;
+                text-align: left;
+                color: rgba($color-black, 0.87);
             }
 
             &__date {
@@ -64,34 +77,55 @@
                 justify-content: space-between;
 
                 &__today {
-                    background: var(--_components-button-ontainedLight-fill, #EAF3F5);
-                    border-radius: 10px;
+                    background: var(
+                        --_components-button-ontainedLight-fill,
+                        $color-light
+                    );
+                    border-radius: $radius;
                     padding: 9px;
                     margin-left: 10px;
-                    font-family: Nunito;
+                    font-family: $font-family-primary;
                     font-size: 12px;
-                    font-weight: 500;
+                    font-weight: $font-weight-medium;
                     line-height: 26px;
                     letter-spacing: 0.46px;
                     text-align: center;
-                    color: #047A9B;
+                    color: $color-green-dark;
                 }
+            }
+
+            label {
+                font-family: $font-family-primary;
+                font-size: $font-size-h4;
+                font-weight: $font-weight-normal;
+                line-height: 21.82px;
+                text-align: left;
+                color: rgba($color-black, 0.87);
             }
 
             p {
                 margin: 0;
+                font-family: $font-family-primary;
+                font-size: $font-size-h4;
+                font-weight: $font-weight-normal;
+                line-height: 21.82px;
+                text-align: left;
+                color: rgba($color-black, 0.87);
             }
 
             &__submit {
-                background: var(--_components-button-contained-primary, #047A9B);
-                box-shadow: 0px 3px 2px -2px #1A526133;
-                box-shadow: 0px 2px 20px 0px #057A9B1F;
-                box-shadow: 0px 1px 20px 0px #057A9B0A;
-                border-radius: 10px;
+                background: var(
+                    --_components-button-contained-primary,
+                    #047a9b
+                );
+                box-shadow: 0px 3px 2px -2px #1a526133;
+                box-shadow: 0px 2px 20px 0px #057a9b1f;
+                box-shadow: 0px 1px 20px 0px #057a9b0a;
+                border-radius: $radius;
                 padding: 8px 22px;
-                font-family: Nunito;
-                font-size: 16px;
-                font-weight: 500;
+                font-family: $font-family-primary;
+                font-size: $font-size-h4;
+                font-weight: $font-weight-medium;
                 line-height: 26px;
                 letter-spacing: 0.46px;
                 text-align: left;

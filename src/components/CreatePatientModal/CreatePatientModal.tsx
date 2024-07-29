@@ -1,7 +1,7 @@
 import { MouseEvent, default as React, useEffect, useRef } from 'react';
 import style from './CreatePatientModal.module.scss';
 import Input from '@components/Input/Input';
-import { Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import Dropdown from '@components/Input/Dropdown';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -70,25 +70,25 @@ const CreatePatientModal = ({
     const onCreatePatient = () => {};
 
     return (
-        <div
+        <Box
             onClick={handleClickOutsideModal}
             className={`${style.modal} flex-wrap align-center justify-center ${
                 !showModal ? style.modalClose : ''
             }`}
         >
-            <div className={style.modal__inner} ref={modalRef}>
-                <div className={style.modal__header}>
-                    <h3>Create patient</h3>
+            <Box className={style.modal__inner} ref={modalRef}>
+                <Box className={style.modal__header}>
+                    <Typography variant='h3'>Create patient</Typography>
                     <CloseIcon
                         style={{ cursor: 'pointer' }}
                         onClick={onCloseModal}
                     />
-                </div>
-                <div className={style.modal__innerContent}>
+                </Box>
+                <Box className={style.modal__innerContent}>
                     <form
                         className={`${style.modal__innerContent__form} flex-wrap`}
                     >
-                        <h4>Patient Info</h4>
+                        <Typography variant='h4'>Patient Info</Typography>
                         <Input
                             style={{ marginBottom: '10px' }}
                             label='Legal First Name'
@@ -126,9 +126,9 @@ const CreatePatientModal = ({
                             max={new Date().toJSON().slice(0, 10)}
                             onChange={handleChange}
                         />
-                        <h4>Appointment info</h4>
-                        <div
-                            style={{ marginBottom: '10px' }}
+                        <Typography variant='h4'>Appointment info</Typography>
+                        <Box
+                            sx={{ marginBottom: '10px' }}
                             className={style.modal__innerContent__form__date}
                         >
                             <Input
@@ -149,8 +149,10 @@ const CreatePatientModal = ({
                             >
                                 Today
                             </Button>
-                        </div>
-                        <p>Appointment type</p>
+                        </Box>
+                        <Typography component={'p'}>
+                            Appointment type
+                        </Typography>
                         <Dropdown
                             items={dropdownItems}
                             value={patientDetails.typeOfAppointment}
@@ -160,16 +162,16 @@ const CreatePatientModal = ({
                             resetValueAfterClick={true}
                         />
                         <Button
-                            style={{ marginTop: '10px' }}
+                            sx={{ marginTop: '10px' }}
                             className={style.modal__innerContent__form__submit}
                             onClick={onCreatePatient}
                         >
                             Create patient
                         </Button>
                     </form>
-                </div>
-            </div>
-        </div>
+                </Box>
+            </Box>
+        </Box>
     );
 };
 

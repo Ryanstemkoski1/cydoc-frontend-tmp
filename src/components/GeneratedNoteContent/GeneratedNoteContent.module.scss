@@ -8,27 +8,27 @@
     align-items: center;
 
     h1 {
-        font-family: Nunito;
-        font-size: 20px;
-        font-weight: 600;
+        font-family: $font-family-primary;
+        font-size: $font-size-h3;
+        font-weight: $font-weight-semibold;
         line-height: 28.6px;
         letter-spacing: -0.2px;
         text-align: left;
-        color: black;
+        color: $color-black;
         margin: 0;
     }
 
     &__Button {
-        background: var(--accent, #FFD602);
-        border-radius: 10px;
+        background: var(--accent, #ffd602);
+        border-radius: $radius;
         padding: 8px 22px;
-        font-family: Nunito;
-        font-size: 16px;
-        font-weight: 500;
+        font-family: $font-family-primary;
+        font-size: $font-size-h4;
+        font-weight: $font-weight-medium;
         line-height: 26px;
         letter-spacing: 0.46px;
         text-align: left;
-        color: #000000;
+        color: $color-black;
         cursor: pointer;
     }
 }
@@ -52,26 +52,26 @@
         }
 
         h1 {
-            font-family: Nunito;
+            font-family: $font-family-primary;
             font-size: 24px;
-            font-weight: bold;
+            font-weight: $font-weight-bold;
             line-height: 36px;
             letter-spacing: 0.15px;
             text-align: center;
-            color: black;
+            color: $color-black;
             margin: 0;
             padding-left: 10px;
         }
     }
 
     p {
-        font-family: Nunito;
-        font-size: 16px;
-        font-weight: 600;
+        font-family: $font-family-primary;
+        font-size: $font-size-h4;
+        font-weight: $font-weight-semibold;
         line-height: 24px;
-        letter-spacing: 0.15000000596046448px;
+        letter-spacing: 0.15px;
         text-align: center;
-        color: black;
+        color: $color-black;
     }
 }
 
@@ -90,24 +90,24 @@
 
         h3 {
             min-width: 135px;
-            font-family: Nunito;
+            font-family: $font-family-primary;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: $font-weight-semibold;
             line-height: 21px;
             letter-spacing: 0.15px;
             text-align: left;
-            color: #000000E5;
+            color: rgba($color-black, 0.9);
             margin: 0;
         }
 
         p {
-            font-family: Nunito;
+            font-family: $font-family-primary;
             font-size: 14px;
-            font-weight: 400;
+            font-weight: $font-weight-normal;
             line-height: 20.02px;
             letter-spacing: 0.17px;
             text-align: left;
-            color: #000000E5;
+            color: rgba($color-black, 0.9);
         }
     }
 }
@@ -123,19 +123,19 @@
 
     h1 {
         margin: 0;
-        font-family: Nunito;
-        font-size: 16px;
-        font-weight: 600;
+        font-family: $font-family-primary;
+        font-size: $font-size-h4;
+        font-weight: $font-weight-semibold;
         line-height: 22.88px;
         letter-spacing: -0.2px;
         text-align: left;
-        color: black;
+        color: $color-black;
         padding-bottom: 10px;
     }
 
     &__Item {
-        border: 1px solid var(--Divider, #D7E5E9);
-        border-radius: 10px;
+        border: 1px solid var(--Divider, #d7e5e9);
+        border-radius: $radius;
         padding: 10px;
         display: flex;
         align-items: center;
@@ -154,13 +154,13 @@
         }
 
         h3 {
-            font-family: Nunito;
-            font-size: 16px;
-            font-weight: 400;
+            font-family: $font-family-primary;
+            font-size: $font-size-h4;
+            font-weight: $font-weight-normal;
             line-height: 24px;
             letter-spacing: 0.15px;
             text-align: left;
-            color: black;
+            color: $color-black;
             margin: 0;
             padding-left: 10px;
         }
@@ -172,19 +172,18 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: #F5F5F5;
+        background-color: #f5f5f5;
 
         &__circle {
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background: #7F8485;
+            background: #7f8485;
         }
 
         p {
-            font-family: Roboto;
             font-size: 13px;
-            font-weight: 400;
+            font-weight: $font-weight-normal;
             line-height: 18px;
             letter-spacing: 0.16px;
             text-align: left;

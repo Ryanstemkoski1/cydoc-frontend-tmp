@@ -5,6 +5,7 @@ import style from './GeneratedNoteContent.module.scss';
 import { AppointmentUser } from '@screens/BrowseNotes/BrowseNotes';
 import { ParseAndRenderHpiNote } from '@screens/EditNote/content/generatenote/notesections/HPINote';
 import { toast } from 'react-toastify';
+import { Box, Typography } from '@mui/material';
 
 interface GeneratedNoteContentProps {
     selectedAppointment: AppointmentUser;
@@ -61,42 +62,48 @@ const GeneratedNoteContent = (
     };
 
     return (
-        <div>
-            <div className={style.genNoteHeader}>
-                <h1>{`${firstName ? firstName : ''} ${middleName ? middleName : ''} ${lastName ? lastName : ''}`}</h1>
-                <div className={style.genNoteHeader__Button} onClick={copyNote}>
+        <Box>
+            <Box className={style.genNoteHeader}>
+                <Typography variant='h1'>{`${firstName ? firstName : ''} ${middleName ? middleName : ''} ${lastName ? lastName : ''}`}</Typography>
+                <Box className={style.genNoteHeader__Button} onClick={copyNote}>
                     Copy Note
-                </div>
-            </div>
-            <div className={style.genNoteContent}>
-                <div className={style.genNoteTitle}>
-                    <div className={style.genNoteTitle__Icon}>
+                </Box>
+            </Box>
+            <Box className={style.genNoteContent}>
+                <Box className={style.genNoteTitle}>
+                    <Box className={style.genNoteTitle__Icon}>
                         <img src='/images/cydoc-logo.svg' alt='cydoc-logo' />
-                        <h1>Cydoc</h1>
-                    </div>
-                    <p>Psychological Evaluation</p>
-                </div>
-                <div className={style.genNoteBody}>
+                        <Typography variant='h1'>Cydoc</Typography>
+                    </Box>
+                    <Typography component={'p'}>
+                        Psychological Evaluation
+                    </Typography>
+                </Box>
+                <Box className={style.genNoteBody}>
                     {Object.keys(data).map((item, index) => {
                         return (
-                            <div
+                            <Box
                                 key={index}
                                 className={style.genNoteBody__Item}
                             >
-                                <h3>{item ? `${item}:` : ''}</h3>
-                                <p>{data[item]}</p>
-                            </div>
+                                <Typography variant='h3'>
+                                    {item ? `${item}:` : ''}
+                                </Typography>
+                                <Typography component={'p'}>
+                                    {data[item]}
+                                </Typography>
+                            </Box>
                         );
                     })}
-                </div>
-                <div className={style.genNoteDetail} id='copy-notes'>
+                </Box>
+                <Box className={style.genNoteDetail} id='copy-notes'>
                     <ParseAndRenderHpiNote
                         hpiText={hpiText}
                         isParagraphFormat={true}
                     />
-                </div>
-                <div className={style.genNoteSource}>
-                    <h1>Source Data (Forms)</h1>
+                </Box>
+                <Box className={style.genNoteSource}>
+                    <Typography variant='h1'>Source Data (Forms)</Typography>
                     {Object.keys(sourcesData).map((item, index) => {
                         let statusStyle = {};
                         let dotStyle = {};
@@ -124,37 +131,42 @@ const GeneratedNoteContent = (
                         }
 
                         return (
-                            <div
+                            <Box
                                 key={index}
                                 className={style.genNoteSource__Item}
                             >
-                                <div className={style.genNoteSource__ItemIcon}>
+                                <Box className={style.genNoteSource__ItemIcon}>
                                     <img
                                         src={sourcesData[item].icon}
                                         alt='icon'
                                     />
-                                    <h3>{sourcesData[item].title}</h3>
-                                </div>
-                                <div
+                                    <Typography variant='h3'>
+                                        {sourcesData[item].title}
+                                    </Typography>
+                                </Box>
+                                <Box
                                     style={statusStyle}
                                     className={style.genNoteSource__ItemStatus}
                                 >
-                                    <div
+                                    <Box
                                         style={dotStyle}
                                         className={
                                             style.genNoteSource__ItemStatus__circle
                                         }
                                     />
-                                    <p style={textStyle}>
+                                    <Typography
+                                        component={'p'}
+                                        style={textStyle}
+                                    >
                                         {sourcesData[item].Status}
-                                    </p>
-                                </div>
-                            </div>
+                                    </Typography>
+                                </Box>
+                            </Box>
                         );
                     })}
-                </div>
-            </div>
-        </div>
+                </Box>
+            </Box>
+        </Box>
     );
 };
 export default GeneratedNoteContent;

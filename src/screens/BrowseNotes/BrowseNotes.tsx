@@ -140,12 +140,16 @@ const BrowseNotes = () => {
         const currentDate = new Date(dateAdvance);
         currentDate.setDate(currentDate.getDate() - 1);
         setDateAdvance(currentDate.toISOString().slice(0, 10));
+        setSelectedIndex(null);
+        setSelectedAppointment(undefined);
     };
 
     const goForwardAdvance = () => {
         const currentDate = new Date(dateAdvance);
         currentDate.setDate(currentDate.getDate() + 1);
         setDateAdvance(currentDate.toISOString().slice(0, 10));
+        setSelectedIndex(null);
+        setSelectedAppointment(undefined);
     };
 
     const loadPatientHistory = useCallback(async () => {
@@ -176,6 +180,8 @@ const BrowseNotes = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDateAdvance(e.target.value);
+        setSelectedIndex(null);
+        setSelectedAppointment(undefined);
     };
 
     function renderUsers(users: AppointmentUser[]) {
@@ -223,14 +229,14 @@ const BrowseNotes = () => {
 
     function renderUsersAdvance(users: AppointmentUser[]) {
         return (
-            <div className={`${style.notesBlockAdvance__tableWrapper}`}>
-                <div
+            <Box className={`${style.notesBlockAdvance__tableWrapper}`}>
+                <Box
                     className={style.notesBlockAdvance__tableWrapper__addBtn}
                     onClick={openModalAdvance}
                 >
                     <AddIcon style={{ color: '#047A9B' }} />
-                    <p>Add patient</p>
-                </div>
+                    <Typography component='p'>Add patient</Typography>
+                </Box>
                 <List>
                     {!loadingStatus && users.length === 0 ? (
                         <ListItem>
@@ -250,7 +256,7 @@ const BrowseNotes = () => {
                             <ListItem
                                 key={index}
                                 onClick={() => handleListItemClick(index, user)}
-                                style={{
+                                sx={{
                                     backgroundColor:
                                         selectedIndex === index
                                             ? '#047A9B'
@@ -261,12 +267,12 @@ const BrowseNotes = () => {
                                     padding: '12px 20px',
                                 }}
                             >
-                                <div
+                                <Box
                                     className={
                                         style.notesBlockAdvance__tableWrapper__itemWrapper
                                     }
                                 >
-                                    <div
+                                    <Box
                                         className={
                                             style.notesBlockAdvance__tableWrapper__left
                                         }
@@ -275,7 +281,8 @@ const BrowseNotes = () => {
                                             src={'/images/patient.svg'}
                                             alt={`${index} patient image`}
                                         />
-                                        <p
+                                        <Typography
+                                            component='p'
                                             style={{
                                                 color:
                                                     selectedIndex === index
@@ -288,9 +295,10 @@ const BrowseNotes = () => {
                                                 user?.middleName ?? '',
                                                 user?.lastName
                                             )}
-                                        </p>
-                                    </div>
-                                    <p
+                                        </Typography>
+                                    </Box>
+                                    <Typography
+                                        component='p'
                                         style={{
                                             color:
                                                 selectedIndex === index
@@ -302,13 +310,13 @@ const BrowseNotes = () => {
                                         }
                                     >
                                         {formatDateOfBirth(user.dob)}
-                                    </p>
-                                </div>
+                                    </Typography>
+                                </Box>
                             </ListItem>
                         ))
                     )}
                 </List>
-            </div>
+            </Box>
         );
     }
 
@@ -385,12 +393,12 @@ const BrowseNotes = () => {
                 </div>
             ) : (
                 <>
-                    <div className={style.notesBlockAdvance}>
-                        <div className={style.notesBlockAdvance__notesWrap}>
-                            <div
+                    <Box className={style.notesBlockAdvance}>
+                        <Box className={style.notesBlockAdvance__notesWrap}>
+                            <Box
                                 className={` ${style.notesBlockAdvance__header} flex align-center justify-between`}
                             >
-                                <div
+                                <Box
                                     className={
                                         style.notesBlockAdvance__header__dateWrapper
                                     }
@@ -404,7 +412,7 @@ const BrowseNotes = () => {
                                         value={dateAdvance}
                                         onChange={handleChange}
                                     />
-                                </div>
+                                </Box>
                                 <a
                                     className='flex align-center justify-center'
                                     onClick={goBackAdvance}
@@ -423,16 +431,16 @@ const BrowseNotes = () => {
                                         alt='Right arrow'
                                     />
                                 </a>
-                            </div>
+                            </Box>
 
-                            <div
+                            <Box
                                 className={` ${style.notesBlockAdvance__content} `}
                             >
                                 {renderUsersAdvance(users)}
-                            </div>
-                        </div>
+                            </Box>
+                        </Box>
                         {selectedAppointment && (
-                            <div
+                            <Box
                                 className={
                                     style.notesBlockAdvance__notesDescription
                                 }
@@ -440,10 +448,10 @@ const BrowseNotes = () => {
                                 <GeneratedNoteContent
                                     selectedAppointment={selectedAppointment}
                                 />
-                            </div>
+                            </Box>
                         )}
-                    </div>
-                    <div className={`${style.checkReload}`}>
+                    </Box>
+                    <Box className={`${style.checkReload}`}>
                         <button
                             onClick={loadPatientHistory}
                             style={{
@@ -479,7 +487,7 @@ const BrowseNotes = () => {
                                 Check for new notes
                             </Box>
                         </button>
-                    </div>
+                    </Box>
                     <CreatePatientModal
                         showModal={showModalAdvance}
                         setShowModal={setShowModalAdvance}

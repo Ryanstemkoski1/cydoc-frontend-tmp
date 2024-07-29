@@ -209,14 +209,12 @@
     }
 
     &__tableWrapper {
-        // max-height: calc(100vh - 535px);
         max-height: 300px;
         overflow-y: auto;
         min-height: 150px;
         overflow-x: auto;
 
         @include max-screen($mobile) {
-            // max-height: calc(100vh - 505px);
             max-height: 300px;
             margin-right: -20px;
             padding-right: 20px;
@@ -243,8 +241,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #eaf3f5;
-            border-radius: 10px;
+            background: $color-light;
+            border-radius: $radius;
             cursor: pointer;
             padding: 12px;
 
@@ -253,10 +251,10 @@
             }
 
             p {
-                color: #047a9b;
-                font-family: Nunito;
+                color: $color-green-dark;
+                font-family: $font-family-primary;
                 font-size: 14px;
-                font-weight: 500;
+                font-weight: $font-weight-medium;
                 line-height: 20px;
                 letter-spacing: 0.4px;
                 text-align: left;
@@ -277,23 +275,22 @@
             justify-content: space-between;
 
             p {
-                //styleName: 1440/typography/body1;
-                font-family: Nunito;
-                font-size: 16px;
-                font-weight: 400;
+                font-family: $font-family-primary;
+                font-size: $font-size-h4;
+                font-weight: $font-weight-normal;
                 line-height: 24px;
                 letter-spacing: 0.15px;
                 text-align: left;
-                color: black;
+                color: $color-black;
             }
         }
 
         &__right {
             align-items: flex-end;
-            color: #00000099;
-            font-family: Nunito;
+            color: rgba($color-black, 0.6);
+            font-family: $font-family-primary;
             font-size: 14px;
-            font-weight: 400;
+            font-weight: $font-weight-normal;
             line-height: 20.02px;
             letter-spacing: 0.17px;
             text-align: left;
