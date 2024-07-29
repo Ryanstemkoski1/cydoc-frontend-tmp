@@ -1,0 +1,57 @@
+@import '../../assets/scss/variables.scss';
+
+.input {
+    width: 100%;
+    position: relative;
+
+    p {
+        color: var(--text-primary, rgba($color-black, 0.87));
+        font-family: $font-family-primary;
+        font-size: $font-size-h4;
+        font-style: normal;
+        font-weight: $font-weight-normal;
+        line-height: normal;
+
+        span {
+            color: var(--error-main, #d32f2f);
+        }
+    }
+
+    &__wrap {
+        width: 100%;
+        margin: 8px 0 16px;
+
+        div {
+            border-radius: $radius;
+            background: $color-white;
+            color: rgba($color-black, 0.6);
+            font-family: $font-family-primary;
+            font-size: $font-size-h4;
+            font-style: normal;
+            font-weight: $font-weight-normal;
+            line-height: 24px;
+            letter-spacing: 0.15px;
+
+            input {
+                padding: 14px 12px;
+            }
+        }
+    }
+
+    &__icon {
+        top: 35px;
+        right: 3px;
+        height: 41px;
+        display: flex;
+        position: absolute;
+        align-items: center;
+        padding: 0 13px 0 5px;
+        pointer-events: none;
+        background-color: $color-white;
+
+        img {
+            width: 16px;
+            opacity: 0.5;
+        }
+    }
+}

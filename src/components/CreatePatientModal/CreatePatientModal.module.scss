@@ -10,6 +10,7 @@
     padding: 20px;
     word-wrap: break-word;
     background-color: rgba($color-black, 0.5);
+    overflow-y: auto;
 
     &.modalClose {
         display: none;
@@ -17,8 +18,7 @@
 
     &__inner {
         background-color: $color-white;
-        max-width: 700px;
-        min-width: 550px;
+        max-width: 660px;
         border-radius: $radius;
 
         @include max-screen($small) {
@@ -27,10 +27,10 @@
     }
 
     &__header {
-        border-bottom: 1px solid $color-border;
-        padding: 20px;
-        background-color: $color-green-light;
-        border-radius: $radius $radius 0 0;
+        padding: var(--indentation-7, 20px) 30px;
+        border-radius: var(--corners-4, 10px) var(--corners-4, 10px) 0px 0px;
+        border-bottom: 1px solid var(--Divider, #d7e5e9);
+        background: $color-white;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -68,15 +68,17 @@
                 letter-spacing: -0.2px;
                 text-align: left;
                 color: rgba($color-black, 0.87);
+                margin-bottom: 16px;
             }
 
             &__date {
                 width: 100%;
                 display: flex;
-                align-items: flex-end;
+                align-items: center;
                 justify-content: space-between;
 
                 &__today {
+                    margin-top: 16px;
                     background: var(
                         --_components-button-ontainedLight-fill,
                         $color-light

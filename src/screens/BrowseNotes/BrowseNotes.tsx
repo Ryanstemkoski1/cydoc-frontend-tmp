@@ -17,8 +17,6 @@ import GeneratedNoteContent from '@components/GeneratedNoteContent/GeneratedNote
 import CreatePatientModal from '@components/CreatePatientModal/CreatePatientModal';
 import AddIcon from '@mui/icons-material/Add';
 import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
-import { setProductDefinitionAction } from '@redux/actions/productDefinitionAction';
-import { ProductName } from '@constants/ProductDefinitions/ProductDefinitionType';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
     return `${lastName}, ${firstName} ${middleName}`;
@@ -101,13 +99,6 @@ const BrowseNotes = () => {
         useState<AppointmentUser>();
     const loadingStatus = useSelector(selectLoadingStatus);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-
-    useEffect(() => {
-        // set the product definition(SMART_PATIENT_INTAKE_FORM, ADVANCED_REPORT_GENERATION)
-        dispatch(
-            setProductDefinitionAction(ProductName.ADVANCED_REPORT_GENERATION)
-        );
-    }, [dispatch]);
 
     useEffect(() => {
         const initialDate = new Date().toISOString().slice(0, 10); // yyyy-mm-dd format
@@ -278,7 +269,11 @@ const BrowseNotes = () => {
                                         }
                                     >
                                         <img
-                                            src={'/images/patient.svg'}
+                                            src={
+                                                selectedIndex === index
+                                                    ? '/images/add-patient-select.svg'
+                                                    : '/images/add-patient.svg'
+                                            }
                                             alt={`${index} patient image`}
                                         />
                                         <Typography

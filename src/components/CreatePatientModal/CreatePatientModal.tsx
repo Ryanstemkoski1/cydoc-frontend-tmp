@@ -4,6 +4,7 @@ import Input from '@components/Input/Input';
 import { Box, Button, Typography } from '@mui/material';
 import Dropdown from '@components/Input/Dropdown';
 import CloseIcon from '@mui/icons-material/Close';
+import CustomTextField from '@components/Input/CustomTextField';
 
 export interface CreatePatientModalProps {
     showModal: boolean;
@@ -46,6 +47,7 @@ const CreatePatientModal = ({
             ...patientDetails,
             [name]: value,
         });
+        console.log(patientDetails);
     };
 
     const handleTodayClick = () => {
@@ -89,8 +91,7 @@ const CreatePatientModal = ({
                         className={`${style.modal__innerContent__form} flex-wrap`}
                     >
                         <Typography variant='h4'>Patient Info</Typography>
-                        <Input
-                            style={{ marginBottom: '10px' }}
+                        <CustomTextField
                             label='Legal First Name'
                             required={true}
                             aria-label='First-Name'
@@ -98,25 +99,22 @@ const CreatePatientModal = ({
                             placeholder='Legal First Name'
                             onChange={handleChange}
                         />
-                        <Input
-                            style={{ marginBottom: '10px' }}
-                            aria-label='middle-Name'
+                        <CustomTextField
                             label='Legal Middle Name'
+                            aria-label='middle-Name'
                             name='legalMiddleName'
                             placeholder='Legal Middle Name'
                             onChange={handleChange}
                         />
-                        <Input
-                            style={{ marginBottom: '10px' }}
+                        <CustomTextField
+                            label='Legal Last Name'
                             required={true}
                             aria-label='last-Name'
-                            label='Legal Last Name'
                             name='legalLastName'
                             placeholder='Legal Last Name'
                             onChange={handleChange}
                         />
-                        <Input
-                            style={{ marginBottom: '10px' }}
+                        <CustomTextField
                             id='dateOfBirth'
                             required={true}
                             type='date'
@@ -126,12 +124,11 @@ const CreatePatientModal = ({
                             max={new Date().toJSON().slice(0, 10)}
                             onChange={handleChange}
                         />
-                        <Typography variant='h4'>Appointment info</Typography>
-                        <Box
-                            sx={{ marginBottom: '10px' }}
-                            className={style.modal__innerContent__form__date}
-                        >
-                            <Input
+                        <Typography variant='h4' sx={{ marginTop: '4px' }}>
+                            Appointment info
+                        </Typography>
+                        <Box className={style.modal__innerContent__form__date}>
+                            <CustomTextField
                                 id='dateOfAppointment'
                                 type='date'
                                 label='Appointment date'
