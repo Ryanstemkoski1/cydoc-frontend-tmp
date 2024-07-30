@@ -44,13 +44,16 @@ const HandleAgeEventInput: React.FC<Props> = ({
     const [year, setYear] = useState<number | null>(
         response ? currentYear - Number(response) : null
     );
-    const [birthday, setBirthday] = useState<string | undefined>(undefined);
+    const [birthday, setBirthday] = useState<string | undefined>(
+        'January 1, 1990'
+    );
+    const [birthYear, setBirthYear] = useState<number>(1990);
 
     const handleAgeChange = (e) => {
         const value = parseInt(e.target.value);
         if (!isNaN(value) && value >= 0 && value <= 150) {
             setAge(value);
-            setYear(currentYear - value);
+            setYear(birthYear + value);
         } else {
             setAge(null);
         }
@@ -64,7 +67,7 @@ const HandleAgeEventInput: React.FC<Props> = ({
             ('2' && parseInt(value) > 0 && parseInt(value) <= currentYear)
         ) {
             setYear(parseInt(value));
-            const ageVal = currentYear - parseInt(value);
+            const ageVal = parseInt(value) - birthYear;
             if (!isNaN(ageVal) && ageVal >= 0 && ageVal <= 150) {
                 setAge(ageVal);
             }
@@ -78,6 +81,7 @@ const HandleAgeEventInput: React.FC<Props> = ({
         if (additionalSurveyState.dateOfBirth) {
             const dateParts = additionalSurveyState.dateOfBirth.split('-');
             const yyyy = parseInt(dateParts[0]);
+            setBirthYear(yyyy);
             const mm = parseInt(dateParts[1]);
             const dd = parseInt(dateParts[2]);
             setBirthday(`${MONTH_MAP[mm]} ${dd}, ${yyyy}`);
@@ -144,10 +148,7 @@ const HandleAgeEventInput: React.FC<Props> = ({
                     margin: '5px',
                 }}
             >
-                <p>
-                    based on reported birthday{' '}
-                    {birthday ? birthday : 'January 1, 1990'}
-                </p>
+                <p>based on reported birthday {birthday}</p>
             </Grid>
         </div>
     );
