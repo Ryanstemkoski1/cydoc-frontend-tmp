@@ -79,20 +79,22 @@
 
                 &__today {
                     margin-top: 16px;
-                    background: var(
-                        --_components-button-ontainedLight-fill,
-                        $color-light
-                    );
+                    background: $color-light;
                     border-radius: $radius;
-                    padding: 9px;
+                    height: 52px;
+                    padding: 8px 22px;
                     margin-left: 10px;
                     font-family: $font-family-primary;
-                    font-size: 12px;
+                    font-size: 16px;
                     font-weight: $font-weight-medium;
                     line-height: 26px;
                     letter-spacing: 0.46px;
                     text-align: center;
                     color: $color-green-dark;
+                    text-transform: capitalize;
+                }
+                &__today:hover {
+                    background-color: $color-light;
                 }
             }
 
@@ -116,13 +118,11 @@
             }
 
             &__submit {
-                background: var(
-                    --_components-button-contained-primary,
-                    #047a9b
-                );
-                box-shadow: 0px 3px 2px -2px #1a526133;
-                box-shadow: 0px 2px 20px 0px #057a9b1f;
-                box-shadow: 0px 1px 20px 0px #057a9b0a;
+                background: $color-green-dark;
+                box-shadow:
+                    0px 1px 20px 0px rgba(5, 122, 155, 0.04),
+                    0px 2px 20px 0px rgba(5, 122, 155, 0.12),
+                    0px 3px 2px -2px rgba(26, 82, 97, 0.2);
                 border-radius: $radius;
                 padding: 8px 22px;
                 font-family: $font-family-primary;
@@ -132,6 +132,11 @@
                 letter-spacing: 0.46px;
                 text-align: left;
                 color: white;
+                text-transform: capitalize;
+            }
+
+            &__submit:hover {
+                background-color: $color-green-dark;
             }
         }
     }

@@ -147,7 +147,10 @@ const CreatePatientModal = ({
                                 Today
                             </Button>
                         </Box>
-                        <Typography component={'p'}>
+                        <Typography
+                            component={'p'}
+                            style={{ marginBottom: '8px' }}
+                        >
                             Appointment type
                         </Typography>
                         <Dropdown
@@ -159,7 +162,7 @@ const CreatePatientModal = ({
                             resetValueAfterClick={true}
                         />
                         <Button
-                            sx={{ marginTop: '10px' }}
+                            sx={{ marginTop: '16px' }}
                             className={style.modal__innerContent__form__submit}
                             onClick={onCreatePatient}
                         >
