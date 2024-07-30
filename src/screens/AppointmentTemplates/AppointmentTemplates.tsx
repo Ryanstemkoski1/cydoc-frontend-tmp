@@ -281,7 +281,6 @@ const AppointmentTemplatePage = () => {
                             labelId={`demo-simple-select-label-${idx}`}
                             id={`demo-simple-select-${idx}`}
                             value={selectedWhoCompletesValue[idx] || ''}
-                            label='Select'
                             onChange={(event) =>
                                 handleWhoCompletesValue(event, idx)
                             }
@@ -396,8 +395,8 @@ const AppointmentTemplatePage = () => {
                         </Typography>
                         <TextField
                             id='new-temp-title'
-                            label='Enter'
                             variant='outlined'
+                            placeholder='Enter'
                             sx={{
                                 '& div:hover': {
                                     '& .MuiOutlinedInput-notchedOutline': {
