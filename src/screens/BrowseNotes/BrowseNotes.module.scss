@@ -153,8 +153,9 @@
 
 .notesBlockAdvance {
     width: 100%;
-    max-width: 1376px;
-    padding: 20px;
+    // max-width: 1312px;
+    // margin: 0 auto;
+    padding: 32px;
     display: flex;
     align-items: flex-start;
     position: relative;
@@ -165,6 +166,7 @@
 
     @include max-screen($mobile) {
         padding: 20px 0;
+        display: block;
     }
 
     h1 {
@@ -173,18 +175,22 @@
     }
 
     &__notesWrap {
-        // margin: 20px 0;
         border-radius: $radius;
         background-color: $color-white;
         border: 1px solid $color-light;
         box-shadow: 0 0 20px rgba($color-black, 0.05);
-        width: 35%;
-        padding: 10px;
+        // width: 35.2%;
+        min-width: 440px;
+        // padding: 0 10px 10px 8px;
+
+        @include max-screen($mobile) {
+            min-width: auto;
+            width: 100%;
+        }
     }
 
     &__header {
-        // padding: 20px 30px;
-        padding-bottom: 10px;
+        padding-bottom: 8px;
         border-bottom: 1px solid $color-primary-light;
 
         @include max-screen($mobile) {
@@ -193,18 +199,23 @@
 
         &__dateWrapper {
             flex: 1;
+            padding-left: 8px;
         }
 
         a {
-            background-color: $color-light;
-            width: 40px;
-            height: 40px;
-            border-radius: $radius;
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
             margin-left: 10px;
+            background: rgba(4, 122, 155, 0.04);
 
             img {
                 width: 8px;
             }
+        }
+
+        a:last-child {
+            margin-right: 10px;
         }
     }
 
@@ -244,10 +255,11 @@
             background: $color-light;
             border-radius: $radius;
             cursor: pointer;
-            padding: 12px;
+            padding: 6px;
 
             img {
                 width: 20px;
+                height: 20px;
             }
 
             p {
@@ -255,7 +267,7 @@
                 font-family: $font-family-primary;
                 font-size: 14px;
                 font-weight: $font-weight-medium;
-                line-height: 20px;
+                line-height: 24px;
                 letter-spacing: 0.4px;
                 text-align: left;
                 margin-left: 5px;
@@ -274,6 +286,11 @@
             align-items: center;
             justify-content: space-between;
 
+            img {
+                width: 24px;
+                height: 24px;
+            }
+
             p {
                 font-family: $font-family-primary;
                 font-size: $font-size-h4;
@@ -282,7 +299,7 @@
                 letter-spacing: 0.15px;
                 text-align: left;
                 color: $color-black;
-                margin-left: 3px;
+                margin-left: 8px;
             }
         }
 
@@ -299,8 +316,7 @@
     }
 
     &__content {
-        // padding: 30px;
-        padding-top: 10px;
+        padding: 10px;
         gap: 30px;
 
         @include max-screen($mobile) {
@@ -345,8 +361,13 @@
         background-color: $color-white;
         border: 1px solid $color-light;
         box-shadow: 0 0 20px rgba($color-black, 0.05);
-        width: 65%;
+        // width: 64.8%;
+        flex: 1;
         margin-left: 20px;
+
+        @include max-screen($mobile) {
+            width: 100%;
+        }
     }
 }
 

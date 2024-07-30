@@ -24,7 +24,10 @@ const CustomTextField = ({
                     className={style.input__wrap}
                 />
                 {inputProps?.type == 'date' && (
-                    <Box className={style.input__icon}>
+                    <Box
+                        sx={label && { top: '44px !important' }}
+                        className={style.input__icon}
+                    >
                         <img src={'/images/calendar.svg'} alt='Calendar' />{' '}
                     </Box>
                 )}

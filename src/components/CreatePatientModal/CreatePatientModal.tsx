@@ -124,7 +124,7 @@ const CreatePatientModal = ({
                             max={new Date().toJSON().slice(0, 10)}
                             onChange={handleChange}
                         />
-                        <Typography variant='h4' sx={{ marginTop: '4px' }}>
+                        <Typography variant='h4' sx={{ marginTop: '16px' }}>
                             Appointment info
                         </Typography>
                         <Box className={style.modal__innerContent__form__date}>

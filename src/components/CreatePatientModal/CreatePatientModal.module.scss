@@ -68,7 +68,7 @@
                 letter-spacing: -0.2px;
                 text-align: left;
                 color: rgba($color-black, 0.87);
-                margin-bottom: 16px;
+                margin-bottom: 8px;
             }
 
             &__date {
@@ -78,7 +78,7 @@
                 justify-content: space-between;
 
                 &__today {
-                    margin-top: 16px;
+                    margin-top: 32px;
                     background: $color-light;
                     border-radius: $radius;
                     height: 52px;

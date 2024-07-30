@@ -17,6 +17,7 @@ import GeneratedNoteContent from '@components/GeneratedNoteContent/GeneratedNote
 import CreatePatientModal from '@components/CreatePatientModal/CreatePatientModal';
 import AddIcon from '@mui/icons-material/Add';
 import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
+import CustomTextField from '@components/Input/CustomTextField';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
     return `${lastName}, ${firstName} ${middleName}`;
@@ -228,7 +229,7 @@ const BrowseNotes = () => {
                     <AddIcon style={{ color: '#047A9B' }} />
                     <Typography component='p'>Add patient</Typography>
                 </Box>
-                <List>
+                <List sx={{ padding: '0' }}>
                     {!loadingStatus && users.length === 0 ? (
                         <ListItem>
                             <ListItemText
@@ -254,8 +255,9 @@ const BrowseNotes = () => {
                                             : 'inherit',
                                     border: '1px solid var(--Divider, #D7E5E9)',
                                     borderRadius: '10px',
-                                    marginBottom: '5px',
-                                    padding: '12px 20px',
+                                    marginTop: '4px',
+                                    padding: '16px 20px',
+                                    cursor: 'pointer',
                                 }}
                             >
                                 <Box
@@ -398,13 +400,14 @@ const BrowseNotes = () => {
                                         style.notesBlockAdvance__header__dateWrapper
                                     }
                                 >
-                                    <Input
+                                    <CustomTextField
+                                        id='dateOfBirth'
                                         required={true}
                                         type='date'
                                         name='dateOfBirth'
                                         placeholder='mm/dd/yyyy'
-                                        max={new Date().toJSON().slice(0, 10)}
                                         value={dateAdvance}
+                                        max={new Date().toJSON().slice(0, 10)}
                                         onChange={handleChange}
                                     />
                                 </Box>
