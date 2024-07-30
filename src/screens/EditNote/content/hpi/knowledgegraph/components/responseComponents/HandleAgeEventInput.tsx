@@ -15,6 +15,21 @@ interface InputProps {
     additionalSurveyState: AdditionalSurvey;
 }
 
+const MONTH_MAP = {
+    1: 'January',
+    2: 'February',
+    3: 'March',
+    4: 'April',
+    5: 'May',
+    6: 'June',
+    7: 'July',
+    8: 'August',
+    9: 'September',
+    10: 'October',
+    11: 'November',
+    12: 'December',
+};
+
 const HandleAgeEventInput: React.FC<Props> = ({
     hpi,
     node,
@@ -62,19 +77,10 @@ const HandleAgeEventInput: React.FC<Props> = ({
     useEffect(() => {
         if (additionalSurveyState.dateOfBirth) {
             const dateParts = additionalSurveyState.dateOfBirth.split('-');
-            const date = new Date(
-                parseInt(dateParts[0]), // Year
-                parseInt(dateParts[1], 10) - 1, // Month (0-based index)
-                parseInt(dateParts[2]) // Day
-            );
-
-            const options: Intl.DateTimeFormatOptions = {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-            };
-            const formattedDate = date.toLocaleDateString('en-US', options);
-            setBirthday(formattedDate);
+            const yyyy = parseInt(dateParts[0]);
+            const mm = parseInt(dateParts[1]);
+            const dd = parseInt(dateParts[2]);
+            setBirthday(`${MONTH_MAP[mm]} ${dd}, ${yyyy}`);
         }
     }, [additionalSurveyState.dateOfBirth]);
 
