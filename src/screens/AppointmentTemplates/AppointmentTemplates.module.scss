@@ -25,6 +25,7 @@
 
         .newBtn {
             padding: 12px;
+            height: 48px;
             border-radius: 50%;
             background-color: #057a9b;
             color: white;
@@ -239,11 +240,13 @@
                 align-items: center;
                 gap: 8px;
 
-                svg {
-                    width: 20px;
-                    height: 20px;
+                & svg {
+                    width: 24px;
+                    height: 24px;
 
-                    fill: $color-green-dark;
+                    path {
+                        fill: $color-green-dark;
+                    }
                 }
 
                 span {
@@ -445,14 +448,13 @@
             padding: 6px 16px;
             cursor: pointer;
 
-            span {
-                width: 20px;
-                height: 20px;
-                color: $color-green-dark;
-                font-size: 18px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
+            svg {
+                width: 24px;
+                height: 24px;
+                
+                path {
+                    fill: $color-green-dark;
+                }
             }
 
             p {

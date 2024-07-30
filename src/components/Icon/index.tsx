@@ -1,10 +1,12 @@
 import { SVGProps } from 'react';
-import { ReactComponent as EditPencil } from './icons/editPencil.svg';
-import { ReactComponent as TrashCan } from './icons/trashCan.svg';
+import EditPencil from './icons/editPencil.svg';
+import TrashCan from './icons/trashCan.svg';
+import PlusIcon from './icons/add.svg';
 
 const iconRegistry = {
     editPencil: EditPencil,
     trashCan: TrashCan,
+    plusIcon: PlusIcon,
 };
 
 export type IconType = keyof typeof iconRegistry;

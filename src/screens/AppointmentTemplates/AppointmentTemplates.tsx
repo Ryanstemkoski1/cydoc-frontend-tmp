@@ -24,13 +24,12 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
-import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
-import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import DragIndicatorRoundedIcon from '@mui/icons-material/DragIndicatorRounded';
 import {
     TaskType,
     WhoCompletes,
 } from '@constants/appointmentTemplatesConstants';
+import { Icon } from '@components/Icon';
 
 const ApptTempData = [
     {
@@ -183,6 +182,13 @@ const AppointmentTemplatePage = () => {
         handlePopupClose();
     };
 
+    const handleApptTemplateDeleteOnViewMore = () => {
+        const tempDataTemp = [...tempData];
+        tempDataTemp.splice(viewMoreOpen - 1, 1);
+        setTempData(tempDataTemp);
+        setViewMoreOpen(0);
+    };
+
     const ViewMoreModal = () => (
         <Modal
             open={!!viewMoreOpen}
@@ -195,7 +201,7 @@ const AppointmentTemplatePage = () => {
                     <Typography component='p'>
                         {tempData[viewMoreOpen - 1]?.header}
                     </Typography>
-                    <IconButton>
+                    <IconButton onClick={handleViewMoreClose}>
                         <CloseRoundedIcon />
                     </IconButton>
                 </Box>
@@ -229,11 +235,14 @@ const AppointmentTemplatePage = () => {
                         }
                     >
                         <Button variant='outlined'>
-                            <BorderColorRoundedIcon />
+                            <Icon type='editPencil' />
                             <span>Edit</span>
                         </Button>
-                        <Button variant='outlined'>
-                            <DeleteRoundedIcon />
+                        <Button
+                            variant='outlined'
+                            onClick={handleApptTemplateDeleteOnViewMore}
+                        >
+                            <Icon type='trashCan' />
                             <span>Delete</span>
                         </Button>
                     </Box>
@@ -356,7 +365,7 @@ const AppointmentTemplatePage = () => {
             </Box>
             {stepCount > 1 && (
                 <IconButton onClick={() => handleRemoveSteps(idx)}>
-                    <DeleteRoundedIcon />
+                    <Icon type='trashCan' />
                 </IconButton>
             )}
         </Box>
@@ -412,7 +421,7 @@ const AppointmentTemplatePage = () => {
                             }
                             onClick={() => setStepCount(stepCount + 1)}
                         >
-                            <span>+</span>
+                            <Icon type='plusIcon' />
                             <Typography component='p'>Add step</Typography>
                         </Box>
                     </Box>
@@ -450,7 +459,7 @@ const AppointmentTemplatePage = () => {
                 <ListItem disablePadding>
                     <ListItemButton>
                         <ListItemIcon sx={{ minWidth: '32px' }}>
-                            <BorderColorRoundedIcon />
+                            <Icon type='editPencil' />
                         </ListItemIcon>
                         <ListItemText primary={'Edit'} />
                     </ListItemButton>
@@ -458,7 +467,7 @@ const AppointmentTemplatePage = () => {
                 <ListItem disablePadding>
                     <ListItemButton onClick={handleApptTemplateDelete}>
                         <ListItemIcon sx={{ minWidth: '32px' }}>
-                            <DeleteRoundedIcon />
+                            <Icon type='trashCan' />
                         </ListItemIcon>
                         <ListItemText primary={'Delete'} />
                     </ListItemButton>
@@ -527,7 +536,7 @@ const AppointmentTemplatePage = () => {
             ))}
             <Box className={style.newTemp} onClick={handleCreateNewOpen}>
                 <Box className={style.newBtn}>
-                    <span>+</span>
+                    <Icon type='plusIcon' />
                 </Box>
                 <Typography component='p'>Create a new template</Typography>
             </Box>
