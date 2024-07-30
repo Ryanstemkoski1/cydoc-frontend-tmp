@@ -1,6 +1,9 @@
 'use client';
 
 import * as React from 'react';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -19,8 +22,6 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import AccountManagement from '@components/AccountManagement/AccountManagement';
 import useAuth from '@hooks/useAuth';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useMemo } from 'react';
 import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
 import {
     clinicalWorkflowItems,
@@ -28,8 +29,6 @@ import {
     MenuTitles,
     practiceAdminMenuItems,
 } from '@constants/drawerMenuItems';
-import { setProductDefinitionAction } from '@redux/actions/productDefinitionAction';
-import { ProductName } from '@constants/ProductDefinitions/ProductDefinitionType';
 
 const drawerWidth = 240;
 
@@ -83,7 +82,6 @@ const Drawer = styled(MuiDrawer, {
 export default function DrawerMenu() {
     const definitions = useSelector(selectProductDefinitions);
     const router = useRouter();
-    const dispatch = useDispatch();
     const { signOut } = useAuth();
     const { user, isManager } = useUser();
     const [open, setOpen] = React.useState(true);
@@ -97,12 +95,6 @@ export default function DrawerMenu() {
                   ),
         [definitions]
     );
-
-    useEffect(() => {
-        dispatch(
-            setProductDefinitionAction(ProductName.ADVANCED_REPORT_GENERATION)
-        );
-    }, [dispatch]);
 
     const drawerWidth = open ? '300px' : '64px';
 
