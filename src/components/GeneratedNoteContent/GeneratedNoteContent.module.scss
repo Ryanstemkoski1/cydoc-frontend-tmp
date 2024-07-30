@@ -1,7 +1,7 @@
 @import '../../assets/scss/variables.scss';
 
 .genNoteHeader {
-    padding: 10px 20px;
+    padding: 8px 20px 16px;
     border-bottom: 1px solid $color-primary-light;
     display: flex;
     justify-content: space-between;
@@ -19,7 +19,7 @@
     }
 
     &__Button {
-        background: var(--accent, #ffd602);
+        background: #ffd602;
         border-radius: $radius;
         padding: 8px 22px;
         font-family: $font-family-primary;
@@ -28,17 +28,17 @@
         line-height: 26px;
         letter-spacing: 0.46px;
         text-align: left;
-        color: $color-black;
+        color: rgba($color-black, 0.87);
         cursor: pointer;
     }
 }
 
 .genNoteContent {
-    padding: 15px;
+    padding: 20px;
 }
 
 .genNoteTitle {
-    padding-bottom: 15px;
+    padding-bottom: 14px;
     border-bottom: 2px solid $color-primary-light;
 
     &__Icon {
@@ -76,7 +76,7 @@
 }
 
 .genNoteBody {
-    padding: 12px 0;
+    padding: 14px 0;
     border-bottom: 2px solid $color-primary-light;
     display: flex;
     flex-wrap: wrap;
@@ -113,14 +113,12 @@
 }
 
 .genNoteDetail {
-    padding: 12px 0;
+    padding: 14px 0;
     overflow-y: auto;
     max-height: calc(100vh - 280px);
 }
 
 .genNoteSource {
-    padding: 12px 0;
-
     h1 {
         margin: 0;
         font-family: $font-family-primary;
@@ -130,17 +128,16 @@
         letter-spacing: -0.2px;
         text-align: left;
         color: $color-black;
-        padding-bottom: 10px;
     }
 
     &__Item {
-        border: 1px solid var(--Divider, #d7e5e9);
+        border: 1px solid #d7e5e9;
         border-radius: $radius;
         padding: 10px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 8px;
+        margin-top: 8px;
         cursor: pointer;
     }
 

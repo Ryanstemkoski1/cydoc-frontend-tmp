@@ -449,7 +449,7 @@ const BrowseNotes = () => {
                             </Box>
                         )}
                     </Box>
-                    <Box className={`${style.checkReload}`}>
+                    <Box className={`${style.checkReloadAdvance}`}>
                         <button
                             onClick={loadPatientHistory}
                             style={{
@@ -458,24 +458,9 @@ const BrowseNotes = () => {
                                 cursor: 'pointer',
                             }}
                         >
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    paddingY: '.5em',
-                                    color: '#047A9B',
-                                    fontSize: '16px',
-                                    fontWeight: '500',
-                                    lineHeight: '26px',
-                                    letterSpacing: '0.46px',
-                                    textAlign: 'left',
-                                    alignItems: 'center',
-                                }}
-                            >
+                            <Box className={style.checkReloadAdvance__inner}>
                                 <img
                                     alt='Refresh'
-                                    height={14}
-                                    width={14}
                                     style={{
                                         marginRight: '10px',
                                         marginLeft: '7px',
