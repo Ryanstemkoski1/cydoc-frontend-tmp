@@ -70,6 +70,8 @@ const HandleAgeEventInput: React.FC<Props> = ({
             const ageVal = parseInt(value) - birthYear;
             if (!isNaN(ageVal) && ageVal >= 0 && ageVal <= 150) {
                 setAge(ageVal);
+            } else {
+                setAge(null);
             }
         } else {
             setYear(null);
