@@ -260,6 +260,37 @@ describe('hpi reducers', () => {
 
         expect(nextState).toMatchSnapshot();
     });
+    it('handles PRONOUN changes', () => {
+        let payload = { medId: medId };
+        let nextState = processedState;
+        nextState.nodes[medId].response = ExpectedResponseDict.PRONOUN;
+        nextState.nodes[medId].responseType = 'PRONOUN';
+
+        const optionsToTest = [
+            'They',
+            'She',
+            'He',
+        ];
+        optionsToTest.forEach(option => {
+            payload.name = option;
+            nextState = hpiReducer(nextState, {
+                type: HPI_ACTION.SINGLE_MULTIPLE_CHOICE_HANDLE_CLICK,
+                payload,
+            });
+            expect(nextState.nodes[medId].response).toHaveProperty(
+                payload.name
+            );
+            expect(nextState.nodes[medId].response[payload.name]).toEqual(true);
+
+            nextState = hpiReducer(nextState, {
+                type: HPI_ACTION.SINGLE_MULTIPLE_CHOICE_HANDLE_CLICK,
+                payload,
+            });
+            expect(nextState.nodes[medId].response[payload.name]).toEqual(
+                false
+            );
+        });
+    });
     describe('handle user actions', () => {
         let payload = {};
         let nextState = {};

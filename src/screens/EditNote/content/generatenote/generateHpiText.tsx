@@ -199,7 +199,7 @@ export const fillNameAndPronouns = (
     const { name, pronouns, objPronoun, posPronoun } = patientInfo;
 
     hpiString = name.length
-        ? hpiString.replace(/the patient's|their/g, posPronoun)
+        ? hpiString.replace(/\bthe patient's\b|\btheir\b/g, posPronoun)
         : hpiString;
 
     let toggle = 1;
@@ -243,7 +243,7 @@ export const fillNameAndPronouns = (
         // Handle special cases for 'her' to avoid wrong replacement
         sentence = sentence.replace(/\bher\b\s+(\b\w+\b)/gi, (match, noun) => {
             return noun
-                ? replaceWord(match, possessive + ` ${noun} `)
+                ? replaceWord(match, possessive + ` ${noun}`)
                 : replaceWord(match, object);
         });
 
@@ -300,7 +300,7 @@ export const fillNameAndPronouns = (
         return sentence;
     });
 
-    return newHpiString.join('. ') + '.';
+    return newHpiString.join('. ').trim() + '.';
 };
 
 const partOfSpeechCorrection = (hpiString: string): string => {

@@ -1,4 +1,4 @@
-// import { PatientPronouns } from '../../../../../constants/patientInformation';
+import { PatientPronouns } from '../../../../../constants/patientInformation';
 import {
     abbreviate,
     capitalize,
@@ -6,7 +6,7 @@ import {
     // definePatientNameAndPronouns,
     fillAnswers,
     fillMedicalTerms,
-    // fillNameAndPronouns,
+    fillNameAndPronouns,
     fullClean,
 } from '../generateHpiText';
 
@@ -158,7 +158,64 @@ describe('generateHpiText', () => {
         // });
     });
 
-    describe.todo('fillNameAndPronouns', () => {
+    describe('fillNameAndPronouns', () => {
+        it('replaces possessives - her', () => {
+            const hpiString = 'his dog is cute.';
+            const patientInfo = {
+                name: '',
+                pronouns: PatientPronouns.She,
+                objPronoun: 'she',
+                posPronoun: 'her',
+            };
+            const expected = 'her dog is cute.';
+            expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
+                expected
+            );
+        });
+        it('replaces patientName', () => {
+            const hpiString = "The patient's dog is cute.";
+            const patientInfo = {
+                name: 'Judy',
+                pronouns: PatientPronouns.She,
+                objPronoun: 'she',
+                posPronoun: 'her',
+            };
+            const expected = "Judy's dog is cute.";
+            expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
+                expected
+            );
+        });
+        it('replaces pronouns - He', () => {
+            const hpiString =
+                "The patient's dog is cute. Her dos's name is Muffin and Muffin likes icecream.";
+            const patientInfo = {
+                name: 'Judy',
+                pronouns: PatientPronouns.He,
+                objPronoun: 'he',
+                posPronoun: 'his',
+            };
+            const expected =
+                "Judy's dog is cute. His dos's name is Muffin and Muffin likes icecream.";
+            expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
+                expected
+            );
+        });
+        it('replaces pronouns - They', () => {
+            const hpiString =
+                'He has many problems with his dogs; nobody loves him.';
+            const patientInfo = {
+                name: 'Mike',
+                pronouns: PatientPronouns.They,
+                objPronoun: 'they',
+                posPronoun: 'their',
+            };
+            const expected =
+                'They has many problems with their dogs; nobody loves them.';
+            expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
+                expected
+            );
+        });
+
         // // TODO: Fix below tests
         // it('handles empty empty', () => {
         //     expect(
