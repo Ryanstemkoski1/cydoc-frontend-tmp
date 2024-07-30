@@ -61,13 +61,20 @@ const HandleAgeEventInput: React.FC<Props> = ({
     // Age field is auto-populated using the patient's birth date
     useEffect(() => {
         if (additionalSurveyState.dateOfBirth) {
-            const date = new Date(additionalSurveyState.dateOfBirth);
+            const dateParts = additionalSurveyState.dateOfBirth.split('-');
+            const date = new Date(
+                parseInt(dateParts[0]), // Year
+                parseInt(dateParts[1], 10) - 1, // Month (0-based index)
+                parseInt(dateParts[2]) // Day
+            );
+
             const options: Intl.DateTimeFormatOptions = {
+                year: 'numeric',
                 month: 'long',
                 day: 'numeric',
-                year: 'numeric',
             };
-            setBirthday(date.toLocaleDateString('en-US', options));
+            const formattedDate = date.toLocaleDateString('en-US', options);
+            setBirthday(formattedDate);
         }
     }, [additionalSurveyState.dateOfBirth]);
 
@@ -80,7 +87,11 @@ const HandleAgeEventInput: React.FC<Props> = ({
             <Grid
                 item
                 xs={6}
-                sx={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    marginTop: '15px',
+                }}
             >
                 <TextField
                     size='small'

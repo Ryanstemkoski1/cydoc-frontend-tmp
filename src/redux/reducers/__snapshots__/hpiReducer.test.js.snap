@@ -1,5 +1,27 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`hpi reducers > handle user actions > handles age AGEATEVENT input change 1`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": 1999,
+      "responseType": "AGEATEVENT",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
 exports[`hpi reducers > handle user actions > handles blank widget questions > handles new blank response 1`] = `
 {
   "edges": {},
