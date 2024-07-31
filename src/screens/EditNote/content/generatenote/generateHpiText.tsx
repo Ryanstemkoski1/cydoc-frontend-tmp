@@ -85,7 +85,10 @@ const selectivelyLowercase = (str: string): string => {
  * Removes punctuation (except periods, commas, forward slashes, apostrophes,
  * and colons). Removes multiple spaces.
  */
-export const fullClean = (sentence: string): string => {
+export const fullClean = (
+    sentence: string,
+    isAdvancedReport?: boolean
+): string => {
     // remove punctuations except hyphens, parentheses and single apostrophes
     sentence = sentence.replace(/[^\w\s'.,:/@()-]/g, '');
 
@@ -99,7 +102,9 @@ export const fullClean = (sentence: string): string => {
     sentence = selectivelyUppercase(sentence);
 
     // decimal measurements of lesion)
-    return sentence.replace(/\.\s?$/, '').trim();
+    return isAdvancedReport
+        ? sentence.trim() // Do not remove any punctuation for Advanced Report Generation.
+        : sentence.replace(/\.\s?$/, '').trim();
 };
 
 // checks if string has I in it, if so, returns it with quotes around.
@@ -133,17 +138,18 @@ export const removeSentence = (
  * Clean the fill sentences and the answers, and insert the answers int the
  * fill sentences
  */
-export const fillAnswers = (hpi: HPI): string => {
+export const fillAnswers = (hpi: HPI, isAdvancedReport?: boolean): string => {
     const sortedKeys: number[] = Object.keys(hpi).map((val) => parseInt(val));
     // JS sorts numbers lexicographically by default
     sortedKeys.sort((lhs, rhs) => lhs - rhs);
 
+    //debugger;
     let hpiString = '';
     sortedKeys.forEach((key) => {
         let [fillSentence, answer, negAnswer] = hpi[key] || hpi[key.toString()];
-        answer = fullClean(answer);
-        negAnswer = fullClean(negAnswer);
-        fillSentence = fullClean(fillSentence);
+        answer = fullClean(answer, isAdvancedReport);
+        negAnswer = fullClean(negAnswer, isAdvancedReport);
+        fillSentence = fullClean(fillSentence, isAdvancedReport);
         if (!answer.length)
             fillSentence = removeSentence(fillSentence, 'answer');
         else if (answer === 'all no') {
@@ -158,7 +164,10 @@ export const fillAnswers = (hpi: HPI): string => {
         else if (fillSentence.match(/notanswer/)) {
             fillSentence = fillSentence.replace(/notanswer/, negAnswer);
         }
-        hpiString += fillSentence + '. ';
+        // Do not add any punctuation for Advanced Report Generation.
+        isAdvancedReport
+            ? (hpiString += `${fillSentence} `)
+            : (hpiString += `${fillSentence}. `);
     });
     return hpiString;
 };
@@ -372,9 +381,7 @@ export const createInitialHPI = (
     hpi: HPI,
     isAdvancedReport: boolean
 ): string => {
-    return isAdvancedReport
-        ? fillAnswersForAdvancedReport(hpi)
-        : fillAnswers(hpi);
+    return fillAnswers(hpi, isAdvancedReport);
 };
 
 export const createHPI = (
@@ -394,47 +401,4 @@ export const createHPI = (
         hpiString = capitalize(hpiString);
     }
     return hpiString;
-};
-
-/**
- * This function generates text specifically for Advanced Report Generation.
- * It returns the text without altering the provided fillSentence value.
- * Note: This function does not change any capitalization or punctuation.
- *
- * @returns {string} The original texts filled with original answers.
- */
-export const fillAnswersForAdvancedReport = (hpi: HPI): string => {
-    if (hpi && typeof hpi === 'object') {
-        const sortedKeys: number[] = Object.keys(hpi).map((val) =>
-            parseInt(val)
-        );
-        sortedKeys.sort((lhs, rhs) => lhs - rhs);
-        let hpiString = '';
-        sortedKeys.forEach((key) => {
-            let [fillSentence, answer, negAnswer] =
-                hpi[key] || hpi[key.toString()];
-            answer = fullClean(answer);
-            negAnswer = fullClean(negAnswer);
-            if (!answer.length)
-                fillSentence = removeSentence(fillSentence, 'ANSWER');
-            else if (answer === 'all no') {
-                fillSentence = fillSentence.substring(
-                    fillSentence.indexOf('ANSWER') + 6
-                );
-            } else if (fillSentence.match(/ANSWER/)) {
-                fillSentence = fillSentence.replace(
-                    /ANSWER/,
-                    stringHasI(answer)
-                );
-            }
-            if (!negAnswer.length)
-                fillSentence = removeSentence(fillSentence, 'NOTANSWER');
-            else if (fillSentence.match(/NOTANSWER/)) {
-                fillSentence = fillSentence.replace(/NOTANSWER/, negAnswer);
-            }
-            hpiString += fillSentence + ' ';
-        });
-        return hpiString.trim();
-    }
-    return '';
 };
