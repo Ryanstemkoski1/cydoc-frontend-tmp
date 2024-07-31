@@ -4,17 +4,14 @@ import { useState } from 'react';
 import {
     Box,
     Button,
-    FormControl,
     IconButton,
     List,
     ListItem,
     ListItemButton,
     ListItemIcon,
     ListItemText,
-    MenuItem,
     Modal,
     Popover,
-    Select,
     SelectChangeEvent,
     TextField,
     Typography,
@@ -23,13 +20,13 @@ import Link from 'next/link';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
-import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import DragIndicatorRoundedIcon from '@mui/icons-material/DragIndicatorRounded';
 import {
     TaskType,
     WhoCompletes,
 } from '@constants/appointmentTemplatesConstants';
 import { Icon } from '@components/Icon';
+import SelectPlaceholder from '@components/SelectPlaceholder/SelectPlaceholder';
 
 const ApptTempData = [
     {
@@ -268,44 +265,13 @@ const AppointmentTemplatePage = () => {
                     >
                         Who completes the task?
                     </Typography>
-                    <FormControl
-                        fullWidth
-                        sx={{
-                            bgcolor: 'white',
-                        }}
-                    >
-                        {/* <InputLabel id={`demo-simple-select-label-${idx}`}>
-                            Select
-                        </InputLabel> */}
-                        <Select
-                            labelId={`demo-simple-select-label-${idx}`}
-                            id={`demo-simple-select-${idx}`}
-                            value={selectedWhoCompletesValue[idx] || ''}
-                            onChange={(event) =>
-                                handleWhoCompletesValue(event, idx)
-                            }
-                            IconComponent={KeyboardArrowDownRoundedIcon}
-                            sx={{
-                                pl: 3,
-
-                                '& ul': {
-                                    padding: 0,
-                                },
-                            }}
-                        >
-                            {Object.values(WhoCompletes).map((item) => (
-                                <MenuItem
-                                    value={item}
-                                    key={item}
-                                    sx={{
-                                        padding: '12px 16px',
-                                    }}
-                                >
-                                    {item}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    <SelectPlaceholder
+                        idx={idx}
+                        placeholder='Select'
+                        items={Object.values(WhoCompletes)}
+                        handleChange={handleWhoCompletesValue}
+                        value={selectedWhoCompletesValue[idx] || ''}
+                    />
                     {selectedWhoCompletesValue[idx] && (
                         <>
                             <Typography
@@ -325,38 +291,13 @@ const AppointmentTemplatePage = () => {
                             </Typography>
                             {selectedWhoCompletesValue[idx] !==
                                 WhoCompletes.Cydoc_ai && (
-                                <FormControl
-                                    fullWidth
-                                    sx={{
-                                        bgcolor: 'white',
-                                    }}
-                                >
-                                    {/* <InputLabel
-                                        id={`task-type-select-label-${idx}`}
-                                    >
-                                        Select specific form
-                                    </InputLabel> */}
-                                    <Select
-                                        labelId={`task-type-select-label-${idx}`}
-                                        id={`task-type-select-${idx}`}
-                                        value={selectedTaskTypeValue[idx] || ''}
-                                        onChange={(event) =>
-                                            handleTaskTypeValue(event, idx)
-                                        }
-                                        IconComponent={
-                                            KeyboardArrowDownRoundedIcon
-                                        }
-                                        sx={{
-                                            pl: 3,
-                                        }}
-                                    >
-                                        {Object.values(TaskType).map((item) => (
-                                            <MenuItem value={item} key={item}>
-                                                {item}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                                <SelectPlaceholder
+                                    idx={idx}
+                                    placeholder='Select specific form'
+                                    items={Object.values(TaskType)}
+                                    handleChange={handleTaskTypeValue}
+                                    value={selectedTaskTypeValue[idx] || ''}
+                                />
                             )}
                         </>
                     )}
@@ -398,8 +339,14 @@ const AppointmentTemplatePage = () => {
                             variant='outlined'
                             placeholder='Enter'
                             sx={{
-                                '& div:hover': {
-                                    '& .MuiOutlinedInput-notchedOutline': {
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: '#0000003B',
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: '#047A9B',
+                                    },
+                                    '&.Mui-focused fieldset': {
                                         borderColor: '#047A9B',
                                     },
                                 },

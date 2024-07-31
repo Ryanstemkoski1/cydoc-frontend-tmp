@@ -281,7 +281,7 @@
             font-weight: $font-weight-normal;
             font-size: 16px;
             line-height: 24px;
-            color: rgba($color-black, .87);
+            color: rgba($color-black, 0.87);
         }
     }
 }
@@ -360,6 +360,11 @@
 
                 input {
                     padding: 14px 12px;
+                    font-family: $font-family-primary;
+                    font-weight: $font-weight-normal;
+                    font-size: 16px;
+                    line-height: 24px;
+                    color: rgba($color-black, 0.87);
 
                     ::placeholder {
                         font-family: $font-family-primary;
@@ -403,6 +408,8 @@
                     display: flex;
                     flex-direction: column;
                     gap: 8px;
+                    box-sizing: border-box;
+                    border-radius: 10px;
 
                     & label {
                         font-family: $font-family-primary;
@@ -451,7 +458,7 @@
             svg {
                 width: 24px;
                 height: 24px;
-                
+
                 path {
                     fill: $color-green-dark;
                 }
@@ -481,6 +488,7 @@
             padding: 8px 22px;
             border-radius: 10px;
             text-transform: capitalize;
+            box-shadow: none;
         }
 
         &__create {

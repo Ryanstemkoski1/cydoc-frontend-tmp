@@ -1,0 +1,16 @@
+@import '@assets/scss/variables.scss';
+
+.select {
+    div {
+        padding: 14px 12px;
+    };
+}
+
+.placeholder {
+    font-family: $font-family-primary;
+    font-weight: $font-weight-normal;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.15px;
+    color: rgba($color-black, 0.6);
+}
