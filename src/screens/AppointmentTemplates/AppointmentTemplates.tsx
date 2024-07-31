@@ -22,6 +22,8 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import DragIndicatorRoundedIcon from '@mui/icons-material/DragIndicatorRounded';
 import {
+    AppointmentTemplateType,
+    AppointmentValueType,
     FormType,
     TaskType,
     WhoCompletes,
@@ -29,25 +31,25 @@ import {
 import { Icon } from '@components/Icon';
 import SelectPlaceholder from '@components/SelectPlaceholder/SelectPlaceholder';
 
-const ApptTempData = [
+const ApptTempData: AppointmentTemplateType[] = [
     {
         header: 'Annual visit',
         body: [
             {
-                title: 'Clinician',
-                form: 'Diabetes Form',
+                whoCompletes: WhoCompletes.Clinician,
+                form: FormType.Diabetes,
             },
             {
-                title: 'Staff',
-                form: 'Evaluation Form',
+                whoCompletes: WhoCompletes.Staff,
+                form: FormType.Evaluation,
             },
             {
-                title: 'Patient',
-                form: 'Symptoms Today Form',
+                whoCompletes: WhoCompletes.Patient,
+                form: FormType.Symptoms_Today,
             },
             {
-                title: 'Patient',
-                form: 'After Visit Survey',
+                whoCompletes: WhoCompletes.Patient,
+                form: FormType.After_Visit_Survey,
             },
         ],
     },
@@ -55,16 +57,16 @@ const ApptTempData = [
         header: 'Diabetes',
         body: [
             {
-                title: 'Patient',
-                form: 'Form',
+                whoCompletes: WhoCompletes.Patient,
+                form: FormType.Form,
             },
             {
-                title: 'Clinician',
-                form: 'Glucose Management Form',
+                whoCompletes: WhoCompletes.Clinician,
+                form: FormType.Glucose_Management,
             },
             {
-                title: 'Patient',
-                form: 'After Visit Survey',
+                whoCompletes: WhoCompletes.Patient,
+                form: FormType.After_Visit_Survey,
             },
         ],
     },
@@ -77,11 +79,9 @@ const AppointmentTemplatePage = () => {
     const [stepCount, setStepCount] = useState<number>(1);
     const [createNewOpen, setCreateNewOpen] = useState<boolean>(false);
     const [newTempTitle, setNewTempTitle] = useState<string>('');
-    const [selectedWhoCompletesValue, setSelectedWhoCompletesValue] =
-        React.useState<(string | null)[]>(['']);
-    const [selectedFormTypeValue, setSelectedFormTypeValue] = React.useState<
-        (string | null)[]
-    >(['']);
+    const [selectedApptValue, setSelectedApptValue] = React.useState<
+        AppointmentValueType[]
+    >([{ whoCompletes: null, form: null }]);
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
         null
     );
@@ -93,10 +93,14 @@ const AppointmentTemplatePage = () => {
     const popupId = openedPopover > 0 ? 'edit-apptTemp-popover' : undefined;
 
     const taskType = (idx: number) => {
-        if (selectedWhoCompletesValue[idx] === '') {
+        if (
+            !selectedApptValue.length ||
+            selectedApptValue[idx].whoCompletes === null
+        ) {
             return '';
         }
-        return selectedWhoCompletesValue[idx] === WhoCompletes.Cydoc_ai
+
+        return selectedApptValue[idx].whoCompletes === WhoCompletes.Cydoc_ai
             ? TaskType.Synthesize_All_forms_into_Report
             : TaskType.Smart_Form;
     };
@@ -117,41 +121,30 @@ const AppointmentTemplatePage = () => {
         setCreateNewOpen(false);
     };
 
-    const handleWhoCompletesValue = (
+    const handleApptValues = (
         event: SelectChangeEvent<string | null>,
-        index: number
+        index: number,
+        type: 'whoCompletes' | 'form'
     ) => {
-        setSelectedWhoCompletesValue((prevState) => {
-            const newState = [...prevState];
-            newState[index] = event.target.value;
+        setSelectedApptValue((prevState) => {
+            const newState: AppointmentValueType[] = [...prevState];
+            newState[index] = {
+                ...newState[index],
+                [type]: event.target.value,
+            };
             return newState;
         });
     };
 
-    const handleFormTypeValue = (
-        event: SelectChangeEvent<string | null>,
-        idx: number
-    ) => {
-        const newValue = event.target.value;
-        setSelectedFormTypeValue((prevValues) => {
-            const updatedValues = [...prevValues];
-            updatedValues[idx] = newValue;
-            return updatedValues;
-        });
-    };
-
     const handleRemoveSteps = (idx: number) => {
-        if (stepCount === 1) {
+        if (stepCount === 1 || !selectedApptValue?.length) {
             return;
         }
-        const whoCompletesTemp = [...selectedWhoCompletesValue];
-        const formTypeTemp = [...selectedFormTypeValue];
-        whoCompletesTemp.splice(idx, 1);
-        formTypeTemp.splice(idx, 1);
+        const apptValuesTemp = [...selectedApptValue];
+        apptValuesTemp.splice(idx, 1);
 
         setStepCount(stepCount - 1);
-        setSelectedWhoCompletesValue(whoCompletesTemp);
-        setSelectedFormTypeValue(formTypeTemp);
+        setSelectedApptValue(apptValuesTemp);
     };
 
     const handlePopupClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -215,7 +208,7 @@ const AppointmentTemplatePage = () => {
                                     style.viewMoreModalWrapper__body__item__title
                                 }
                             >
-                                {item.title}
+                                {item.whoCompletes}
                             </Typography>
                             <Typography
                                 component='p'
@@ -268,12 +261,13 @@ const AppointmentTemplatePage = () => {
                     </Typography>
                     <SelectPlaceholder
                         idx={idx}
+                        type='whoCompletes'
                         placeholder='Select'
                         items={Object.values(WhoCompletes)}
-                        handleChange={handleWhoCompletesValue}
-                        value={selectedWhoCompletesValue[idx] || ''}
+                        handleChange={handleApptValues}
+                        value={selectedApptValue[idx]?.whoCompletes || ''}
                     />
-                    {selectedWhoCompletesValue[idx] && (
+                    {selectedApptValue[idx] && (
                         <>
                             <Typography
                                 component='label'
@@ -289,14 +283,15 @@ const AppointmentTemplatePage = () => {
                                     {taskType(idx)}
                                 </span>
                             </Typography>
-                            {selectedWhoCompletesValue[idx] !==
+                            {selectedApptValue[idx].whoCompletes !==
                                 WhoCompletes.Cydoc_ai && (
                                 <SelectPlaceholder
                                     idx={idx}
+                                    type='form'
                                     placeholder='Select specific form'
                                     items={Object.values(FormType)}
-                                    handleChange={handleFormTypeValue}
-                                    value={selectedFormTypeValue[idx] || ''}
+                                    handleChange={handleApptValues}
+                                    value={selectedApptValue[idx].form || ''}
                                 />
                             )}
                         </>
@@ -458,7 +453,7 @@ const AppointmentTemplatePage = () => {
                                         style.apptTempCard__body__item__title
                                     }
                                 >
-                                    {item.title}
+                                    {item.whoCompletes}
                                 </Typography>
                                 <Typography
                                     component='p'

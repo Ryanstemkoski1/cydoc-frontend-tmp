@@ -87,9 +87,11 @@ interface SelectPlaceholderProps {
     value: string;
     placeholder: string;
     items: string[];
+    type: 'whoCompletes' | 'form';
     handleChange: (
         event: SelectChangeEvent<string | null>,
-        idx: number
+        idx: number,
+        type: 'whoCompletes' | 'form'
     ) => void;
 }
 
@@ -97,6 +99,7 @@ const SelectPlaceholder = ({
     idx,
     value,
     items,
+    type,
     placeholder,
     handleChange,
 }: SelectPlaceholderProps) => {
@@ -113,13 +116,13 @@ const SelectPlaceholder = ({
             <Select
                 displayEmpty
                 value={value}
-                onChange={(event) => handleChange(event, idx)}
+                onChange={(event) => handleChange(event, idx, type)}
                 renderValue={handleValue}
                 MenuProps={MenuProps}
                 IconComponent={KeyboardArrowDownRoundedIcon}
                 inputProps={{ 'aria-label': 'Without label' }}
                 className={style.select}
-                input={<BootstrapInput />}
+                input={<BootstrapInput notched='true' />}
             >
                 {items.map((item) => (
                     <MenuItem key={item} value={item}>

@@ -11,8 +11,20 @@ export enum TaskType {
 }
 
 export enum FormType {
+    Form = 'Form',
     Diabetes = 'Diabetes Form',
     Evaluation = 'Evaluation Form',
-    Symptoms_Today_Form = 'Symptoms Today Form',
+    Symptoms_Today = 'Symptoms Today Form',
     After_Visit_Survey = 'After Visit Survey',
+    Glucose_Management = 'Glucose Management Form',
 }
+
+export type AppointmentValueType = {
+    whoCompletes: string | null;
+    form: string | null;
+};
+
+export type AppointmentTemplateType = {
+    header: string | null;
+    body: AppointmentValueType[];
+};
