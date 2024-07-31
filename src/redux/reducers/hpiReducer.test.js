@@ -205,7 +205,7 @@ describe('hpi reducers', () => {
             'GERD',
             'other',
         ];
-        optionsToTest.forEach(option => {
+        optionsToTest.forEach((option) => {
             payload.name = option;
             nextState = hpiReducer(nextState, {
                 type: HPI_ACTION.SINGLE_MULTIPLE_CHOICE_HANDLE_CLICK,
@@ -225,7 +225,7 @@ describe('hpi reducers', () => {
             );
         });
         let trueCount = 0;
-        Object.values(nextState.nodes[medId].response).forEach(value => {
+        Object.values(nextState.nodes[medId].response).forEach((value) => {
             if (value) trueCount++;
         });
         expect(trueCount).toBeLessThanOrEqual(optionsToTest.length);
@@ -240,7 +240,7 @@ describe('hpi reducers', () => {
         expect(nextState.nodes[medId].response[payload.name]).toEqual(true);
 
         // Check the remaining options are still true
-        optionsToTest.slice(1).forEach(option => {
+        optionsToTest.slice(1).forEach((option) => {
             expect(nextState.nodes[medId].response[option]).toEqual(false);
         });
 
@@ -253,7 +253,7 @@ describe('hpi reducers', () => {
         expect(nextState.nodes[medId].response[payload.name]).toEqual(true);
 
         trueCount = 0;
-        Object.values(nextState.nodes[medId].response).forEach(value => {
+        Object.values(nextState.nodes[medId].response).forEach((value) => {
             if (value) trueCount++;
         });
         expect(trueCount).toEqual(2);
@@ -362,6 +362,16 @@ describe('hpi reducers', () => {
             });
             expect(nextState).toMatchSnapshot();
             expect(nextState.nodes[medId].response).toEqual(payload.textInput);
+        });
+        it('handles age AGEATEVENT input change', () => {
+            payload.input = 1999;
+            nextState.nodes[medId].responseType = 'AGEATEVENT';
+            nextState = hpiReducer(nextState, {
+                type: HPI_ACTION.HANDLE_NUMERIC_INPUT_CHANGE,
+                payload,
+            });
+            expect(nextState).toMatchSnapshot();
+            expect(nextState.nodes[medId].response).toEqual(payload.input);
         });
         it('handles numeric input change', () => {
             payload.input = 42;
