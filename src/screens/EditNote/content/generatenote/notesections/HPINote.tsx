@@ -46,6 +46,8 @@ function processSentence(sentence: string) {
         return (
             <React.Fragment key={str + id++}>
                 <br />
+                {/* Added a new line before each heading specifically for Advanced Report Generation.*/}
+                {id !== 1 ? <br /> : null}
                 <b>{str}</b>
                 <br />
             </React.Fragment>
@@ -119,7 +121,7 @@ const HpiNote = ({
             <li key={item.title} className={styles.listItem}>
                 <b>{item.title}</b>
                 <ul className={styles.noBullets}>
-                    <span>{item.text}</span>
+                    <span>{processSentence(item.text)}</span>
                 </ul>
 
                 {item.miscNote &&
