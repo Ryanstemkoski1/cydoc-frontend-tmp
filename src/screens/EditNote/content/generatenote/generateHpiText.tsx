@@ -222,12 +222,12 @@ export const fillNameAndPronouns = (
         }
 
         const pronounReplacements = {
-            he: ['he', 'him', 'his', 'himself'],
-            she: ['she', 'her', 'her', 'herself'],
-            they: ['they', 'them', 'their', 'themselves'],
+            he: ['he', 'him', 'his', 'himself', 'his'],
+            she: ['she', 'her', 'her', 'herself', 'hers'],
+            they: ['they', 'them', 'their', 'themselves', 'theirs'],
         };
 
-        const [subject, object, possessive, reflexive] =
+        const [subject, object, possessive, reflexive, possessivePronoun] =
             pronounReplacements[pronoun];
 
         // Replace pronouns in the senetence
@@ -251,6 +251,12 @@ export const fillNameAndPronouns = (
             /\bher\b(?=\s*\b(?:\w|[a-zA-Z])\b)/gi,
             (match) => replaceWord(match, possessive)
         );
+
+        // Handle "theirs" and "hers" plural
+        sentence = sentence.replace(/\b(hers|theirs)\b/gi, (match) =>
+            replaceWord(match, possessivePronoun)
+        );
+
         sentence = sentence.replace(
             /\b(himself|herself|themselves)\b/gi,
             (match) => replaceWord(match, reflexive)
