@@ -22,6 +22,7 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import DragIndicatorRoundedIcon from '@mui/icons-material/DragIndicatorRounded';
 import {
+    FormType,
     TaskType,
     WhoCompletes,
 } from '@constants/appointmentTemplatesConstants';
@@ -34,19 +35,19 @@ const ApptTempData = [
         body: [
             {
                 title: 'Clinician',
-                detail: 'Diabetes Form',
+                form: 'Diabetes Form',
             },
             {
                 title: 'Staff',
-                detail: 'Evaluation Form',
+                form: 'Evaluation Form',
             },
             {
                 title: 'Patient',
-                detail: 'Symptoms Today Form',
+                form: 'Symptoms Today Form',
             },
             {
                 title: 'Patient',
-                detail: 'After Visit Survey',
+                form: 'After Visit Survey',
             },
         ],
     },
@@ -55,15 +56,15 @@ const ApptTempData = [
         body: [
             {
                 title: 'Patient',
-                detail: 'Form',
+                form: 'Form',
             },
             {
                 title: 'Clinician',
-                detail: 'Glucose Management Form',
+                form: 'Glucose Management Form',
             },
             {
                 title: 'Patient',
-                detail: 'After Visit Survey',
+                form: 'After Visit Survey',
             },
         ],
     },
@@ -75,9 +76,10 @@ const AppointmentTemplatePage = () => {
     const [openedPopover, setOpenedPopover] = useState<number>(0);
     const [stepCount, setStepCount] = useState<number>(1);
     const [createNewOpen, setCreateNewOpen] = useState<boolean>(false);
+    const [newTempTitle, setNewTempTitle] = useState<string>('');
     const [selectedWhoCompletesValue, setSelectedWhoCompletesValue] =
         React.useState<(string | null)[]>(['']);
-    const [selectedTaskTypeValue, setSelectedTaskTypeValue] = React.useState<
+    const [selectedFormTypeValue, setSelectedFormTypeValue] = React.useState<
         (string | null)[]
     >(['']);
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -88,8 +90,16 @@ const AppointmentTemplatePage = () => {
         left: 0,
     });
 
-    // const popupOpen = Boolean(anchorEl);
     const popupId = openedPopover > 0 ? 'edit-apptTemp-popover' : undefined;
+
+    const taskType = (idx: number) => {
+        if (selectedWhoCompletesValue[idx] === '') {
+            return '';
+        }
+        return selectedWhoCompletesValue[idx] === WhoCompletes.Cydoc_ai
+            ? TaskType.Synthesize_All_forms_into_Report
+            : TaskType.Smart_Form;
+    };
 
     const handleViewMoreOpen = (index: number) => {
         setViewMoreOpen(index);
@@ -111,15 +121,6 @@ const AppointmentTemplatePage = () => {
         event: SelectChangeEvent<string | null>,
         index: number
     ) => {
-        if (event.target.value === WhoCompletes.Cydoc_ai) {
-            setSelectedTaskTypeValue((prevValues) => {
-                const updatedValues = [...prevValues];
-                updatedValues[index] =
-                    TaskType.Synthesize_All_forms_into_Report;
-                return updatedValues;
-            });
-        }
-
         setSelectedWhoCompletesValue((prevState) => {
             const newState = [...prevState];
             newState[index] = event.target.value;
@@ -127,12 +128,12 @@ const AppointmentTemplatePage = () => {
         });
     };
 
-    const handleTaskTypeValue = (
+    const handleFormTypeValue = (
         event: SelectChangeEvent<string | null>,
         idx: number
     ) => {
         const newValue = event.target.value;
-        setSelectedTaskTypeValue((prevValues) => {
+        setSelectedFormTypeValue((prevValues) => {
             const updatedValues = [...prevValues];
             updatedValues[idx] = newValue;
             return updatedValues;
@@ -144,13 +145,13 @@ const AppointmentTemplatePage = () => {
             return;
         }
         const whoCompletesTemp = [...selectedWhoCompletesValue];
-        const taskTypeTemp = [...selectedTaskTypeValue];
+        const formTypeTemp = [...selectedFormTypeValue];
         whoCompletesTemp.splice(idx, 1);
-        taskTypeTemp.splice(idx, 1);
+        formTypeTemp.splice(idx, 1);
 
         setStepCount(stepCount - 1);
         setSelectedWhoCompletesValue(whoCompletesTemp);
-        setSelectedTaskTypeValue(taskTypeTemp);
+        setSelectedFormTypeValue(formTypeTemp);
     };
 
     const handlePopupClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -222,7 +223,7 @@ const AppointmentTemplatePage = () => {
                                     style.viewMoreModalWrapper__body__item__detail
                                 }
                             >
-                                {item.detail}
+                                {item.form}
                             </Typography>
                         </Box>
                     ))}
@@ -285,8 +286,7 @@ const AppointmentTemplatePage = () => {
                                         fontWeight: '400',
                                     }}
                                 >
-                                    {selectedTaskTypeValue[idx] ||
-                                        TaskType.Smart_Form}
+                                    {taskType(idx)}
                                 </span>
                             </Typography>
                             {selectedWhoCompletesValue[idx] !==
@@ -294,9 +294,9 @@ const AppointmentTemplatePage = () => {
                                 <SelectPlaceholder
                                     idx={idx}
                                     placeholder='Select specific form'
-                                    items={Object.values(TaskType)}
-                                    handleChange={handleTaskTypeValue}
-                                    value={selectedTaskTypeValue[idx] || ''}
+                                    items={Object.values(FormType)}
+                                    handleChange={handleFormTypeValue}
+                                    value={selectedFormTypeValue[idx] || ''}
                                 />
                             )}
                         </>
@@ -338,6 +338,8 @@ const AppointmentTemplatePage = () => {
                             id='new-temp-title'
                             variant='outlined'
                             placeholder='Enter'
+                            value={newTempTitle}
+                            onChange={(e) => setNewTempTitle(e.target.value)}
                             sx={{
                                 '& .MuiOutlinedInput-root': {
                                     '& fieldset': {
@@ -464,7 +466,7 @@ const AppointmentTemplatePage = () => {
                                         style.apptTempCard__body__item__detail
                                     }
                                 >
-                                    {item.detail}
+                                    {item.form}
                                 </Typography>
                             </Box>
                         ))}
