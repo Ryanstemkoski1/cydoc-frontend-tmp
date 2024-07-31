@@ -7,4 +7,5 @@ export interface ProductDefinitions {
     showAppointmentTemplates: boolean;
     showNewPatientGeneration: boolean;
     useAdvancedReportTextGeneration: boolean;
+    displayedNodesCutOff: number;
 }

@@ -5,4 +5,5 @@ export const SmartPatientIntakeForm: ProductDefinitions = {
     showAppointmentTemplates: false,
     showNewPatientGeneration: false,
     useAdvancedReportTextGeneration: false,
+    displayedNodesCutOff: 150,
 };

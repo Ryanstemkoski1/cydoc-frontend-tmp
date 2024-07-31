@@ -5,4 +5,5 @@ export const AdvancedReportGeneration: ProductDefinitions = {
     showAppointmentTemplates: true,
     showNewPatientGeneration: true,
     useAdvancedReportTextGeneration: true,
+    displayedNodesCutOff: 1000,
 };

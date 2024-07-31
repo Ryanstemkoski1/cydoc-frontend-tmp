@@ -1,7 +1,4 @@
-import {
-    displayedNodesCutOff,
-    displayedNodesCutOffForAdvancedReport,
-} from '@constants/displayedNodesCutOff';
+import { displayedNodesCutOff } from '@constants/displayedNodesCutOff';
 import { YesNoResponse } from '@constants/enums';
 import {
     ResponseTypes,
@@ -96,11 +93,10 @@ export function nodesToDisplayInOrder(
         ];
     let loopCount = 0;
 
+    // Ensure maxLimit defaults to displayedNodesCutOff to avoid being null.
     const maxLimit =
-        productDefinition.definitions &&
-        productDefinition.definitions.useAdvancedReportTextGeneration
-            ? displayedNodesCutOffForAdvancedReport
-            : displayedNodesCutOff;
+        productDefinition.definitions?.displayedNodesCutOff ??
+        displayedNodesCutOff;
 
     if (totalNodes.length < maxLimit) {
         let nodesArr = totalNodes, // for the count
