@@ -8,42 +8,64 @@ import { toast } from 'react-toastify';
 import { Box, Typography } from '@mui/material';
 
 interface GeneratedNoteContentProps {
-    selectedAppointment: AppointmentUser;
+    selectedAppointment: any;
 }
 const GeneratedNoteContent = (
     selectedAppointment: GeneratedNoteContentProps
 ) => {
-    const { firstName, middleName, lastName, hpiText } =
+    // const { firstName, middleName, lastName, hpiText } =
+    //     selectedAppointment.selectedAppointment;
+    const { appointmentDetails, patientDetails, hpiText } =
         selectedAppointment.selectedAppointment;
+    const {
+        firstName,
+        middleName,
+        lastName,
+        age,
+        dateOfBirth,
+        examiners,
+        education,
+        occupation,
+        referredBy,
+    } = patientDetails;
+    const { dateOfAppointment, typeOfAppointment, associatedForms } =
+        appointmentDetails;
 
     const data = {
-        Name: 'Sara K.',
-        'Date of Evaluation': 'June 15, 2024',
-        Age: '30 Years-old',
-        'Referred by': 'Dr. Kate R.',
-        DOB: 'June 10, 1994',
-        Examiners: 'Dr. Marta J.',
-        Education: 'High School Diploma',
+        Name: `${firstName} ${middleName} ${lastName}`,
+        'Date of Evaluation': dateOfAppointment,
+        Age: `${age} Years-old`,
+        'Referred by': referredBy,
+        DOB: dateOfBirth,
+        Examiners: examiners.join(', '),
+        Education: education,
         '': '',
-        Occupation: 'Retail Worker',
+        Occupation: occupation,
     };
-    const sourcesData = [
-        {
-            reporter: 'clinician',
-            title: 'Clinician survey',
-            Status: 'Not started',
-        },
-        {
-            reporter: 'staff',
-            title: 'Evaluation results',
-            Status: 'Finished',
-        },
-        {
-            reporter: 'patient',
-            title: 'Patient survey',
-            Status: 'In progress',
-        },
-    ];
+    // const sourcesData = [
+    //     {
+    //         reporter: 'clinician',
+    //         title: 'Clinician survey',
+    //         Status: 'Not started',
+    //     },
+    //     {
+    //         reporter: 'staff',
+    //         title: 'Evaluation results',
+    //         Status: 'Finished',
+    //     },
+    //     {
+    //         reporter: 'patient',
+    //         title: 'Patient survey',
+    //         Status: 'In progress',
+    //     },
+    // ];
+    const sourcesData = associatedForms.map((form: any) => {
+        return {
+            reporter: form.identifier,
+            title: form.name,
+            status: form.status,
+        };
+    });
 
     const copyNote = () => {
         const note = document.getElementById('copy-notes');
@@ -64,16 +86,16 @@ const GeneratedNoteContent = (
 
     function handleReporterChange(reporter: string) {
         switch (reporter) {
-            case 'cydoc':
+            case 'CYDOC_AI_REPORT':
                 return '/images/reporter-staff.svg';
                 break;
-            case 'clinician':
+            case 'RCONNELL_ADULT':
                 return '/images/reporter-clinician.svg';
                 break;
-            case 'staff':
+            case 'RCONNELL_ADULT_DX':
                 return '/images/reporter-staff.svg';
                 break;
-            case 'patient':
+            case 'RCONNELL_PAI':
                 return '/images/reporter-patient.svg';
                 break;
             default:
@@ -116,12 +138,14 @@ const GeneratedNoteContent = (
                         );
                     })}
                 </Box>
-                <Box className={style.genNoteDetail} id='copy-notes'>
-                    <ParseAndRenderHpiNote
-                        hpiText={hpiText}
-                        isParagraphFormat={true}
-                    />
-                </Box>
+                {hpiText !== undefined && (
+                    <Box className={style.genNoteDetail} id='copy-notes'>
+                        <ParseAndRenderHpiNote
+                            hpiText={hpiText}
+                            isParagraphFormat={true}
+                        />
+                    </Box>
+                )}
                 <Box className={style.genNoteSource}>
                     <Typography variant='h1'>Source Data (Forms)</Typography>
                     {Object.keys(sourcesData).map((item, index) => {
@@ -180,7 +204,7 @@ const GeneratedNoteContent = (
                                         component={'p'}
                                         style={textStyle}
                                     >
-                                        {sourcesData[item].Status}
+                                        {sourcesData[item].status}
                                     </Typography>
                                 </Box>
                             </Box>

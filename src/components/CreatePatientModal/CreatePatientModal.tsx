@@ -31,7 +31,7 @@ const CreatePatientModal = ({
 
     const dropdownItems = ['Adult Evaluation'];
     const mockyAPI =
-        'https://run.mocky.io/v3/69c20acd-d2b0-495b-9915-9a28eec4a02b';
+        'https://run.mocky.io/v3/8aadd6ba-f4d6-446b-93b8-445fba005708';
 
     const handleClickOutsideModal = (event: MouseEvent<HTMLDivElement>) => {
         if (!modalRef.current?.contains(event.target as HTMLDivElement)) {
@@ -55,7 +55,6 @@ const CreatePatientModal = ({
             ...patientDetails,
             [name]: value,
         });
-        console.log(patientDetails);
     };
 
     const handleTodayClick = (event: React.FormEvent) => {
@@ -114,10 +113,16 @@ const CreatePatientModal = ({
             });
 
             // Handle the response
-            console.log(response.data);
             dispatch(addPatient(response.data));
-            // You can update the state with the response data if needed
-            // setPatientDetails(response.data.patientDetails);
+            setShowModal(false);
+            setPatientDetails({
+                legalFirstName: '',
+                legalLastName: '',
+                legalMiddleName: '',
+                dateOfBirth: '',
+                dateOfAppointment: '',
+                typeOfAppointment: '',
+            });
         } catch (error) {
             console.error('Error creating patient:', error);
         }
@@ -149,6 +154,7 @@ const CreatePatientModal = ({
                             aria-label='First-Name'
                             name='legalFirstName'
                             placeholder='Legal First Name'
+                            value={patientDetails.legalFirstName}
                             onChange={handleChange}
                         />
                         <CustomTextField
@@ -156,6 +162,7 @@ const CreatePatientModal = ({
                             aria-label='middle-Name'
                             name='legalMiddleName'
                             placeholder='Legal Middle Name'
+                            value={patientDetails.legalMiddleName}
                             onChange={handleChange}
                         />
                         <CustomTextField
@@ -164,6 +171,7 @@ const CreatePatientModal = ({
                             aria-label='last-Name'
                             name='legalLastName'
                             placeholder='Legal Last Name'
+                            value={patientDetails.legalLastName}
                             onChange={handleChange}
                         />
                         <CustomTextField
@@ -174,6 +182,7 @@ const CreatePatientModal = ({
                             name='dateOfBirth'
                             placeholder='mm/dd/yyyy'
                             max={new Date().toJSON().slice(0, 10)}
+                            value={patientDetails.dateOfBirth}
                             onChange={handleChange}
                         />
                         <Typography variant='h4' sx={{ marginTop: '16px' }}>

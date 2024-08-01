@@ -96,20 +96,21 @@ const BrowseNotes = () => {
     const dispatch = useDispatch();
     const definitions = useSelector(selectProductDefinitions);
     const patientsData = useSelector(selectPatientState);
-    console.log('===>', patientsData);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [showModalAdvance, setShowModalAdvance] = useState<boolean>(false);
-    const [selectedAppointment, setSelectedAppointment] =
-        useState<AppointmentUser>();
+    const [selectedAppointment, setSelectedAppointment] = useState<any>();
     const loadingStatus = useSelector(selectLoadingStatus);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const [addedPatients, setAddedPatients] = useState<any[]>(
+        patientsData.patients
+    );
 
     useEffect(() => {
         const initialDate = new Date().toISOString().slice(0, 10); // yyyy-mm-dd format
         setDateAdvance(initialDate);
     }, []);
 
-    const handleListItemClick = (index: number, user: AppointmentUser) => {
+    const handleListItemClick = (index: number, user: any) => {
         setSelectedIndex(index);
         setSelectedAppointment(user);
     };
@@ -148,30 +149,40 @@ const BrowseNotes = () => {
     };
 
     const loadPatientHistory = useCallback(async () => {
-        dispatch(setLoadingStatus(true));
-        if (!user) {
-            dispatch(setLoadingStatus(false));
-            return;
+        if (!definitions?.showNewPatientGeneration) {
+            dispatch(setLoadingStatus(true));
+            if (!user) {
+                dispatch(setLoadingStatus(false));
+                return;
+            }
+            try {
+                const users = await getAppointment(
+                    formatDateOfBirth(
+                        definitions?.showNewPatientGeneration
+                            ? dateAdvance
+                            : date
+                    ),
+                    user?.institutionId,
+                    cognitoUser
+                );
+                setUsers(users);
+                dispatch(setLoadingStatus(false));
+            } catch (err) {
+                setUsers([]);
+                dispatch(setLoadingStatus(false));
+            }
         }
-        try {
-            const users = await getAppointment(
-                formatDateOfBirth(
-                    definitions?.showNewPatientGeneration ? dateAdvance : date
-                ),
-                user?.institutionId,
-                cognitoUser
-            );
-            setUsers(users);
-            dispatch(setLoadingStatus(false));
-        } catch (err) {
-            setUsers([]);
-            dispatch(setLoadingStatus(false));
-        }
-    }, [cognitoUser, date, dateAdvance, dispatch, user]);
+    }, [cognitoUser, date, dispatch, user]);
 
     useEffect(() => {
         loadPatientHistory();
     }, [loadPatientHistory]);
+
+    useEffect(() => {
+        if (patientsData.patients.length > 0) {
+            setAddedPatients(patientsData.patients);
+        }
+    }, [dateAdvance, dispatch, patientsData]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDateAdvance(e.target.value);
@@ -222,7 +233,7 @@ const BrowseNotes = () => {
         );
     }
 
-    function renderUsersAdvance(users: AppointmentUser[]) {
+    function renderUsersAdvance(addedPatients: any[]) {
         return (
             <Box className={`${style.notesBlockAdvance__tableWrapper}`}>
                 <Box
@@ -233,7 +244,7 @@ const BrowseNotes = () => {
                     <Typography component='p'>Add patient</Typography>
                 </Box>
                 <List sx={{ padding: '0' }}>
-                    {!loadingStatus && users.length === 0 ? (
+                    {!loadingStatus && addedPatients.length === 0 ? (
                         <ListItem>
                             <ListItemText
                                 primary={
@@ -247,7 +258,7 @@ const BrowseNotes = () => {
                             />
                         </ListItem>
                     ) : (
-                        users.map((user, index) => (
+                        addedPatients.map((user, index) => (
                             <ListItem
                                 key={index}
                                 onClick={() => handleListItemClick(index, user)}
@@ -290,11 +301,7 @@ const BrowseNotes = () => {
                                                         : 'black',
                                             }}
                                         >
-                                            {formatFullName(
-                                                user?.firstName,
-                                                user?.middleName ?? '',
-                                                user?.lastName
-                                            )}
+                                            {user?.patientDetails?.fullName}
                                         </Typography>
                                     </Box>
                                     <Typography
@@ -309,7 +316,9 @@ const BrowseNotes = () => {
                                             style.notesBlockAdvance__tableWrapper__right
                                         }
                                     >
-                                        {formatDateOfBirth(user.dob)}
+                                        {formatDateOfBirth(
+                                            user?.patientDetails?.dateOfBirth
+                                        )}
                                     </Typography>
                                 </Box>
                             </ListItem>
@@ -437,7 +446,7 @@ const BrowseNotes = () => {
                             <Box
                                 className={` ${style.notesBlockAdvance__content} `}
                             >
-                                {renderUsersAdvance(users)}
+                                {renderUsersAdvance(addedPatients)}
                             </Box>
                         </Box>
                         {selectedAppointment && (
