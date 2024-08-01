@@ -357,7 +357,7 @@ const FormPreferencesPage = () => {
             loadingData === false &&
             showDefaultForm == false &&
             showChiefComplaints == false &&
-            productType !== ProductType.ADVANCED_REPORT_GENERATION
+            productType === ProductType.SMART_PATIENT_INTAKE_FORM
         ) {
             setErrorMessage(`You must select "Yes" for at least one option`);
         } else {
@@ -371,13 +371,13 @@ const FormPreferencesPage = () => {
         productType,
     ]);
 
-    const disableSmartPatientIntakeForm =
+    const disableWhenSmartPatientIntakeForm =
         (!showChiefComplaints && !showDefaultForm) ||
         (showDefaultForm && !nonDeletedDiseaseForm.length);
 
-    const disableAdvancedReportGeneration =
-        disableSmartPatientIntakeForm &&
-        productType !== ProductType.ADVANCED_REPORT_GENERATION;
+    const disableWhenAdvancedReportGeneration =
+        disableWhenSmartPatientIntakeForm &&
+        productType === ProductType.SMART_PATIENT_INTAKE_FORM;
 
     return (
         <Box className={style.formPreferences}>
@@ -519,8 +519,8 @@ const FormPreferencesPage = () => {
                     className='button'
                     onClick={handleSubmit}
                     disabled={
-                        (disableSmartPatientIntakeForm &&
-                            disableAdvancedReportGeneration) ||
+                        (disableWhenSmartPatientIntakeForm &&
+                            disableWhenAdvancedReportGeneration) ||
                         loading
                     }
                 >
