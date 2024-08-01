@@ -191,6 +191,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     />
                 );
 
+            case ResponseTypes.PRONOUN:
             case ResponseTypes.SELECTMANYDENSE:
             case ResponseTypes.SELECTONE:
                 return (
@@ -321,6 +322,16 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 );
 
             case ResponseTypes.PSH_POP:
+                return (
+                    <SurgicalHistoryContent
+                        key={node}
+                        isPreview={false}
+                        responseChoice={choices}
+                        responseType={responseType}
+                        node={node}
+                        hide={false}
+                    />
+                );
             case ResponseTypes.PSH_BLANK:
                 return (
                     <SurgicalHistoryContent

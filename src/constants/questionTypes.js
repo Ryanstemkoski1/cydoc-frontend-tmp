@@ -19,6 +19,7 @@ export const questionTypes = {
     PSH: 'PSH',
     AGEATEVENT: 'AGEATEVENT',
     PSYCHDXPICKER: 'PSYCHDXPICKER',
+    PRONOUN: 'PRONOUN',
 };
 
 export const questionTypeMapping = {
@@ -36,6 +37,7 @@ export const questionTypeMapping = {
         [questionTypes.SELECTMANY]: 'Multiple Selection',
         [questionTypes.SELECTMANYDENSE]: 'Multiple Selection (Dense)',
         [questionTypes.LIST_TEXT]: 'List',
+        [questionTypes.PRONOUN]: 'Pronoun',
     },
     advanced: {
         [questionTypes.FH]: 'Family History',

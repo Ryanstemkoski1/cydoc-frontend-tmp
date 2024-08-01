@@ -353,7 +353,9 @@ export function hpiReducer(
             const { medId, name } = action.payload;
             const response = state.nodes[medId].response;
             if (
-                state.nodes[medId].responseType == ResponseTypes.SELECTONE &&
+                [ResponseTypes.SELECTONE, ResponseTypes.PRONOUN].includes(
+                    state.nodes[medId].responseType
+                ) &&
                 isSelectOneResponse(response)
             ) {
                 Object.keys(response).forEach((otherName) => {
