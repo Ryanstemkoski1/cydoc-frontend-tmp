@@ -180,7 +180,7 @@ describe('generateHpiText', () => {
                 objPronoun: 'she',
                 posPronoun: 'her',
             };
-            const expected = "Judy's dog is cute.";
+            const expected = "Ms.Judy's dog is cute.";
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
                 expected
             );
@@ -195,7 +195,7 @@ describe('generateHpiText', () => {
                 posPronoun: 'his',
             };
             const expected =
-                "Judy's dog is cute. His dos's name is Muffin and Muffin likes icecream.";
+                "Mr.Judy's dog is cute. His dos's name is Muffin and Muffin likes icecream.";
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
                 expected
             );
