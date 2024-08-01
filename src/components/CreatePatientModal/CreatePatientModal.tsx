@@ -5,6 +5,8 @@ import { Box, Typography } from '@mui/material';
 import Dropdown from '@components/Input/Dropdown';
 import CloseIcon from '@mui/icons-material/Close';
 import CustomTextField from '@components/Input/CustomTextField';
+import { useDispatch, useSelector } from 'react-redux';
+import { addPatient } from '@redux/actions/patientActions';
 
 export interface CreatePatientModalProps {
     showModal: boolean;
@@ -15,6 +17,7 @@ const CreatePatientModal = ({
     showModal,
     setShowModal,
 }: CreatePatientModalProps) => {
+    const dispatch = useDispatch();
     const modalRef = useRef<HTMLDivElement>(null);
     const [patientDetails, setPatientDetails] = React.useState({
         legalFirstName: '',
@@ -112,6 +115,7 @@ const CreatePatientModal = ({
 
             // Handle the response
             console.log(response.data);
+            dispatch(addPatient(response.data));
             // You can update the state with the response data if needed
             // setPatientDetails(response.data.patientDetails);
         } catch (error) {

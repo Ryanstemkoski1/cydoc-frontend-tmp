@@ -60,6 +60,7 @@ import {
     initialProductDefinitionState,
     productDefinitionReducer,
 } from './productDefinitionReducer';
+import { initialPatientsState, patientReducer } from './patientReducer';
 
 const currentNoteReducer = combineReducers({
     reviewOfSystems: reviewOfSystemsReducer,
@@ -82,6 +83,7 @@ const currentNoteReducer = combineReducers({
     additionalSurvey: additionalSurveyReducer,
     productDefinition: productDefinitionReducer,
     loadingStatus: loadingStatusReducer,
+    patientsDetails: patientReducer,
 });
 
 export type CurrentNoteState = ReturnType<typeof currentNoteReducer>;
@@ -107,6 +109,7 @@ export const initialState: CurrentNoteState = {
     additionalSurvey: initialAdditionalSurveyData,
     productDefinition: initialProductDefinitionState,
     loadingStatus: initialLoadingStatus,
+    patientsDetails: initialPatientsState,
 };
 
 export function rootReducer(

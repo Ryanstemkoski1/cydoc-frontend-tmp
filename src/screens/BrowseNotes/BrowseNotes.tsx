@@ -4,7 +4,7 @@ import Modal from '@components/Modal/Modal';
 import useAuth from '@hooks/useAuth';
 import useUser from '@hooks/useUser';
 import { getAppointment } from 'modules/appointment-api';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { use, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoadingStatus } from '@redux/actions/loadingStatusActions';
 import { selectLoadingStatus } from '@redux/reducers/loadingStatusReducer';
@@ -17,6 +17,7 @@ import GeneratedNoteContent from '@components/GeneratedNoteContent/GeneratedNote
 import CreatePatientModal from '@components/CreatePatientModal/CreatePatientModal';
 import AddIcon from '@mui/icons-material/Add';
 import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
+import { selectPatientState } from '@redux/selectors/patientSelector';
 import CustomTextField from '@components/Input/CustomTextField';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
@@ -94,6 +95,8 @@ const BrowseNotes = () => {
     const { cognitoUser } = useAuth();
     const dispatch = useDispatch();
     const definitions = useSelector(selectProductDefinitions);
+    const patientsData = useSelector(selectPatientState);
+    console.log('===>', patientsData);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [showModalAdvance, setShowModalAdvance] = useState<boolean>(false);
     const [selectedAppointment, setSelectedAppointment] =
