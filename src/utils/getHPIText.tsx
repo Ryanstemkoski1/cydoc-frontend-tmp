@@ -24,7 +24,6 @@ import { PatientInformationState } from '@redux/reducers/patientInformationReduc
 import { SurgicalHistoryElements } from '@redux/reducers/surgicalHistoryReducer';
 import { UserSurveyState } from '@redux/reducers/userViewReducer';
 import { isHPIResponseValid } from './getHPIFormData';
-import { AdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
 
 interface HPINoteProps {
     hpi: HpiState;
@@ -665,7 +664,6 @@ export interface HPIReduxValues {
     patientInformation: PatientInformationState;
     chiefComplaints: ChiefComplaintsState;
     userSurvey: UserSurveyState;
-    additionalSurvey: AdditionalSurvey;
 }
 
 function getHPIText(
@@ -690,9 +688,6 @@ function getHPIText(
 
     const initialSurveyResponse = getInitialSurveyResponses(state.userSurvey);
 
-    debugger;
-    console.log('checking additionalSurvey', state);
-    
     const hpiTextResult: HPIText[] = [];
 
     const formattedHpis = extractHpi(state);
@@ -729,9 +724,7 @@ function getHPIText(
                 ...acc,
                 createHPI(
                     Array.from(hpiStringSet).join('. '),
-                    state.additionalSurvey?.legalLastName
-                        ? state.additionalSurvey.legalLastName
-                        : state.patientInformation.patientName,
+                    state.patientInformation.patientName,
                     state.patientInformation.pronouns,
                     isAdvancedReport
                 ),

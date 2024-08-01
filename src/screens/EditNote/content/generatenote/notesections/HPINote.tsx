@@ -23,7 +23,12 @@ export function ParseAndRenderHpiNote({
                 <div key={item.title} style={{ marginBottom: '10px' }}>
                     <b>{item.title}</b>
                     <br />
-                    <span>{item.text}</span>
+                    <span>
+                        {item.text.replace(
+                            /Mr\.|Ms\.|Mx\./g,
+                            (match) => match + ' '
+                        )}
+                    </span>
                     <br />
                 </div>
             );
@@ -143,7 +148,14 @@ const HpiNote = ({
             <li key={item.title} className={styles.listItem}>
                 <b>{item.title}</b>
                 <ul className={styles.noBullets}>
-                    <span>{processSentence(item.text)}</span>
+                    <span>
+                        {processSentence(
+                            item.text.replace(
+                                /Mr\.|Ms\.|Mx\./g,
+                                (match) => match + ' '
+                            )
+                        )}
+                    </span>
                 </ul>
 
                 {item.miscNote &&
@@ -163,7 +175,12 @@ const HpiNote = ({
                   <p key={item.title}>
                       <b>{capitalizeFirstLetter(item.title)}</b>
                       <br />
-                      {capitalizeFirstLetter(item.text)}
+                      {capitalizeFirstLetter(
+                          item.text.replace(
+                              /Mr\.|Ms\.|Mx\./g,
+                              (match) => match + ' '
+                          )
+                      )}
                       {item.miscNote ? (
                           <>
                               {' '}
@@ -185,7 +202,10 @@ const HpiNote = ({
                           {item.text.split('. ').map((sentence, index, arr) => (
                               <li key={index}>
                                   {processSentence(
-                                      capitalizeFirstLetter(sentence)
+                                      capitalizeFirstLetter(sentence).replace(
+                                          /Mr\.|Ms\.|Mx\./g,
+                                          (match) => match + ' '
+                                      )
                                   )}
                                   {index < arr.length - 1 && '.'}
                               </li>

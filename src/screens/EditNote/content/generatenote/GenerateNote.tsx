@@ -331,7 +331,6 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                                             props.patientInformationState,
                                         surgicalHistory: props.surgicalHistory,
                                         userSurvey: props.userSurvey,
-                                        additionalSurvey: props.additionalSurveyState,
                                     },
                                     props.productDefinition
                                         ?.useAdvancedReportTextGeneration

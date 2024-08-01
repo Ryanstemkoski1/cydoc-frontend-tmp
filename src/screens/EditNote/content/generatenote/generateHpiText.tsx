@@ -280,13 +280,15 @@ export const fillNameAndPronouns = (
     // 1) they with she/he 2) their with her/his 3) she's/he's with her/his 4) theirs with hers/his
     // 5) them with her/him 6) himselves/herselves with himself/herself
     const newHpiString = hpiString.split('. ').map((sentence) => {
-        // Replace "the patient" with "she/he/they/name"
+        // Replace "[t]he patient/[p]atient" with "she/he/they/name"
         if (/[Tt]he patient/.test(sentence) || /[Pp]atient/.test(sentence)) {
             const noun = name
                 ? toggle
                     ? objPronoun === 'he'
-                        ? `Mr. ${name}`
-                        : `Ms. ${name}`
+                        ? `Mr.${name}`
+                        : objPronoun === 'she'
+                          ? `Ms.${name}`
+                          : `Mx.${name}`
                     : objPronoun
                 : toggle
                   ? undefined

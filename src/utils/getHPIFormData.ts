@@ -25,9 +25,16 @@ export default function getHPIFormData(
         socialSecurityNumber: last_4_ssn = '',
     } = additionalSurvey;
 
-    // debugger;
-
-    console.log('state', state);
+    // Set patientName to the value from additionalSurvey.legalLastName.
+    const updatedState = {
+        ...state,
+        patientInformation: {
+            ...state.patientInformation,
+            patientName: additionalSurvey.legalLastName
+                ? additionalSurvey.legalLastName
+                : '',
+        },
+    };
 
     return {
         first_name: sanitizeString(first_name),
@@ -35,7 +42,7 @@ export default function getHPIFormData(
         last_name: sanitizeString(last_name),
         date_of_birth,
         last_4_ssn,
-        hpi_text: JSON.stringify(getHPIText(true, state)),
+        hpi_text: JSON.stringify(getHPIText(true, updatedState)),
         clinician_last_name: sanitizeString(
             (userSurvey?.nodes['9']?.response ?? '') as string
         ).trim(),
