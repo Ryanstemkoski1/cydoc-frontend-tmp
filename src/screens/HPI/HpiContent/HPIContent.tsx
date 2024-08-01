@@ -6,10 +6,7 @@ import { favChiefComplaints } from 'classes/institution.class';
 import React, { useCallback } from 'react';
 import Masonry from 'react-masonry-css';
 import { ConnectedProps, connect } from 'react-redux';
-import {
-    setChiefComplaint,
-    setNotesChiefComplaint,
-} from '@redux/actions/chiefComplaintsActions';
+import { setChiefComplaint } from '@redux/actions/chiefComplaintsActions';
 import { processKnowledgeGraph } from '@redux/actions/hpiActions';
 import { saveHpiHeader } from '@redux/actions/hpiHeadersActions';
 import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
@@ -363,7 +360,6 @@ const mapDispatchToProps = {
     processKnowledgeGraph,
     saveHpiHeader,
     setChiefComplaint,
-    setNotesChiefComplaint,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

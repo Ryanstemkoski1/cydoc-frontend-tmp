@@ -35,6 +35,7 @@ import style from './CreateResponse.module.scss';
 import BodyLocation from './responseComponents/BodyLocation';
 import HandleInput from './responseComponents/HandleInput';
 import HandleNumericInput from './responseComponents/HandleNumericInput';
+import HandleAgeEventInput from './responseComponents/HandleAgeEventInput';
 import HandleWriteInInput from './responseComponents/HandleWriteInInput';
 import LaboratoryTest from './responseComponents/LaboratoryTest';
 import ListText from './responseComponents/ListText';
@@ -190,6 +191,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     />
                 );
 
+            case ResponseTypes.PRONOUN:
             case ResponseTypes.SELECTMANYDENSE:
             case ResponseTypes.SELECTONE:
                 return (
@@ -258,6 +260,9 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
             case ResponseTypes.NUMBER:
                 return <HandleNumericInput key={node} node={node} />;
 
+            case ResponseTypes.AGEATEVENT:
+                return <HandleAgeEventInput key={node} node={node} />;
+
             case ResponseTypes.YEAR:
                 return <YearInput key={node} node={node} />;
 
@@ -317,6 +322,16 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 );
 
             case ResponseTypes.PSH_POP:
+                return (
+                    <SurgicalHistoryContent
+                        key={node}
+                        isPreview={false}
+                        responseChoice={choices}
+                        responseType={responseType}
+                        node={node}
+                        hide={false}
+                    />
+                );
             case ResponseTypes.PSH_BLANK:
                 return (
                     <SurgicalHistoryContent
