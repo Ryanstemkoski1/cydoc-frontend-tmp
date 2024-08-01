@@ -124,6 +124,13 @@ const AppointmentTemplatePage = () => {
         handleCreateNewOpen();
     };
 
+    const handleApptTemplateEditOnViewMore = () => {
+        setEditApptTempIndex(viewMoreOpen);
+        setViewMoreOpen(0);
+        handleViewMoreClose();
+        handleCreateNewOpen();
+    };
+
     const handleApptTemplateDelete = () => {
         const tempDataTemp = [...tempData];
         tempDataTemp.splice(openedPopover - 1, 1);
@@ -184,7 +191,10 @@ const AppointmentTemplatePage = () => {
                             style.viewMoreModalWrapper__body__viewMoreModalBtn
                         }
                     >
-                        <Button variant='outlined'>
+                        <Button
+                            variant='outlined'
+                            onClick={handleApptTemplateEditOnViewMore}
+                        >
                             <Icon type='editPencil' />
                             <span>Edit</span>
                         </Button>
