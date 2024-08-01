@@ -42,17 +42,13 @@ const CreateNewModal = ({
 
     useEffect(() => {
         if (editAppointmentTempIndex !== undefined) {
-            setTitle(appointmentTempData[editAppointmentTempIndex - 1].header);
-            setSelectedApptValue(
-                appointmentTempData[editAppointmentTempIndex - 1].body
-            );
-            setStepCount(selectedApptValue.length);
+            const editTempData =
+                appointmentTempData[editAppointmentTempIndex - 1];
+            setTitle(editTempData.header);
+            setSelectedApptValue(editTempData.body);
+            setStepCount(editTempData.body.length);
         }
-    }, [
-        appointmentTempData,
-        editAppointmentTempIndex,
-        selectedApptValue.length,
-    ]);
+    }, [appointmentTempData, editAppointmentTempIndex]);
 
     const stepTaskType = (idx: number) => {
         if (

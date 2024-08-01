@@ -53,7 +53,7 @@ const AppointmentTempStep = ({
                     handleChange={handleApptValues}
                     value={selectedApptValue[idx]?.whoCompletes || ''}
                 />
-                {selectedApptValue[idx].whoCompletes && (
+                {selectedApptValue[idx]?.whoCompletes && (
                     <>
                         <Typography
                             component='label'
