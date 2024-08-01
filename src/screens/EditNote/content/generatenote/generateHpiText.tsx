@@ -222,6 +222,7 @@ export const fillNameAndPronouns = (
         return /^[A-Z]/.test(word) ? capitalizeFirstLetter(replace) : replace;
     };
 
+    // The helper function for replacing pronouns requires only the string and the pronoun as parameters.
     const replacePronouns = (sentence: string, pronoun: string) => {
         const validPronouns = ['he', 'she', 'they'];
         if (!validPronouns.includes(pronoun)) {
@@ -275,6 +276,9 @@ export const fillNameAndPronouns = (
     };
 
     // process each sentence
+    // If patient's pronouns are not they/them, replace:
+    // 1) they with she/he 2) their with her/his 3) she's/he's with her/his 4) theirs with hers/his
+    // 5) them with her/him 6) himselves/herselves with himself/herself
     const newHpiString = hpiString.split('. ').map((sentence) => {
         // Replace "the patient" with "she/he/they/name"
         if (/[Tt]he patient/.test(sentence)) {
@@ -292,18 +296,21 @@ export const fillNameAndPronouns = (
         }
 
         sentence = sentenceHelper(sentence);
+
+        // Replace all pronouns for PatientPronouns.They ['they', 'them', 'their', 'themselves', 'theirs']
+        sentence = replacePronouns(sentence, 'they');
+
+        // Replace "she's/he's/they's" with "her/his/their"
         sentence = sentence.replace(
             / she's | he's | they's /g,
             ' ' + posPronoun + ' '
         );
 
+        // If patient's pronouns are not they/them/their, replace:
         if (pronouns == PatientPronouns.She) {
-            // sentence = sentence.replace(/ them /g, ' ' + posPronoun + ' ');
             sentence = replacePronouns(sentence, 'she');
         } else if (pronouns == PatientPronouns.He) {
             sentence = replacePronouns(sentence, 'he');
-        } else {
-            sentence = replacePronouns(sentence, 'they');
         }
 
         // other cases:
