@@ -71,6 +71,10 @@
                 font-size: 20px;
                 line-height: 28px;
                 color: rgba($color-black, 0.87);
+
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
 
             button {

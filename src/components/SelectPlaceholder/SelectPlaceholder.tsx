@@ -122,7 +122,7 @@ const SelectPlaceholder = ({
                 IconComponent={KeyboardArrowDownRoundedIcon}
                 inputProps={{ 'aria-label': 'Without label' }}
                 className={style.select}
-                input={<BootstrapInput notched='true' />}
+                input={<BootstrapInput />}
             >
                 {items.map((item) => (
                     <MenuItem key={item} value={item}>
