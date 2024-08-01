@@ -25,6 +25,10 @@ export default function getHPIFormData(
         socialSecurityNumber: last_4_ssn = '',
     } = additionalSurvey;
 
+    // debugger;
+
+    console.log('state', state);
+
     return {
         first_name: sanitizeString(first_name),
         middle_name: sanitizeString(middle_name),

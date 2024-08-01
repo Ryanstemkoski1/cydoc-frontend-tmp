@@ -96,6 +96,8 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
 
     const { patientName, pronouns } = patientInformationState;
 
+    console.log('I am not suppose to here ', props.additionalSurveyState);
+
     // Opening and closing modal with patient information
     // const [isModalOpen, setIsModalOpen] = useState(false);
     // const openModal = (): void => setIsModalOpen(true);
@@ -329,6 +331,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                                             props.patientInformationState,
                                         surgicalHistory: props.surgicalHistory,
                                         userSurvey: props.userSurvey,
+                                        additionalSurvey: props.additionalSurveyState,
                                     },
                                     props.productDefinition
                                         ?.useAdvancedReportTextGeneration
