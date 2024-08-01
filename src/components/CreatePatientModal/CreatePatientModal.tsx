@@ -1,7 +1,7 @@
 import { MouseEvent, default as React, useEffect, useRef } from 'react';
 import style from './CreatePatientModal.module.scss';
-import Input from '@components/Input/Input';
-import { Box, Button, Typography } from '@mui/material';
+import axios from 'axios';
+import { Box, Typography } from '@mui/material';
 import Dropdown from '@components/Input/Dropdown';
 import CloseIcon from '@mui/icons-material/Close';
 import CustomTextField from '@components/Input/CustomTextField';
@@ -24,7 +24,11 @@ const CreatePatientModal = ({
         dateOfAppointment: '',
         typeOfAppointment: '',
     });
-    const dropdownItems = ['type 1', 'type 2', 'type 3'];
+    const [errorMessage, setErrorMessage] = React.useState('');
+
+    const dropdownItems = ['Adult Evaluation'];
+    const mockyAPI =
+        'https://run.mocky.io/v3/69c20acd-d2b0-495b-9915-9a28eec4a02b';
 
     const handleClickOutsideModal = (event: MouseEvent<HTMLDivElement>) => {
         if (!modalRef.current?.contains(event.target as HTMLDivElement)) {
@@ -43,6 +47,7 @@ const CreatePatientModal = ({
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
+        setErrorMessage('');
         setPatientDetails({
             ...patientDetails,
             [name]: value,
@@ -50,7 +55,9 @@ const CreatePatientModal = ({
         console.log(patientDetails);
     };
 
-    const handleTodayClick = () => {
+    const handleTodayClick = (event: React.FormEvent) => {
+        event.preventDefault();
+        setErrorMessage('');
         const todayDate = new Date().toISOString().split('T')[0];
         setPatientDetails({
             ...patientDetails,
@@ -59,6 +66,7 @@ const CreatePatientModal = ({
     };
 
     const onSelected = (value: string) => {
+        setErrorMessage('');
         setPatientDetails({
             ...patientDetails,
             typeOfAppointment: value,
@@ -69,7 +77,47 @@ const CreatePatientModal = ({
         setShowModal(false);
     };
 
-    const onCreatePatient = () => {};
+    const onCreatePatient = async (event: React.FormEvent) => {
+        event.preventDefault();
+        try {
+            const {
+                legalFirstName,
+                legalMiddleName,
+                legalLastName,
+                dateOfBirth,
+                dateOfAppointment,
+                typeOfAppointment,
+            } = patientDetails;
+            if (
+                legalFirstName.trim() === '' ||
+                legalLastName.trim() === '' ||
+                dateOfBirth === 'Invalid Date'
+            ) {
+                setErrorMessage('Please fill in all details');
+                return;
+            }
+
+            const response = await axios.post(mockyAPI, {
+                patientDetails: {
+                    firstName: legalFirstName,
+                    middleName: legalMiddleName,
+                    lastName: legalLastName,
+                    dateOfBirth: dateOfBirth,
+                },
+                appointmentDetails: {
+                    dateOfAppointment: dateOfAppointment, // Example date, you can replace it with a state variable
+                    typeOfAppointment: typeOfAppointment,
+                },
+            });
+
+            // Handle the response
+            console.log(response.data);
+            // You can update the state with the response data if needed
+            // setPatientDetails(response.data.patientDetails);
+        } catch (error) {
+            console.error('Error creating patient:', error);
+        }
+    };
 
     return (
         <Box
@@ -138,14 +186,15 @@ const CreatePatientModal = ({
                                 value={patientDetails.dateOfAppointment}
                                 onChange={handleChange}
                             />
-                            <Button
+                            <button
+                                type='button'
                                 className={
                                     style.modal__innerContent__form__date__today
                                 }
                                 onClick={handleTodayClick}
                             >
                                 Today
-                            </Button>
+                            </button>
                         </Box>
                         <Typography
                             component={'p'}
@@ -161,13 +210,22 @@ const CreatePatientModal = ({
                             canEnterNewValue={false}
                             resetValueAfterClick={true}
                         />
-                        <Button
-                            sx={{ marginTop: '16px' }}
+                        {errorMessage && (
+                            <div
+                                className={
+                                    style.modal__innerContent__form__error
+                                }
+                            >
+                                {errorMessage}
+                            </div>
+                        )}
+                        <button
+                            type='submit'
                             className={style.modal__innerContent__form__submit}
                             onClick={onCreatePatient}
                         >
                             Create patient
-                        </Button>
+                        </button>
                     </form>
                 </Box>
             </Box>

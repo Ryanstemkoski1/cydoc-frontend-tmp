@@ -92,6 +92,7 @@
                     text-align: center;
                     color: $color-green-dark;
                     text-transform: capitalize;
+                    border: none;
                 }
                 &__today:hover {
                     background-color: $color-light;
@@ -117,7 +118,15 @@
                 color: rgba($color-black, 0.87);
             }
 
+            &__error {
+                width: 100%;
+                color: $color-error;
+                font-size: 12px;
+                text-align: center;
+            }
+
             &__submit {
+                margin-top: 16px;
                 background: $color-green-dark;
                 box-shadow:
                     0px 1px 20px 0px rgba(5, 122, 155, 0.04),
@@ -133,6 +142,7 @@
                 text-align: left;
                 color: white;
                 text-transform: capitalize;
+                border: none;
             }
 
             &__submit:hover {
