@@ -12,6 +12,7 @@ import react from '@vitejs/plugin-react';
 // coveragePathIgnorePatterns: ['src/semantic', 'src/constants'],
 
 export default defineConfig({
+    envPrefix: 'NEXT_PUBLIC_', // load Next Public variables into client code - https://vitejs.dev/config/shared-options#envprefix
     plugins: [react(), tsconfigPaths()],
     test: {
         environment: 'jsdom',

@@ -23,13 +23,13 @@ describe('utils tests', () => {
                 )
             );
 
-            const knowledgegraphQuestionnaires = Object.keys(
+            const knowledgeGraphQuestionnaires = Object.keys(
                 knowledgeGraphResponse.data.parentNodes
             ).map((item) => item.toLowerCase());
 
             const notFoundItems: string[] = [];
             mappedQuestionnaires.forEach((questionnaire) => {
-                if (knowledgegraphQuestionnaires.includes(questionnaire)) {
+                if (knowledgeGraphQuestionnaires.includes(questionnaire)) {
                     return;
                 }
                 notFoundItems.push(questionnaire);
@@ -37,7 +37,7 @@ describe('utils tests', () => {
             expect(notFoundItems).toHaveLength(0);
         });
 
-        it('Every KnowledgeGraph Questionnaire should be atleast present in Mapped Questionnaires', () => {
+        it('Every KnowledgeGraph Questionnaire should be at least present in Mapped Questionnaires', () => {
             // unique mapped questionnaires (case insensitive)
             const mappedQuestionnaires = Array.from(
                 new Set(
@@ -47,14 +47,14 @@ describe('utils tests', () => {
                 )
             );
 
-            const knowledgegraphQuestionnaires = Object.keys(
+            const knowledgeGraphQuestionnaires = Object.keys(
                 knowledgeGraphResponse.data.parentNodes
             ).map((item) => item.toLowerCase());
 
             const notFoundItems: string[] = [];
             let result: boolean = true;
 
-            knowledgegraphQuestionnaires.forEach((chiefComplaint) => {
+            knowledgeGraphQuestionnaires.forEach((chiefComplaint) => {
                 if (!mappedQuestionnaires.includes(chiefComplaint)) {
                     notFoundItems.push(chiefComplaint);
                     result = false;
