@@ -71,6 +71,7 @@ const AppointmentTemplatePage = () => {
     const [viewMoreOpen, setViewMoreOpen] = useState<number>(0);
     const [openedPopover, setOpenedPopover] = useState<number>(0);
     const [createNewOpen, setCreateNewOpen] = useState<boolean>(false);
+    const [editApptTempIndex, setEditApptTempIndex] = useState<number>();
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
         null
@@ -114,6 +115,13 @@ const AppointmentTemplatePage = () => {
     const handlePopupClose = () => {
         setAnchorEl(null);
         setOpenedPopover(0);
+    };
+
+    const handleApptTemplateEdit = () => {
+        setEditApptTempIndex(openedPopover);
+        setOpenedPopover(0);
+        handlePopupClose();
+        handleCreateNewOpen();
     };
 
     const handleApptTemplateDelete = () => {
@@ -206,7 +214,7 @@ const AppointmentTemplatePage = () => {
         >
             <List className={style.menuWrapper}>
                 <ListItem disablePadding>
-                    <ListItemButton>
+                    <ListItemButton onClick={handleApptTemplateEdit}>
                         <ListItemIcon sx={{ minWidth: '32px' }}>
                             <Icon type='editPencil' />
                         </ListItemIcon>
@@ -295,6 +303,7 @@ const AppointmentTemplatePage = () => {
                 handleClose={handleCreateNewClose}
                 appointmentTempData={tempData}
                 setAppointmentTempData={setTempData}
+                editAppointmentTempIndex={editApptTempIndex}
             />
         </Box>
     );

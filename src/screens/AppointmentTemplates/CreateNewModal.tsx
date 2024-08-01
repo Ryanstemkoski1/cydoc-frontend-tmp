@@ -1,5 +1,5 @@
 import style from './AppointmentTemplates.module.scss';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon } from '@components/Icon';
 import {
     Box,
@@ -22,6 +22,7 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 interface CreateNewModalProps {
     open: boolean;
     handleClose: () => void;
+    editAppointmentTempIndex: number | undefined;
     appointmentTempData: AppointmentTemplateType[];
     setAppointmentTempData: (data: AppointmentTemplateType[]) => void;
 }
@@ -31,12 +32,27 @@ const CreateNewModal = ({
     handleClose,
     appointmentTempData,
     setAppointmentTempData,
+    editAppointmentTempIndex,
 }: CreateNewModalProps) => {
     const [stepCount, setStepCount] = useState<number>(1);
-    const [title, setTitle] = useState<string | null>(null);
+    const [title, setTitle] = useState<string | null>('');
     const [selectedApptValue, setSelectedApptValue] = React.useState<
         AppointmentValueType[]
     >([{ whoCompletes: null, form: null }]);
+
+    useEffect(() => {
+        if (editAppointmentTempIndex !== undefined) {
+            setTitle(appointmentTempData[editAppointmentTempIndex - 1].header);
+            setSelectedApptValue(
+                appointmentTempData[editAppointmentTempIndex - 1].body
+            );
+            setStepCount(selectedApptValue.length);
+        }
+    }, [
+        appointmentTempData,
+        editAppointmentTempIndex,
+        selectedApptValue.length,
+    ]);
 
     const stepTaskType = (idx: number) => {
         if (
@@ -82,6 +98,10 @@ const CreateNewModal = ({
     };
 
     const handleApptTemplateCreate = () => {
+        if (editAppointmentTempIndex !== undefined) {
+            return;
+        }
+
         const newAppointmentTempData = [
             ...appointmentTempData,
             {
@@ -89,6 +109,25 @@ const CreateNewModal = ({
                 body: selectedApptValue,
             },
         ];
+
+        setAppointmentTempData(newAppointmentTempData);
+
+        setTitle('');
+        setStepCount(1);
+        setSelectedApptValue([{ whoCompletes: null, form: null }]);
+        handleClose();
+    };
+
+    const handleApptTemplateEdit = () => {
+        if (editAppointmentTempIndex === undefined) {
+            return;
+        }
+
+        const newAppointmentTempData = [...appointmentTempData];
+        newAppointmentTempData[editAppointmentTempIndex - 1] = {
+            header: title || 'Undefined Title',
+            body: selectedApptValue,
+        };
 
         setAppointmentTempData(newAppointmentTempData);
 
@@ -179,7 +218,7 @@ const CreateNewModal = ({
                         <Button
                             variant='contained'
                             className={style.createNewModalWrapper__btn__save}
-                            onClick={handleApptTemplateCreate}
+                            onClick={handleApptTemplateEdit}
                         >
                             <span>Save</span>
                         </Button>
