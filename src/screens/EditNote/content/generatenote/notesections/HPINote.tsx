@@ -36,6 +36,10 @@ export function ParseAndRenderHpiNote({
 
 function processSentence(sentence: string) {
     let id = 1;
+
+    // Replace the string PARAGRAPHBREAK with a newline character.
+    sentence = sentence.replace(/PARAGRAPHBREAK/g, '\n');
+
     const addHeading = (str: string) => {
         str = str
             .trim()
@@ -62,6 +66,24 @@ function processSentence(sentence: string) {
     const jsx: JSX.Element[] = [];
 
     for (const char of sentence) {
+        // Handle newlines
+        if (char === '\n') {
+            if (headingText.trim().length > 0) {
+                if (headingText.trim().length >= 7) {
+                    jsx.push(addHeading(headingText));
+                } else {
+                    jsx.push(addNormalText(headingText));
+                }
+                headingText = '';
+            }
+            if (normalText.trim().length > 0) {
+                jsx.push(addNormalText(normalText));
+                normalText = '';
+            }
+            // Add a line break
+            jsx.push(<br />);
+            continue;
+        }
         if (char === ':' && headingText.trim().length > 7) {
             jsx.push(addHeading(headingText));
             headingText = '';
