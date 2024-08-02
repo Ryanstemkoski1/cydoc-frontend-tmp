@@ -167,7 +167,10 @@ export const fillAnswers = (hpi: HPI, isAdvancedReport?: boolean): string => {
         // Do not add any punctuation for Advanced Report Generation.
         isAdvancedReport
             ? (hpiString += `${fillSentence} `)
-            : (hpiString += `${fillSentence}. `);
+            : (hpiString +=
+                  fillSentence === 'PARAGRAPHBREAK'
+                      ? `${fillSentence} `
+                      : `${fillSentence}. `);
     });
     return hpiString;
 };
@@ -393,6 +396,7 @@ export const createInitialHPI = (
     hpi: HPI,
     isAdvancedReport: boolean
 ): string => {
+    debugger;
     return fillAnswers(hpi, isAdvancedReport);
 };
 
