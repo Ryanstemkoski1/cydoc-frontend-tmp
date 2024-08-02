@@ -37,8 +37,7 @@ export function ParseAndRenderHpiNote({
 function formatSentence(sentence: string) {
     // Replace 'Mr.|Ms.|Mx.' ends with space ' '.
     const updatedSentence = sentence
-        .replace(/(Mr\.|Ms\.|Mx\.)\b(?=\s|$)/g, '$1 ')
-        // .replace(/(\.|[\?!])(\s|$)/g, '$1 ')
+        .replace(/\b(Mr\.|Ms\.|Mx\.)\b/g, (match) => match + ' ')
         .replace(/PARAGRAPHBREAK/g, '\n');
 
     return updatedSentence;
