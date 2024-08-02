@@ -23,12 +23,7 @@ export function ParseAndRenderHpiNote({
                 <div key={item.title} style={{ marginBottom: '10px' }}>
                     <b>{item.title}</b>
                     <br />
-                    <span>
-                        {item.text.replace(
-                            /Mr\.|Ms\.|Mx\./g,
-                            (match) => match + ' '
-                        )}
-                    </span>
+                    <span>{formatSentence(item.text)}</span>
                     <br />
                 </div>
             );
@@ -39,12 +34,18 @@ export function ParseAndRenderHpiNote({
     }
 }
 
+function formatSentence(sentence: string) {
+    // Replace 'Mr.|Ms.|Mx.' ends with space ' '.
+    const updatedSentence = sentence
+        .replace(/(Mr\.|Ms\.|Mx\.)\b(?=\s|$)/g, '$1 ')
+        // .replace(/(\.|[\?!])(\s|$)/g, '$1 ')
+        .replace(/PARAGRAPHBREAK/g, '\n');
+
+    return updatedSentence;
+}
+
 function processSentence(sentence: string) {
     let id = 1;
-
-    // Replace the string PARAGRAPHBREAK with a newline character.
-    sentence = sentence.replace(/PARAGRAPHBREAK/g, '\n');
-
     const addHeading = (str: string) => {
         str = str
             .trim()
@@ -139,7 +140,7 @@ const HpiNote = ({
     isAdvancedReport?: boolean; // A boolean flag to identify Advanced Report generation.
 }) => {
     if (typeof text === 'string') {
-        return <p>{text}</p>;
+        return <p>{formatSentence(text)}</p>;
     }
 
     // This note is generated for the Advanced Report with changing any capitalization and punctuation.
@@ -148,14 +149,7 @@ const HpiNote = ({
             <li key={item.title} className={styles.listItem}>
                 <b>{item.title}</b>
                 <ul className={styles.noBullets}>
-                    <span>
-                        {processSentence(
-                            item.text.replace(
-                                /Mr\.|Ms\.|Mx\./g,
-                                (match) => match + ' '
-                            )
-                        )}
-                    </span>
+                    <span>{processSentence(formatSentence(item.text))}</span>
                 </ul>
 
                 {item.miscNote &&
@@ -175,12 +169,7 @@ const HpiNote = ({
                   <p key={item.title}>
                       <b>{capitalizeFirstLetter(item.title)}</b>
                       <br />
-                      {capitalizeFirstLetter(
-                          item.text.replace(
-                              /Mr\.|Ms\.|Mx\./g,
-                              (match) => match + ' '
-                          )
-                      )}
+                      {capitalizeFirstLetter(formatSentence(item.text))}
                       {item.miscNote ? (
                           <>
                               {' '}
@@ -202,9 +191,8 @@ const HpiNote = ({
                           {item.text.split('. ').map((sentence, index, arr) => (
                               <li key={index}>
                                   {processSentence(
-                                      capitalizeFirstLetter(sentence).replace(
-                                          /Mr\.|Ms\.|Mx\./g,
-                                          (match) => match + ' '
+                                      capitalizeFirstLetter(
+                                          formatSentence(item.text)
                                       )
                                   )}
                                   {index < arr.length - 1 && '.'}
