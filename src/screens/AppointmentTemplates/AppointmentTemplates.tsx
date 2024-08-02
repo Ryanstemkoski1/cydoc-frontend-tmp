@@ -1,5 +1,5 @@
 import style from './AppointmentTemplates.module.scss';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Icon } from '@components/Icon';
 import {
     AppointmentTemplateType,
@@ -24,6 +24,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CreateNewModal from './CreateNewModal';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
+import useDimensions from '@hooks/useDimensions';
 
 const ApptTempData: AppointmentTemplateType[] = [
     {
@@ -67,6 +68,7 @@ const ApptTempData: AppointmentTemplateType[] = [
 ];
 
 const AppointmentTemplatePage = () => {
+    const { windowWidth } = useDimensions();
     const [tempData, setTempData] = useState(ApptTempData);
     const [viewMoreOpen, setViewMoreOpen] = useState<number>(0);
     const [openedPopover, setOpenedPopover] = useState<number>(0);
@@ -79,6 +81,11 @@ const AppointmentTemplatePage = () => {
         top: 0,
         left: 0,
     });
+
+    const gridColumns = useMemo(
+        () => Math.floor(windowWidth / 400),
+        [windowWidth]
+    );
 
     const popupId = openedPopover > 0 ? 'edit-apptTemp-popover' : undefined;
 
@@ -243,7 +250,12 @@ const AppointmentTemplatePage = () => {
     );
 
     return (
-        <Box className={style.apptTempWrapper}>
+        <Box
+            className={style.apptTempWrapper}
+            sx={{
+                gridTemplateColumns: `repeat(${gridColumns}, 1fr)`,
+            }}
+        >
             {tempData.map((temp, index) => (
                 <Box key={index} className={style.apptTempCard}>
                     <Box className={style.apptTempCard__header}>
