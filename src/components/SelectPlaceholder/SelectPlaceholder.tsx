@@ -45,6 +45,7 @@ const MenuProps = {
         style: {
             marginTop: '4px',
             width: 250,
+            maxHeight: 200,
             borderRadius: '10px',
         },
     },

@@ -4,7 +4,6 @@ import { Icon } from '@components/Icon';
 import { Box, IconButton, SelectChangeEvent, Typography } from '@mui/material';
 import {
     AppointmentValueType,
-    FormType,
     WhoCompletes,
 } from '@constants/appointmentTemplatesConstants';
 import SelectPlaceholder from '@components/SelectPlaceholder/SelectPlaceholder';
@@ -13,6 +12,7 @@ import DragIndicatorRoundedIcon from '@mui/icons-material/DragIndicatorRounded';
 interface AppointmentTempStepProps {
     idx: number;
     stepCount: number;
+    allDiseaseForms: string[];
     stepTaskType: (idx: number) => string;
     selectedApptValue: AppointmentValueType[];
     handleRemoveSteps: (idx: number) => void;
@@ -27,6 +27,7 @@ const AppointmentTempStep = ({
     idx,
     stepCount,
     stepTaskType,
+    allDiseaseForms,
     handleApptValues,
     selectedApptValue,
     handleRemoveSteps,
@@ -75,7 +76,7 @@ const AppointmentTempStep = ({
                                 idx={idx}
                                 type='form'
                                 placeholder='Select specific form'
-                                items={Object.values(FormType)}
+                                items={allDiseaseForms}
                                 handleChange={handleApptValues}
                                 value={selectedApptValue[idx].form || ''}
                             />

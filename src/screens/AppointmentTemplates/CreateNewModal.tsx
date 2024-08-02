@@ -1,5 +1,5 @@
 import style from './AppointmentTemplates.module.scss';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Icon } from '@components/Icon';
 import {
     Box,
@@ -18,6 +18,10 @@ import {
 } from '@constants/appointmentTemplatesConstants';
 import AppointmentTempStep from './AppointmentTemplateStep';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import { DiseaseForm } from '@cydoc-ai/types/dist/disease';
+import { hpiHeaders as knowledgeGraphAPI } from '@screens/EditNote/content/hpi/knowledgegraph/API';
+import { toast } from 'react-toastify';
+import ToastOptions from '@constants/ToastOptions';
 
 interface CreateNewModalProps {
     open: boolean;
@@ -39,6 +43,30 @@ const CreateNewModal = ({
     const [selectedApptValue, setSelectedApptValue] = React.useState<
         AppointmentValueType[]
     >([{ whoCompletes: null, form: null }]);
+    const [allDiseaseForms, setAllDiseaseForms] = useState<string[]>([]);
+
+    const loadAllDiseaseForms = useCallback(async () => {
+        try {
+            const response = await knowledgeGraphAPI;
+            const diseaseForms = Object.entries(response.data.parentNodes).map(
+                ([key, value]) =>
+                    ({
+                        id: '',
+                        diseaseKey: Object.keys(value as object)?.[0],
+                        diseaseName: key,
+                        isDeleted: false,
+                    }) as DiseaseForm
+            );
+
+            setAllDiseaseForms(diseaseForms.map((item) => item.diseaseName));
+        } catch (error: unknown) {
+            toast.error('Something went wrong.', ToastOptions.error);
+        }
+    }, []);
+
+    useEffect(() => {
+        loadAllDiseaseForms();
+    }, [loadAllDiseaseForms]);
 
     useEffect(() => {
         if (editAppointmentTempIndex !== undefined) {
@@ -188,6 +216,7 @@ const CreateNewModal = ({
                                 idx={idx}
                                 stepCount={stepCount}
                                 stepTaskType={stepTaskType}
+                                allDiseaseForms={allDiseaseForms}
                                 selectedApptValue={selectedApptValue}
                                 handleApptValues={handleAppointmentValues}
                                 handleRemoveSteps={handleRemoveSteps}
@@ -206,15 +235,29 @@ const CreateNewModal = ({
                     <Box className={style.createNewModalWrapper__btn}>
                         <Button
                             variant='contained'
-                            className={style.createNewModalWrapper__btn__create}
                             onClick={handleApptTemplateCreate}
+                            sx={{
+                                color: 'white',
+                                bgcolor: '#047A9B',
+
+                                '&:hover': {
+                                    bgcolor: '#047A9B',
+                                },
+                            }}
                         >
                             <span>Create template</span>
                         </Button>
                         <Button
                             variant='contained'
-                            className={style.createNewModalWrapper__btn__save}
                             onClick={handleApptTemplateEdit}
+                            sx={{
+                                color: '#047A9B',
+                                bgcolor: '#EAF3F5',
+
+                                '&:hover': {
+                                    bgcolor: '#EAF3F5',
+                                },
+                            }}
                         >
                             <span>Save</span>
                         </Button>

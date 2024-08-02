@@ -19,6 +19,7 @@
         gap: 16px;
         flex: 1;
         height: 240px;
+        min-width: 300px;
 
         border: 1px dashed #047a9b;
         border-radius: 10px;
@@ -57,6 +58,7 @@
         border-radius: 10px;
         overflow: hidden;
         height: 240px;
+        min-width: 300px;
 
         &__header {
             display: flex;
@@ -493,24 +495,6 @@
             border-radius: 10px;
             text-transform: capitalize;
             box-shadow: none;
-        }
-
-        &__create {
-            background-color: $color-green-dark;
-            color: $color-white;
-
-            &:hover {
-                background-color: $color-green-dark;
-            }
-        }
-
-        &__save {
-            background-color: $color-light;
-            color: $color-green-dark;
-
-            &:hover {
-                background-color: $color-light;
-            }
         }
     }
 }

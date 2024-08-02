@@ -72,7 +72,6 @@ const AppointmentTemplatePage = () => {
     const [openedPopover, setOpenedPopover] = useState<number>(0);
     const [createNewOpen, setCreateNewOpen] = useState<boolean>(false);
     const [editApptTempIndex, setEditApptTempIndex] = useState<number>();
-
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
         null
     );
