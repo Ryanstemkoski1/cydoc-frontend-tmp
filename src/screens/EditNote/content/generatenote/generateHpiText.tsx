@@ -210,22 +210,17 @@ export const fillNameAndPronouns = (
 ): string => {
     const { name, pronouns, objPronoun, posPronoun } = patientInfo;
 
-    hpiString = name.length
-        ? hpiString.replace(/\bthe patient's\b|\btheir\b/g, posPronoun)
-        : hpiString;
-
-    let toggle = 1;
-
     const sentenceHelper = (sentence: string): string => {
         // Remove period from the end if present and pad with spaces
         return ` ${sentence.replace(/\.$/, '')} `;
     };
 
+    // the helper function to capitalizes the replacement word if the original word starts with an uppercase letter.
     const replaceWord = (word: string, replace: string) => {
         return /^[A-Z]/.test(word) ? capitalizeFirstLetter(replace) : replace;
     };
 
-    // The helper function for replacing pronouns requires only the string and the pronoun as parameters.
+    // The helper function to replace pronouns requires only the string and the pronoun as parameters.
     const replacePronouns = (sentence: string, pronoun: string) => {
         const validPronouns = ['he', 'she', 'they'];
         if (!validPronouns.includes(pronoun)) {
@@ -277,6 +272,28 @@ export const fillNameAndPronouns = (
 
         return sentence;
     };
+
+    //  The Personality Assessment Inventory (PAI) uses "respondent" and "the client's"
+    //  instead of "patient" and "the patient's," and "he/she" instead of "patient."
+    //  Perform the following string replacements before inserting name and pronouns:
+    //  Replace "respondent" with "patient" | Replace "the client's" with "the patient's" |
+    //  Replace "he/she" with "patient" (as in literally the strong "he/she" with the slash included, needs to be changed to "patient")
+    hpiString = hpiString.replace(/\brespondent\b/gi, (match) =>
+        replaceWord(match, 'patient')
+    );
+    hpiString = hpiString.replace(/\bthe client's\b/gi, (match) =>
+        replaceWord(match, "the patient's")
+    );
+    hpiString = hpiString.replace(/\bhe|she\b/gi, (match) =>
+        replaceWord(match, 'patient')
+    );
+
+    // Replace "the patient's" and "their" with given posPronoun.
+    hpiString = name.length
+        ? hpiString.replace(/\bthe patient's\b|\btheir\b/g, posPronoun)
+        : hpiString;
+
+    let toggle = 1;
 
     // process each sentence
     // If patient's pronouns are not they/them, replace:
