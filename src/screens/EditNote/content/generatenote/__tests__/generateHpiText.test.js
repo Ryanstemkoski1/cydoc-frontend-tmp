@@ -187,7 +187,7 @@ describe('generateHpiText', () => {
         });
         it('replaces pronouns - He', () => {
             const hpiString =
-                "The patient's dog is cute. Her dos's name is Muffin and Muffin likes icecream.";
+                "The patient's dog is cute. Her dog's name is Muffin and Muffin likes icecream.";
             const patientInfo = {
                 name: 'Judy',
                 pronouns: PatientPronouns.He,
@@ -195,7 +195,7 @@ describe('generateHpiText', () => {
                 posPronoun: 'his',
             };
             const expected =
-                "Mr.Judy's dog is cute. His dos's name is Muffin and Muffin likes icecream.";
+                "Mr.Judy's dog is cute. His dog's name is Muffin and Muffin likes icecream.";
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
                 expected
             );
