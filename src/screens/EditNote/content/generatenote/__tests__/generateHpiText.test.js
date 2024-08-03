@@ -215,6 +215,45 @@ describe('generateHpiText', () => {
                 expected
             );
         });
+        it('replaces He/she', () => {
+            const hpiString = 'He/she loves dog, and he/she also loves cat.';
+            const patientInfo = {
+                name: '',
+                pronouns: PatientPronouns.They,
+                objPronoun: 'they',
+                posPronoun: 'their',
+            };
+            const expected = 'Patient loves dog, and patient also loves cat.';
+            expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
+                expected
+            );
+        });
+        it("replaces the client's", () => {
+            const hpiString = "the client's cat name is Molly.";
+            const patientInfo = {
+                name: '',
+                pronouns: PatientPronouns.They,
+                objPronoun: 'they',
+                posPronoun: 'their',
+            };
+            const expected = "the patient's cat name is Molly.";
+            expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
+                expected
+            );
+        });
+        it('replaces respondent', () => {
+            const hpiString = 'respondent loves cat.';
+            const patientInfo = {
+                name: '',
+                pronouns: PatientPronouns.They,
+                objPronoun: 'they',
+                posPronoun: 'their',
+            };
+            const expected = 'patient loves cat.';
+            expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
+                expected
+            );
+        });
 
         // // TODO: Fix below tests
         // it('handles empty empty', () => {

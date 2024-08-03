@@ -284,7 +284,7 @@ export const fillNameAndPronouns = (
     hpiString = hpiString.replace(/\bthe client's\b/gi, (match) =>
         replaceWord(match, "the patient's")
     );
-    hpiString = hpiString.replace(/\bhe|she\b/gi, (match) =>
+    hpiString = hpiString.replace(/he\/she/gi, (match) =>
         replaceWord(match, 'patient')
     );
 
