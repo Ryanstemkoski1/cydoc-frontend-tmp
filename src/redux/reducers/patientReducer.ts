@@ -13,7 +13,8 @@ export const patientReducer = (state = initialPatientsState, action: any) => {
         case ADD_PATIENT:
             return {
                 ...state,
-                patients: [...state.patients, action.payload],
+                // patients: [...state.patients, action.payload],
+                patients: action.payload,
             };
         default:
             return state;

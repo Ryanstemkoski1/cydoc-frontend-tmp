@@ -1,11 +1,14 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import style from './GeneratedNoteContent.module.scss';
-import { AppointmentUser } from '@screens/BrowseNotes/BrowseNotes';
 import { ParseAndRenderHpiNote } from '@screens/EditNote/content/generatenote/notesections/HPINote';
 import { toast } from 'react-toastify';
 import { Box, Typography } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { addPatient } from '@redux/actions/patientActions';
+import axios from 'axios';
+import { selectPatientState } from '@redux/selectors/patientSelector';
 
 interface GeneratedNoteContentProps {
     selectedAppointment: any;
@@ -13,59 +16,99 @@ interface GeneratedNoteContentProps {
 const GeneratedNoteContent = (
     selectedAppointment: GeneratedNoteContentProps
 ) => {
-    // const { firstName, middleName, lastName, hpiText } =
-    //     selectedAppointment.selectedAppointment;
-    const { appointmentDetails, patientDetails, hpiText } =
-        selectedAppointment.selectedAppointment;
     const {
         firstName,
         middleName,
         lastName,
-        age,
-        dateOfBirth,
-        examiners,
-        education,
-        occupation,
-        referredBy,
-    } = patientDetails;
-    const { dateOfAppointment, typeOfAppointment, associatedForms } =
-        appointmentDetails;
+        dob,
+        institutionId,
+        appointmentDate,
+        hpiText,
+    } = selectedAppointment.selectedAppointment;
+    const dispatch = useDispatch();
+    const mockyAPI =
+        'https://run.mocky.io/v3/355330c6-60a7-4502-a9fa-0ad0e19f1868';
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await axios.post(mockyAPI);
+            dispatch(addPatient(response.data));
+        };
+
+        fetchData();
+
+        // Cleanup function
+        return () => {
+            // Perform cleanup tasks if needed
+        };
+    }, []);
+
+    const patientsData = useSelector(selectPatientState);
+    console.log('patients data===>', patientsData);
 
     const data = {
         Name: `${firstName} ${middleName} ${lastName}`,
-        'Date of Evaluation': dateOfAppointment,
-        Age: `${age} Years-old`,
-        'Referred by': referredBy,
-        DOB: dateOfBirth,
-        Examiners: examiners.join(', '),
-        Education: education,
+        'Date of Evaluation': formatDate(appointmentDate),
+        Age: `${calculateAge(dob)} Years-old`,
+        'Referred by': 'Dr. John Doe',
+        DOB: formatDate(dob),
+        Examiners: 'Dr. Jane Doe',
+        Education: 'College Graduate',
         '': '',
-        Occupation: occupation,
+        Occupation: 'Software Engineer',
     };
-    // const sourcesData = [
-    //     {
-    //         reporter: 'clinician',
-    //         title: 'Clinician survey',
-    //         Status: 'Not started',
-    //     },
-    //     {
-    //         reporter: 'staff',
-    //         title: 'Evaluation results',
-    //         Status: 'Finished',
-    //     },
-    //     {
-    //         reporter: 'patient',
-    //         title: 'Patient survey',
-    //         Status: 'In progress',
-    //     },
-    // ];
-    const sourcesData = associatedForms.map((form: any) => {
+    const tempData = [
+        {
+            stepNumber: 1,
+            name: 'Connell and Associates Adult Evaluation',
+            identifier: 'RCONNELL_ADULT',
+            status: 'Not started',
+        },
+        {
+            stepNumber: 2,
+            name: 'Connell and Associates Adult Diagnosis Form',
+            identifier: 'RCONNELL_ADULT_DX',
+            status: 'Not started',
+        },
+        {
+            stepNumber: 3,
+            name: 'Personality Assessment Inventory',
+            identifier: 'RCONNELL_PAI',
+            status: 'Not started',
+        },
+        {
+            stepNumber: 4,
+            name: 'Cydoc AI Report Synthesis',
+            identifier: 'CYDOC_AI_REPORT',
+            status: 'Not started',
+        },
+    ];
+
+    const sourcesData = tempData.map((form: any) => {
         return {
             reporter: form.identifier,
             title: form.name,
             status: form.status,
         };
     });
+
+    function calculateAge(dob) {
+        const dobDate = new Date(dob);
+        const today = new Date();
+        let age = today.getFullYear() - dobDate.getFullYear();
+        const monthDifference = today.getMonth() - dobDate.getMonth();
+        if (
+            monthDifference < 0 ||
+            (monthDifference === 0 && today.getDate() < dobDate.getDate())
+        ) {
+            age--;
+        }
+        return age;
+    }
+
+    function formatDate(date) {
+        return new Date(date).toLocaleDateString();
+    }
 
     const copyNote = () => {
         const note = document.getElementById('copy-notes');
@@ -74,6 +117,15 @@ const GeneratedNoteContent = (
                 (note as HTMLHeadingElement)?.innerText || ''
             );
             toast.success('Copied to Clipboard!', {
+                position: 'top-right',
+                autoClose: 2000,
+                hideProgressBar: true,
+                pauseOnHover: false,
+                closeOnClick: true,
+                theme: 'light',
+            });
+        } else {
+            toast.error('No notes to copy!', {
                 position: 'top-right',
                 autoClose: 2000,
                 hideProgressBar: true,
@@ -102,6 +154,8 @@ const GeneratedNoteContent = (
                 return '/images/reporter-staff.svg';
         }
     }
+
+    const handleSourceFormClick = () => {};
 
     return (
         <Box>
@@ -138,14 +192,15 @@ const GeneratedNoteContent = (
                         );
                     })}
                 </Box>
-                {hpiText !== undefined && (
-                    <Box className={style.genNoteDetail} id='copy-notes'>
-                        <ParseAndRenderHpiNote
-                            hpiText={hpiText}
-                            isParagraphFormat={true}
-                        />
-                    </Box>
-                )}
+                {hpiText !== undefined ||
+                    (hpiText == 'No history of present illness reported.' && (
+                        <Box className={style.genNoteDetail} id='copy-notes'>
+                            <ParseAndRenderHpiNote
+                                hpiText={hpiText}
+                                isParagraphFormat={true}
+                            />
+                        </Box>
+                    ))}
                 <Box className={style.genNoteSource}>
                     <Typography variant='h1'>Source Data (Forms)</Typography>
                     {Object.keys(sourcesData).map((item, index) => {
@@ -178,6 +233,7 @@ const GeneratedNoteContent = (
                             <Box
                                 key={index}
                                 className={style.genNoteSource__Item}
+                                onClick={handleSourceFormClick}
                             >
                                 <Box className={style.genNoteSource__ItemIcon}>
                                     <img

@@ -4,7 +4,7 @@ import Modal from '@components/Modal/Modal';
 import useAuth from '@hooks/useAuth';
 import useUser from '@hooks/useUser';
 import { getAppointment } from 'modules/appointment-api';
-import React, { use, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoadingStatus } from '@redux/actions/loadingStatusActions';
 import { selectLoadingStatus } from '@redux/reducers/loadingStatusReducer';
@@ -12,16 +12,14 @@ import style from './BrowseNotes.module.scss';
 import { Box, List, ListItem, ListItemText, Typography } from '@mui/material';
 import useSignInRequired from '@hooks/useSignInRequired';
 import MobileDatePicker from '@components/Input/MobileDatePicker';
-import Input from '@components/Input/Input';
 import GeneratedNoteContent from '@components/GeneratedNoteContent/GeneratedNoteContent';
 import CreatePatientModal from '@components/CreatePatientModal/CreatePatientModal';
 import AddIcon from '@mui/icons-material/Add';
 import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
-import { selectPatientState } from '@redux/selectors/patientSelector';
 import CustomTextField from '@components/Input/CustomTextField';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
-    return `${lastName}, ${firstName} ${middleName}`;
+    return `${firstName} ${middleName ? middleName : ''} ${lastName}`;
 }
 
 const months = [
@@ -95,15 +93,11 @@ const BrowseNotes = () => {
     const { cognitoUser } = useAuth();
     const dispatch = useDispatch();
     const definitions = useSelector(selectProductDefinitions);
-    const patientsData = useSelector(selectPatientState);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [showModalAdvance, setShowModalAdvance] = useState<boolean>(false);
     const [selectedAppointment, setSelectedAppointment] = useState<any>();
     const loadingStatus = useSelector(selectLoadingStatus);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-    const [addedPatients, setAddedPatients] = useState<any[]>(
-        patientsData.patients
-    );
 
     useEffect(() => {
         const initialDate = new Date().toISOString().slice(0, 10); // yyyy-mm-dd format
@@ -149,40 +143,32 @@ const BrowseNotes = () => {
     };
 
     const loadPatientHistory = useCallback(async () => {
-        if (!definitions?.showNewPatientGeneration) {
-            dispatch(setLoadingStatus(true));
-            if (!user) {
-                dispatch(setLoadingStatus(false));
-                return;
-            }
-            try {
-                const users = await getAppointment(
-                    formatDateOfBirth(
-                        definitions?.showNewPatientGeneration
-                            ? dateAdvance
-                            : date
-                    ),
-                    user?.institutionId,
-                    cognitoUser
-                );
-                setUsers(users);
-                dispatch(setLoadingStatus(false));
-            } catch (err) {
-                setUsers([]);
-                dispatch(setLoadingStatus(false));
-            }
+        // if (!definitions?.showNewPatientGeneration) {
+        dispatch(setLoadingStatus(true));
+        if (!user) {
+            dispatch(setLoadingStatus(false));
+            return;
         }
-    }, [cognitoUser, date, dispatch, user]);
+        try {
+            const users = await getAppointment(
+                formatDateOfBirth(
+                    definitions?.showNewPatientGeneration ? dateAdvance : date
+                ),
+                user?.institutionId,
+                cognitoUser
+            );
+            setUsers(users);
+            dispatch(setLoadingStatus(false));
+        } catch (err) {
+            setUsers([]);
+            dispatch(setLoadingStatus(false));
+        }
+        // }
+    }, [cognitoUser, date, dateAdvance, dispatch, user]);
 
     useEffect(() => {
         loadPatientHistory();
     }, [loadPatientHistory]);
-
-    useEffect(() => {
-        if (patientsData.patients.length > 0) {
-            setAddedPatients(patientsData.patients);
-        }
-    }, [dateAdvance, dispatch, patientsData]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDateAdvance(e.target.value);
@@ -301,7 +287,11 @@ const BrowseNotes = () => {
                                                         : 'black',
                                             }}
                                         >
-                                            {user?.patientDetails?.fullName}
+                                            {formatFullName(
+                                                user?.firstName,
+                                                user?.middleName ?? '',
+                                                user?.lastName
+                                            )}
                                         </Typography>
                                     </Box>
                                     <Typography
@@ -316,9 +306,7 @@ const BrowseNotes = () => {
                                             style.notesBlockAdvance__tableWrapper__right
                                         }
                                     >
-                                        {formatDateOfBirth(
-                                            user?.patientDetails?.dateOfBirth
-                                        )}
+                                        {formatDateOfBirth(user.dob)}
                                     </Typography>
                                 </Box>
                             </ListItem>
@@ -446,7 +434,8 @@ const BrowseNotes = () => {
                             <Box
                                 className={` ${style.notesBlockAdvance__content} `}
                             >
-                                {renderUsersAdvance(addedPatients)}
+                                {/* {renderUsersAdvance(addedPatients)} */}
+                                {renderUsersAdvance(users)}
                             </Box>
                         </Box>
                         {selectedAppointment && (

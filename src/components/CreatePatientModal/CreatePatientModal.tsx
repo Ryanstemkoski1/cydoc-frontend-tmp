@@ -1,12 +1,26 @@
 import { MouseEvent, default as React, useEffect, useRef } from 'react';
 import style from './CreatePatientModal.module.scss';
-import axios from 'axios';
 import { Box, Typography } from '@mui/material';
 import Dropdown from '@components/Input/Dropdown';
 import CloseIcon from '@mui/icons-material/Close';
 import CustomTextField from '@components/Input/CustomTextField';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPatient } from '@redux/actions/patientActions';
+import { updateAdditionalSurveyDetails } from '@redux/actions/additionalSurveyActions';
+import { initialSurveyAddDateOrPlace } from '@redux/actions/userViewActions';
+import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
+import useQuery from '@hooks/useQuery';
+import useUser from '@hooks/useUser';
+import { apiClient } from '@constants/api';
+import { HPIPatientQueryParams } from '@constants/enums/hpi.patient.enums';
+import getHPIFormData from '@utils/getHPIFormData';
+import { selectAdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
+import { selectFamilyHistoryState } from '@redux/selectors/familyHistorySelectors';
+import { selectMedicationsState } from '@redux/selectors/medicationsSelectors';
+import { selectHpiState } from '@redux/selectors/hpiSelectors';
+import { selectMedicalHistoryState } from '@redux/selectors/medicalHistorySelector';
+import { selectPatientInformationState } from '@redux/selectors/patientInformationSelector';
+import { selectSurgicalHistoryProcedures } from '@redux/selectors/surgicalHistorySelectors';
+import { selectChiefComplaintsState } from '@redux/selectors/chiefComplaintsSelectors';
 
 export interface CreatePatientModalProps {
     showModal: boolean;
@@ -29,9 +43,20 @@ const CreatePatientModal = ({
     });
     const [errorMessage, setErrorMessage] = React.useState('');
 
+    const query = useQuery();
+    const { user } = useUser();
+
+    const additionalSurvey = useSelector(selectAdditionalSurvey);
+    const userSurveyState = useSelector(selectInitialPatientSurvey);
+    const chiefComplaints = useSelector(selectChiefComplaintsState);
+    const hpi = useSelector(selectHpiState);
+    const familyHistoryState = useSelector(selectFamilyHistoryState);
+    const medicationsState = useSelector(selectMedicationsState);
+    const medicalHistoryState = useSelector(selectMedicalHistoryState);
+    const patientInformationState = useSelector(selectPatientInformationState);
+    const surgicalHistory = useSelector(selectSurgicalHistoryProcedures);
+
     const dropdownItems = ['Adult Evaluation'];
-    const mockyAPI =
-        'https://run.mocky.io/v3/8aadd6ba-f4d6-446b-93b8-445fba005708';
 
     const handleClickOutsideModal = (event: MouseEvent<HTMLDivElement>) => {
         if (!modalRef.current?.contains(event.target as HTMLDivElement)) {
@@ -55,6 +80,7 @@ const CreatePatientModal = ({
             ...patientDetails,
             [name]: value,
         });
+        dispatch(initialSurveyAddDateOrPlace('8', value));
     };
 
     const handleTodayClick = (event: React.FormEvent) => {
@@ -65,6 +91,7 @@ const CreatePatientModal = ({
             ...patientDetails,
             dateOfAppointment: todayDate,
         });
+        dispatch(initialSurveyAddDateOrPlace('8', todayDate));
     };
 
     const onSelected = (value: string) => {
@@ -99,30 +126,55 @@ const CreatePatientModal = ({
                 return;
             }
 
-            const response = await axios.post(mockyAPI, {
-                patientDetails: {
-                    firstName: legalFirstName,
-                    middleName: legalMiddleName,
-                    lastName: legalLastName,
-                    dateOfBirth: dateOfBirth,
-                },
-                appointmentDetails: {
-                    dateOfAppointment: dateOfAppointment, // Example date, you can replace it with a state variable
-                    typeOfAppointment: typeOfAppointment,
-                },
-            });
+            dispatch(
+                updateAdditionalSurveyDetails(
+                    legalFirstName.trim(),
+                    legalLastName.trim(),
+                    legalMiddleName.trim(),
+                    '',
+                    dateOfBirth.trim(),
+                    0
+                )
+            );
 
-            // Handle the response
-            dispatch(addPatient(response.data));
-            setShowModal(false);
-            setPatientDetails({
-                legalFirstName: '',
-                legalLastName: '',
-                legalMiddleName: '',
-                dateOfBirth: '',
-                dateOfAppointment: '',
-                typeOfAppointment: '',
-            });
+            const clinician_id =
+                query.get(HPIPatientQueryParams.CLINICIAN_ID) ?? '';
+            const institution_id = user?.institutionId;
+            // query.get(HPIPatientQueryParams.INSTITUTION_ID) ?? '';
+
+            apiClient
+                .post('/appointment', {
+                    ...getHPIFormData(additionalSurvey, userSurveyState, {
+                        hpi: hpi,
+                        chiefComplaints: chiefComplaints,
+                        familyHistory: familyHistoryState,
+                        medications: medicationsState,
+                        medicalHistory: medicalHistoryState,
+                        patientInformation: patientInformationState,
+                        surgicalHistory: surgicalHistory,
+                        userSurvey: userSurveyState,
+                    }),
+                    clinician_id,
+                    institution_id,
+                })
+                .then(() => {
+                    console.log('success');
+                })
+                .catch((_error) => {
+                    console.log('error', _error);
+                })
+                .finally(() => {
+                    console.log('finally');
+                    setShowModal(false);
+                    setPatientDetails({
+                        legalFirstName: '',
+                        legalLastName: '',
+                        legalMiddleName: '',
+                        dateOfBirth: '',
+                        dateOfAppointment: '',
+                        typeOfAppointment: '',
+                    });
+                });
         } catch (error) {
             console.error('Error creating patient:', error);
         }
