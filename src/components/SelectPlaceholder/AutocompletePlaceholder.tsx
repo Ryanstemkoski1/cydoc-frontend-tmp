@@ -103,6 +103,8 @@ const AutocompletePlaceholder = ({
     options,
     handleChange,
 }: AutocompleteProps) => {
+    const newOptions = [...options, value];
+
     const handleAutocompleteChange = (
         event: SyntheticEvent<Element, Event>
     ) => {
@@ -112,15 +114,15 @@ const AutocompletePlaceholder = ({
     return (
         <Autocomplete
             id='combo-box-demo'
-            className={style.autocompletePlaceholder}
             disablePortal
-            includeInputInList
-            options={options}
-            popupIcon={<KeyboardArrowDownRoundedIcon />}
             disableClearable
-            componentsProps={customComponentProps}
+            includeInputInList
             value={value}
+            options={newOptions.sort()}
             onChange={handleAutocompleteChange}
+            popupIcon={<KeyboardArrowDownRoundedIcon />}
+            className={style.autocompletePlaceholder}
+            componentsProps={customComponentProps}
             renderInput={(params) => (
                 <TextField
                     {...params}
