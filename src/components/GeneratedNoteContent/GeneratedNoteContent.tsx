@@ -12,6 +12,7 @@ import { selectPatientState } from '@redux/selectors/patientSelector';
 
 interface GeneratedNoteContentProps {
     selectedAppointment: any;
+    user: any;
 }
 const GeneratedNoteContent = (
     selectedAppointment: GeneratedNoteContentProps
@@ -25,6 +26,7 @@ const GeneratedNoteContent = (
         appointmentDate,
         hpiText,
     } = selectedAppointment.selectedAppointment;
+
     const dispatch = useDispatch();
     const mockyAPI =
         'https://run.mocky.io/v3/355330c6-60a7-4502-a9fa-0ad0e19f1868';
@@ -42,6 +44,8 @@ const GeneratedNoteContent = (
             // Perform cleanup tasks if needed
         };
     }, []);
+
+    const link = `${window.location.origin}/hpi/patient-advance?institution_id=${institutionId}`;
 
     const patientsData = useSelector(selectPatientState);
     console.log('patients data===>', patientsData);
@@ -230,40 +234,48 @@ const GeneratedNoteContent = (
                         }
 
                         return (
-                            <Box
-                                key={index}
-                                className={style.genNoteSource__Item}
-                                onClick={handleSourceFormClick}
-                            >
-                                <Box className={style.genNoteSource__ItemIcon}>
-                                    <img
-                                        src={handleReporterChange(
-                                            sourcesData[item].reporter
-                                        )}
-                                        alt={`${sourcesData[item].reporter}`}
-                                    />
-                                    <Typography variant='h3'>
-                                        {sourcesData[item].title}
-                                    </Typography>
-                                </Box>
+                            <a target='_blank' rel='noreferrer' href={link}>
                                 <Box
-                                    style={statusStyle}
-                                    className={style.genNoteSource__ItemStatus}
+                                    key={index}
+                                    className={style.genNoteSource__Item}
+                                    // onClick={handleSourceFormClick}
                                 >
                                     <Box
-                                        style={dotStyle}
                                         className={
-                                            style.genNoteSource__ItemStatus__circle
+                                            style.genNoteSource__ItemIcon
                                         }
-                                    />
-                                    <Typography
-                                        component={'p'}
-                                        style={textStyle}
                                     >
-                                        {sourcesData[item].status}
-                                    </Typography>
+                                        <img
+                                            src={handleReporterChange(
+                                                sourcesData[item].reporter
+                                            )}
+                                            alt={`${sourcesData[item].reporter}`}
+                                        />
+                                        <Typography variant='h3'>
+                                            {sourcesData[item].title}
+                                        </Typography>
+                                    </Box>
+                                    <Box
+                                        style={statusStyle}
+                                        className={
+                                            style.genNoteSource__ItemStatus
+                                        }
+                                    >
+                                        <Box
+                                            style={dotStyle}
+                                            className={
+                                                style.genNoteSource__ItemStatus__circle
+                                            }
+                                        />
+                                        <Typography
+                                            component={'p'}
+                                            style={textStyle}
+                                        >
+                                            {sourcesData[item].status}
+                                        </Typography>
+                                    </Box>
                                 </Box>
-                            </Box>
+                            </a>
                         );
                     })}
                 </Box>

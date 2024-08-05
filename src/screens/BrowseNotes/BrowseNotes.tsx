@@ -446,6 +446,7 @@ const BrowseNotes = () => {
                             >
                                 <GeneratedNoteContent
                                     selectedAppointment={selectedAppointment}
+                                    user={user}
                                 />
                             </Box>
                         )}
