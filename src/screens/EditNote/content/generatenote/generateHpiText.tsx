@@ -278,11 +278,11 @@ export const fillNameAndPronouns = (
     //  Perform the following string replacements before inserting name and pronouns:
     //  Replace "respondent" with "patient" | Replace "the client's" with "the patient's" |
     //  Replace "he/she" with "patient" (as in literally the strong "he/she" with the slash included, needs to be changed to "patient")
-    hpiString = hpiString.replace(/\brespondent\b/gi, (match) =>
+    hpiString = hpiString.replace(/\brespondent/gi, (match) =>
         replaceWord(match, 'patient')
     );
-    hpiString = hpiString.replace(/\bthe client's\b/gi, (match) =>
-        replaceWord(match, "the patient's")
+    hpiString = hpiString.replace(/\bclient/gi, (match) =>
+        replaceWord(match, "patient")
     );
     hpiString = hpiString.replace(/he\/she/gi, (match) =>
         replaceWord(match, 'patient')
