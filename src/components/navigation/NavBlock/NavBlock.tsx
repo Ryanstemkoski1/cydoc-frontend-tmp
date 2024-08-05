@@ -11,11 +11,15 @@ import {
     practiceAdminMenuItems,
 } from '@constants/drawerMenuItems';
 import NoteNameMenuItem from '../NoteNameMenuItem';
+import LightTooltip from '@components/LightTooltip/LightTooltip';
 
 const NavBlock = () => {
     const doctorView = useSelector(selectDoctorViewState);
     const pathname = usePathname();
     const isEditNotePage = pathname?.includes('editnote');
+    const isAppointmentTemplatePage = pathname?.includes(
+        'appointment-templates'
+    );
 
     const menuItems = [
         ...clinicalWorkflowItems,
@@ -26,7 +30,7 @@ const NavBlock = () => {
     const currentRoute = menuItems.find((item) => item.href.includes(pathname));
 
     return (
-        <Box className={style.wrapper}>
+        <Box className={style.navBlockWrapper}>
             {doctorView && isEditNotePage && (
                 <div className={style.header__note}>
                     <NoteNameMenuItem />
@@ -35,6 +39,13 @@ const NavBlock = () => {
             <Typography className={style.typo}>
                 {pathname === '/' ? 'Home' : currentRoute?.label}
             </Typography>
+            {isAppointmentTemplatePage && (
+                <LightTooltip
+                    title={
+                        "Each appointment type can be configured to automatically assign clinicians, staff, patients, or Cydoc Al particular tasks. For example, a clinician can be assigned a Mental Status Exam Form within an appointment template for a 'Depression follow Up visit'"
+                    }
+                />
+            )}
         </Box>
     );
 };

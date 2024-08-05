@@ -1,0 +1,15 @@
+.lightTooltipWrapper {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+
+    path {
+        fill: #7f8485;
+    }
+
+    &:hover {
+        path {
+            fill: #147a9b;
+        }
+    }
+}

@@ -161,7 +161,7 @@ export default function DrawerMenu() {
                     borderRight: '1px solid #D7E5E9',
                     '& .MuiDrawer-paper': {
                         position: 'relative',
-                        zIndex: '10',
+                        zIndex: '20',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
