@@ -14,3 +14,18 @@
     letter-spacing: 0.15px;
     color: rgba($color-black, 0.6);
 }
+
+.autocompletePlaceholder {
+    background-color: $color-white;
+
+   button {
+        padding: 0;
+        width: 21px;
+        height: 21px;
+
+        svg {
+            width: 21px;
+            height: 21px;
+        }
+    }
+}

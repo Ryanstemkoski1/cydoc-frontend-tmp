@@ -2,7 +2,7 @@ import * as React from 'react';
 import style from './SelectPlaceholder.module.scss';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import { Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -90,8 +90,8 @@ interface SelectPlaceholderProps {
     items: string[];
     type: 'whoCompletes' | 'form';
     handleChange: (
-        event: SelectChangeEvent<string | null>,
         idx: number,
+        newValue: string,
         type: 'whoCompletes' | 'form'
     ) => void;
 }
@@ -117,7 +117,9 @@ const SelectPlaceholder = ({
             <Select
                 displayEmpty
                 value={value}
-                onChange={(event) => handleChange(event, idx, type)}
+                onChange={(event) =>
+                    handleChange(idx, event.target.value, type)
+                }
                 renderValue={handleValue}
                 MenuProps={MenuProps}
                 IconComponent={KeyboardArrowDownRoundedIcon}

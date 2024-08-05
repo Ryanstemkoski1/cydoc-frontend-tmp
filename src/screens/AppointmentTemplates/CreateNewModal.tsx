@@ -6,7 +6,6 @@ import {
     Button,
     IconButton,
     Modal,
-    SelectChangeEvent,
     TextField,
     Typography,
 } from '@mui/material';
@@ -72,9 +71,9 @@ const CreateNewModal = ({
         if (editAppointmentTempIndex !== undefined) {
             const editTempData =
                 appointmentTempData[editAppointmentTempIndex - 1];
-            setTitle(editTempData.header);
-            setSelectedApptValue(editTempData.body);
-            setStepCount(editTempData.body.length);
+            setTitle(editTempData?.header);
+            setSelectedApptValue(editTempData?.body);
+            setStepCount(editTempData?.body.length);
         }
     }, [appointmentTempData, editAppointmentTempIndex]);
 
@@ -107,15 +106,15 @@ const CreateNewModal = ({
     };
 
     const handleAppointmentValues = (
-        event: SelectChangeEvent<string | null>,
         index: number,
+        newValue: string,
         type: 'whoCompletes' | 'form'
     ) => {
         setSelectedApptValue((prevState) => {
             const newState: AppointmentValueType[] = [...prevState];
             newState[index] = {
                 ...newState[index],
-                [type]: event.target.value,
+                [type]: newValue,
             };
             return newState;
         });

@@ -1,13 +1,14 @@
 import style from './AppointmentTemplates.module.scss';
 
 import { Icon } from '@components/Icon';
-import { Box, IconButton, SelectChangeEvent, Typography } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 import {
     AppointmentValueType,
     WhoCompletes,
 } from '@constants/appointmentTemplatesConstants';
 import SelectPlaceholder from '@components/SelectPlaceholder/SelectPlaceholder';
 import DragIndicatorRoundedIcon from '@mui/icons-material/DragIndicatorRounded';
+import AutocompletePlaceholder from '@components/SelectPlaceholder/AutocompletePlaceholder';
 
 interface AppointmentTempStepProps {
     idx: number;
@@ -17,8 +18,8 @@ interface AppointmentTempStepProps {
     selectedApptValue: AppointmentValueType[];
     handleRemoveSteps: (idx: number) => void;
     handleApptValues: (
-        event: SelectChangeEvent<string>,
         idx: number,
+        newValue: string,
         type: 'whoCompletes' | 'form'
     ) => void;
 }
@@ -72,13 +73,13 @@ const AppointmentTempStep = ({
                         </Typography>
                         {selectedApptValue[idx].whoCompletes !==
                             WhoCompletes.Cydoc_ai && (
-                            <SelectPlaceholder
+                            <AutocompletePlaceholder
                                 idx={idx}
                                 type='form'
                                 placeholder='Select specific form'
-                                items={allDiseaseForms}
                                 handleChange={handleApptValues}
                                 value={selectedApptValue[idx].form || ''}
+                                options={allDiseaseForms}
                             />
                         )}
                     </>
