@@ -1,3 +1,4 @@
+import { Icon } from '@components/Icon';
 import { ProductType, ViewType } from '@constants/enums/route.enums';
 import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 import QrCode2RoundedIcon from '@mui/icons-material/QrCode2Rounded';
@@ -5,10 +6,6 @@ import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import CollectionsBookmarkRoundedIcon from '@mui/icons-material/CollectionsBookmarkRounded';
 import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
 import ArticleRoundedIcon from '@mui/icons-material/ArticleRounded';
-import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
-import ContactEmergencyRoundedIcon from '@mui/icons-material/ContactEmergencyRounded';
-import GppMaybeRoundedIcon from '@mui/icons-material/GppMaybeRounded';
-import { Icon } from '@components/Icon';
 
 export interface MenuItem {
     label: string;
