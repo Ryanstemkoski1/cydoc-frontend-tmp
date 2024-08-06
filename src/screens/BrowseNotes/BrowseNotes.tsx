@@ -173,7 +173,6 @@ const BrowseNotes = () => {
 
     return (
         <div className={style.notesBlock}>
-            <h1>Generated Notes</h1>
             <div className={style.notesBlock__notesWrap}>
                 <div
                     className={` ${style.notesBlock__header} flex align-center justify-between`}

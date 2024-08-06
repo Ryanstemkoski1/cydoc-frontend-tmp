@@ -17,7 +17,7 @@ const ForgotPasswordPage = () => {
 
     return (
         <CenteredPaper>
-            <LogoHeader title='Forgot password' />
+            <LogoHeader title='' />
             <div className='forgot-password-email'>
                 {!codeSentEmail || !obfuscatedEmail ? (
                     <ForgotPasswordEmailForm
