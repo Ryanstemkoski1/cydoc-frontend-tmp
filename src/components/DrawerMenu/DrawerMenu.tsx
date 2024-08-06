@@ -122,7 +122,7 @@ export default function DrawerMenu() {
                     <ListItem key={item.label + index} disablePadding>
                         <ListItemButton onClick={() => onClickLink(item.href)}>
                             <ListItemIcon>
-                                {React.createElement(item.icon)}
+                                {item.icon && React.createElement(item.icon)}
                             </ListItemIcon>
                         </ListItemButton>
                     </ListItem>
@@ -140,7 +140,8 @@ export default function DrawerMenu() {
                                 onClick={() => onClickLink(item.href)}
                             >
                                 <ListItemIcon sx={{ minWidth: '32px' }}>
-                                    {React.createElement(item.icon)}
+                                    {item.icon &&
+                                        React.createElement(item.icon)}
                                 </ListItemIcon>
                                 <ListItemText primary={item.label} />
                             </ListItemButton>

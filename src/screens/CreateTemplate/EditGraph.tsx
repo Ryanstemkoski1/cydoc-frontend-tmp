@@ -128,7 +128,7 @@ const EditGraph = () => {
 
     return (
         <TemplateTitlePage
-            header='Existing History of Present Illness Template'
+            header=''
             label='Select the name of a template to edit.'
             inputComponent={inputComponent}
             onSubmit={onSubmit}

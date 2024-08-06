@@ -27,7 +27,7 @@ const TemplateTitlePage = (props) => {
     };
 
     return (
-        <>
+        <div style={{marginTop: 6}}>
             <Segment className='template-title container'>
                 <Header
                     as='h2'
@@ -56,7 +56,7 @@ const TemplateTitlePage = (props) => {
                     {redirectElement}
                 </Form>
             </Segment>
-        </>
+        </div>
     );
 };
 

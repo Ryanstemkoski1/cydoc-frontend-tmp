@@ -4,7 +4,6 @@ import React, { useMemo, useState } from 'react';
 import { Box } from '@mui/system';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import ModalHeader from '@components/Atoms/ModalHeader';
 import { EditBilling } from './EditBilling';
 import { CurrentPaymentMethod } from './CurrentPaymentMethod';
 import { CenteredPaper } from '@components/Atoms/CenteredPaper';
@@ -29,7 +28,6 @@ export function SubscriptionPage() {
 
     return (
         <CenteredPaper loading={loading}>
-            <ModalHeader title='Subscription Management' />
             <Grid container spacing={1}>
                 {isPaymentSetup ? null : (
                     <>
