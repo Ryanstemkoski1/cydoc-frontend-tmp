@@ -592,7 +592,7 @@ class EditTemplateForm extends Component {
                         dividing
                         as='h2'
                         textAlign='center'
-                        content='History of Present Illness Template'
+                        content=''
                         subheader='Create your own dynamic, interactive HPI questionnaire
                         to generate an HPI your way.'
                     />

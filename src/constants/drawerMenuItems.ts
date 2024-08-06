@@ -13,7 +13,7 @@ import GppMaybeRoundedIcon from '@mui/icons-material/GppMaybeRounded';
 export interface MenuItem {
     label: string;
     href: string;
-    icon: React.ElementType;
+    icon: React.ElementType | null;
     onClick?: () => void;
 }
 
@@ -79,5 +79,43 @@ export const accountMenuItems: MenuItem[] = [
         href: 'logout',
         label: 'Log Out',
         icon: LoginRoundedIcon,
+    },
+];
+
+export const pageRoutes: MenuItem[] = [
+    {
+        href: '/forgot-password',
+        label: 'Forgot Password',
+        icon: null,
+    },
+    {
+        href: '/privacypolicy',
+        label: 'Privacy Policy',
+        icon: null,
+    },
+    {
+        href: '/termsandconditions',
+        label: 'Terms and Conditions',
+        icon: null,
+    },
+    {
+        href: '/view/product',
+        label: 'Product View',
+        icon: null,
+    },
+    {
+        href: '/templates/new',
+        label: 'New History of Present Illness Template',
+        icon: null,
+    },
+    {
+        href: '/templates/old',
+        label: 'Existing History of Present Illness Template',
+        icon: null,
+    },
+    {
+        href: '/templates/edit',
+        label: 'History of Present Illness Template',
+        icon: null,
     },
 ];

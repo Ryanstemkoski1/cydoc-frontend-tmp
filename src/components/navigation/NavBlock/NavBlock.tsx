@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 import {
     accountMenuItems,
     clinicalWorkflowItems,
+    pageRoutes,
     practiceAdminMenuItems,
 } from '@constants/drawerMenuItems';
 import NoteNameMenuItem from '../NoteNameMenuItem';
@@ -25,6 +26,7 @@ const NavBlock = () => {
         ...clinicalWorkflowItems,
         ...practiceAdminMenuItems,
         ...accountMenuItems,
+        ...pageRoutes,
     ];
 
     const currentRoute = menuItems.find((item) => item.href.includes(pathname));
