@@ -6,6 +6,7 @@ import AwardStar from './icons/awardStar.svg';
 import Encrypted from './icons/encrypted.svg';
 import IDCard from './icons/idCard.svg';
 import LogOut from './icons/logout.svg';
+import UserGroup from './icons/userGroup.svg';
 
 const iconRegistry = {
     editPencil: EditPencil,
@@ -15,6 +16,7 @@ const iconRegistry = {
     encrypted: Encrypted,
     idCard: IDCard,
     logout: LogOut,
+    userGroup: UserGroup,
 };
 
 export type IconType = keyof typeof iconRegistry;

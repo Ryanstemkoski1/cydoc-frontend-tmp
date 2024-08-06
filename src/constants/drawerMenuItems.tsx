@@ -4,7 +4,6 @@ import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 import QrCode2RoundedIcon from '@mui/icons-material/QrCode2Rounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import CollectionsBookmarkRoundedIcon from '@mui/icons-material/CollectionsBookmarkRounded';
-import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
 import ArticleRoundedIcon from '@mui/icons-material/ArticleRounded';
 
 export interface MenuItem {
@@ -52,7 +51,7 @@ export const practiceAdminMenuItems: MenuItem[] = [
     {
         href: '/manager-dashboard',
         label: 'Manage Users',
-        icon: <PeopleAltRoundedIcon />,
+        icon: <Icon type='userGroup' />,
     },
     {
         href: '/subscription',
