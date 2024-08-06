@@ -284,7 +284,7 @@ export const fillNameAndPronouns = (
         replaceWord(match, 'patient')
     );
     hpiString = hpiString.replace(/him\/her/gi, (match) =>
-        replaceWord(match, 'their')
+        replaceWord(match, 'them')
     );
 
     // Replace "the patient's" and "their" with given posPronoun.
