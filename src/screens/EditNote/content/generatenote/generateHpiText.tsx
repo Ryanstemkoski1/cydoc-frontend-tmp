@@ -55,7 +55,7 @@ const MONTHS = [
 
 const selectivelyUppercase = (str: string): string => {
     [...ETINICITY, ...MONTHS].forEach((item) => {
-        if (str.match(new RegExp('(^|[^a-zA-Z])' + item, 'ig'))) {
+        if (str.match(new RegExp(`\\b${item}\\b`, 'ig'))) {
             str = str.replace(new RegExp(item, 'ig'), ' ' + item);
         }
     });
