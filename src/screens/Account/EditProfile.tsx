@@ -154,7 +154,6 @@ const EditProfile = () => {
                 >
                     {({ errors, submitForm, isSubmitting, touched }) => (
                         <div>
-                            <ModalHeader title='Enter User Info' />
                             <Grid container spacing={4} paddingTop='2rem'>
                                 <Grid item xs={12} md={6}>
                                     <SignUpTextInput
