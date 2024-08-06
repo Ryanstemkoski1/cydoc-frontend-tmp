@@ -23,7 +23,12 @@ export function ParseAndRenderHpiNote({
                 <div key={item.title} style={{ marginBottom: '10px' }}>
                     <b>{item.title}</b>
                     <br />
-                    <span>{processSentence(formatSentence(item.text))}</span>
+                    <span>
+                        {processSentence(
+                            formatSentence(item.text),
+                            isParagraphFormat
+                        )}
+                    </span>
                     <br />
                 </div>
             );
@@ -44,7 +49,7 @@ function formatSentence(sentence: string) {
     return updatedSentence;
 }
 
-function processSentence(sentence: string) {
+function processSentence(sentence: string, isParagraphFormat?: boolean) {
     let id = 1;
     const addHeading = (str: string) => {
         str = str
@@ -56,7 +61,6 @@ function processSentence(sentence: string) {
         return (
             <React.Fragment key={str + id++}>
                 <br />
-                {/* Added a new line before each heading specifically for Advanced Report Generation.*/}
                 <b>{str}</b>
                 <br />
             </React.Fragment>
@@ -68,6 +72,7 @@ function processSentence(sentence: string) {
 
     let normalText = '';
     let headingText = '';
+    let toggle = false; // To control new lines in paragraphs, separating headings from text.
     const jsx: JSX.Element[] = [];
 
     for (const char of sentence) {
@@ -86,12 +91,18 @@ function processSentence(sentence: string) {
                 normalText = '';
             }
             // Add a line break
-            jsx.push(<br />);
+            if (isParagraphFormat) {
+                jsx.push(<br />);
+            }
             continue;
         }
         if (char === ':' && headingText.trim().length > 7) {
+            if (isParagraphFormat && toggle) {
+                jsx.push(<br />);
+            }
             jsx.push(addHeading(headingText));
             headingText = '';
+            toggle = true;
             continue;
         }
 
@@ -148,7 +159,9 @@ const HpiNote = ({
             <li key={item.title} className={styles.listItem}>
                 <b>{item.title}</b>
                 <ul className={styles.noBullets}>
-                    <span>{processSentence(formatSentence(item.text))}</span>
+                    <span>
+                        {processSentence(formatSentence(item.text), true)}
+                    </span>
                 </ul>
 
                 {item.miscNote &&
