@@ -23,7 +23,7 @@ export function ParseAndRenderHpiNote({
                 <div key={item.title} style={{ marginBottom: '10px' }}>
                     <b>{item.title}</b>
                     <br />
-                    <span>{formatSentence(item.text)}</span>
+                    <span>{processSentence(formatSentence(item.text))}</span>
                     <br />
                 </div>
             );
@@ -37,7 +37,8 @@ export function ParseAndRenderHpiNote({
 function formatSentence(sentence: string) {
     // Replace 'Mr.|Ms.|Mx.' ends with space ' '.
     const updatedSentence = sentence
-        .replace(/\b(Mr\.|Ms\.|Mx\.)\b/g, (match) => match + ' ')
+        .replace(/(\.)(?!\s)/g, '$1 ')
+        // .replace(/\b(Mr\.|Ms\.|Mx\.)\b/g, (match) => match + ' ')
         .replace(/PARAGRAPHBREAK/g, '\n');
 
     return updatedSentence;
@@ -56,7 +57,6 @@ function processSentence(sentence: string) {
             <React.Fragment key={str + id++}>
                 <br />
                 {/* Added a new line before each heading specifically for Advanced Report Generation.*/}
-                {id !== 1 ? <br /> : null}
                 <b>{str}</b>
                 <br />
             </React.Fragment>
@@ -183,18 +183,19 @@ const HpiNote = ({
               );
           })
         : text.map((item) => {
+              // Split the text into sentences only at '. ' (period followed by space)
+              const sentences = item.text
+                  .split(/(?<=\.\s)/)
+                  .filter((sentence) => sentence.trim().length > 0);
               return (
                   <li key={item.title} className={styles.listItem}>
                       <b>{item.title}</b>
                       <ul className={styles.noBullets}>
-                          {item.text.split('. ').map((sentence, index, arr) => (
+                          {sentences.map((sentence: string, index: number) => (
                               <li key={index}>
                                   {processSentence(
-                                      capitalizeFirstLetter(
-                                          formatSentence(item.text)
-                                      )
+                                      formatSentence(sentence.trim())
                                   )}
-                                  {index < arr.length - 1 && '.'}
                               </li>
                           ))}
                       </ul>

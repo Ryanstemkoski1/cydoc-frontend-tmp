@@ -85,10 +85,7 @@ const selectivelyLowercase = (str: string): string => {
  * Removes punctuation (except periods, commas, forward slashes, apostrophes,
  * and colons). Removes multiple spaces.
  */
-export const fullClean = (
-    sentence: string,
-    isAdvancedReport?: boolean
-): string => {
+export const fullClean = (sentence: string): string => {
     // remove punctuations except hyphens, parentheses and single apostrophes
     sentence = sentence.replace(/[^\w\s'.,:/@()-]/g, '');
 
@@ -101,10 +98,8 @@ export const fullClean = (
     // capitalized letters selectively
     sentence = selectivelyUppercase(sentence);
 
-    // decimal measurements of lesion)
-    return isAdvancedReport
-        ? sentence.trim() // Do not remove any punctuation for Advanced Report Generation.
-        : sentence.replace(/\.\s?$/, '').trim();
+    //TODO: Do not remove any punctuation for Advanced Report Generation. (Including decimal measurements of lesion)
+    return sentence.trim();
 };
 
 // checks if string has I in it, if so, returns it with quotes around.
@@ -125,8 +120,10 @@ export const removeSentence = (
 ): string => {
     const containsBoth = (sentence: string): boolean =>
         sentence.includes('answer') && sentence.includes('notanswer');
+
+    // Split by period followed by a space but retain the periods in the result
     return fillSentence
-        .split('. ')
+        .split(/(?<=\.)\s+/)
         .filter(
             (sentence) =>
                 !sentence.match(new RegExp(keyword) || containsBoth(sentence))
@@ -138,18 +135,17 @@ export const removeSentence = (
  * Clean the fill sentences and the answers, and insert the answers int the
  * fill sentences
  */
-export const fillAnswers = (hpi: HPI, isAdvancedReport?: boolean): string => {
+export const fillAnswers = (hpi: HPI): string => {
     const sortedKeys: number[] = Object.keys(hpi).map((val) => parseInt(val));
     // JS sorts numbers lexicographically by default
     sortedKeys.sort((lhs, rhs) => lhs - rhs);
 
-    //debugger;
     let hpiString = '';
     sortedKeys.forEach((key) => {
         let [fillSentence, answer, negAnswer] = hpi[key] || hpi[key.toString()];
-        answer = fullClean(answer, isAdvancedReport);
-        negAnswer = fullClean(negAnswer, isAdvancedReport);
-        fillSentence = fullClean(fillSentence, isAdvancedReport);
+        answer = fullClean(answer);
+        negAnswer = fullClean(negAnswer);
+        fillSentence = fullClean(fillSentence);
         if (!answer.length)
             fillSentence = removeSentence(fillSentence, 'answer');
         else if (answer === 'all no') {
@@ -164,13 +160,7 @@ export const fillAnswers = (hpi: HPI, isAdvancedReport?: boolean): string => {
         else if (fillSentence.match(/notanswer/)) {
             fillSentence = fillSentence.replace(/notanswer/, negAnswer);
         }
-        // Do not add any punctuation for Advanced Report Generation.
-        isAdvancedReport
-            ? (hpiString += `${fillSentence} `)
-            : (hpiString +=
-                  fillSentence === 'PARAGRAPHBREAK'
-                      ? `${fillSentence} `
-                      : `${fillSentence}. `);
+        hpiString += `${fillSentence} `; // Keep original punctuation.
     });
     return hpiString;
 };
@@ -282,7 +272,7 @@ export const fillNameAndPronouns = (
         replaceWord(match, 'patient')
     );
     hpiString = hpiString.replace(/\bclient/gi, (match) =>
-        replaceWord(match, "patient")
+        replaceWord(match, 'patient')
     );
     hpiString = hpiString.replace(/he\/she/gi, (match) =>
         replaceWord(match, 'patient')
@@ -293,31 +283,31 @@ export const fillNameAndPronouns = (
         ? hpiString.replace(/\bthe patient's\b|\btheir\b/g, posPronoun)
         : hpiString;
 
-    let toggle = 1;
-
     // process each sentence
-    // If patient's pronouns are not they/them, replace:
+    // If patient's pronouns ia available, replace "[t]he patient|[patient]" with "she/he/they/name".
+    // Otherwise, if patient's pronouns are not they/them, replace:
     // 1) they with she/he 2) their with her/his 3) she's/he's with her/his 4) theirs with hers/his
     // 5) them with her/him 6) himselves/herselves with himself/herself
     const newHpiString = hpiString.split('. ').map((sentence) => {
-        // Replace "[t]he patient/[p]atient" with "she/he/they/name"
-        if (/[Tt]he patient/.test(sentence) || /[Pp]atient/.test(sentence)) {
-            const noun = name
-                ? toggle
-                    ? objPronoun === 'he'
+        // Replace "[t]he patient|[patient]" with "she/he/they/name"
+        if (/\b[Tt]he patient\b|\b[Pp]atient\b/.test(sentence)) {
+            if (name) {
+                sentence = sentence.replace(
+                    /\b[Tt]he patient\b|\b[Pp]atient\b/g,
+                    objPronoun === 'he'
                         ? `Mr.${name}`
                         : objPronoun === 'she'
                           ? `Ms.${name}`
                           : `Mx.${name}`
-                    : objPronoun
-                : toggle
-                  ? undefined
-                  : objPronoun;
-            if (noun) {
-                sentence = sentence.replace(/[Tt]he patient/g, noun);
-                sentence = sentence.replace(/[Pp]atient/g, noun);
+                );
+            } else {
+                sentence = objPronoun
+                    ? sentence.replace(
+                          /\b[Tt]he patient\b|\b[Pp]atient\b/g,
+                          objPronoun
+                      )
+                    : sentence;
             }
-            toggle = (toggle + 1) % 2;
         }
 
         sentence = sentenceHelper(sentence);
@@ -394,27 +384,29 @@ const capitalizeWord = (word: string) =>
  */
 export const capitalize = (hpiString: string): string => {
     hpiString = hpiString.trim();
+    // replace 'i' with I
     hpiString = hpiString.replace(/\bi\b/g, 'I');
-    const punctuation = new Set(END_OF_SENTENCE_PUNC);
-    const words = hpiString.split(' ');
-    const capitalizedWords = words.map((word, i) => {
-        if (
-            i - 1 < 0 ||
-            punctuation.has(words[i - 1][words[i - 1].length - 1])
-        ) {
-            word = capitalizeWord(word);
-        }
-        return word;
+    // replace to capitalize the word after 'PARAGRAPHBREAK'
+    hpiString = hpiString.replace(/PARAGRAPHBREAK\s+(\w)/g, (match, p1) => {
+        return `PARAGRAPHBREAK ${capitalizeWord(p1)}`;
     });
-    return capitalizedWords.join(' ');
+    // replace to capitalize the word after heading ends with ':'
+    hpiString = hpiString.replace(/:\s+(\w)/g, (match, p1) => {
+        return `: ${capitalizeWord(p1)}`;
+    });
+    // replace after sentence-ending punctuation (., !, ?)
+    hpiString = hpiString.replace(
+        /(?:^|\.\s+|\!\s+|\?\s+)([a-z])/g,
+        (match, p1) => {
+            // Preserve the leading punctuation or space and capitalize the letter
+            return match[0] + capitalizeWord(p1);
+        }
+    );
+    return hpiString;
 };
 
-export const createInitialHPI = (
-    hpi: HPI,
-    isAdvancedReport: boolean
-): string => {
-    debugger;
-    return fillAnswers(hpi, isAdvancedReport);
+export const createInitialHPI = (hpi: HPI): string => {
+    return fillAnswers(hpi);
 };
 
 export const createHPI = (
@@ -424,9 +416,11 @@ export const createHPI = (
     isAdvancedReport?: boolean
 ): string => {
     const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
+
     hpiString = fillNameAndPronouns(hpiString, patientInfo);
     hpiString = partOfSpeechCorrection(hpiString);
     // hpiString = combineHpiString(hpiString, 3);
+
     if (!isAdvancedReport) {
         hpiString = fillMedicalTerms(hpiString);
         hpiString = conjugateThirdPerson(hpiString);

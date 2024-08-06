@@ -704,9 +704,7 @@ function getHPIText(
         const formattedHpi = formattedHpis[key];
         // TODO: use actual patient info to populate fields
         return new Set(
-            createInitialHPI(formattedHpi, isAdvancedReport)
-                .split('. ')
-                .filter(Boolean)
+            createInitialHPI(formattedHpi).split('. ').filter(Boolean)
         );
     });
     for (let i = 0; i < initialPara.length - 1; i++) {
@@ -749,7 +747,8 @@ function getHPIText(
     ];
 
     finalPara.forEach((paragraph, i) => {
-        finalPara[i] = bulletNoteView
+        // TODO: when to use bulletNoteView?
+        finalPara[i] = !bulletNoteView
             ? removePhrases(paragraph, phrasesToRemove)
             : paragraph;
     });
