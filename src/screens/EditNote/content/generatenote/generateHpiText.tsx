@@ -184,7 +184,12 @@ export const definePatientNameAndPronouns = (
         objPronoun = 'they';
         posPronoun = 'their';
     }
-    return { name: patientName, pronouns, objPronoun, posPronoun };
+    return {
+        name: capitalizeFirstLetter(patientName),
+        pronouns,
+        objPronoun,
+        posPronoun,
+    };
 };
 
 /**
@@ -268,6 +273,7 @@ export const fillNameAndPronouns = (
     //  Perform the following string replacements before inserting name and pronouns:
     //  Replace "respondent" with "patient" | Replace "the client's" with "the patient's" |
     //  Replace "he/she" with "patient" (as in literally the strong "he/she" with the slash included, needs to be changed to "patient")
+    //  Replace "him/her" with "patient's"
     hpiString = hpiString.replace(/\brespondent/gi, (match) =>
         replaceWord(match, 'patient')
     );
@@ -276,6 +282,9 @@ export const fillNameAndPronouns = (
     );
     hpiString = hpiString.replace(/he\/she/gi, (match) =>
         replaceWord(match, 'patient')
+    );
+    hpiString = hpiString.replace(/him\/her/gi, (match) =>
+        replaceWord(match, 'their')
     );
 
     // Replace "the patient's" and "their" with given posPronoun.
