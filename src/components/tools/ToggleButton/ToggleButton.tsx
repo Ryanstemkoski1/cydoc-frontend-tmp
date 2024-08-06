@@ -49,11 +49,7 @@ export default function ToggleButton<T = string>(props: ButtonProps<T>) {
             data-hover={false}
             className={`button outline info pill sm ${active ? 'active' : ''}`}
         >
-            {title === 'yes'
-                ? 'Yes'
-                : title === 'no'
-                  ? 'No'
-                  : title.toLowerCase()}
+            {title === 'yes' ? 'Yes' : title === 'no' ? 'No' : title}
         </button>
     );
 }
