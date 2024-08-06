@@ -48,7 +48,6 @@ const GeneratedNoteContent = (
     const link = `${window.location.origin}/hpi/patient-advance?institution_id=${institutionId}`;
 
     const patientsData = useSelector(selectPatientState);
-    console.log('patients data===>', patientsData);
 
     const data = {
         Name: `${firstName} ${middleName} ${lastName}`,
@@ -159,7 +158,12 @@ const GeneratedNoteContent = (
         }
     }
 
-    const handleSourceFormClick = () => {};
+    const handleSourceFormClick = () => {
+        localStorage.setItem(
+            'selectedAppointment',
+            JSON.stringify(selectedAppointment)
+        );
+    };
 
     return (
         <Box>
@@ -196,15 +200,14 @@ const GeneratedNoteContent = (
                         );
                     })}
                 </Box>
-                {hpiText !== undefined ||
-                    (hpiText == 'No history of present illness reported.' && (
-                        <Box className={style.genNoteDetail} id='copy-notes'>
-                            <ParseAndRenderHpiNote
-                                hpiText={hpiText}
-                                isParagraphFormat={true}
-                            />
-                        </Box>
-                    ))}
+                {hpiText !== undefined && !hpiText.includes('No history') && (
+                    <Box className={style.genNoteDetail} id='copy-notes'>
+                        <ParseAndRenderHpiNote
+                            hpiText={hpiText}
+                            isParagraphFormat={true}
+                        />
+                    </Box>
+                )}
                 <Box className={style.genNoteSource}>
                     <Typography variant='h1'>Source Data (Forms)</Typography>
                     {Object.keys(sourcesData).map((item, index) => {
@@ -238,7 +241,7 @@ const GeneratedNoteContent = (
                                 <Box
                                     key={index}
                                     className={style.genNoteSource__Item}
-                                    // onClick={handleSourceFormClick}
+                                    onClick={handleSourceFormClick}
                                 >
                                     <Box
                                         className={

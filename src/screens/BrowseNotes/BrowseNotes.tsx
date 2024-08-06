@@ -157,7 +157,24 @@ const BrowseNotes = () => {
                 user?.institutionId,
                 cognitoUser
             );
-            setUsers(users);
+
+            const filteredUsers = users.reduce(
+                (acc: AppointmentUser[], current) => {
+                    const x = acc.find((item) => item.id === current.id);
+                    if (!x) {
+                        return acc.concat([current]);
+                    } else {
+                        if (!current.hpiText.includes('No history')) {
+                            const index = acc.indexOf(x);
+                            acc[index] = current;
+                        }
+                        return acc;
+                    }
+                },
+                []
+            );
+
+            setUsers(filteredUsers);
             dispatch(setLoadingStatus(false));
         } catch (err) {
             setUsers([]);
