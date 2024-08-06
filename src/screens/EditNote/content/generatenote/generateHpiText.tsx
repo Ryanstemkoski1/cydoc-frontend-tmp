@@ -400,7 +400,7 @@ export const capitalize = (hpiString: string): string => {
     );
     // Capitalize the very first letter of the string
     if (hpiString.length > 0) {
-        hpiString = hpiString.charAt(0).toUpperCase() + hpiString.slice(1);
+        hpiString = capitalizeWord(hpiString);
     }
     // Capitalize the first letter of each sentence
     hpiString = hpiString.replace(
