@@ -52,9 +52,6 @@ function QRCodePage() {
             <div id='react-no-print'>
                 <div className='centering'>
                     <div className={style.QRCodePage}>
-                        <div className={style.QRCodePage__header}>
-                            <h2>QR Code</h2>
-                        </div>
                         <div className={style.QRCodePage__content}>
                             <p>
                                 Cydoc&lsquo;s Smart Patient Intake Form© uses
