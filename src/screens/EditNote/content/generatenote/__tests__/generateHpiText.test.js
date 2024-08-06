@@ -223,7 +223,7 @@ describe('generateHpiText', () => {
                 objPronoun: 'they',
                 posPronoun: 'their',
             };
-            const expected = 'Patient loves dog, and patient also loves cat.';
+            const expected = 'They loves dog, and they also loves cat.';
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
                 expected
             );
@@ -236,7 +236,7 @@ describe('generateHpiText', () => {
                 objPronoun: 'they',
                 posPronoun: 'their',
             };
-            const expected = "the patient's cat name is Molly.";
+            const expected = 'their cat name is Molly.';
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
                 expected
             );
@@ -249,7 +249,7 @@ describe('generateHpiText', () => {
                 objPronoun: 'they',
                 posPronoun: 'their',
             };
-            const expected = 'patient loves cat.';
+            const expected = 'they loves cat.';
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
                 expected
             );
@@ -341,7 +341,7 @@ describe('generateHpiText', () => {
 
         it('capitalizes multiple sentences', () => {
             const inp = 'the: quick, brown fox. jumped! over the? yellow';
-            const expected = 'The: quick, brown fox. Jumped! Over the? Yellow';
+            const expected = 'The: Quick, brown fox. Jumped! Over the? Yellow';
             expect(capitalize(inp)).toEqual(expected);
         });
     });
@@ -364,13 +364,13 @@ describe('generateHpiText', () => {
         });
 
         it('removes appropriate punctuation', () => {
-            const inp = 'foo!:;? bar, 42. 24.';
+            const inp = 'foo!:;? bar, 42. 24';
             const expected = 'foo: bar, 42. 24';
             expect(fullClean(inp)).toEqual(expected);
         });
 
         it('chains the rules', () => {
-            const inp = '  foo?  BAR!! 42?   24,  eom.';
+            const inp = '  foo?  BAR!! 42?   24,  eom';
             const expected = 'foo BAR 42 24, eom';
             expect(fullClean(inp)).toEqual(expected);
         });

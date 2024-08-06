@@ -313,7 +313,7 @@ export const fillNameAndPronouns = (
                 sentence = objPronoun
                     ? sentence.replace(
                           /\b[Tt]he patient\b|\b[Pp]atient\b/g,
-                          objPronoun
+                          (match) => replaceWord(match, objPronoun)
                       )
                     : sentence;
             }
@@ -394,7 +394,19 @@ const capitalizeWord = (word: string) =>
 export const capitalize = (hpiString: string): string => {
     hpiString = hpiString.trim();
     // replace 'i' with I
-    hpiString = hpiString.replace(/\bi\b/g, 'I');
+    hpiString = hpiString.replace(
+        /(^|\s|\b)i(\s|$|\b)/g,
+        (match, p1, p2) => p1 + 'I' + p2
+    );
+    // Capitalize the very first letter of the string
+    if (hpiString.length > 0) {
+        hpiString = hpiString.charAt(0).toUpperCase() + hpiString.slice(1);
+    }
+    // Capitalize the first letter of each sentence
+    hpiString = hpiString.replace(
+        /([.?!])\s*([a-z])/g,
+        (match, p1, p2) => `${p1} ${p2.toUpperCase()}`
+    );
     // replace to capitalize the word after 'PARAGRAPHBREAK'
     hpiString = hpiString.replace(/PARAGRAPHBREAK\s+(\w)/g, (match, p1) => {
         return `PARAGRAPHBREAK ${capitalizeWord(p1)}`;
@@ -403,14 +415,6 @@ export const capitalize = (hpiString: string): string => {
     hpiString = hpiString.replace(/:\s+(\w)/g, (match, p1) => {
         return `: ${capitalizeWord(p1)}`;
     });
-    // replace after sentence-ending punctuation (., !, ?)
-    hpiString = hpiString.replace(
-        /(?:^|\.\s+|\!\s+|\?\s+)([a-z])/g,
-        (match, p1) => {
-            // Preserve the leading punctuation or space and capitalize the letter
-            return match[0] + capitalizeWord(p1);
-        }
-    );
     return hpiString;
 };
 
