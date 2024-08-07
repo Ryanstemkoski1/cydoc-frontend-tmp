@@ -88,8 +88,8 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
         that the question can still pass through correctly.
         */
         const { node, hpi, category } = this.props;
-        const { response, responseType } = hpi.nodes[node];
-        const text = hpi.nodes[node].text
+        const { response, responseType } = hpi.nodes[node] ?? {};
+        const text = hpi.nodes[node]?.text
             .replace('SYMPTOM', category.toLowerCase())
             .replace('DISEASE', category.toLowerCase())
             .replace(/ONLYIF\[.*]\s/, '') // remove "ONLYIF[**] " part from text
@@ -107,21 +107,21 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 question: "What is the patient's " + response.name + '?',
             });
         else {
-            const click = text.search('CLICK'),
-                select = text.search('\\['),
-                endSelect = text.search('\\]'),
+            const click = text?.search('CLICK'),
+                select = text?.search('\\['),
+                endSelect = text?.search('\\]'),
                 cleanText = select != -1 && endSelect != -1;
             this.setState({
-                question: text.slice(
+                question: text?.slice(
                     0,
-                    click != -1 ? click : cleanText ? select : text.length
+                    click != -1 ? click : cleanText ? select : text?.length
                 ),
                 responseChoice:
                     click != -1 || cleanText
                         ? text
-                              .slice(
+                              ?.slice(
                                   select + 1,
-                                  endSelect != -1 ? endSelect : text.length
+                                  endSelect != -1 ? endSelect : text?.length
                               )
                               .split(',')
                               .map((response) => response.trim())
@@ -138,7 +138,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 listTextHandleChange,
                 removeListInput,
             } = this.props,
-            { responseType } = hpi.nodes[node],
+            { responseType } = hpi.nodes[node] ?? {},
             blankTypes = [
                 ResponseTypes.FH_BLANK,
                 ResponseTypes.MEDS_BLANK,
@@ -165,7 +165,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
         }
 
         const choices = blankTypes.includes(responseType)
-            ? (hpi.nodes[node].response as string[])
+            ? (hpi.nodes[node]?.response as string[])
             : responseChoice;
         switch (responseType) {
             case ResponseTypes.YES_NO:
@@ -187,7 +187,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         onAddListItem={addListInput}
                         onChangeListItem={listTextHandleChange}
                         onRemoveListItem={removeListInput}
-                        response={hpi.nodes[node].response}
+                        response={hpi.nodes[node]?.response}
                     />
                 );
 
@@ -232,7 +232,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 );
 
             case ResponseTypes.SELECTMANY: {
-                const existingResponse = this.props.hpi.nodes[node].response;
+                const existingResponse = this.props.hpi.nodes[node]?.response;
                 const formattedResponseChoice: ReviewOfSystemsState = {
                     '': {},
                 };
@@ -373,7 +373,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
         const isYesNoResponseType = [
             ResponseTypes.NO_YES,
             ResponseTypes.YES_NO,
-        ].includes(hpi.nodes[node].responseType);
+        ].includes(hpi.nodes[node]?.responseType);
         return (
             <div
                 className={`${style.response} ${
@@ -388,10 +388,10 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     gap: '10px',
                 }}
             >
-                {this.state.question.trim() == 'NAME' ? (
+                {this.state.question?.trim() == 'NAME' ? (
                     ''
                 ) : (
-                    <h5>{this.state.question.trim()}</h5>
+                    <h5>{this.state.question?.trim()}</h5>
                 )}
                 <aside>{this.renderSwitch()}</aside>
             </div>

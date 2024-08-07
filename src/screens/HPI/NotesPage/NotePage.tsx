@@ -12,6 +12,8 @@ import HPIContent from '../HpiContent/HPIContent';
 import { NotificationTypeEnum } from '@components/tools/Notification/Notification';
 import { OnNextClickParams } from '../Hpi';
 import { RootState } from '@redux/store';
+import { FetchFilledFormData } from '../HpiContent/FetchFIlledFormData';
+import { GraphData } from '@constants/hpiEnums';
 //Component that manages the content displayed based on the activeItem prop
 // and records the information the user enters as state
 
@@ -26,14 +28,27 @@ interface OwnProps {
     onPreviousClick: () => void;
 }
 
+interface State {
+    formContent: GraphData;
+    isLoad: boolean;
+}
+
 type ReduxProps = ConnectedProps<typeof connector>;
 
 type Props = OwnProps & ReduxProps;
 
-class NotePage extends Component<Props> {
-    constructor(props) {
+class NotePage extends Component<Props, State> {
+    constructor(props: Props) {
         super(props);
-        //initialize state
+        this.state = {
+            formContent: {
+                graph: {},
+                nodes: {},
+                edges: {},
+                order: {},
+            },
+            isLoad: false,
+        };
     }
 
     componentDidMount() {
@@ -45,6 +60,41 @@ class NotePage extends Component<Props> {
         ) {
             processSurveyGraph(initialQuestions);
         }
+
+        const handleFetchFilledForm = async () => {
+            //temp constants for fetchFilledFormToDb
+            const getAppointmentId = '660e8400-e29b-41d4-a716-446622444411';
+            const getFormCategory = 'diabetes';
+            //temp constants for fetchFilledFormToDb
+
+            // Please replace hard-coded constants values to the dynamic values
+            try {
+                const formData = await FetchFilledFormData(
+                    getAppointmentId,
+                    getFormCategory
+                );
+
+                this.setState({
+                    isLoad: true,
+                    formContent: formData.data.filled_form.formContent,
+                });
+
+                return formData.data.filled_form.formContent;
+            } catch (error) {
+                this.setState({
+                    isLoad: true,
+                    formContent: {
+                        graph: {},
+                        nodes: {},
+                        edges: {},
+                        order: {},
+                    },
+                });
+                console.error('---Error getting filled_form data---:', error);
+            }
+        };
+
+        this.state.isLoad == false && handleFetchFilledForm();
     }
 
     setStickyHeaders() {
@@ -90,6 +140,7 @@ class NotePage extends Component<Props> {
                     //     );
                     // }}
                     notification={this.props.notification}
+                    formContent={this.state.formContent}
                 />
             </div>
         );
