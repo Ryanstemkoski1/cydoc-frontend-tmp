@@ -18,6 +18,20 @@ function traverseNodes(
     let nodesArr: string[] = [],
         stack = currNodes,
         totalNodes = stack;
+
+    /*Sort Stack based on displayOrder if available.*/
+    stack.sort((a, b) => {
+        const nodeA = state.hpi.nodes[a] as { displayOrder?: number };
+        const nodeB = state.hpi.nodes[b] as { displayOrder?: number };
+        if (
+            nodeA?.displayOrder !== undefined &&
+            nodeB?.displayOrder !== undefined
+        ) {
+            return nodeB.displayOrder - nodeA.displayOrder;
+        }
+        return 0; // If displayOrder is not defined, maintain order
+    });
+
     while (stack.length) {
         const currNode = stack.pop();
         if (!currNode) continue;
@@ -110,18 +124,7 @@ export function nodesToDisplayInOrder(
                         state,
                         maxLimit - nodesArr.length
                     ).filter((node) => !nodesSoFar.includes(node));
-                /** Sort currNodesArr based on displayOrder if available.*/
-                currNodesArr.sort((a, b) => {
-                    const nodeA = hpi.nodes[a] as { displayOrder?: number };
-                    const nodeB = hpi.nodes[b] as { displayOrder?: number };
-                    if (
-                        nodeA?.displayOrder !== undefined &&
-                        nodeB?.displayOrder !== undefined
-                    ) {
-                        return nodeA.displayOrder - nodeB.displayOrder;
-                    }
-                    return 0; // If displayOrder is not defined, maintain order
-                });
+
                 if (chiefComplaint == currCat) return currNodesArr;
                 nodesArr = [
                     ...new Set([
