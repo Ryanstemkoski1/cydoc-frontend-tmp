@@ -66,6 +66,8 @@ function traverseNodes(
                 nodes[currNode]?.response == YesNoResponse.Yes) ||
             (nodes[currNode]?.responseType == ResponseTypes.NO_YES &&
                 nodes[currNode]?.response == YesNoResponse.No) ||
+            (nodes[currNode]?.responseType == ResponseTypes.SELECTMANYDENSE &&
+                isValidResponseResult) ||
             (nodes[currNode]?.responseType == ResponseTypes.SELECTMANY &&
                 isValidResponseResult) ||
             (nodes[currNode]?.responseType == ResponseTypes.SELECTONE &&
