@@ -207,7 +207,9 @@ const HpiNote = ({
                           {sentences.map((sentence: string, index: number) => (
                               <li key={index}>
                                   {processSentence(
-                                      formatSentence(sentence.trim())
+                                      capitalizeFirstLetter(
+                                          formatSentence(sentence.trim())
+                                      )
                                   )}
                               </li>
                           ))}
