@@ -158,10 +158,14 @@ const GeneratedNoteContent = (
         }
     }
 
-    const handleSourceFormClick = () => {
+    const handleSourceFormClick = (item: any) => {
+        const updatedAppointment = {
+            ...selectedAppointment,
+            selectedForm: item,
+        };
         localStorage.setItem(
             'selectedAppointment',
-            JSON.stringify(selectedAppointment)
+            JSON.stringify(updatedAppointment)
         );
     };
 
@@ -214,7 +218,7 @@ const GeneratedNoteContent = (
                         let statusStyle = {};
                         let dotStyle = {};
                         let textStyle = {};
-                        switch (sourcesData[item].Status) {
+                        switch (sourcesData[item].status) {
                             case 'Not started':
                                 statusStyle = { backgroundColor: '#F5F5F5' };
                                 dotStyle = { backgroundColor: '#7F8485' };
@@ -237,11 +241,17 @@ const GeneratedNoteContent = (
                         }
 
                         return (
-                            <a target='_blank' rel='noreferrer' href={link}>
+                            <a
+                                key={index}
+                                target='_blank'
+                                rel='noreferrer'
+                                href={link}
+                            >
                                 <Box
-                                    key={index}
                                     className={style.genNoteSource__Item}
-                                    onClick={handleSourceFormClick}
+                                    onClick={() =>
+                                        handleSourceFormClick(sourcesData[item])
+                                    }
                                 >
                                     <Box
                                         className={

@@ -2,12 +2,8 @@
 
 import { ApiResponse, Institution } from '@cydoc-ai/types';
 import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
-import { ChiefComplaintsEnum } from '@constants/enums/chiefComplaints.enums';
 import { HPIPatientQueryParams } from '@constants/enums/hpi.patient.enums';
-import {
-    Institution as InstitutionClass,
-    InstitutionType,
-} from 'classes/institution.class';
+import { Institution as InstitutionClass } from 'classes/institution.class';
 import CommonLayout from '@components/CommonLayout/CommonLayout';
 import Notification, {
     NotificationTypeEnum,
@@ -22,7 +18,6 @@ import {
 } from 'modules/institution-api';
 import { log } from 'modules/logging';
 import { hpiHeaders as knowledgeGraphAPI } from '@screens/EditNote/content/hpi/knowledgegraph/API';
-import initialQuestions from '@screens/EditNote/content/patientview/constants/initialQuestions';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
@@ -31,24 +26,17 @@ import { setChiefComplaint } from '@redux/actions/chiefComplaintsActions';
 import { processKnowledgeGraph } from '@redux/actions/hpiActions';
 import { saveHpiHeader } from '@redux/actions/hpiHeadersActions';
 import { setLoadingStatus } from '@redux/actions/loadingStatusActions';
-import {
-    initialSurveyAddText,
-    processSurveyGraph,
-} from '@redux/actions/userViewActions';
 import { updateAdditionalSurveyDetails } from '@redux/actions/additionalSurveyActions';
 import { initialSurveyAddDateOrPlace } from '@redux/actions/userViewActions';
 import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
-import { isResponseValid } from '@utils/getHPIFormData';
 import { loadChiefComplaintsData } from '@utils/loadKnowledgeGraphData';
-import CCSelection from '../HPI/ChiefComplaintSelection/CCSelection';
 import style from './HpiAdvance.module.scss';
-// import InitialSurveyHPI from './InitialSurvey/InitialSurvey';
 import NewNotePage from '../HPI/NotesPage/NotePage';
-// import PreHPI from './PreHpi/PreHPI';
-import { selectAdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
 import { selectHpiHeaders } from '@redux/reducers/hpiHeadersReducer';
 import useSignInRequired from '@hooks/useSignInRequired';
+import axios from 'axios';
+import { graphClientURL } from '@constants/api';
 
 export interface OnNextClickParams {
     allSelectedChiefComplaints?: string[];
@@ -67,6 +55,8 @@ const HpiAdvance = () => {
     const query = useQuery();
     const router = useRouter();
 
+    const institutionId = query?.get(HPIPatientQueryParams.INSTITUTION_ID);
+
     const [notificationMessage, setNotificationMessage] = useState('');
     const [notificationType, setNotificationType] = useState(
         NotificationTypeEnum.ERROR
@@ -81,7 +71,6 @@ const HpiAdvance = () => {
     const hpiHeaders = useSelector(selectHpiHeaders);
     const activeItem = useSelector(selectActiveItem);
 
-    const [currentTabs, setCurrentTabs] = useState<string[]>(['CCSelection']);
     const [institutionConfig, setInstitutionConfig] =
         useState<InstitutionConfig>();
 
@@ -90,18 +79,11 @@ const HpiAdvance = () => {
         return institutionConfig.diseaseForm.map((item) => item.diseaseName);
     }, [institutionConfig]);
 
-    const [showCCModal, setShowCCModal] = useState(false);
     const selectedChiefComplaints = useSelectedChiefComplaints();
-    const [chiefComplaintsForModal, setChiefComplaintsForModal] = useState<
-        { chiefComplaint: string; isSelected: boolean }[]
-    >([]);
-    const selectedChiefComplaintsForModal = useMemo(
-        () => chiefComplaintsForModal.filter((item) => item.isSelected),
-        [chiefComplaintsForModal]
-    );
-    const [appointmentDate, setAppointmentDate] = useState('');
 
-    const institutionId = query?.get(HPIPatientQueryParams.INSTITUTION_ID);
+    const [appointmentDate, setAppointmentDate] = useState('');
+    const [hpiKey, setHpiKey] = useState('');
+    const [hpiName, setHpiName] = useState('');
 
     useEffect(() => {
         const selectedAppointment = localStorage.getItem('selectedAppointment');
@@ -113,7 +95,13 @@ const HpiAdvance = () => {
             const legalMiddleName = temp.selectedAppointment.middleName;
             const dateOfBirth = temp.selectedAppointment.dob;
 
+            const reporter = temp.selectedForm.reporter;
+            const title = temp.selectedForm.title;
+
+            setHpiKey(reporter);
+            setHpiName(title);
             setAppointmentDate(appointmentDate);
+
             dispatch(
                 updateAdditionalSurveyDetails(
                     legalFirstName,
@@ -127,236 +115,47 @@ const HpiAdvance = () => {
         }
     }, [query, router, dispatch]);
 
-    const resetCurrentTabs = useCallback(() => {
-        if (!institutionConfig) return [];
-
-        const { showChiefComplaints, showDefaultForm } = institutionConfig;
-
-        const newCurrentTabs: string[] = [];
-
-        if (showChiefComplaints) {
-            newCurrentTabs.push('CCSelection');
-        } else if (showDefaultForm) {
-            newCurrentTabs.push(...institutionDefaultCC);
-        }
-
-        return newCurrentTabs;
-    }, [institutionConfig, institutionDefaultCC]);
-
-    const changeFavComplaintsBasedOnInstitute = useCallback(() => {
-        const { graph, nodes, order } = userSurveyState;
-
-        if (
-            !institution ||
-            Object.keys(graph).length ||
-            Object.keys(nodes).length ||
-            Object.keys(order).length
-        ) {
+    const getData = async (chiefComplaint: string) => {
+        if (!chiefComplaint) {
             return;
         }
-
-        switch (institution.type) {
-            case InstitutionType.GYN: {
-                initialQuestions.nodes['2'].category = 'ANNUAL_GYN_EXAM';
-                initialQuestions.nodes['2'].doctorView =
-                    ChiefComplaintsEnum.ANNUAL_GYN_EXAM_WELL_WOMAN_VISIT;
-
-                dispatch(processSurveyGraph(initialQuestions));
-
-                const favChiefComplaintsObj: { [item: string]: boolean } = {};
-                institution.favComplaints.forEach((item) => {
-                    favChiefComplaintsObj[item] = false;
-                });
-
-                dispatch(initialSurveyAddText('6', favChiefComplaintsObj));
-                break;
-            }
-            case InstitutionType.ENDO:
-            case InstitutionType.KAVIRA_HEALTH: {
-                dispatch(processSurveyGraph(initialQuestions));
-
-                const favChiefComplaintsObj: { [item: string]: boolean } = {};
-                institution.favComplaints.forEach((item) => {
-                    favChiefComplaintsObj[item] = false;
-                });
-
-                dispatch(initialSurveyAddText('6', favChiefComplaintsObj));
-                break;
-            }
-            default: {
-                dispatch(processSurveyGraph(initialQuestions));
-                break;
-            }
-        }
-    }, [dispatch, institution, userSurveyState]);
-
-    const onPreviousClick = useCallback(() => {
-        if (notificationMessage) setNotificationMessage('');
-
-        const tabs = currentTabs;
-        const nextTabIndex = tabs.indexOf(activeItem) - 1;
-        if (-1 === nextTabIndex) return;
-
-        const nextTab = tabs[nextTabIndex];
-
-        dispatch(updateActiveItem(nextTab));
-        window.scrollTo(0, 0);
-    }, [currentTabs, activeItem, notificationMessage, dispatch]);
-
-    // FIXME: this logic should be combined with the logic in the stepper button handler! it currently doesn't work the same
-    const onNextClick = useCallback(
-        (args?: OnNextClickParams) => {
-            const allSelectedChiefComplaints =
-                args?.allSelectedChiefComplaints || [];
-            const listTextChiefComplaints = args?.listTextChiefComplaints || [];
-
-            setShowCCModal(false);
-            setChiefComplaintsForModal([]);
-
-            if (notificationMessage) setNotificationMessage('');
-
-            let newCurrentTabs = currentTabs;
-
-            const node7Response = userSurveyState.nodes['7'].response ?? {};
-
-            if (activeItem === 'CCSelection') {
-                if (
-                    !allSelectedChiefComplaints.length &&
-                    !isResponseValid(node7Response)
-                ) {
-                    setNotificationMessage(
-                        'You must select or describe at least one visit reason to proceed.'
-                    );
-                    setNotificationType(NotificationTypeEnum.ERROR);
-                    return;
-                }
-
-                const selectedCCExceptInstitutionDefault =
-                    allSelectedChiefComplaints.filter(
-                        (item) => !institutionDefaultCC.includes(item)
-                    );
-
-                const listTextChiefComplaintsExceptInstitutionDefault =
-                    listTextChiefComplaints.filter(
-                        (item) => !institutionDefaultCC.includes(item)
-                    );
-
-                if (listTextChiefComplaintsExceptInstitutionDefault.length) {
-                    const chiefComplaintsForModal =
-                        selectedCCExceptInstitutionDefault.map(
-                            (chiefComplaint) => ({
-                                chiefComplaint: chiefComplaint,
-                                isSelected: false,
-                            })
-                        );
-
-                    setChiefComplaintsForModal(chiefComplaintsForModal);
-                    setShowCCModal(true);
-                    return;
-                }
-
-                const newSelectedChiefComplaints = Array.from(
-                    new Set([
-                        ...allSelectedChiefComplaints,
-                        ...institutionDefaultCC,
-                    ])
-                );
-
-                newCurrentTabs = [
-                    ...resetCurrentTabs(),
-                    ...newSelectedChiefComplaints,
-                ];
-
-                // remove current selected Chief Complaints
-                selectedChiefComplaints.forEach((item) => {
-                    dispatch(setChiefComplaint(item));
-                });
-
-                // add new selected Chief Complaints
-                newSelectedChiefComplaints.forEach((item) => {
-                    dispatch(setChiefComplaint(item));
-                });
-            }
-
-            const nextTabIndex = newCurrentTabs.indexOf(activeItem) + 1;
-            if (newCurrentTabs.length === nextTabIndex) {
-                return;
-            }
-            const nextTab = newCurrentTabs[nextTabIndex];
-            dispatch(updateActiveItem(nextTab));
-        },
-        [
-            notificationMessage,
-            currentTabs,
-            userSurveyState.nodes,
-            activeItem,
-            dispatch,
-            institutionDefaultCC,
-            resetCurrentTabs,
-            selectedChiefComplaints,
-        ]
-    );
-
-    const handleContinueForCCModal = () => {
-        const selectedCC = chiefComplaintsForModal
-            .filter((item) => item.isSelected === true)
-            .map((item) => item.chiefComplaint);
-        onNextClick({
-            allSelectedChiefComplaints: selectedCC,
-            listTextChiefComplaints: [],
-        });
+        const response = await axios.get(
+            graphClientURL + '/graph/category/' + chiefComplaint + '/4'
+        );
+        dispatch(processKnowledgeGraph(response.data));
     };
 
     useEffect(() => {
-        switch (activeItem) {
-            case 'CCSelection': {
-                return setScreenForPatient({
-                    component: (
-                        <CCSelection
-                            continue={onNextClick}
-                            onPreviousClick={onPreviousClick}
-                            notification={{
-                                setNotificationMessage,
-                                setNotificationType,
-                            }}
-                            defaultInstitutionChiefComplaints={
-                                institutionDefaultCC
-                            }
-                        />
-                    ),
-                    title: `Please select the top 3 conditions or symptoms you'd like to discuss`,
-                });
-            }
-            default: {
-                return setScreenForPatient({
-                    component: (
-                        <NewNotePage
-                            onNextClick={onNextClick}
-                            onPreviousClick={onPreviousClick}
-                            notification={{
-                                setNotificationMessage,
-                                setNotificationType,
-                            }}
-                        />
-                    ),
-                    title:
-                        activeItem in hpiHeaders.parentNodes
-                            ? hpiHeaders.parentNodes[activeItem].patientView
-                            : activeItem,
-                });
-            }
+        if (!hpiKey) return;
+
+        if (!(hpiKey in hpiHeaders?.parentNodes)) {
+            console.error(
+                `Chief Complaint named '${hpiKey}' is not present in the Knowledge Graph API response, SYSTEM MIGHT FAIL DUE TO THIS`
+            );
         }
-    }, [
-        onNextClick,
-        onPreviousClick,
-        activeItem,
-        institutionDefaultCC,
-        hpiHeaders?.parentNodes,
-    ]);
+
+        getData(hpiKey);
+        dispatch(setChiefComplaint(hpiName));
+    }, [hpiKey, hpiName]);
 
     useEffect(() => {
-        changeFavComplaintsBasedOnInstitute();
-    }, [changeFavComplaintsBasedOnInstitute]);
+        setScreenForPatient({
+            component: (
+                <NewNotePage
+                    onNextClick={onNextClick}
+                    onPreviousClick={() => {}}
+                    notification={{
+                        setNotificationMessage,
+                        setNotificationType,
+                    }}
+                />
+            ),
+            title:
+                activeItem in hpiHeaders.parentNodes
+                    ? hpiHeaders.parentNodes[activeItem].patientView
+                    : activeItem,
+        });
+    }, [activeItem, institutionDefaultCC, hpiHeaders?.parentNodes]);
 
     useEffect(() => {
         if (!institutionId) {
@@ -394,7 +193,6 @@ const HpiAdvance = () => {
                     if (!validationDiseaseFormResult) {
                         throw new Error('DiseaseForm validation failed');
                     }
-
                     setInstitutionConfig(result);
                 } else {
                     log(`HPI error fetching institution preferences`);
@@ -415,14 +213,6 @@ const HpiAdvance = () => {
     }, [activeItem, dispatch]);
 
     useEffect(() => {
-        let newCurrentTabs = [
-            ...resetCurrentTabs(),
-            ...selectedChiefComplaints,
-        ];
-
-        newCurrentTabs = Array.from(new Set(newCurrentTabs));
-
-        setCurrentTabs(newCurrentTabs);
         if (
             userSurveyState &&
             userSurveyState.nodes &&
@@ -430,7 +220,7 @@ const HpiAdvance = () => {
         ) {
             dispatch(initialSurveyAddDateOrPlace('8', appointmentDate));
         }
-    }, [resetCurrentTabs, selectedChiefComplaints]);
+    }, [selectedChiefComplaints]);
 
     useEffect(() => {
         if (notificationMessage) {
@@ -457,8 +247,6 @@ const HpiAdvance = () => {
             values.forEach((data) => dispatch(processKnowledgeGraph(data)));
         });
 
-        setCurrentTabs(resetCurrentTabs());
-
         if (showChiefComplaints || !showDefaultForm) return;
 
         // FIXME: this logic is not idempotent and it should be!
@@ -473,13 +261,13 @@ const HpiAdvance = () => {
         institutionDefaultCC.forEach((item) => {
             dispatch(setChiefComplaint(item));
         });
+
         // this effect changes selectedChiefComplaints, so don't add it to dependencies
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         dispatch,
         institutionConfig,
         institutionDefaultCC,
-        resetCurrentTabs,
         // selectedChiefComplaints <-- do not add this here, causes infinite loop
     ]);
 
@@ -494,22 +282,17 @@ const HpiAdvance = () => {
     }, [dispatch, hpiHeaders]);
 
     useEffect(() => {
-        dispatch(updateActiveItem('CCSelection'));
+        dispatch(updateActiveItem(hpiName));
+
         return () => {
             dispatch(updateActiveItem('CC'));
         };
-    }, [dispatch]);
+    }, [dispatch, hpiName]);
 
     const showMainNotificationMessage = useMemo(() => {
         if (!notificationMessage) return false;
-        if (activeItem !== 'CCSelection') return true;
-        if (!selectedChiefComplaintsForModal.length) return true;
         return false;
-    }, [
-        activeItem,
-        notificationMessage,
-        selectedChiefComplaintsForModal.length,
-    ]);
+    }, [activeItem, notificationMessage]);
 
     return (
         <div className={style.editNote}>
@@ -529,3 +312,10 @@ const HpiAdvance = () => {
 };
 
 export default HpiAdvance;
+function onNextClick(args?: OnNextClickParams | undefined): void {
+    throw new Error('Function not implemented.');
+}
+
+function onPreviousClick(): void {
+    throw new Error('Function not implemented.');
+}
