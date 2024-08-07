@@ -292,6 +292,9 @@ export const fillNameAndPronouns = (
         ? hpiString.replace(/\bthe patient's\b|\btheir\b/g, posPronoun)
         : hpiString;
 
+    // TODO: change this so that it gets replaced at random rather than alternating.
+    let toggle = 1;
+
     // process each sentence
     // If patient's pronouns ia available, replace "[t]he patient|[patient]" with "she/he/they/name".
     // Otherwise, if patient's pronouns are not they/them, replace:
@@ -301,22 +304,28 @@ export const fillNameAndPronouns = (
         // Replace "[t]he patient|[patient]" with "she/he/they/name"
         if (/\b[Tt]he patient\b|\b[Pp]atient\b/.test(sentence)) {
             if (name) {
-                sentence = sentence.replace(
-                    /\b[Tt]he patient\b|\b[Pp]atient\b/g,
-                    objPronoun === 'he'
-                        ? `Mr.${name}`
-                        : objPronoun === 'she'
-                          ? `Ms.${name}`
-                          : `Mx.${name}`
-                );
-            } else {
-                sentence = objPronoun
+                sentence = toggle
                     ? sentence.replace(
                           /\b[Tt]he patient\b|\b[Pp]atient\b/g,
-                          (match) => replaceWord(match, objPronoun)
+                          objPronoun === 'he'
+                              ? `Mr.${name}`
+                              : objPronoun === 'she'
+                                ? `Ms.${name}`
+                                : `Mx.${name}`
                       )
-                    : sentence;
+                    : sentence.replace(
+                          /\b[Tt]he patient\b|\b[Pp]atient\b/g,
+                          (match) => replaceWord(match, objPronoun)
+                      );
+            } else {
+                sentence = toggle
+                    ? sentence
+                    : sentence.replace(
+                          /\b[Tt]he patient\b|\b[Pp]atient\b/g,
+                          (match) => replaceWord(match, objPronoun)
+                      );
             }
+            toggle = (toggle + 1) % 2;
         }
 
         sentence = sentenceHelper(sentence);

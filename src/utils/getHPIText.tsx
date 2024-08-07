@@ -747,8 +747,7 @@ function getHPIText(
     ];
 
     finalPara.forEach((paragraph, i) => {
-        // TODO: when to use bulletNoteView?
-        finalPara[i] = !bulletNoteView
+        finalPara[i] = bulletNoteView
             ? removePhrases(paragraph, phrasesToRemove)
             : paragraph;
     });

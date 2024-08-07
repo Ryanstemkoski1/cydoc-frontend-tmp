@@ -223,7 +223,7 @@ describe('generateHpiText', () => {
                 objPronoun: 'they',
                 posPronoun: 'their',
             };
-            const expected = 'They loves dog, and they also loves cat.';
+            const expected = 'Patient loves dog, and patient also loves cat.';
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
                 expected
             );
@@ -236,7 +236,7 @@ describe('generateHpiText', () => {
                 objPronoun: 'they',
                 posPronoun: 'their',
             };
-            const expected = 'their cat name is Molly.';
+            const expected = 'the patient\'s cat name is Molly.';
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
                 expected
             );
@@ -249,7 +249,7 @@ describe('generateHpiText', () => {
                 objPronoun: 'they',
                 posPronoun: 'their',
             };
-            const expected = 'they loves cat.';
+            const expected = 'patient loves cat.';
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
                 expected
             );
