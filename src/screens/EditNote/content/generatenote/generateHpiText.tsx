@@ -55,8 +55,8 @@ const MONTHS = [
 
 const selectivelyUppercase = (str: string): string => {
     [...ETINICITY, ...MONTHS].forEach((item) => {
-        if (str.match(new RegExp('(^|[^a-zA-Z])' + item, 'ig'))) {
-            str = str.replace(new RegExp(item, 'ig'), ' ' + item);
+        if (str?.match(new RegExp('(^|[^a-zA-Z])' + item, 'ig'))) {
+            str = str?.replace(new RegExp(item, 'ig'), ' ' + item);
         }
     });
     return str;
@@ -75,7 +75,7 @@ const selectivelyLowercase = (str: string): string => {
         ...PART_OF_SPEECH_CORRECTION_MAP_FIRST_COLUMN,
     ].forEach((item) => {
         const regEx = new RegExp(item, 'ig');
-        str = str.replace(regEx, item.toLowerCase().replace(/[\\]/g, ''));
+        str = str?.replace(regEx, item.toLowerCase().replace(/[\\]/g, ''));
     });
 
     return str;
@@ -90,10 +90,10 @@ export const fullClean = (
     isAdvancedReport?: boolean
 ): string => {
     // remove punctuations except hyphens, parentheses and single apostrophes
-    sentence = sentence.replace(/[^\w\s'.,:/@()-]/g, '');
+    sentence = sentence?.replace(/[^\w\s'.,:/@()-]/g, '');
 
     // condense multiple whitespace into single space
-    sentence = sentence.split(/\s+/).join(' ');
+    sentence = sentence?.split(/\s+/).join(' ');
 
     // remove capitalized letters selectively
     sentence = selectivelyLowercase(sentence);
@@ -103,8 +103,8 @@ export const fullClean = (
 
     // decimal measurements of lesion)
     return isAdvancedReport
-        ? sentence.trim() // Do not remove any punctuation for Advanced Report Generation.
-        : sentence.replace(/\.\s?$/, '').trim();
+        ? sentence?.trim() // Do not remove any punctuation for Advanced Report Generation.
+        : sentence?.replace(/\.\s?$/, '').trim();
 };
 
 // checks if string has I in it, if so, returns it with quotes around.
@@ -126,7 +126,7 @@ export const removeSentence = (
     const containsBoth = (sentence: string): boolean =>
         sentence.includes('answer') && sentence.includes('notanswer');
     return fillSentence
-        .split('. ')
+        ?.split('. ')
         .filter(
             (sentence) =>
                 !sentence.match(new RegExp(keyword) || containsBoth(sentence))

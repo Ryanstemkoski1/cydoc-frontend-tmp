@@ -56,7 +56,7 @@ export type ReduxNodeInterface = {
 
 /* Returns whether the user has responded to this node or not */
 export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
-    switch (node.responseType) {
+    switch (node?.responseType) {
         case ResponseTypes.YES_NO:
         case ResponseTypes.NO_YES:
             return node?.response === YesNoResponse.None;
@@ -74,7 +74,7 @@ export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
         }
 
         case ResponseTypes.BODYLOCATION:
-            return Object?.entries(node.response as BodyLocationType).every(
+            return Object?.entries(node?.response as BodyLocationType).every(
                 ([, value]) => {
                     if (typeof value === 'boolean') return !value;
                     else return Object?.entries(value).every(([, v]) => !v);
@@ -203,15 +203,15 @@ export const extractNode = (
     }
 
     if (
-        node.responseType === ResponseTypes.NO_YES ||
-        node.responseType === ResponseTypes.YES_NO
+        node?.responseType === ResponseTypes.NO_YES ||
+        node?.responseType === ResponseTypes.YES_NO
     ) {
         return node?.response === YesNoResponse.Yes
-            ? [node.blankYes, '', '']
-            : [node.blankNo, '', ''];
+            ? [node?.blankYes, '', '']
+            : [node?.blankNo, '', ''];
     }
     // all other types utilize blankTemplate and the second string
-    const { response } = node;
+    const { response } = node ?? {};
     const negAnswer = node?.blankTemplate?.includes('NOTANSWER');
     const lastSeparator = negAnswer ? 'or' : 'and';
     let answer = '',
@@ -219,7 +219,7 @@ export const extractNode = (
         res,
         updatedRes,
         updatedNeg;
-    switch (node.responseType) {
+    switch (node?.responseType) {
         case ResponseTypes.YEAR:
         case ResponseTypes.NUMBER:
         case ResponseTypes.AGEATEVENT:
@@ -455,7 +455,7 @@ export const extractNode = (
             answer = joinLists(posArr, 'and');
             negRes = joinLists(negArr, 'or');
     }
-    return [node.blankTemplate, answer, negRes];
+    return [node?.blankTemplate, answer, negRes];
 };
 
 export function getNodeConditions(node: ReduxNodeInterface) {
@@ -481,8 +481,8 @@ export const checkParent = (
     node: ReduxNodeInterface,
     state: HPINoteProps
 ): string[] => {
-    const medId = node.medID;
-    const { response, responseType } = node;
+    const medId = node?.medID;
+    const { response, responseType } = node ?? {};
     const childNodes = state.hpi.graph[medId];
     let childNodesToHide: string[] = [];
 
@@ -544,10 +544,10 @@ export const extractNodes = (
     const formattedHpi: [string, string, string][] = [],
         order = state.hpi.order[source];
     let hideChildren: string[] = [];
-    for (let i = 1; i < Object.keys(order).length + 1; i++) {
+    for (let i = 0; i < Object.keys(order).length + 1; i++) {
         const node = state.hpi.nodes[order[i.toString()]];
         hideChildren = [...hideChildren, ...checkParent(node, state)];
-        if (!isEmpty(state, node) && !hideChildren.includes(node.medID)) {
+        if (!isEmpty(state, node) && !hideChildren.includes(node?.medID)) {
             formattedHpi.push(extractNode(state, node));
         }
     }
