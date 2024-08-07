@@ -72,7 +72,7 @@ const AccountManagement = ({
                     <ListItem key={item.label + index} disablePadding>
                         <ListItemButton onClick={() => onClickLink(item.href)}>
                             <ListItemIcon sx={{ minWidth: '32px' }}>
-                                {item.icon && React.createElement(item.icon)}
+                                {item.icon}
                             </ListItemIcon>
                             <ListItemText primary={item.label} />
                         </ListItemButton>
