@@ -17,12 +17,15 @@ export const questionTypes = {
     MEDS: 'MEDS',
     BODY_LOCATION: 'BODYLOCATION',
     PSH: 'PSH',
+    AGEATEVENT: 'AGEATEVENT',
     PSYCHDXPICKER: 'PSYCHDXPICKER',
+    PRONOUN: 'PRONOUN',
 };
 
 export const questionTypeMapping = {
     basic: {
         [questionTypes.NUMBER]: 'Number',
+        [questionTypes.AGEATEVENT]: 'Age At Event',
         [questionTypes.TIME]: 'Age or Duration',
         [questionTypes.DATE]: 'Date',
         [questionTypes.YEAR]: 'Year',
@@ -34,6 +37,7 @@ export const questionTypeMapping = {
         [questionTypes.SELECTMANY]: 'Multiple Selection',
         [questionTypes.SELECTMANYDENSE]: 'Multiple Selection (Dense)',
         [questionTypes.LIST_TEXT]: 'List',
+        [questionTypes.PRONOUN]: 'Pronoun',
     },
     advanced: {
         [questionTypes.FH]: 'Family History',

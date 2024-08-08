@@ -4,10 +4,7 @@ import { graphClientURL } from '@constants/api';
 import React from 'react';
 import Masonry from 'react-masonry-css';
 import { ConnectedProps, connect } from 'react-redux';
-import {
-    setChiefComplaint,
-    setNotesChiefComplaint,
-} from '@redux/actions/chiefComplaintsActions';
+import { setChiefComplaint } from '@redux/actions/chiefComplaintsActions';
 import { processKnowledgeGraph } from '@redux/actions/hpiActions';
 import { saveHpiHeader } from '@redux/actions/hpiHeadersActions';
 import { CurrentNoteState } from '@redux/reducers';
@@ -253,7 +250,6 @@ const mapStateToProps = (state: CurrentNoteState) => {
 
 const mapDispatchToProps = {
     setChiefComplaint,
-    setNotesChiefComplaint,
     processKnowledgeGraph,
     saveHpiHeader,
 };

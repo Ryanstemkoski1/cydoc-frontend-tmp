@@ -1,5 +1,6 @@
 'use client';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import style from './FormPreferencesPage.module.scss';
 
 import { toast } from 'react-toastify';
@@ -48,6 +49,7 @@ import ButtonLoader from '@components/ButtonLoader/ButtonLoader';
 import MultiSelectDropdown from '@components/Input/MultiSelectDropdown';
 import { hpiHeaders as knowledgeGraphAPI } from '@screens/EditNote/content/hpi/knowledgegraph/API';
 import useManagerRequired from '@hooks/useManagerRequired';
+import { setProductDefinitionAction } from '@redux/actions/productDefinitionAction';
 
 const defaultInstitutionConfig: InstitutionConfig = {
     diseaseForm: [],
@@ -119,6 +121,7 @@ const FormPreferencesPage = () => {
     useManagerRequired(); // this route is private, manager required
     const { user } = useUser();
     const { cognitoUser } = useAuth();
+    const dispatch = useDispatch();
 
     /* states */
     const [loading, setLoading] = useState(false);
@@ -213,6 +216,9 @@ const FormPreferencesPage = () => {
         if (!user) return null;
         try {
             setLoading(true);
+
+            // depends on the product type, we will set the product definition file on action
+            dispatch(setProductDefinitionAction(productType));
 
             const { showDefaultForm, diseaseForm, institutionId } =
                 institutionConfig;
@@ -350,7 +356,8 @@ const FormPreferencesPage = () => {
         if (
             loadingData === false &&
             showDefaultForm == false &&
-            showChiefComplaints == false
+            showChiefComplaints == false &&
+            productType === ProductType.SMART_PATIENT_INTAKE_FORM
         ) {
             setErrorMessage(`You must select "Yes" for at least one option`);
         } else {
@@ -361,7 +368,16 @@ const FormPreferencesPage = () => {
         showChiefComplaints,
         setNotificationMessage,
         loadingData,
+        productType,
     ]);
+
+    const disableWhenSmartPatientIntakeForm =
+        (!showChiefComplaints && !showDefaultForm) ||
+        (showDefaultForm && !nonDeletedDiseaseForm.length);
+
+    const disableWhenAdvancedReportGeneration =
+        disableWhenSmartPatientIntakeForm &&
+        productType === ProductType.SMART_PATIENT_INTAKE_FORM;
 
     return (
         <Box className={style.formPreferences}>
@@ -503,8 +519,8 @@ const FormPreferencesPage = () => {
                     className='button'
                     onClick={handleSubmit}
                     disabled={
-                        (!showChiefComplaints && !showDefaultForm) ||
-                        (showDefaultForm && !nonDeletedDiseaseForm.length) ||
+                        (disableWhenSmartPatientIntakeForm &&
+                            disableWhenAdvancedReportGeneration) ||
                         loading
                     }
                 >

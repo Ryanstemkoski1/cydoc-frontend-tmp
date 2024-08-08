@@ -19,7 +19,7 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 type Props = OwnProps & ReduxProps;
 
-export class DiseaseForm extends React.Component<Props> {
+class DiseaseForm extends React.Component<Props> {
     constructor(props: Props) {
         super(props);
     }

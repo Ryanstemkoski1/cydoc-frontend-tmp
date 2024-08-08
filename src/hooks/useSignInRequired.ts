@@ -10,11 +10,11 @@ const useSignInRequired = () => {
     const { user, loading } = useUser();
 
     // wait til loading is complete
-    if (authLoading || loading) {
+    if (authLoading) {
         return null;
     }
 
-    if (isSignedIn && user) return true;
+    if (isSignedIn && (loading || user)) return true;
 
     // user required to view this page
     router.push('/login');

@@ -1,0 +1,31 @@
+@import '@assets/scss/variables.scss';
+
+.select {
+    div {
+        padding: 14px 12px;
+    };
+}
+
+.placeholder {
+    font-family: $font-family-primary;
+    font-weight: $font-weight-normal;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.15px;
+    color: rgba($color-black, 0.6);
+}
+
+.autocompletePlaceholder {
+    background-color: $color-white;
+
+   button {
+        padding: 0;
+        width: 21px;
+        height: 21px;
+
+        svg {
+            width: 21px;
+            height: 21px;
+        }
+    }
+}

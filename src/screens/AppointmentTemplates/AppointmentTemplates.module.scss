@@ -1,0 +1,507 @@
+@import '@assets/scss/variables.scss';
+
+.apptTempWrapper {
+    padding: 36px 32px;
+    width: 100%;
+    display: grid;
+    grid-gap: 16px;
+
+    .newTemp {
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        flex: 1;
+        height: 240px;
+
+        border: 1px dashed #047a9b;
+        border-radius: 10px;
+
+        .newBtn {
+            padding: 12px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: #057a9b;
+            color: white;
+
+            span {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 24px;
+                height: 24px;
+                font-size: 20px;
+            }
+        }
+
+        p {
+            font-family: $font-family-primary;
+            font-weight: $font-weight-semibold;
+            font-size: 20px;
+            line-height: 28px;
+            text-align: center;
+            color: $color-green-dark;
+        }
+    }
+
+    .apptTempCard {
+        box-shadow: 0px 3px 6px 0px #cbdfe3;
+        background-color: $color-white;
+        flex: 1;
+        border-radius: 10px;
+        overflow: hidden;
+        height: 240px;
+
+        &__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 1px solid $color-border;
+
+            p {
+                font-family: $font-family-primary;
+                font-weight: $font-weight-semibold;
+                font-size: 20px;
+                line-height: 28px;
+                color: rgba($color-black, 0.87);
+
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            button {
+                padding: 2px;
+
+                &:hover {
+                    svg {
+                        fill: $color-green-dark;
+                    }
+                }
+            }
+
+            svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
+
+        &__body {
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+
+            &__item {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+
+                &__title {
+                    padding: 7px 10px;
+                    border-radius: 100px;
+                    background-color: $color-light;
+                    min-width: 74px;
+                    font-family: $font-family-Roboto;
+                    font-weight: $font-weight-normal;
+                    font-size: 13px;
+                    line-height: 18px;
+                    color: $color-green-dark;
+                    text-align: center;
+                }
+
+                &__detail {
+                    font-family: $font-family-primary;
+                    font-weight: $font-weight-normal;
+                    font-size: 16px;
+                    line-height: 24px;
+                    color: $color-black;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+            }
+
+            &__viewMore {
+                padding: 4px 10px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                cursor: pointer;
+
+                a {
+                    font-family: $font-family-primary;
+                    font-weight: $font-weight-medium;
+                    font-size: 12px;
+                    line-height: 22px;
+                    color: $color-green-dark;
+                }
+
+                svg {
+                    width: 12px;
+                    height: 12px;
+
+                    fill: $color-green-dark;
+                }
+            }
+        }
+    }
+}
+
+.viewMoreModalWrapper {
+    background-color: $color-white;
+    flex: 1;
+    border-radius: 10px;
+    overflow: hidden;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 660px;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 30px;
+        border-bottom: 1px solid $color-border;
+
+        p {
+            font-family: $font-family-primary;
+            font-weight: $font-weight-semibold;
+            font-size: 20px;
+            line-height: 28px;
+            color: rgba($color-black, 0.87);
+        }
+
+        button {
+            border-radius: 4px;
+            padding: 2px;
+        }
+
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    &__body {
+        padding: 20px 20px 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        &__item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+
+            &__title {
+                padding: 7px 10px;
+                border-radius: 100px;
+                background-color: $color-light;
+                min-width: 74px;
+                font-family: $font-family-primary;
+                font-weight: $font-weight-normal;
+                font-size: 13px;
+                line-height: 18px;
+                color: $color-green-dark;
+                text-align: center;
+            }
+
+            &__detail {
+                font-family: $font-family-primary;
+                font-weight: $font-weight-normal;
+                font-size: 16px;
+                line-height: 24px;
+                color: $color-black;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+
+        &__viewMoreModalBtn {
+            padding-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            button {
+                padding: 6px 16px;
+                border: 1px solid $color-green-dark;
+                border-radius: 10px;
+
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                & svg {
+                    width: 24px;
+                    height: 24px;
+
+                    path {
+                        fill: $color-green-dark;
+                    }
+                }
+
+                span {
+                    font-family: $font-family-primary;
+                    font-weight: $font-weight-medium;
+                    font-size: 14px;
+                    line-height: 24px;
+                    color: $color-green-dark;
+                    text-transform: capitalize;
+                }
+            }
+        }
+    }
+}
+
+.apptPopoverWrapper {
+    > div {
+        border-radius: 10px;
+        box-shadow: 0px 3px 10px rgba($color-black, 0.1);
+    }
+
+    .menuWrapper {
+        padding: 0;
+
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        span {
+            font-family: $font-family-primary;
+            font-weight: $font-weight-normal;
+            font-size: 16px;
+            line-height: 24px;
+            color: rgba($color-black, 0.87);
+        }
+    }
+}
+
+.createNewModalWrapper {
+    background-color: $color-white;
+    flex: 1;
+    border-radius: 10px;
+    overflow: hidden;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 660px;
+
+    &:focus-visible {
+        border: none;
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 30px;
+        border-bottom: 1px solid $color-border;
+
+        p {
+            font-family: $font-family-primary;
+            font-weight: $font-weight-semibold;
+            font-size: 20px;
+            line-height: 28px;
+            color: rgba($color-black, 0.87);
+        }
+
+        button {
+            border-radius: 4px;
+            padding: 2px;
+        }
+
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    &__body {
+        padding: 20px 20px 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        overflow-y: auto;
+        max-height: 584px;
+
+        &__stepsWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        &__titleBox {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            label {
+                font-family: $font-family-primary;
+                font-weight: $font-weight-normal;
+                font-size: 16px;
+                line-height: 22px;
+                color: rgba($color-black, 0.87);
+            }
+
+            div {
+                border-radius: 10px;
+
+                input {
+                    padding: 14px 12px;
+                    font-family: $font-family-primary;
+                    font-weight: $font-weight-normal;
+                    font-size: 16px;
+                    line-height: 24px;
+                    color: rgba($color-black, 0.87);
+
+                    ::placeholder {
+                        font-family: $font-family-primary;
+                        font-weight: $font-weight-normal;
+                        font-size: 16px;
+                        line-height: 24px;
+                        color: rgba($color-black, 0.6);
+                    }
+                }
+            }
+        }
+
+        &__stepWrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+
+            & button {
+                border-radius: 4px;
+                padding: 2px;
+
+                svg {
+                    width: 24px;
+                    height: 24px;
+                }
+            }
+
+            &__stepBox {
+                flex: 1;
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 10px;
+                background-color: $color-light;
+                border-radius: 10px;
+                padding: 16px 20px;
+
+                & div {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    box-sizing: border-box;
+                    border-radius: 10px;
+
+                    & label {
+                        font-family: $font-family-primary;
+                        font-weight: $font-weight-normal;
+                        font-size: 16px;
+                        line-height: 22px;
+                        color: rgba($color-black, 0.87);
+
+                        & span {
+                            font-weight: $font-weight-semibold;
+                            line-height: 24px;
+                            color: $color-black;
+                        }
+                    }
+
+                    & ul {
+                        border-radius: 8px;
+
+                        & li {
+                            padding: 12px 16px;
+                            font-family: $font-family-primary;
+                            font-weight: $font-weight-normal;
+                            font-size: 16px;
+                            line-height: 24px;
+                            color: $color-white;
+
+                            :hover {
+                                background-color: $color-green-dark;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        &__addNewStep {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid $color-green-dark;
+            border-radius: 10px;
+            padding: 6px 16px;
+            cursor: pointer;
+
+            svg {
+                width: 24px;
+                height: 24px;
+
+                path {
+                    fill: $color-green-dark;
+                }
+            }
+
+            p {
+                font-family: $font-family-primary;
+                font-weight: $font-weight-medium;
+                font-size: 14px;
+                line-height: 24px;
+                color: $color-green-dark;
+            }
+        }
+    }
+
+    &__btn {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 16px;
+
+        button {
+            font-family: $font-family-primary;
+            font-weight: $font-weight-medium;
+            font-size: 16px;
+            line-height: 26px;
+            padding: 8px 22px;
+            border-radius: 10px;
+            text-transform: capitalize;
+            box-shadow: none;
+        }
+    }
+}
+
+.taskType {
+    font-family: $font-family-primary;
+    font-weight: $font-weight-semibold;
+    font-size: 16px;
+    line-height: 24px;
+    color: $color-black;
+
+    span {
+        font-weight: $font-weight-normal;
+        margin-left: 10px;
+    }
+}
