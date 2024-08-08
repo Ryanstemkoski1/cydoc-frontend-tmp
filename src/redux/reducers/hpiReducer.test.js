@@ -117,8 +117,8 @@ describe('hpi reducers', () => {
                     );
                 });
             const edgeKeys = {
-                [medId]: ['foo2', 'foo1'],
-                foo1: ['foo3'],
+                [medId]: [1, 2, 'foo2', 'foo1'],
+                foo1: [3, 'foo3'],
                 foo2: [],
                 foo3: [],
             };
