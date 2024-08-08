@@ -13,6 +13,8 @@ import style from './DiseaseForm.module.scss';
 
 interface OwnProps {
     category: string;
+    nextStep: (e: any) => void;
+    prevStep: (e: any) => void;
 }
 
 type ReduxProps = ConnectedProps<typeof connector>;
