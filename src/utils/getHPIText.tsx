@@ -762,7 +762,7 @@ function getHPIText(
     ];
 
     finalPara.forEach((paragraph, i) => {
-        finalPara[i] = bulletNoteView
+        finalPara[i] = !isAdvancedReport
             ? removePhrases(paragraph, phrasesToRemove)
             : paragraph;
     });
