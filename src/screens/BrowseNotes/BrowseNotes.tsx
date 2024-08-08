@@ -17,6 +17,7 @@ import CreatePatientModal from '@components/CreatePatientModal/CreatePatientModa
 import AddIcon from '@mui/icons-material/Add';
 import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
 import CustomTextField from '@components/Input/CustomTextField';
+import useIsMobile from '@hooks/useIsMobile';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
     return `${firstName} ${middleName ? middleName : ''} ${lastName}`;
@@ -98,6 +99,7 @@ const BrowseNotes = () => {
     const [selectedAppointment, setSelectedAppointment] = useState<any>();
     const loadingStatus = useSelector(selectLoadingStatus);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const isMobile = useIsMobile();
 
     useEffect(() => {
         const initialDate = new Date().toISOString().slice(0, 10); // yyyy-mm-dd format
@@ -187,6 +189,12 @@ const BrowseNotes = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDateAdvance(e.target.value);
+        setSelectedIndex(null);
+        setSelectedAppointment(undefined);
+    };
+
+    const handleMobileChange = (value: string) => {
+        setDateAdvance(value);
         setSelectedIndex(null);
         setSelectedAppointment(undefined);
     };
@@ -407,44 +415,59 @@ const BrowseNotes = () => {
                 <>
                     <Box className={style.notesBlockAdvance}>
                         <Box className={style.notesBlockAdvance__notesWrap}>
-                            <Box
-                                className={` ${style.notesBlockAdvance__header} flex align-center justify-between`}
-                            >
+                            {isMobile ? (
                                 <Box
-                                    className={
-                                        style.notesBlockAdvance__header__dateWrapper
-                                    }
+                                    className={` ${style.notesBlockAdvance__header}`}
                                 >
-                                    <CustomTextField
-                                        id='dateOfBirth'
-                                        required={true}
-                                        type='date'
-                                        name='dateOfBirth'
-                                        placeholder='mm/dd/yyyy'
+                                    <MobileDatePicker
                                         value={dateAdvance}
-                                        max={new Date().toJSON().slice(0, 10)}
-                                        onChange={handleChange}
+                                        handleChange={(value) =>
+                                            handleMobileChange(value)
+                                        }
                                     />
                                 </Box>
-                                <a
-                                    className='flex align-center justify-center'
-                                    onClick={goBackAdvance}
+                            ) : (
+                                <Box
+                                    className={` ${style.notesBlockAdvance__header} flex align-center justify-between`}
                                 >
-                                    <img
-                                        src={'/images/left-arrow.svg'}
-                                        alt='Left arrow'
-                                    />
-                                </a>
-                                <a
-                                    className='flex align-center justify-center'
-                                    onClick={goForwardAdvance}
-                                >
-                                    <img
-                                        src={'/images/right-arrow.svg'}
-                                        alt='Right arrow'
-                                    />
-                                </a>
-                            </Box>
+                                    <Box
+                                        className={
+                                            style.notesBlockAdvance__header__dateWrapper
+                                        }
+                                    >
+                                        <CustomTextField
+                                            id='dateOfBirth'
+                                            required={true}
+                                            type='date'
+                                            name='dateOfBirth'
+                                            placeholder='mm/dd/yyyy'
+                                            value={dateAdvance}
+                                            max={new Date()
+                                                .toJSON()
+                                                .slice(0, 10)}
+                                            onChange={handleChange}
+                                        />
+                                    </Box>
+                                    <a
+                                        className={` ${style.notesBlockAdvance__header__arrow} flex align-center justify-center`}
+                                        onClick={goBackAdvance}
+                                    >
+                                        <img
+                                            src={'/images/left-arrow.svg'}
+                                            alt='Left arrow'
+                                        />
+                                    </a>
+                                    <a
+                                        className={` ${style.notesBlockAdvance__header__arrow} flex align-center justify-center`}
+                                        onClick={goForwardAdvance}
+                                    >
+                                        <img
+                                            src={'/images/right-arrow.svg'}
+                                            alt='Right arrow'
+                                        />
+                                    </a>
+                                </Box>
+                            )}
 
                             <Box
                                 className={` ${style.notesBlockAdvance__content} `}
@@ -484,7 +507,7 @@ const BrowseNotes = () => {
                                     }}
                                     src={'/images/refresh.png'}
                                 />
-                                Check for new notes
+                                {isMobile ? '' : 'Check for new notes'}
                             </Box>
                         </button>
                     </Box>

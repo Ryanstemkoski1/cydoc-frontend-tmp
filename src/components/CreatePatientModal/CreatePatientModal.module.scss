@@ -93,6 +93,9 @@
                     color: $color-green-dark;
                     text-transform: capitalize;
                     border: none;
+                    @include max-screen($mobile) {
+                        margin-top: 15px;
+                    }
                 }
                 &__today:hover {
                     background-color: $color-light;

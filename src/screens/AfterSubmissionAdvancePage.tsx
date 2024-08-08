@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 export default function AfterSubmissionAdvancePage() {
     const router = useRouter();
 
-    let resetButtonURL = `/hpi/doctor`;
+    const resetButtonURL = `/hpi/doctor`;
 
     return (
         <div className='centering'>

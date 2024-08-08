@@ -81,6 +81,10 @@
     display: flex;
     flex-wrap: wrap;
 
+    @include max-screen($mobile) {
+        display: block;
+    }
+
     &__Item {
         width: 50%;
         display: flex;

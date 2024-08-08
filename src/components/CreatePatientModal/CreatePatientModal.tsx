@@ -21,6 +21,8 @@ import { selectMedicalHistoryState } from '@redux/selectors/medicalHistorySelect
 import { selectPatientInformationState } from '@redux/selectors/patientInformationSelector';
 import { selectSurgicalHistoryProcedures } from '@redux/selectors/surgicalHistorySelectors';
 import { selectChiefComplaintsState } from '@redux/selectors/chiefComplaintsSelectors';
+import MobileDatePicker from '@components/Input/MobileDatePicker';
+import useIsMobile from '@hooks/useIsMobile';
 
 export interface CreatePatientModalProps {
     showModal: boolean;
@@ -55,6 +57,7 @@ const CreatePatientModal = ({
     const medicalHistoryState = useSelector(selectMedicalHistoryState);
     const patientInformationState = useSelector(selectPatientInformationState);
     const surgicalHistory = useSelector(selectSurgicalHistoryProcedures);
+    const isMobile = useIsMobile();
 
     const dropdownItems = ['Adult Evaluation'];
 
@@ -79,6 +82,25 @@ const CreatePatientModal = ({
         setPatientDetails({
             ...patientDetails,
             [name]: value,
+        });
+        if (name === 'dateOfAppointment') {
+            dispatch(initialSurveyAddDateOrPlace('8', value));
+        }
+    };
+
+    const handleBirthdayChange = (value: string) => {
+        setErrorMessage('');
+        setPatientDetails({
+            ...patientDetails,
+            dateOfBirth: value,
+        });
+    };
+
+    const handleAppointmentChange = (value: string) => {
+        setErrorMessage('');
+        setPatientDetails({
+            ...patientDetails,
+            dateOfAppointment: value,
         });
         dispatch(initialSurveyAddDateOrPlace('8', value));
     };
@@ -226,31 +248,55 @@ const CreatePatientModal = ({
                             value={patientDetails.legalLastName}
                             onChange={handleChange}
                         />
-                        <CustomTextField
-                            id='dateOfBirth'
-                            required={true}
-                            type='date'
-                            label='Date of Birth'
-                            name='dateOfBirth'
-                            placeholder='mm/dd/yyyy'
-                            max={new Date().toJSON().slice(0, 10)}
-                            value={patientDetails.dateOfBirth}
-                            onChange={handleChange}
-                        />
+                        {isMobile ? (
+                            <>
+                                <label>Date of Birth</label>
+                                <MobileDatePicker
+                                    value={patientDetails.dateOfBirth}
+                                    handleChange={(value) =>
+                                        handleBirthdayChange(value)
+                                    }
+                                />
+                            </>
+                        ) : (
+                            <CustomTextField
+                                id='dateOfBirth'
+                                required={true}
+                                type='date'
+                                label='Date of Birth'
+                                name='dateOfBirth'
+                                placeholder='mm/dd/yyyy'
+                                max={new Date().toJSON().slice(0, 10)}
+                                value={patientDetails.dateOfBirth}
+                                onChange={handleChange}
+                            />
+                        )}
                         <Typography variant='h4' sx={{ marginTop: '16px' }}>
                             Appointment info
                         </Typography>
                         <Box className={style.modal__innerContent__form__date}>
-                            <CustomTextField
-                                id='dateOfAppointment'
-                                type='date'
-                                label='Appointment date'
-                                name='dateOfAppointment'
-                                placeholder='mm/dd/yyyy'
-                                max={new Date().toJSON().slice(0, 10)}
-                                value={patientDetails.dateOfAppointment}
-                                onChange={handleChange}
-                            />
+                            {isMobile ? (
+                                <div>
+                                    <label>Appointment date</label>
+                                    <MobileDatePicker
+                                        value={patientDetails.dateOfAppointment}
+                                        handleChange={(value) =>
+                                            handleAppointmentChange(value)
+                                        }
+                                    />
+                                </div>
+                            ) : (
+                                <CustomTextField
+                                    id='dateOfAppointment'
+                                    type='date'
+                                    label='Appointment date'
+                                    name='dateOfAppointment'
+                                    placeholder='mm/dd/yyyy'
+                                    max={new Date().toJSON().slice(0, 10)}
+                                    value={patientDetails.dateOfAppointment}
+                                    onChange={handleChange}
+                                />
+                            )}
                             <button
                                 type='button'
                                 className={
