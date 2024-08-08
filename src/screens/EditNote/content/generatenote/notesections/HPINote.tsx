@@ -2,6 +2,8 @@ import React from 'react';
 import { HPIText } from '@utils/getHPIText';
 import { capitalizeFirstLetter } from '../generateHpiText';
 import styles from './HPINote.module.scss';
+import { useSelector } from 'react-redux';
+import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
 
 // TODOJING: what are all these functions doing? they seem redundant
 // and not needed based on functionality that is available elsewhere.
@@ -19,6 +21,8 @@ export function ParseAndRenderHpiNote({
     } catch (err) {
         parsedHPIText = hpiText;
     }
+
+    const productDefinition = useSelector(selectProductDefinitions);
 
     if (isParagraphFormat) {
         const generatedParagraph = (parsedHPIText as HPIText[]).map((item) => {
@@ -38,7 +42,15 @@ export function ParseAndRenderHpiNote({
         });
         return <>{generatedParagraph}</>;
     } else {
-        return <HpiNote text={parsedHPIText} bulletNoteView={true} />;
+        return (
+            <HpiNote
+                text={parsedHPIText}
+                bulletNoteView={true}
+                isAdvancedReport={
+                    productDefinition?.useAdvancedReportTextGeneration
+                }
+            />
+        );
     }
 }
 
@@ -159,6 +171,8 @@ const HpiNote = ({
     if (typeof text === 'string') {
         return <p>{formatSentence(text)}</p>;
     }
+
+    console.log('checking', isAdvancedReport);
 
     // This note is generated for the Advanced Report with changing any capitalization and punctuation.
     const notesForAdvancedReport = text.map((item) => {
