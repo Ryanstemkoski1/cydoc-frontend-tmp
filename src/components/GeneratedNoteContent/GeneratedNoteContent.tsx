@@ -50,7 +50,7 @@ const GeneratedNoteContent = (
     const patientsData = useSelector(selectPatientState);
 
     const data = {
-        Name: `${firstName} ${middleName} ${lastName}`,
+        Name: `${firstName} ${middleName ? middleName : ''} ${lastName}`,
         'Date of Evaluation': formatDate(appointmentDate),
         Age: `${calculateAge(dob)} Years-old`,
         'Referred by': 'Dr. John Doe',

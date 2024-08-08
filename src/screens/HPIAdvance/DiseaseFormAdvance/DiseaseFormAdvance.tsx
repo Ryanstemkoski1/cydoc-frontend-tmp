@@ -4,10 +4,10 @@ import { ConnectedProps, connect } from 'react-redux';
 import { CurrentNoteState } from '@redux/reducers';
 import { nodesToDisplayInOrder } from '@redux/selectors/displayedNodesSelectors';
 import { selectHpiState } from '@redux/selectors/hpiSelectors';
-import '../HPI.css';
-import '../css/App.css';
-import CreateResponse from './CreateResponse';
-import style from './DiseaseForm.module.scss';
+import '../../EditNote/content/hpi/knowledgegraph/HPI.css';
+import '../../EditNote/content/hpi/knowledgegraph/css/App.css';
+import CreateResponse from '../../EditNote/content/hpi/knowledgegraph/components/CreateResponse';
+import style from '../../EditNote/content/hpi/knowledgegraph/components/DiseaseForm.module.scss';
 
 //The order goes DiseaseForm -> CreateResponse -> ButtonTag
 

@@ -143,7 +143,6 @@ const BrowseNotes = () => {
     };
 
     const loadPatientHistory = useCallback(async () => {
-        // if (!definitions?.showNewPatientGeneration) {
         dispatch(setLoadingStatus(true));
         if (!user) {
             dispatch(setLoadingStatus(false));
@@ -180,7 +179,6 @@ const BrowseNotes = () => {
             setUsers([]);
             dispatch(setLoadingStatus(false));
         }
-        // }
     }, [cognitoUser, date, dateAdvance, dispatch, user]);
 
     useEffect(() => {

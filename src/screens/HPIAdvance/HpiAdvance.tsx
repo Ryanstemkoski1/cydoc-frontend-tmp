@@ -18,7 +18,7 @@ import {
 } from 'modules/institution-api';
 import { log } from 'modules/logging';
 import { hpiHeaders as knowledgeGraphAPI } from '@screens/EditNote/content/hpi/knowledgegraph/API';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { updateActiveItem } from '@redux/actions/activeItemActions';
@@ -32,7 +32,7 @@ import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
 import { loadChiefComplaintsData } from '@utils/loadKnowledgeGraphData';
 import style from './HpiAdvance.module.scss';
-import NewNotePage from '../HPI/NotesPage/NotePage';
+import NewNotePage from './NotePageAdvance/NotePageAdvance';
 import { selectHpiHeaders } from '@redux/reducers/hpiHeadersReducer';
 import useSignInRequired from '@hooks/useSignInRequired';
 import axios from 'axios';
@@ -142,8 +142,6 @@ const HpiAdvance = () => {
         setScreenForPatient({
             component: (
                 <NewNotePage
-                    onNextClick={onNextClick}
-                    onPreviousClick={() => {}}
                     notification={{
                         setNotificationMessage,
                         setNotificationType,
@@ -312,10 +310,3 @@ const HpiAdvance = () => {
 };
 
 export default HpiAdvance;
-function onNextClick(args?: OnNextClickParams | undefined): void {
-    throw new Error('Function not implemented.');
-}
-
-function onPreviousClick(): void {
-    throw new Error('Function not implemented.');
-}
