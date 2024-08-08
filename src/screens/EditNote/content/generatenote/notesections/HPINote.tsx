@@ -182,7 +182,7 @@ const HpiNote = ({
         );
     });
 
-    const notes = !bulletNoteView
+    const notes = isAdvancedReport
         ? text.map((item) => {
               return (
                   <p key={item.title}>
