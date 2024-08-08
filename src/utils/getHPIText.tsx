@@ -57,7 +57,7 @@ export type ReduxNodeInterface = {
 // TODOJING: please add documentation at the top of this module explaining
 // what this module is doing. It looks to me as if it's going through
 // each question type and gathering some information from it as a string.
-// but that's not documented and needs to be made clear. 
+// but that's not documented and needs to be made clear.
 
 /* Returns whether the user has responded to this node or not */
 export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
@@ -675,7 +675,6 @@ export interface HPIReduxValues {
     userSurvey: UserSurveyState;
 }
 
-
 // TODOJING: what is this function, getHPIText? this also looks redundant.
 function getHPIText(
     bulletNoteView = false,
@@ -747,7 +746,7 @@ function getHPIText(
     // TODOJING: this text removal step needs to be its own function,
     // defined as its own function, in the OTHER MODULE, NOT HERE.
     // it should ONLY be used when advanced report generation is FALSE.
-    
+
     // After the finalPara array is constructed, perform the removal operation.
     const phrasesToRemove = [
         'The patient has been ',

@@ -2,10 +2,10 @@ import { PART_OF_SPEECH_CORRECTION_MAP } from '@constants/hpiTextGenerationMappi
 import { PatientPronouns } from '@constants/patientInformation';
 import { ABBREVIFY, MEDICAL_TERM_TRANSLATOR } from '@constants/word-mappings';
 
-/**JINGTODO: what is the below documentation for? it seems out of context 
-* and I don't know what it's talking about. Please either clarify what this
-* documentation is referring to, or delete it.
-*/
+/**JINGTODO: what is the below documentation for? it seems out of context
+ * and I don't know what it's talking about. Please either clarify what this
+ * documentation is referring to, or delete it.
+ */
 
 /**
  * keys: ints for the question order
@@ -77,7 +77,6 @@ const selectivelyUppercase = (str: string): string => {
 // TODOJING - please figure out why ANSWER and NOTANSWER are being lowercased
 // why is that a necessary step? Why can't they be kept uppercase?
 
-
 const PART_OF_SPEECH_CORRECTION_MAP_FIRST_COLUMN = [
     ...PART_OF_SPEECH_CORRECTION_MAP.keys(),
 ];
@@ -148,7 +147,7 @@ export const removeSentence = (
 };
 
 /** TODOJING please explain where this function came from- is this something
- * new that you wrote or was it here before? 
+ * new that you wrote or was it here before?
  * Clean the fill sentences and the answers, and insert the answers into the
  * fill sentences
  */
@@ -234,7 +233,7 @@ export const fillNameAndPronouns = (
     const replaceWord = (word: string, replace: string) => {
         return /^[A-Z]/.test(word) ? capitalizeFirstLetter(replace) : replace;
     };
-    
+
     // TODOJING: why isn't this next part within the function definePatientNameandPronouns?
     // The helper function to replace pronouns requires only the string and the pronoun as parameters.
     const replacePronouns = (sentence: string, pronoun: string) => {
@@ -244,9 +243,9 @@ export const fillNameAndPronouns = (
                 'Invalid pronoun. Please provide "he", "she", or "they".'
             );
         }
-     
-    // TODOJING: why is this defined here, but then definePatientNameandPronouns
-    // is doing something else? this is confusing and redundant. pick ONE WAY
+
+        // TODOJING: why is this defined here, but then definePatientNameandPronouns
+        // is doing something else? this is confusing and redundant. pick ONE WAY
         const pronounReplacements = {
             he: ['he', 'him', 'his', 'himself', 'his'],
             she: ['she', 'her', 'her', 'herself', 'hers'],
@@ -291,10 +290,9 @@ export const fillNameAndPronouns = (
         return sentence;
     };
 
-
-    // TODOJING: this word replacement operation should be part of a separate 
+    // TODOJING: this word replacement operation should be part of a separate
     // function. It should be its own standalone function that is called BEFORE
-    // this pronoun operation. 
+    // this pronoun operation.
 
     //  The Personality Assessment Inventory (PAI) uses "respondent" and "the client's"
     //  instead of "patient" and "the patient's," and "he/she" instead of "patient."
@@ -362,7 +360,7 @@ export const fillNameAndPronouns = (
         // and disorganized. Why is replacePronouns its own function defined
         // above this and then used here? why are there some pronoun replacement
         // operations that *don't* take place in this function? this is unacceptable
-        // this is VERY confusing code. 
+        // this is VERY confusing code.
 
         // Replace all pronouns for PatientPronouns.They ['they', 'them', 'their', 'themselves', 'theirs']
         sentence = replacePronouns(sentence, 'they');
@@ -399,7 +397,6 @@ const partOfSpeechCorrection = (hpiString: string): string => {
     });
     return hpiString;
 };
-
 
 const END_OF_SENTENCE_PUNC = '.!?';
 

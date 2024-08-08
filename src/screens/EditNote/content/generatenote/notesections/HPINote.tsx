@@ -42,7 +42,7 @@ export function ParseAndRenderHpiNote({
     }
 }
 
-// TODOJING: this kind of formatting operation needs to be done 
+// TODOJING: this kind of formatting operation needs to be done
 // within generateHpiText.tsx
 // we can't have random formatting strewn across all these modules.
 
