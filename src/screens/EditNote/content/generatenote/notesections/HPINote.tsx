@@ -3,6 +3,9 @@ import { HPIText } from '@utils/getHPIText';
 import { capitalizeFirstLetter } from '../generateHpiText';
 import styles from './HPINote.module.scss';
 
+// TODOJING: what are all these functions doing? they seem redundant
+// and not needed based on functionality that is available elsewhere.
+
 export function ParseAndRenderHpiNote({
     hpiText = '',
     isParagraphFormat = false,
@@ -38,6 +41,10 @@ export function ParseAndRenderHpiNote({
         return <HpiNote text={parsedHPIText} bulletNoteView={true} />;
     }
 }
+
+// TODOJING: this kind of formatting operation needs to be done 
+// within generateHpiText.tsx
+// we can't have random formatting strewn across all these modules.
 
 function formatSentence(sentence: string) {
     // Replace 'Mr.|Ms.|Mx.' ends with space ' '.

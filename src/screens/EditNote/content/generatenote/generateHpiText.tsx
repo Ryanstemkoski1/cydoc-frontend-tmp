@@ -1,6 +1,12 @@
 import { PART_OF_SPEECH_CORRECTION_MAP } from '@constants/hpiTextGenerationMapping';
 import { PatientPronouns } from '@constants/patientInformation';
 import { ABBREVIFY, MEDICAL_TERM_TRANSLATOR } from '@constants/word-mappings';
+
+/**JINGTODO: what is the below documentation for? it seems out of context 
+* and I don't know what it's talking about. Please either clarify what this
+* documentation is referring to, or delete it.
+*/
+
 /**
  * keys: ints for the question order
  * value: list of length 2 in which the first element is the fill in the blank
@@ -9,6 +15,8 @@ import { ABBREVIFY, MEDICAL_TERM_TRANSLATOR } from '@constants/word-mappings';
  * for yes/no questions, we only need the fill in the blank phrase for the
  * answer they gave, and the patient's answer can be the empty string
  */
+
+//JINGTODO: what is this export interface HPI used for?
 export interface HPI {
     [questionOrder: number]: [string, string, string];
     [questionOrder: string]: [string, string, string];
@@ -24,8 +32,12 @@ interface PatientDisplayName {
     posPronoun: string;
 }
 
-const ETINICITY = ['Hispanic', 'Latino'];
-// https://capitalizemytitle.com/abbreviations-for-months/
+/** Don't want ethnicity or months to ever show up as lowercase, so this
+ * code ensures that they will be uppercased if needed.
+ */
+
+const ETHNICITY = ['Hispanic', 'Latino'];
+
 const MONTHS = [
     'January',
     'Jan',
@@ -54,7 +66,7 @@ const MONTHS = [
 ];
 
 const selectivelyUppercase = (str: string): string => {
-    [...ETINICITY, ...MONTHS].forEach((item) => {
+    [...ETHNICITY, ...MONTHS].forEach((item) => {
         if (str.match(new RegExp(`\\b${item}\\b`, 'ig'))) {
             str = str.replace(new RegExp(item, 'ig'), ' ' + item);
         }
@@ -62,7 +74,10 @@ const selectivelyUppercase = (str: string): string => {
     return str;
 };
 
-const END_OF_SENTENCE_PUNC = '.!?';
+// TODOJING - please figure out why ANSWER and NOTANSWER are being lowercased
+// why is that a necessary step? Why can't they be kept uppercase?
+
+
 const PART_OF_SPEECH_CORRECTION_MAP_FIRST_COLUMN = [
     ...PART_OF_SPEECH_CORRECTION_MAP.keys(),
 ];
@@ -80,6 +95,7 @@ const selectivelyLowercase = (str: string): string => {
 
     return str;
 };
+
 /**
  * Removes whitespace from beginning and end of a sentence. Lowercases.
  * Removes punctuation (except periods, commas, forward slashes, apostrophes,
@@ -131,8 +147,9 @@ export const removeSentence = (
         .join('. ');
 };
 
-/**
- * Clean the fill sentences and the answers, and insert the answers int the
+/** TODOJING please explain where this function came from- is this something
+ * new that you wrote or was it here before? 
+ * Clean the fill sentences and the answers, and insert the answers into the
  * fill sentences
  */
 export const fillAnswers = (hpi: HPI): string => {
@@ -205,6 +222,9 @@ export const fillNameAndPronouns = (
 ): string => {
     const { name, pronouns, objPronoun, posPronoun } = patientInfo;
 
+    // TODOJING: do not handle punctuation or capitalization in this function!
+    // handle punctuation and capitalization in their own function.
+
     const sentenceHelper = (sentence: string): string => {
         // Remove period from the end if present and pad with spaces
         return ` ${sentence.replace(/\.$/, '')} `;
@@ -214,7 +234,8 @@ export const fillNameAndPronouns = (
     const replaceWord = (word: string, replace: string) => {
         return /^[A-Z]/.test(word) ? capitalizeFirstLetter(replace) : replace;
     };
-
+    
+    // TODOJING: why isn't this next part within the function definePatientNameandPronouns?
     // The helper function to replace pronouns requires only the string and the pronoun as parameters.
     const replacePronouns = (sentence: string, pronoun: string) => {
         const validPronouns = ['he', 'she', 'they'];
@@ -223,7 +244,9 @@ export const fillNameAndPronouns = (
                 'Invalid pronoun. Please provide "he", "she", or "they".'
             );
         }
-
+     
+    // TODOJING: why is this defined here, but then definePatientNameandPronouns
+    // is doing something else? this is confusing and redundant. pick ONE WAY
         const pronounReplacements = {
             he: ['he', 'him', 'his', 'himself', 'his'],
             she: ['she', 'her', 'her', 'herself', 'hers'],
@@ -267,6 +290,11 @@ export const fillNameAndPronouns = (
 
         return sentence;
     };
+
+
+    // TODOJING: this word replacement operation should be part of a separate 
+    // function. It should be its own standalone function that is called BEFORE
+    // this pronoun operation. 
 
     //  The Personality Assessment Inventory (PAI) uses "respondent" and "the client's"
     //  instead of "patient" and "the patient's," and "he/she" instead of "patient."
@@ -330,6 +358,12 @@ export const fillNameAndPronouns = (
 
         sentence = sentenceHelper(sentence);
 
+        // TODO right now all the pronoun replacements are scattered and confusing
+        // and disorganized. Why is replacePronouns its own function defined
+        // above this and then used here? why are there some pronoun replacement
+        // operations that *don't* take place in this function? this is unacceptable
+        // this is VERY confusing code. 
+
         // Replace all pronouns for PatientPronouns.They ['they', 'them', 'their', 'themselves', 'theirs']
         sentence = replacePronouns(sentence, 'they');
 
@@ -366,6 +400,9 @@ const partOfSpeechCorrection = (hpiString: string): string => {
     return hpiString;
 };
 
+
+const END_OF_SENTENCE_PUNC = '.!?';
+
 const replaceMappedWords = (
     hpiString: string,
     mapping: { [key: string]: string }
@@ -396,6 +433,10 @@ const conjugateThirdPerson = (hpiString: string) => hpiString;
 
 const capitalizeWord = (word: string) =>
     word.charAt(0).toUpperCase() + word.slice(1);
+
+//TODOJING: there needs to be only ONE PLACE, ONE FUNCTION that handles
+//punctuation and capitalization. Right now there are multiple places in this
+// file that do. it's not acceptable. fix it.
 
 /**
  * Capitalizes first word of every sentence and all ' i 's
