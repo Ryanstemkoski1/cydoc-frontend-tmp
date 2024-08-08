@@ -31,10 +31,10 @@ import { NotificationTypeEnum } from '@components/tools/Notification/Notificatio
 import useQuery from '@hooks/useQuery';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import { log } from '@modules/logging';
-import { saveFilledFormToDb } from './SaveFilledFormData';
 import { apiClient, graphClientURL } from '@constants/api';
 import { FilledFormHpiState } from '@constants/hpiEnums';
 import ButtonSave from '@components/ButtonSave/ButtonSave';
+import { postFilledForm } from '@modules/filled-form-api';
 
 interface OwnProps {
     formContent: FilledFormHpiState;
@@ -246,7 +246,7 @@ class HPIContent extends React.Component<Props, State> {
                 saveFormLoading: true,
             });
             try {
-                await saveFilledFormToDb({
+                await postFilledForm({
                     appointmentId,
                     formCategory,
                     formContent,

@@ -12,8 +12,8 @@ import HPIContent from '../HpiContent/HPIContent';
 import { NotificationTypeEnum } from '@components/tools/Notification/Notification';
 import { OnNextClickParams } from '../Hpi';
 import { RootState } from '@redux/store';
-import { FetchFilledFormData } from '../HpiContent/FetchFIlledFormData';
 import { GraphData } from '@constants/hpiEnums';
+import { getFilledForm } from '@modules/filled-form-api';
 //Component that manages the content displayed based on the activeItem prop
 // and records the information the user enters as state
 
@@ -69,7 +69,7 @@ class NotePage extends Component<Props, State> {
 
             // Please replace hard-coded constants values to the dynamic values
             try {
-                const formData = await FetchFilledFormData(
+                const formData = await getFilledForm(
                     getAppointmentId,
                     getFormCategory
                 );
