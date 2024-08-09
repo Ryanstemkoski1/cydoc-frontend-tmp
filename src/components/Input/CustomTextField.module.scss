@@ -20,7 +20,6 @@
 
     &__wrap {
         width: 100%;
-        // margin: 8px 0 16px;
         margin: 8px 0 !important;
 
         div {
@@ -36,24 +35,24 @@
 
             input {
                 padding: 14px 12px;
+                color: rgba($color-black, 0.87);
             }
         }
     }
 
     &__icon {
-        // top: 35px;
         top: 12px;
         right: 3px;
         height: 41px;
         display: flex;
         position: absolute;
         align-items: center;
-        padding: 0 13px 0 5px;
+        padding: 0 10px 0 5px;
         pointer-events: none;
         background-color: $color-white;
 
         img {
-            width: 16px;
+            width: 22px;
             opacity: 0.5;
         }
     }

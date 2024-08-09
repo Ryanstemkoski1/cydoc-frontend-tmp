@@ -49,16 +49,17 @@ const GeneratedNoteContent = (
 
     const patientsData = useSelector(selectPatientState);
 
-    const data = {
+    const data1 = {
         Name: `${firstName} ${middleName ? middleName : ''} ${lastName}`,
-        'Date of Evaluation': formatDate(appointmentDate),
         Age: `${calculateAge(dob)} Years-old`,
-        'Referred by': 'Dr. John Doe',
         DOB: formatDate(dob),
-        Examiners: 'Dr. Jane Doe',
-        Education: 'College Graduate',
-        '': '',
-        Occupation: 'Software Engineer',
+        Education: 'High School Diploma',
+        Occupation: 'Retail Worker',
+    };
+    const data2 = {
+        'Date of Evaluation': formatDate(appointmentDate),
+        'Referred by': 'Dr. Kate R.',
+        Examiners: 'Dr. Marta J.',
     };
     const tempData = [
         {
@@ -188,21 +189,40 @@ const GeneratedNoteContent = (
                     </Typography>
                 </Box>
                 <Box className={style.genNoteBody}>
-                    {Object.keys(data).map((item, index) => {
-                        return (
-                            <Box
-                                key={index}
-                                className={style.genNoteBody__Item}
-                            >
-                                <Typography variant='h3'>
-                                    {item ? `${item}:` : ''}
-                                </Typography>
-                                <Typography component={'p'}>
-                                    {data[item]}
-                                </Typography>
-                            </Box>
-                        );
-                    })}
+                    <Box>
+                        {Object.keys(data1).map((item, index) => {
+                            return (
+                                <Box
+                                    key={index}
+                                    className={style.genNoteBody__Item1}
+                                >
+                                    <Typography variant='h3'>
+                                        {item ? `${item}:` : ''}
+                                    </Typography>
+                                    <Typography component={'p'}>
+                                        {data1[item]}
+                                    </Typography>
+                                </Box>
+                            );
+                        })}
+                    </Box>
+                    <Box className={style.genNoteBody__right}>
+                        {Object.keys(data2).map((item, index) => {
+                            return (
+                                <Box
+                                    key={index}
+                                    className={style.genNoteBody__Item2}
+                                >
+                                    <Typography variant='h3'>
+                                        {item ? `${item}:` : ''}
+                                    </Typography>
+                                    <Typography component={'p'}>
+                                        {data2[item]}
+                                    </Typography>
+                                </Box>
+                            );
+                        })}
+                    </Box>
                 </Box>
                 {hpiText !== undefined && !hpiText.includes('No history') && (
                     <Box className={style.genNoteDetail} id='copy-notes'>
