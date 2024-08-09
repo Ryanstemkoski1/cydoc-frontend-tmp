@@ -192,19 +192,6 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
         </Button.Group>
     );
 
-    const bulletPointToggler = (
-        <Button.Group className='btn-right'>
-            <Button
-                onClick={() => setIsBulletNoteView(!isBulletNoteView)}
-                className={`margin-left-1 hpi-ph-button${
-                    isBulletNoteView ? '-selected' : ''
-                }`}
-            >
-                Bullet Point HPI
-            </Button>
-        </Button.Group>
-    );
-
     const generateNoteButtons = (
         <Fragment>
             <div className={'ui input large'}>
@@ -247,7 +234,6 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                 </Button>
             </Button.Group>
             {richOrPlainButtons}
-            {bulletPointToggler}
         </Fragment>
     );
 
@@ -334,7 +320,10 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                                         ?.useAdvancedReportTextGeneration
                                 ) as HPIText[]
                             }
-                            bulletNoteView={isBulletNoteView}
+                            bulletNoteView={
+                                props.productDefinition
+                                    ?.useAdvancedReportTextGeneration
+                            }
                             isAdvancedReport={
                                 props.productDefinition
                                     ?.useAdvancedReportTextGeneration

@@ -209,13 +209,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                                     }}
                                 >
                                     <MultipleChoice
-                                        name={
-                                            item === 'yes'
-                                                ? 'Yes'
-                                                : item === 'no'
-                                                  ? 'No'
-                                                  : item.toLowerCase()
-                                        }
+                                        name={item.toLowerCase()}
                                         node={node}
                                     />
                                     {isOther && (

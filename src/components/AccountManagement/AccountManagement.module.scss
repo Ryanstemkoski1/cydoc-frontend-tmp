@@ -108,7 +108,9 @@
                 }
 
                 svg {
-                    fill: #057a9b;
+                    path {
+                        fill: #057a9b;
+                    }
                 }
             }
         }

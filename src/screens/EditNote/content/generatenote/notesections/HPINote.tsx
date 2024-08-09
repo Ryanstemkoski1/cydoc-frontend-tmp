@@ -3,12 +3,17 @@ import { HPIText } from '@utils/getHPIText';
 import { capitalizeFirstLetter } from '../generateHpiText';
 import styles from './HPINote.module.scss';
 
+// TODOJING: what are all these functions doing? they seem redundant
+// and not needed based on functionality that is available elsewhere.
+
 export function ParseAndRenderHpiNote({
     hpiText = '',
     isParagraphFormat = false,
+    isAdvancedReport = false,
 }: {
     hpiText: string;
     isParagraphFormat: boolean;
+    isAdvancedReport: boolean;
 }) {
     let parsedHPIText: HPIText[] | string = '';
     try {
@@ -23,18 +28,43 @@ export function ParseAndRenderHpiNote({
                 <div key={item.title} style={{ marginBottom: '10px' }}>
                     <b>{item.title}</b>
                     <br />
-                    <span>{item.text}</span>
+                    <span>
+                        {processSentence(
+                            formatSentence(item.text),
+                            isParagraphFormat
+                        )}
+                    </span>
                     <br />
                 </div>
             );
         });
         return <>{generatedParagraph}</>;
     } else {
-        return <HpiNote text={parsedHPIText} bulletNoteView={true} />;
+        return (
+            <HpiNote
+                text={parsedHPIText}
+                bulletNoteView={true}
+                isAdvancedReport={isAdvancedReport}
+            />
+        );
     }
 }
 
-function processSentence(sentence: string) {
+// TODOJING: this kind of formatting operation needs to be done
+// within generateHpiText.tsx
+// we can't have random formatting strewn across all these modules.
+
+function formatSentence(sentence: string) {
+    // Replace 'Mr.|Ms.|Mx.' ends with space ' '.
+    const updatedSentence = sentence
+        .replace(/(\.)(?!\s)/g, '$1 ')
+        // .replace(/\b(Mr\.|Ms\.|Mx\.)\b/g, (match) => match + ' ')
+        .replace(/PARAGRAPHBREAK/g, '\n');
+
+    return updatedSentence;
+}
+
+function processSentence(sentence: string, isParagraphFormat?: boolean) {
     let id = 1;
     const addHeading = (str: string) => {
         str = str
@@ -46,8 +76,6 @@ function processSentence(sentence: string) {
         return (
             <React.Fragment key={str + id++}>
                 <br />
-                {/* Added a new line before each heading specifically for Advanced Report Generation.*/}
-                {id !== 1 ? <br /> : null}
                 <b>{str}</b>
                 <br />
             </React.Fragment>
@@ -59,12 +87,37 @@ function processSentence(sentence: string) {
 
     let normalText = '';
     let headingText = '';
+    let toggle = false; // To control new lines in paragraphs, separating headings from text.
     const jsx: JSX.Element[] = [];
 
     for (const char of sentence) {
+        // Handle newlines
+        if (char === '\n') {
+            if (headingText.trim().length > 0) {
+                if (headingText.trim().length >= 7) {
+                    jsx.push(addHeading(headingText));
+                } else {
+                    jsx.push(addNormalText(headingText));
+                }
+                headingText = '';
+            }
+            if (normalText.trim().length > 0) {
+                jsx.push(addNormalText(normalText));
+                normalText = '';
+            }
+            // Add a line break
+            if (isParagraphFormat) {
+                jsx.push(<br />);
+            }
+            continue;
+        }
         if (char === ':' && headingText.trim().length > 7) {
+            if (isParagraphFormat && toggle) {
+                jsx.push(<br />);
+            }
             jsx.push(addHeading(headingText));
             headingText = '';
+            toggle = true;
             continue;
         }
 
@@ -112,7 +165,7 @@ const HpiNote = ({
     isAdvancedReport?: boolean; // A boolean flag to identify Advanced Report generation.
 }) => {
     if (typeof text === 'string') {
-        return <p>{text}</p>;
+        return <p>{formatSentence(text)}</p>;
     }
 
     // This note is generated for the Advanced Report with changing any capitalization and punctuation.
@@ -121,7 +174,9 @@ const HpiNote = ({
             <li key={item.title} className={styles.listItem}>
                 <b>{item.title}</b>
                 <ul className={styles.noBullets}>
-                    <span>{processSentence(item.text)}</span>
+                    <span>
+                        {processSentence(formatSentence(item.text), true)}
+                    </span>
                 </ul>
 
                 {item.miscNote &&
@@ -135,13 +190,13 @@ const HpiNote = ({
         );
     });
 
-    const notes = !bulletNoteView
+    const notes = isAdvancedReport
         ? text.map((item) => {
               return (
                   <p key={item.title}>
                       <b>{capitalizeFirstLetter(item.title)}</b>
                       <br />
-                      {capitalizeFirstLetter(item.text)}
+                      {capitalizeFirstLetter(formatSentence(item.text))}
                       {item.miscNote ? (
                           <>
                               {' '}
@@ -156,16 +211,21 @@ const HpiNote = ({
               );
           })
         : text.map((item) => {
+              // Split the text into sentences only at '. ' (period followed by space)
+              const sentences = item.text
+                  .split(/(?<=\.\s)/)
+                  .filter((sentence) => sentence.trim().length > 0);
               return (
                   <li key={item.title} className={styles.listItem}>
                       <b>{item.title}</b>
                       <ul className={styles.noBullets}>
-                          {item.text.split('. ').map((sentence, index, arr) => (
+                          {sentences.map((sentence: string, index: number) => (
                               <li key={index}>
                                   {processSentence(
-                                      capitalizeFirstLetter(sentence)
+                                      capitalizeFirstLetter(
+                                          formatSentence(sentence.trim())
+                                      )
                                   )}
-                                  {index < arr.length - 1 && '.'}
                               </li>
                           ))}
                       </ul>
