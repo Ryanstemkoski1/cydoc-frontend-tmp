@@ -234,7 +234,6 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                 </Button>
             </Button.Group>
             {richOrPlainButtons}
-            {/* {bulletPointToggler} */}
         </Fragment>
     );
 
