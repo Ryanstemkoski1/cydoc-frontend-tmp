@@ -25,6 +25,36 @@ import { SurgicalHistoryElements } from '@redux/reducers/surgicalHistoryReducer'
 import { UserSurveyState } from '@redux/reducers/userViewReducer';
 import { isHPIResponseValid } from './getHPIFormData';
 
+/**
+ * @module getHPIText
+ *
+ * This module provides utilities for processing and formatting responses from an input questionnaire.
+ * It includes functions to check if responses are empty, join lists of strings, extract and format data
+ * from nodes, handle conditional logic for displaying child nodes, and generate formatted HPI text.
+ *
+ * Key Functions:
+ * - `isEmpty(state: HPINoteProps, node: GraphNode): boolean`: Determines if a node's response is empty based on its type.
+ * - `joinLists(items: string[], lastSeparator = 'and'): string`: Joins a list of strings into a grammatically correct sentence.
+ * - `extractNode(state: HPINoteProps, node: GraphNode): [string, string, string]`: Formats a node's response for output.
+ * - `getNodeConditions(node: ReduxNodeInterface): string[]`: Extracts conditional logic from a node's text.
+ * - `checkParent(node: ReduxNodeInterface, state: HPINoteProps): string[]`: Determines which child nodes should be hidden based on the parent node's response.
+ * - `extractNodes(source: string, state: HPINoteProps): [string, string, string][]`: Extracts and formats all nodes connected to a source node according to a specific order.
+ * - `getHPIText(state: HPIReduxValues, isAdvancedReport: boolean): string`: Generates formatted HPI text based on the input state and report type, incorporating responses, conditional logic, and formatting rules.
+ *
+ */
+
+/**
+ * Defines the properties for HPI (History of Present Illness) note state.
+ *
+ * Includes states for:
+ * - `hpi`: HPI details.
+ * - `familyHistory`: Family medical history.
+ * - `medications`: Current medications.
+ * - `surgicalHistory`: Past surgeries.
+ * - `medicalHistory`: General medical history.
+ * - `patientInformation`: Basic patient info.
+ * - `chiefComplaints`: Main complaints from the patient.
+ */
 interface HPINoteProps {
     hpi: HpiState;
     familyHistory: FamilyHistoryState;
@@ -35,8 +65,10 @@ interface HPINoteProps {
     chiefComplaints: ChiefComplaintsState;
 }
 
+/* Represents a node in the graph with associated HPI response data. */
 export type GraphNode = NodeInterface & { response: HpiResponseType };
 
+/* Defines the structure of a Redux node, utilized in getNodeConditions and checkParent functions. */
 export type ReduxNodeInterface = {
     uid: string;
     medID: string;
@@ -57,7 +89,7 @@ export type ReduxNodeInterface = {
 // TODOJING: please add documentation at the top of this module explaining
 // what this module is doing. It looks to me as if it's going through
 // each question type and gathering some information from it as a string.
-// but that's not documented and needs to be made clear.
+// but that's not documented and needs to be made clear. -- TODO: [Finsihed]
 
 /* Returns whether the user has responded to this node or not */
 export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
@@ -463,6 +495,12 @@ export const extractNode = (
     return [node.blankTemplate, answer, negRes];
 };
 
+/**
+ * Extracts conditional logic from a node's text.
+ * e.g.
+ * "This node should be shown ONLYIF[condition1, condition2] if applicable."
+ * return ['condition1', 'condition2']
+ */
 export function getNodeConditions(node: ReduxNodeInterface) {
     const matches = node.text.match(/ONLYIF\[.*]\s/); // get "ONLYIF[**] " part from text;
 
@@ -589,27 +627,45 @@ export const extractHpi = (state: HPINoteProps): { [key: string]: HPI } => {
 
 // TODOJING: this function to remove specific phrases looks like it's
 // duplicated across multiple files. delete it from this file.
-// it should go in the other file.
+// it should go in the other file. TODO: [it will be moved to the generateHpiText.tsx]
 
 // Function to remove specified phrases
-function removePhrases(text: string, phrases: string[]): string {
-    let modifiedText = ' ' + text + ' '; // Padding with spaces
-    phrases.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
-    phrases.forEach((phrase) => {
-        modifiedText = modifiedText.replace(
-            new RegExp(`\\b${phrase}\\b`, 'g'),
-            ''
-        );
-    });
-    return modifiedText.trim(); // Remove the added spaces
-}
+// function removePhrases(text: string, phrases: string[]): string {
+//     let modifiedText = ' ' + text + ' '; // Padding with spaces
+//     phrases.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
+//     phrases.forEach((phrase) => {
+//         modifiedText = modifiedText.replace(
+//             new RegExp(`\\b${phrase}\\b`, 'g'),
+//             ''
+//         );
+//     });
+//     return modifiedText.trim(); // Remove the added spaces
+// }
 
+/**
+ * Represents generated text details.
+ *
+ * The `HPIText` interface includes:
+ * - `title`: The HPI text's title.
+ * - `text`: Main content of the HPI.
+ * - `miscNote`: Additional notes.
+ *
+ * e.g.
+ * const example: HPIText = {
+ *     title: 'Consultation Summary',
+ *     text: 'Patient shows symptoms of fatigue and dizziness.',
+ *     miscNote: 'Patient reports recent weight loss.'
+ * };
+ *
+ * Used in displaying generated notes. e.g HPINote
+ */
 export interface HPIText {
     title: string;
     text: string;
     miscNote: string;
 }
 
+/* Formats a response object into a single, reversed, quoted string. */
 export function getListTextResponseAsSingleString(response = {}): string {
     return Object.values(response)
         .map((item) => (item as string).trim().replace(/[.]\s/, 'g'))
@@ -622,6 +678,10 @@ export function getListTextResponseAsSingleString(response = {}): string {
         );
 }
 
+/*
+ * Generates an array of HPIText objects from the UserSurveyState, formatting responses based on their type and excluding a specific node.
+ * Used with the `getHPIText` function.
+ */
 function getInitialSurveyResponses(state: UserSurveyState): HPIText[] {
     const responses: HPIText[] = [];
 
@@ -666,6 +726,14 @@ function getInitialSurveyResponses(state: UserSurveyState): HPIText[] {
     return responses;
 }
 
+/**
+ * Represents the Redux state for HPI-related data.
+ *
+ * Includes states for HPI, family history, medications, surgical history,
+ * medical history, patient information, chief complaints, and user survey.
+ *
+ * Used with the `getHPIText` function.
+ */
 export interface HPIReduxValues {
     hpi: HpiState;
     familyHistory: FamilyHistoryState;
@@ -677,7 +745,19 @@ export interface HPIReduxValues {
     userSurvey: UserSurveyState;
 }
 
-// TODOJING: what is this function, getHPIText? this also looks redundant.
+// TODOJING: what is this function, getHPIText? this also looks redundant. TODO: [The descirption is added.]
+/**
+ * Generates HPI (History of Present Illness) text from Redux state, handling
+ * various response types and removing duplicate answer sentences.
+ *
+ * - Formats chief complaints and survey responses.
+ * - Removes duplicate sentences across paragraphs within multiple questionnaires.
+ * - Optionally formats text based on advanced report settings.
+ *
+ * @param state related data
+ * @param isAdvancedReport flag to enable advanced report formatting
+ * @returns Array of HPIText objects, including titles, text, and miscellaneous notes.
+ */
 function getHPIText(
     bulletNoteView = false,
     state: HPIReduxValues,
@@ -714,11 +794,17 @@ function getHPIText(
 
     const initialPara = Object.keys(formattedHpis).map((key) => {
         const formattedHpi = formattedHpis[key];
-        // TODO: use actual patient info to populate fields
+        // Populate actual response fields in the text, then split into a set of sentences.
         return new Set(
-            createInitialHPI(formattedHpi).split('. ').filter(Boolean)
+            createInitialHPI(formattedHpi)
+                .split(/(?<=\.\s)/) // Split by '. ' but retain the period with each sentence
+                .filter(Boolean) // Remove any empty strings resulting from the split
         );
     });
+
+    // Remove duplicate sentences by comparing each set of sentences with subsequent sets. This retains unique sentences in each set and excludes duplicates found in later sets.
+    // e.g: before: setA ['Patient feels tired.', 'Patient has a cough'], setB ['Patient has a fever.', 'Patient has a cough']
+    //      after:  setA ['Patient feels tired.', 'Patient has a cough'], setB ['Patient has a fever.']
     for (let i = 0; i < initialPara.length - 1; i++) {
         for (let j = i + 1; j < initialPara.length; j++) {
             const setA = initialPara[i];
@@ -726,6 +812,7 @@ function getHPIText(
             initialPara[j] = new Set([...setB].filter((x) => !setA.has(x)));
         }
     }
+
     const title: string[] = [];
     const finalPara = initialPara.reduce((acc: string[], hpiStringSet, i) => {
         if (hpiStringSet.size) {
@@ -733,40 +820,39 @@ function getHPIText(
             return [
                 ...acc,
                 createHPI(
-                    Array.from(hpiStringSet).join('. '),
+                    Array.from(hpiStringSet).join(' '),
                     state.patientInformation.patientName,
                     state.patientInformation.pronouns,
                     isAdvancedReport
                 ),
             ];
         }
-        // don't include chief complaint if it was a subset of another CC
-        // paragraph (i.e. set B is a subset of set A)
+        // don't include chief complaint if it was a subset of another CC paragraph (i.e. set B is a subset of set A)
         return acc;
     }, []);
 
     // TODOJING: this text removal step needs to be its own function,
     // defined as its own function, in the OTHER MODULE, NOT HERE.
-    // it should ONLY be used when advanced report generation is FALSE.
+    // it should ONLY be used when advanced report generation is FALSE. TODO: [it will be moved to the generateHpiText.tsx]
 
     // After the finalPara array is constructed, perform the removal operation.
-    const phrasesToRemove = [
-        'The patient has been ',
-        'The patient has ',
-        'The patient is ',
-        'The patients ',
-        'The patient ',
-        "The patient's ",
-        'He ',
-        'She ',
-        'They ',
-    ];
+    // const phrasesToRemove = [
+    //     'The patient has been ',
+    //     'The patient has ',
+    //     'The patient is ',
+    //     'The patients ',
+    //     'The patient ',
+    //     "The patient's ",
+    //     'He ',
+    //     'She ',
+    //     'They ',
+    // ];
 
-    finalPara.forEach((paragraph, i) => {
-        finalPara[i] = !isAdvancedReport
-            ? removePhrases(paragraph, phrasesToRemove)
-            : paragraph;
-    });
+    // finalPara.forEach((paragraph, i) => {
+    //     finalPara[i] = !isAdvancedReport
+    //         ? removePhrases(paragraph, phrasesToRemove)
+    //         : paragraph;
+    // });
 
     const miscText: string[] = [];
     /**
