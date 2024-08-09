@@ -172,8 +172,6 @@ const HpiNote = ({
         return <p>{formatSentence(text)}</p>;
     }
 
-    console.log('checking', isAdvancedReport);
-
     // This note is generated for the Advanced Report with changing any capitalization and punctuation.
     const notesForAdvancedReport = text.map((item) => {
         return (
