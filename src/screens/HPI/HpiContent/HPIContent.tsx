@@ -29,6 +29,7 @@ import { NotificationTypeEnum } from '@components/tools/Notification/Notificatio
 import useQuery from '@hooks/useQuery';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import { log } from '@modules/logging';
+import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
 
 interface OwnProps {
     notification: {
@@ -126,7 +127,9 @@ class HPIContent extends React.Component<Props, State> {
                         patientInformation: this.props.patientInformationState,
                         surgicalHistory: this.props.surgicalHistory,
                         userSurvey: this.props.userSurveyState,
-                    }
+                    },
+                    this.props.productDefinition
+                        ?.useAdvancedReportTextGeneration as boolean
                 ),
                 clinician_id,
                 institution_id,
@@ -353,6 +356,7 @@ const mapStateToProps = (state: CurrentNoteState) => {
         medicalHistoryState: selectMedicalHistoryState(state),
         surgicalHistory: selectSurgicalHistoryProcedures(state),
         userSurveyState: selectInitialPatientSurvey(state),
+        productDefinition: selectProductDefinitions(state),
     };
 };
 

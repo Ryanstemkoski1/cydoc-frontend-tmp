@@ -7,6 +7,8 @@ import { MouseEvent, default as React, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import style from './Modal.module.scss';
 import { Switch } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
 
 export interface ModalProps {
     showModal: boolean;
@@ -21,6 +23,7 @@ const Modal = ({
 }: ModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
     const [isParagraphFormat, setIsParagraphFormat] = React.useState(false);
+    const productDefinition = useSelector(selectProductDefinitions);
 
     const handleClickOutsideModal = (event: MouseEvent<HTMLDivElement>) => {
         if (!modalRef.current?.contains(event.target as HTMLDivElement)) {
@@ -100,6 +103,10 @@ const Modal = ({
                         <ParseAndRenderHpiNote
                             hpiText={hpiText}
                             isParagraphFormat={isParagraphFormat}
+                            isAdvancedReport={
+                                productDefinition?.useAdvancedReportTextGeneration ??
+                                false
+                            }
                         />
                     </div>
                 </div>

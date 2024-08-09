@@ -54,6 +54,11 @@ export type ReduxNodeInterface = {
     response: HpiResponseType;
 };
 
+// TODOJING: please add documentation at the top of this module explaining
+// what this module is doing. It looks to me as if it's going through
+// each question type and gathering some information from it as a string.
+// but that's not documented and needs to be made clear.
+
 /* Returns whether the user has responded to this node or not */
 export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
     switch (node.responseType) {
@@ -582,6 +587,10 @@ export const extractHpi = (state: HPINoteProps): { [key: string]: HPI } => {
     return formattedHpis;
 };
 
+// TODOJING: this function to remove specific phrases looks like it's
+// duplicated across multiple files. delete it from this file.
+// it should go in the other file.
+
 // Function to remove specified phrases
 function removePhrases(text: string, phrases: string[]): string {
     let modifiedText = ' ' + text + ' '; // Padding with spaces
@@ -668,6 +677,7 @@ export interface HPIReduxValues {
     userSurvey: UserSurveyState;
 }
 
+// TODOJING: what is this function, getHPIText? this also looks redundant.
 function getHPIText(
     bulletNoteView = false,
     state: HPIReduxValues,
@@ -706,9 +716,7 @@ function getHPIText(
         const formattedHpi = formattedHpis[key];
         // TODO: use actual patient info to populate fields
         return new Set(
-            createInitialHPI(formattedHpi, isAdvancedReport)
-                .split('. ')
-                .filter(Boolean)
+            createInitialHPI(formattedHpi).split('. ').filter(Boolean)
         );
     });
     for (let i = 0; i < initialPara.length - 1; i++) {
@@ -737,6 +745,10 @@ function getHPIText(
         return acc;
     }, []);
 
+    // TODOJING: this text removal step needs to be its own function,
+    // defined as its own function, in the OTHER MODULE, NOT HERE.
+    // it should ONLY be used when advanced report generation is FALSE.
+
     // After the finalPara array is constructed, perform the removal operation.
     const phrasesToRemove = [
         'The patient has been ',
@@ -751,7 +763,7 @@ function getHPIText(
     ];
 
     finalPara.forEach((paragraph, i) => {
-        finalPara[i] = bulletNoteView
+        finalPara[i] = !isAdvancedReport
             ? removePhrases(paragraph, phrasesToRemove)
             : paragraph;
     });
