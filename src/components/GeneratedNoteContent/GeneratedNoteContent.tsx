@@ -189,7 +189,7 @@ const GeneratedNoteContent = (
                     </Typography>
                 </Box>
                 <Box className={style.genNoteBody}>
-                    <Box>
+                    <Box className={style.genNoteBody__left}>
                         {Object.keys(data1).map((item, index) => {
                             return (
                                 <Box
@@ -206,7 +206,7 @@ const GeneratedNoteContent = (
                             );
                         })}
                     </Box>
-                    <Box className={style.genNoteBody__right}>
+                    <Box>
                         {Object.keys(data2).map((item, index) => {
                             return (
                                 <Box
@@ -244,7 +244,7 @@ const GeneratedNoteContent = (
                                 dotStyle = { backgroundColor: '#7F8485' };
                                 textStyle = { color: '#00000099' };
                                 break;
-                            case 'Finished':
+                            case 'Signed':
                                 statusStyle = { backgroundColor: '#EAF3F5' };
                                 dotStyle = { backgroundColor: '#057A9B' };
                                 textStyle = { color: '#057A9B' };
