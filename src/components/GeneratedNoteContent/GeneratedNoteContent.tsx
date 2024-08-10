@@ -228,7 +228,7 @@ const GeneratedNoteContent = (
                     <Box className={style.genNoteDetail} id='copy-notes'>
                         <ParseAndRenderHpiNote
                             hpiText={hpiText}
-                            isParagraphFormat={true}
+                            isParagraphFormat={false}
                         />
                     </Box>
                 )}
