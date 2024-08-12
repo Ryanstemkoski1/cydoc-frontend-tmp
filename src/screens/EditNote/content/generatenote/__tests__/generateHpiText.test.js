@@ -8,6 +8,7 @@ import {
     fillMedicalTerms,
     fillNameAndPronouns,
     fullClean,
+    fillPatient,
 } from '../generateHpiText';
 
 // const EXAMPLE = {
@@ -166,6 +167,7 @@ describe('generateHpiText', () => {
                 pronouns: PatientPronouns.She,
                 objPronoun: 'she',
                 posPronoun: 'her',
+                pronounPack: ['she', 'her', 'her', 'herself', 'hers'],
             };
             const expected = 'her dog is cute.';
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
@@ -179,8 +181,9 @@ describe('generateHpiText', () => {
                 pronouns: PatientPronouns.She,
                 objPronoun: 'she',
                 posPronoun: 'her',
+                pronounPack: ['she', 'her', 'her', 'herself', 'hers'],
             };
-            const expected = "Ms.Judy's dog is cute.";
+            const expected = "Ms. Judy's dog is cute.";
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
                 expected
             );
@@ -193,9 +196,10 @@ describe('generateHpiText', () => {
                 pronouns: PatientPronouns.He,
                 objPronoun: 'he',
                 posPronoun: 'his',
+                pronounPack: ['he', 'him', 'his', 'himself', 'his'],
             };
             const expected =
-                "Mr.Judy's dog is cute. His dog's name is Muffin and Muffin likes icecream.";
+                "Mr. Judy's dog is cute.  His dog's name is Muffin and Muffin likes icecream.";
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
                 expected
             );
@@ -208,48 +212,10 @@ describe('generateHpiText', () => {
                 pronouns: PatientPronouns.They,
                 objPronoun: 'they',
                 posPronoun: 'their',
+                pronounPack: ['they', 'them', 'their', 'themselves', 'theirs'],
             };
             const expected =
                 'They has many problems with their dogs; nobody loves them.';
-            expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
-                expected
-            );
-        });
-        it('replaces He/she', () => {
-            const hpiString = 'He/she loves dog, and he/she also loves cat.';
-            const patientInfo = {
-                name: '',
-                pronouns: PatientPronouns.They,
-                objPronoun: 'they',
-                posPronoun: 'their',
-            };
-            const expected = 'Patient loves dog, and patient also loves cat.';
-            expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
-                expected
-            );
-        });
-        it("replaces the client's", () => {
-            const hpiString = "the client's cat name is Molly.";
-            const patientInfo = {
-                name: '',
-                pronouns: PatientPronouns.They,
-                objPronoun: 'they',
-                posPronoun: 'their',
-            };
-            const expected = 'the patient\'s cat name is Molly.';
-            expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
-                expected
-            );
-        });
-        it('replaces respondent', () => {
-            const hpiString = 'respondent loves cat.';
-            const patientInfo = {
-                name: '',
-                pronouns: PatientPronouns.They,
-                objPronoun: 'they',
-                posPronoun: 'their',
-            };
-            const expected = 'patient loves cat.';
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
                 expected
             );
@@ -289,6 +255,45 @@ describe('generateHpiText', () => {
         //         ' foo recovered';
         //     expect(fillNameAndPronouns(inp, patient)).toEqual(expected);
         // });
+    });
+
+    describe('fillPatient', () => {
+        it('replaces respondent', () => {
+            const hpiString = 'respondent loves cat.';
+            const patientInfo = {
+                name: '',
+                pronouns: PatientPronouns.They,
+                objPronoun: 'they',
+                posPronoun: 'their',
+                pronounPack: ['they', 'them', 'their', 'themselves', 'theirs'],
+            };
+            const expected = 'patient loves cat.';
+            expect(fillPatient(hpiString, patientInfo)).toEqual(expected);
+        });
+        it("replaces the client's", () => {
+            const hpiString = "the client's cat name is Molly.";
+            const patientInfo = {
+                name: '',
+                pronouns: PatientPronouns.They,
+                objPronoun: 'they',
+                posPronoun: 'their',
+                pronounPack: ['they', 'them', 'their', 'themselves', 'theirs'],
+            };
+            const expected = "the patient's cat name is Molly.";
+            expect(fillPatient(hpiString, patientInfo)).toEqual(expected);
+        });
+        it('replaces He/she', () => {
+            const hpiString = 'He/she loves dog, and he/she also loves cat.';
+            const patientInfo = {
+                name: '',
+                pronouns: PatientPronouns.They,
+                objPronoun: 'they',
+                posPronoun: 'their',
+                pronounPack: ['they', 'them', 'their', 'themselves', 'theirs'],
+            };
+            const expected = 'Patient loves dog, and patient also loves cat.';
+            expect(fillPatient(hpiString, patientInfo)).toEqual(expected);
+        });
     });
 
     describe('fillMedicalTerms', () => {

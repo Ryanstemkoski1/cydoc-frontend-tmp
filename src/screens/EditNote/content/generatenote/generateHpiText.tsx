@@ -374,7 +374,7 @@ export const definePatientNameAndPronouns = (
  *
  * other case: Replaces "him/her" with 'them'.
  */
-const fillPatient = (hpiString: string) => {
+export const fillPatient = (hpiString: string) => {
     hpiString = hpiString.replace(/\brespondent/gi, (match) =>
         replaceWordCaseSensitive(match, 'patient')
     );
