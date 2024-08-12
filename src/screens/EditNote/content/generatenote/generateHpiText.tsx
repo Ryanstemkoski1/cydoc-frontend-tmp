@@ -2,70 +2,72 @@ import { PART_OF_SPEECH_CORRECTION_MAP } from '@constants/hpiTextGenerationMappi
 import { PatientPronouns } from '@constants/patientInformation';
 import { ABBREVIFY, MEDICAL_TERM_TRANSLATOR } from '@constants/word-mappings';
 
-/**JINGTODO: what is the below documentation for? it seems out of context
- * and I don't know what it's talking about. Please either clarify what this
- * documentation is referring to, or delete it.
- */
-
 /**
- * keys: ints for the question order
- * value: list of length 2 in which the first element is the fill in the blank
- *        phrase and the second element is the patient's answer
+ * This interface represents a collection of Health Patient Information enties.
+ *
+ * Keys: Integers representing the display order of answers.
+ * Values: Tuples with three elements:
+ *  - The fill-in-the-blank sentence.
+ *  - The patient's answer.
+ *  - An optional negated or alternative answer (usually empty).
  *
  * for yes/no questions, we only need the fill in the blank phrase for the
  * answer they gave, and the patient's answer can be the empty string
+ *
+ * Example:
+ * - Key `0` with value `['ANSWER likes dog but NOTANSWER doesn't.', 'Lily', 'Kevin']`
+ *   - Fill-in-the-blank sentence: 'ANSWER likes dog but NOTANSWER doesn't.'
+ *   - Patient's answer: 'Lily'
+ *   - Negated answer: 'Kevin'
+ *
+ * Usage: 'fillAnswers', 'createInitialHPI'
  */
-
-//JINGTODO: what is this export interface HPI used for?
 export interface HPI {
     [questionOrder: number]: [string, string, string];
     [questionOrder: string]: [string, string, string];
 }
 
-/**
- * Patient's display name in the note
- */
+/** Patient's display name in the note */
 interface PatientDisplayName {
     name: string;
     pronouns: PatientPronouns;
     objPronoun: string;
     posPronoun: string;
+    pronounPack: string[];
 }
 
-/** Don't want ethnicity or months to ever show up as lowercase, so this
- * code ensures that they will be uppercased if needed.
- */
+// Capitalizes specific terms from ETHNICITY and MONTHS arrays in the input string.
+export const selectivelyUppercase = (str: string): string => {
+    const ETHNICITY = ['Hispanic', 'Latino'];
+    const MONTHS = [
+        'January',
+        'Jan',
+        'February',
+        'Feb',
+        'March',
+        'Mar',
+        'April',
+        'Apr',
+        'May',
+        'June',
+        'Jun',
+        'July',
+        'Jul',
+        'August',
+        'Aug',
+        'September',
+        'Sep',
+        'Sept',
+        'October',
+        'Oct',
+        'November',
+        'Nov',
+        'December',
+        'Dec',
+    ];
 
-const ETHNICITY = ['Hispanic', 'Latino'];
-
-const MONTHS = [
-    'January',
-    'Jan',
-    'February',
-    'Feb',
-    'March',
-    'Mar',
-    'April',
-    'Apr',
-    'May',
-    'June',
-    'Jun',
-    'July',
-    'Jul',
-    'August',
-    'Aug',
-    'September',
-    'Sep',
-    'Sept',
-    'October',
-    'Oct',
-    'November',
-    'Nov',
-    'December',
-    'Dec',
-];
-
-const selectivelyUppercase = (str: string): string => {
+    // Don't want ethnicity or months to ever show up as lowercase, so this
+    // code ensures that they will be uppercased if needed.
     [...ETHNICITY, ...MONTHS].forEach((item) => {
         if (str.match(new RegExp(`\\b${item}\\b`, 'ig'))) {
             str = str.replace(new RegExp(item, 'ig'), ' ' + item);
@@ -74,19 +76,14 @@ const selectivelyUppercase = (str: string): string => {
     return str;
 };
 
-// TODOJING - please figure out why ANSWER and NOTANSWER are being lowercased
-// why is that a necessary step? Why can't they be kept uppercase?
-
-const PART_OF_SPEECH_CORRECTION_MAP_FIRST_COLUMN = [
-    ...PART_OF_SPEECH_CORRECTION_MAP.keys(),
-];
+// TODO: Add to consider PART_OF_SPEECH_CORRECTION_MAP_FIRST_COLUMN
 const selectivelyLowercase = (str: string): string => {
     [
         'ANSWER',
         'NOTANSWER',
         'ANSWER\\.',
         'NOTANSWER\\.',
-        ...PART_OF_SPEECH_CORRECTION_MAP_FIRST_COLUMN,
+        ...PART_OF_SPEECH_CORRECTION_MAP_FIRST_COLUMN, // TODO: add this part!
     ].forEach((item) => {
         const regEx = new RegExp(item, 'ig');
         str = str.replace(regEx, item.toLowerCase().replace(/[\\]/g, ''));
@@ -95,29 +92,8 @@ const selectivelyLowercase = (str: string): string => {
     return str;
 };
 
-/**
- * Removes whitespace from beginning and end of a sentence. Lowercases.
- * Removes punctuation (except periods, commas, forward slashes, apostrophes,
- * and colons). Removes multiple spaces.
- */
-export const fullClean = (sentence: string): string => {
-    // remove punctuations except hyphens, parentheses and single apostrophes
-    sentence = sentence.replace(/[^\w\s'.,:/@()-]/g, '');
-
-    // condense multiple whitespace into single space
-    sentence = sentence.split(/\s+/).join(' ');
-
-    // remove capitalized letters selectively
-    sentence = selectivelyLowercase(sentence);
-
-    // capitalized letters selectively
-    sentence = selectivelyUppercase(sentence);
-
-    //TODO: Do not remove any punctuation for Advanced Report Generation. (Including decimal measurements of lesion)
-    return sentence.trim();
-};
-
-// checks if string has I in it, if so, returns it with quotes around.
+// Checks if string has I in it, if so, returns it with quotes around.
+// e.g. ' I love my cat. ' --> '"I love cat."'
 const stringHasI = (str: string): string => {
     str = ' ' + str + ' ';
     return str.includes(' i ') || str.includes(' I ')
@@ -125,281 +101,157 @@ const stringHasI = (str: string): string => {
         : str.trim();
 };
 
-/*
-Filter sentences so that only those that don't have the keyword are kept in 
-(unless both answer and notanswer are in it) 
-*/
+/**
+ * Filter sentences so that only those that don't have the keyword are kept in (unless both 'ANSWER' and 'NOTANSWER' are in it)
+ *
+ * e.g.
+ * keyword = 'result'
+ * text = "This is a notANSWER test. This ANSWER and NOTANSWER should not be removed. The answer is unclear. The result is inconclusive. Notanswer is also here."
+ * return text = "This is a notANSWER test. This ANSWER and NOTANSWER should not be removed. The answer is unclear. Notanswer is also here."
+ */
 export const removeSentence = (
     fillSentence: string,
     keyword: string
 ): string => {
     const containsBoth = (sentence: string): boolean =>
-        sentence.includes('answer') && sentence.includes('notanswer');
-
+        /\bANSWER\b/.test(sentence) && /\bNOTANSWER\b/.test(sentence);
     // Split by period followed by a space but retain the periods in the result
-    return fillSentence
-        .split(/(?<=\.)\s+/)
+    return splitByPeriod(fillSentence)
         .filter(
             (sentence) =>
+                // Keep the sentence if it doesn't contain the keyword or if it contains both 'ANSWER' and 'NOTANSWER'
                 !sentence.match(new RegExp(keyword) || containsBoth(sentence))
         )
-        .join('. ');
-};
-
-/** TODOJING please explain where this function came from- is this something
- * new that you wrote or was it here before?
- * Clean the fill sentences and the answers, and insert the answers into the
- * fill sentences
- */
-export const fillAnswers = (hpi: HPI): string => {
-    const sortedKeys: number[] = Object.keys(hpi).map((val) => parseInt(val));
-    // JS sorts numbers lexicographically by default
-    sortedKeys.sort((lhs, rhs) => lhs - rhs);
-
-    let hpiString = '';
-    sortedKeys.forEach((key) => {
-        let [fillSentence, answer, negAnswer] = hpi[key] || hpi[key.toString()];
-        answer = fullClean(answer);
-        negAnswer = fullClean(negAnswer);
-        fillSentence = fullClean(fillSentence);
-        if (!answer.length)
-            fillSentence = removeSentence(fillSentence, 'answer');
-        else if (answer === 'all no') {
-            fillSentence = fillSentence.substring(
-                fillSentence.indexOf('answer') + 6
-            );
-        } else if (fillSentence.match(/answer/)) {
-            fillSentence = fillSentence.replace(/answer/, stringHasI(answer));
-        }
-        if (!negAnswer.length)
-            fillSentence = removeSentence(fillSentence, 'notanswer');
-        else if (fillSentence.match(/notanswer/)) {
-            fillSentence = fillSentence.replace(/notanswer/, negAnswer);
-        }
-        hpiString += `${fillSentence} `; // Keep original punctuation.
-    });
-    return hpiString;
+        .join(' ');
 };
 
 /**
- * Defines what string will be used as the patient's name in the note
+ * Cleans and formats a sentence by managing unexpected punctuation and whitespace.
+ *
+ * If `isAdvancedReport` is true:
+ * - Retains all punctuation and sentence case. [TODO: it might be removed.]
+ *
+ * Otherwise:
+ * - Remove punctuation except periods (.), commas (,), forward slashes (/), apostrophes ('), colons (:), hyphens (-), and parentheses (()).
+ * - Apply selective uppercasing.
+ * - Condense multiple spaces into a single space.
+ * - Trim leading and trailing whitespace.
+ *
+ * e.g. Input:  "  This month is may. The lesion measures:      2.5cm.  "
+ *      Output: "This month is May. The lesion measures 2.5cm."
  */
-export const definePatientNameAndPronouns = (
-    patientName: string,
-    pronouns: PatientPronouns
-): PatientDisplayName => {
-    // define pronouns
-    let objPronoun, posPronoun: string;
-    if (pronouns === PatientPronouns.She) {
-        objPronoun = 'she';
-        posPronoun = 'her';
-    } else if (pronouns === PatientPronouns.He) {
-        objPronoun = 'he';
-        posPronoun = 'his';
-    } else {
-        objPronoun = 'they';
-        posPronoun = 'their';
-    }
-    return {
-        name: capitalizeFirstLetter(patientName),
-        pronouns,
-        objPronoun,
-        posPronoun,
-    };
-};
-
-/**
- * Returns modified hpiString such that:
- * -  "the patient's" (possessive) and "their" (generic possessive) are
- *    replaced with possessive pronoun (e.g. "her")
- * -  "the patient" is replaced with patient's name (e.g. "Ms. Smith") or
- *    object pronoun (e.g. "she")
- */
-export const fillNameAndPronouns = (
-    hpiString: string,
-    patientInfo: PatientDisplayName
+export const fullClean = (
+    sentence: string,
+    isAdvancedReport: boolean
 ): string => {
-    const { name, pronouns, objPronoun, posPronoun } = patientInfo;
+    if (!isAdvancedReport) {
+        // TODO: Remove punctuation except periods, commas, forward slashes, apostrophes, colons, hyphens, and parentheses
+        sentence = sentence.replace(/[^\w\s'.,:/@()-]/g, '');
+        // TODO: Apply selective uppercasing.
+        sentence = selectivelyUppercase(sentence);
+    }
+    // Condense multiple spaces into a single space
+    sentence = sentence.split(/\s+/).join(' ');
 
-    // TODOJING: do not handle punctuation or capitalization in this function!
-    // handle punctuation and capitalization in their own function.
+    // Trim leading and trailing whitespace.
+    sentence = sentence.trim();
 
-    const sentenceHelper = (sentence: string): string => {
-        // Remove period from the end if present and pad with spaces
-        return ` ${sentence.replace(/\.$/, '')} `;
-    };
-
-    // the helper function to capitalizes the replacement word if the original word starts with an uppercase letter.
-    const replaceWord = (word: string, replace: string) => {
-        return /^[A-Z]/.test(word) ? capitalizeFirstLetter(replace) : replace;
-    };
-
-    // TODOJING: why isn't this next part within the function definePatientNameandPronouns?
-    // The helper function to replace pronouns requires only the string and the pronoun as parameters.
-    const replacePronouns = (sentence: string, pronoun: string) => {
-        const validPronouns = ['he', 'she', 'they'];
-        if (!validPronouns.includes(pronoun)) {
-            throw new Error(
-                'Invalid pronoun. Please provide "he", "she", or "they".'
-            );
-        }
-
-        // TODOJING: why is this defined here, but then definePatientNameandPronouns
-        // is doing something else? this is confusing and redundant. pick ONE WAY
-        const pronounReplacements = {
-            he: ['he', 'him', 'his', 'himself', 'his'],
-            she: ['she', 'her', 'her', 'herself', 'hers'],
-            they: ['they', 'them', 'their', 'themselves', 'theirs'],
-        };
-
-        const [subject, object, possessive, reflexive, possessivePronoun] =
-            pronounReplacements[pronoun];
-
-        // Replace pronouns in the senetence
-        sentence = sentence.replace(/\b(he|she|they)\b/gi, (match) =>
-            replaceWord(match, subject)
-        );
-        sentence = sentence.replace(/\b(him|them)\b/gi, (match) =>
-            replaceWord(match, object)
-        );
-        sentence = sentence.replace(/\b(?:his|their)\b/gi, (match) =>
-            replaceWord(match, possessive)
-        );
-        // Handle special cases for 'her' to avoid wrong replacement
-        sentence = sentence.replace(/\bher\b\s+(\b\w+\b)/gi, (match, noun) => {
-            return noun
-                ? replaceWord(match, possessive + ` ${noun}`)
-                : replaceWord(match, object);
-        });
-
-        sentence = sentence.replace(
-            /\bher\b(?=\s*\b(?:\w|[a-zA-Z])\b)/gi,
-            (match) => replaceWord(match, possessive)
-        );
-
-        // Handle "theirs" and "hers" plural
-        sentence = sentence.replace(/\b(hers|theirs)\b/gi, (match) =>
-            replaceWord(match, possessivePronoun)
-        );
-
-        sentence = sentence.replace(
-            /\b(himself|herself|themselves)\b/gi,
-            (match) => replaceWord(match, reflexive)
-        );
-
-        return sentence;
-    };
-
-    // TODOJING: this word replacement operation should be part of a separate
-    // function. It should be its own standalone function that is called BEFORE
-    // this pronoun operation.
-
-    //  The Personality Assessment Inventory (PAI) uses "respondent" and "the client's"
-    //  instead of "patient" and "the patient's," and "he/she" instead of "patient."
-    //  Perform the following string replacements before inserting name and pronouns:
-    //  Replace "respondent" with "patient" | Replace "the client's" with "the patient's" |
-    //  Replace "he/she" with "patient" (as in literally the strong "he/she" with the slash included, needs to be changed to "patient")
-    //  Replace "him/her" with "patient's"
-    hpiString = hpiString.replace(/\brespondent/gi, (match) =>
-        replaceWord(match, 'patient')
-    );
-    hpiString = hpiString.replace(/\bclient/gi, (match) =>
-        replaceWord(match, 'patient')
-    );
-    hpiString = hpiString.replace(/he\/she/gi, (match) =>
-        replaceWord(match, 'patient')
-    );
-    hpiString = hpiString.replace(/him\/her/gi, (match) =>
-        replaceWord(match, 'them')
-    );
-
-    // Replace "the patient's" and "their" with given posPronoun.
-    hpiString = name.length
-        ? hpiString.replace(/\bthe patient's\b|\btheir\b/g, posPronoun)
-        : hpiString;
-
-    // TODO: change this so that it gets replaced at random rather than alternating.
-    let toggle = 1;
-
-    // process each sentence
-    // If patient's pronouns ia available, replace "[t]he patient|[patient]" with "she/he/they/name".
-    // Otherwise, if patient's pronouns are not they/them, replace:
-    // 1) they with she/he 2) their with her/his 3) she's/he's with her/his 4) theirs with hers/his
-    // 5) them with her/him 6) himselves/herselves with himself/herself
-    const newHpiString = hpiString.split('. ').map((sentence) => {
-        // Replace "[t]he patient|[patient]" with "she/he/they/name"
-        if (/\b[Tt]he patient\b|\b[Pp]atient\b/.test(sentence)) {
-            if (name) {
-                sentence = toggle
-                    ? sentence.replace(
-                          /\b[Tt]he patient\b|\b[Pp]atient\b/g,
-                          objPronoun === 'he'
-                              ? `Mr.${name}`
-                              : objPronoun === 'she'
-                                ? `Ms.${name}`
-                                : `Mx.${name}`
-                      )
-                    : sentence.replace(
-                          /\b[Tt]he patient\b|\b[Pp]atient\b/g,
-                          (match) => replaceWord(match, objPronoun)
-                      );
-            } else {
-                sentence = toggle
-                    ? sentence
-                    : sentence.replace(
-                          /\b[Tt]he patient\b|\b[Pp]atient\b/g,
-                          (match) => replaceWord(match, objPronoun)
-                      );
-            }
-            toggle = (toggle + 1) % 2;
-        }
-
-        sentence = sentenceHelper(sentence);
-
-        // TODO right now all the pronoun replacements are scattered and confusing
-        // and disorganized. Why is replacePronouns its own function defined
-        // above this and then used here? why are there some pronoun replacement
-        // operations that *don't* take place in this function? this is unacceptable
-        // this is VERY confusing code.
-
-        // Replace all pronouns for PatientPronouns.They ['they', 'them', 'their', 'themselves', 'theirs']
-        sentence = replacePronouns(sentence, 'they');
-
-        // Replace "she's/he's/they's" with "her/his/their"
-        sentence = sentence.replace(
-            / she's | he's | they's /g,
-            ' ' + posPronoun + ' '
-        );
-
-        // If patient's pronouns are not they/them/their, replace:
-        if (pronouns == PatientPronouns.She) {
-            sentence = replacePronouns(sentence, 'she');
-        } else if (pronouns == PatientPronouns.He) {
-            sentence = replacePronouns(sentence, 'he');
-        }
-
-        // other cases:
-        sentence = sentence.replace(/ yourself /g, ' ' + posPronoun + 'self ');
-        sentence = sentence.replace(/ your /g, ' ' + posPronoun + ' ');
-        sentence = sentence.replace(/ you /g, ' ' + objPronoun + ' ');
-
-        sentence = sentence.trim();
-        return sentence;
-    });
-
-    return newHpiString.join('. ').trim() + '.';
+    return sentence;
 };
 
-const partOfSpeechCorrection = (hpiString: string): string => {
-    PART_OF_SPEECH_CORRECTION_MAP.forEach((value: string, key: string) => {
-        const regEx = new RegExp(`${key}`, 'g');
-        hpiString = hpiString.replace(regEx, value);
+/**
+ * A Helper Function updates pronouns in the sentence to match the given pronoun's set of forms. It handles:
+ * - Replaces subject, object, possessive, and reflexive pronouns.
+ * - Handles special cases like "her" and plural possessives.
+ *
+ * Parameters:
+ * - `sentence` (string): The text with pronouns to replace.
+ * - `pronounPack` (string[]): Pronoun forms [subject, object, possessive, reflexive, possessive pronoun].
+ *
+ */
+const replacePronouns = (sentence: string, pronounPack: string[]) => {
+    const [subject, object, possessive, reflexive, possessivePronoun] =
+        pronounPack;
+
+    // Replace pronouns in the senetence
+    sentence = sentence.replace(/\b(he|she|they)\b/gi, (match) =>
+        replaceWordCaseSensitive(match, subject)
+    );
+    sentence = sentence.replace(/\b(him|them)\b/gi, (match) =>
+        replaceWordCaseSensitive(match, object)
+    );
+    sentence = sentence.replace(/\b(?:his|their)\b/gi, (match) =>
+        replaceWordCaseSensitive(match, possessive)
+    );
+    // Handle special cases for 'her' to avoid wrong replacement
+    sentence = sentence.replace(/\bher\b\s+(\b\w+\b)/gi, (match, noun) => {
+        return noun
+            ? replaceWordCaseSensitive(match, possessive + ` ${noun}`)
+            : replaceWordCaseSensitive(match, object);
     });
-    return hpiString;
+
+    sentence = sentence.replace(
+        /\bher\b(?=\s*\b(?:\w|[a-zA-Z])\b)/gi,
+        (match) => replaceWordCaseSensitive(match, possessive)
+    );
+
+    // Handle "theirs" and "hers" plural
+    sentence = sentence.replace(/\b(hers|theirs)\b/gi, (match) =>
+        replaceWordCaseSensitive(match, possessivePronoun)
+    );
+
+    sentence = sentence.replace(/\b(himself|herself|themselves)\b/gi, (match) =>
+        replaceWordCaseSensitive(match, reflexive)
+    );
+
+    return sentence;
 };
 
+const PART_OF_SPEECH_CORRECTION_MAP_FIRST_COLUMN = [
+    ...PART_OF_SPEECH_CORRECTION_MAP.keys(),
+];
+
+/**
+ * Splits a string into sentences based on periods followed by whitespace.
+ *
+ * - By default, uses regex to split on periods followed by one or more whitespace characters.
+ * - If `flag` is true, splits on periods followed by whitespace while preserving [NEW LINE] characters.
+ *
+ * Examples:
+ * const text = `Hello. My name is Mr. Huang.
+ *  I work at Ms. Rachel's company.
+ *  How can I assist you today?`;
+ *
+ * - Default: ["Hello.", "My name is Mr. Huang.", "I work at Ms.Rachel's company.", "How can I assist you today?"]
+ * - With flag: ["Hello. ", "My name is Mr. Huang.\n", "    I work at Ms.Rachel's company.\n", "    How can I assist you today?\n"]
+ */
+export const splitByPeriod = (str: string, flag?: boolean) => {
+    // Remove spaces after titles for processing
+    str = str.replace(/(Mr\.|Mx\.|Ms\.)\s+/g, '$1');
+    // Split the string by '. ' or '.\n', but not after titles if flag is true
+    const strArr = flag ? str.split(/(?<=\.\s)/) : str.split(/(?<=\.)\s+/);
+    // Re-add spaces after titles
+    const result = strArr.map((sentence) => {
+        return sentence.replace(/^(Mr\.|Mx\.|Ms\.)\s*/, '$1 ');
+    });
+    return result;
+};
+
+// A Helper Function to capitalize FirstLetter.
+export function capitalizeFirstLetter(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// A Helper Function to capitalizes the replacement word if the original word starts with an uppercase letter.
+const replaceWordCaseSensitive = (word: string, replace: string) => {
+    return /^[A-Z]/.test(word.trim())
+        ? capitalizeFirstLetter(replace)
+        : replace;
+};
+
+// TODO: organize it later
 const END_OF_SENTENCE_PUNC = '.!?';
-
+// TODO: organize it later
 const replaceMappedWords = (
     hpiString: string,
     mapping: { [key: string]: string }
@@ -413,31 +265,241 @@ const replaceMappedWords = (
     return hpiString;
 };
 
+/**
+ * Processes fill sentences by inserting answers and negAnswers:
+ * 1. Sorts numeric keys from the HPI object.
+ * 2. For each key:
+ *    - Cleans fillSentence, answer, and negAnswer.
+ *    - Replaces 'ANSWER' and 'NOTANSWER' placeholders based on their values.
+ *    - Replaces 'PARAGRAPHBREAK' with a new line.
+ * 3. Combines and returns the processed sentences.
+ */
+export const fillAnswers = (hpi: HPI, isAdvancedReport: boolean): string => {
+    const sortedKeys: number[] = Object.keys(hpi).map((val) => parseInt(val));
+    // JS sorts numbers lexicographically by default
+    sortedKeys.sort((lhs, rhs) => lhs - rhs);
+
+    let hpiString = '';
+    sortedKeys.forEach((key) => {
+        let [fillSentence, answer, negAnswer] = hpi[key] || hpi[key.toString()];
+        answer = fullClean(answer, isAdvancedReport);
+        negAnswer = fullClean(negAnswer, isAdvancedReport);
+        fillSentence = fullClean(fillSentence, isAdvancedReport);
+
+        // 1. Handle the 'ANSWER' placeholder
+        if (!answer.length)
+            // If there's no answer, remove 'ANSWER' from the fillSentence
+            fillSentence = removeSentence(fillSentence, 'ANSWER');
+        else if (answer === 'all no') {
+            // If the answer is 'all no', keep everything after 'ANSWER_'.
+            // e.g 'Question 6 reports ANSWER. Question 6 denies NOTANSWER.' --> 'Question 6 denies NOTANSWER.'
+            fillSentence = fillSentence.substring(
+                fillSentence.indexOf('ANSWER') + 7
+            );
+        } else if (fillSentence.match(/ANSWER/)) {
+            // Replace 'ANSWER' with the cleaned answer
+            fillSentence = fillSentence.replace(/ANSWER/, stringHasI(answer));
+        }
+
+        // 2. Handle the 'NOTANSWER' placeholder
+        if (!negAnswer.length)
+            // If there's no negAnswer, remove 'NOTANSWER' from the fillSentence
+            fillSentence = removeSentence(fillSentence, 'NOTANSWER');
+        else if (fillSentence.match(/NOTANSWER/)) {
+            // Replace 'NOTANSWER' with the cleaned negAnswer
+            fillSentence = fillSentence.replace(/NOTANSWER/, negAnswer);
+        }
+
+        // 3. Handle 'PARAGRAPHBREAK' token
+        fillSentence = fillSentence.replace(/PARAGRAPHBREAK/g, '\n');
+
+        // Combines all fillSentence
+        hpiString += `${fillSentence} `;
+    });
+    return hpiString;
+};
+
+/**
+ * Configures the patient's name and pronouns for display.
+ *
+ * Returns:
+ * - An object containing:
+ *   - `name`: Capitalized patient's name.
+ *   - `pronouns`: The selected pronouns.
+ *   - `objPronoun`: Object form of the pronoun.
+ *   - `posPronoun`: Possessive form of the pronoun.
+ *   - `pronounPack`: Array of all relevant pronoun package.
+ */
+export const definePatientNameAndPronouns = (
+    patientName: string,
+    pronouns: PatientPronouns
+): PatientDisplayName => {
+    // define pronouns
+    let objPronoun: string = 'they';
+    let posPronoun: string = 'their';
+    let pronounPack: string[] = [
+        'they',
+        'them',
+        'their',
+        'themselves',
+        'theirs',
+    ];
+    if (pronouns === PatientPronouns.She) {
+        objPronoun = 'she';
+        posPronoun = 'her';
+        pronounPack = ['she', 'her', 'her', 'herself', 'hers'];
+    } else if (pronouns === PatientPronouns.He) {
+        objPronoun = 'he';
+        posPronoun = 'his';
+        pronounPack = ['he', 'him', 'his', 'himself', 'his'];
+    }
+    return {
+        name: capitalizeFirstLetter(patientName),
+        pronouns,
+        objPronoun,
+        posPronoun,
+        pronounPack,
+    };
+};
+
+/**
+ * Replaces PAI-specific terms with standard equivalents:
+ *
+ * The Personality Assessment Inventory (PAI) uses "respondent" and "the client's"
+ * instead of "patient" and "the patient's," and "he/she" instead of "patient."
+ *
+ * Perform the following string replacements before inserting name and pronouns:
+ * Replace "respondent" with "patient" | Replace "the client's" with "the patient's" |
+ * Replace "he/she" with "patient" (as in literally the strong "he/she" with the slash included, needs to be changed to "patient")
+ *
+ * other case: Replaces "him/her" with 'them'.
+ */
+const fillPatient = (hpiString: string) => {
+    hpiString = hpiString.replace(/\brespondent/gi, (match) =>
+        replaceWordCaseSensitive(match, 'patient')
+    );
+    hpiString = hpiString.replace(/\bclient/gi, (match) =>
+        replaceWordCaseSensitive(match, 'patient')
+    );
+    hpiString = hpiString.replace(/he\/she/gi, (match) =>
+        replaceWordCaseSensitive(match, 'patient')
+    );
+
+    // Replace "him/her" with "them"
+    hpiString = hpiString.replace(/him\/her/gi, (match) =>
+        replaceWordCaseSensitive(match, 'them')
+    );
+
+    return hpiString;
+};
+
+/**
+ * TODO: organize it later.
+ * Returns modified hpiString such that:
+ * - Replaces "the patient's" and "their" with the patient's possessive pronoun (e.g., "her").
+ * - Replaces "the patient" with the patient's name or object pronoun (e.g., "Ms. Smith" or "she").
+ * - Handles special cases for pronouns, including alternating replacements and updating various pronouns.
+ */
+export const fillNameAndPronouns = (
+    hpiString: string,
+    patientInfo: PatientDisplayName
+): string => {
+    const { name, pronouns, objPronoun, posPronoun, pronounPack } = patientInfo;
+
+    // Replace "the patient's" and "their" with given posPronoun.
+    hpiString = name.length
+        ? hpiString.replace(/\bthe patient's\b|\btheir\b/g, posPronoun)
+        : hpiString;
+
+    let toggle = 1; // change this so that it gets replaced at random rather than alternating.
+    const newHpiStringList = splitByPeriod(hpiString, true); // Split the input string by periods while retaining the periods. [consider 'NEW LINE']
+
+    // If patient's pronouns ia available, replace "[t]he patient|[patient]" with "she/he/they/name".
+    // Otherwise, if patient's pronouns are not they/them, replace:
+    // 1) they with she/he 2) their with her/his 3) she's/he's with her/his 4) theirs with hers/his
+    // 5) them with her/him 6) himselves/herselves with himself/herself
+    const newHpiString = newHpiStringList.map((sentence) => {
+        // Replace "[t]he patient|[patient]" with "she/he/they/name"
+        if (/\b[Tt]he patient\b|\b[Pp]atient\b/.test(sentence)) {
+            if (name) {
+                sentence = toggle
+                    ? sentence.replace(
+                          /\b[Tt]he patient\b|\b[Pp]atient\b/g, // TODO: remember add space between title and name
+                          objPronoun === 'he'
+                              ? `Mr. ${name}`
+                              : objPronoun === 'she'
+                                ? `Ms. ${name}`
+                                : `Mx. ${name}`
+                      )
+                    : sentence.replace(
+                          /\b[Tt]he patient\b|\b[Pp]atient\b/g,
+                          (match) => replaceWordCaseSensitive(match, objPronoun)
+                      );
+            } else {
+                sentence = toggle
+                    ? sentence
+                    : sentence.replace(
+                          /\b[Tt]he patient\b|\b[Pp]atient\b/g,
+                          (match) => replaceWordCaseSensitive(match, objPronoun)
+                      );
+            }
+            toggle = (toggle + 1) % 2;
+        }
+
+        // Replace all pronouns for PatientPronouns.They with ['they', 'them', 'their', 'themselves', 'theirs']
+        sentence = replacePronouns(sentence, pronounPack);
+
+        // Replace "she's/he's/they's" with "her/his/their"
+        sentence = sentence.replace(
+            / she's | he's | they's /g,
+            ' ' + posPronoun + ' '
+        );
+
+        // If patient's pronouns are not they/them/their, replace:
+        if (pronouns == PatientPronouns.She) {
+            sentence = replacePronouns(sentence, pronounPack);
+        } else if (pronouns == PatientPronouns.He) {
+            sentence = replacePronouns(sentence, pronounPack);
+        }
+
+        // other cases:
+        sentence = sentence.replace(/ yourself /g, ' ' + posPronoun + 'self ');
+        sentence = sentence.replace(/ your /g, ' ' + posPronoun + ' ');
+        sentence = sentence.replace(/ you /g, ' ' + objPronoun + ' ');
+
+        return sentence;
+    });
+
+    return newHpiString.join(' ');
+};
+
+// TODO: add it
+const conjugateThirdPerson = (hpiString: string) => hpiString;
+
+/** Corrects grammatical errors in the input string based on predefined mappings. */
+// TODO: Address issues with handling cases like ' She wish ' and 'She wish' considering case sensitivity and spacing.
+const partOfSpeechCorrection = (hpiString: string): string => {
+    PART_OF_SPEECH_CORRECTION_MAP.forEach((value: string, key: string) => {
+        const regEx = new RegExp(`${key}`, 'gi');
+        hpiString = hpiString.replace(regEx, value);
+    });
+    return hpiString;
+};
+
+// TODO: Address issues to consider case sensitivity and spacing.
 export const fillMedicalTerms = (hpiString: string): string => {
     return replaceMappedWords(hpiString, MEDICAL_TERM_TRANSLATOR);
 };
 
+// TODO: Address issues to consider case sensitivity and spacing.
 export const abbreviate = (hpiString: string): string => {
     return replaceMappedWords(hpiString, ABBREVIFY);
 };
 
-export function capitalizeFirstLetter(str: string) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-// TODO
-const conjugateThirdPerson = (hpiString: string) => hpiString;
-
-const capitalizeWord = (word: string) =>
-    word.charAt(0).toUpperCase() + word.slice(1);
-
-//TODOJING: there needs to be only ONE PLACE, ONE FUNCTION that handles
-//punctuation and capitalization. Right now there are multiple places in this
-// file that do. it's not acceptable. fix it.
-
 /**
+ * TODO: organzie it later.
  * Capitalizes first word of every sentence and all ' i 's
- */
+ * */
 export const capitalize = (hpiString: string): string => {
     hpiString = hpiString.trim();
     // replace 'i' with I
@@ -447,45 +509,68 @@ export const capitalize = (hpiString: string): string => {
     );
     // Capitalize the very first letter of the string
     if (hpiString.length > 0) {
-        hpiString = capitalizeWord(hpiString);
+        hpiString = capitalizeFirstLetter(hpiString);
     }
     // Capitalize the first letter of each sentence
     hpiString = hpiString.replace(
         /([.?!])\s*([a-z])/g,
         (match, p1, p2) => `${p1} ${p2.toUpperCase()}`
     );
-    // replace to capitalize the word after 'PARAGRAPHBREAK'
-    hpiString = hpiString.replace(/PARAGRAPHBREAK\s+(\w)/g, (match, p1) => {
-        return `PARAGRAPHBREAK ${capitalizeWord(p1)}`;
-    });
     // replace to capitalize the word after heading ends with ':'
     hpiString = hpiString.replace(/:\s+(\w)/g, (match, p1) => {
-        return `: ${capitalizeWord(p1)}`;
+        return `: ${capitalizeFirstLetter(p1)}`;
     });
     return hpiString;
 };
 
-export const createInitialHPI = (hpi: HPI): string => {
-    return fillAnswers(hpi);
+export const createInitialHPI = (
+    hpi: HPI,
+    isAdvancedReport: boolean
+): string => {
+    console.log('hpi', hpi);
+    return fillAnswers(hpi, isAdvancedReport);
 };
 
 export const createHPI = (
     hpiString: string,
     patientName: string,
-    pronouns: PatientPronouns,
-    isAdvancedReport?: boolean
+    pronouns: PatientPronouns
 ): string => {
     const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
-
+    hpiString = fillPatient(hpiString);
     hpiString = fillNameAndPronouns(hpiString, patientInfo);
-    hpiString = partOfSpeechCorrection(hpiString);
-    // hpiString = combineHpiString(hpiString, 3);
-
-    if (!isAdvancedReport) {
-        hpiString = fillMedicalTerms(hpiString);
-        hpiString = conjugateThirdPerson(hpiString);
-        hpiString = abbreviate(hpiString);
-        hpiString = capitalize(hpiString);
-    }
+    // TODO: organize it later
+    // hpiString = conjugateThirdPerson(hpiString); TODO: add to conjugate a base verb into its third-person singular form.
+    hpiString = partOfSpeechCorrection(hpiString); // TODO: add to consider case sensitivity and spacing.
+    hpiString = fillMedicalTerms(hpiString); // TODO:  add to consider case sensitivity and spacing.
+    hpiString = abbreviate(hpiString); // TODO:  add to consider case sensitivity and spacing.
+    console.log('hpiString', hpiString);
     return hpiString;
 };
+
+// TODO: call in HPINote
+const phrasesToRemove = [
+    'The patient has been ',
+    'The patient has ',
+    'The patient is ',
+    'The patients ',
+    'The patient ',
+    "The patient's ",
+    'He ',
+    'She ',
+    'They ',
+];
+
+// Function to remove specified phrases TODO:[Added]
+// TODO: Address issues to consider case sensitivity and spacing.
+export function removePhrases(text: string, phrases: string[]): string {
+    let modifiedText = ' ' + text + ' '; // Padding with spaces
+    phrases.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
+    phrases.forEach((phrase) => {
+        modifiedText = modifiedText.replace(
+            new RegExp(`\\b${phrase}\\b`, 'g'),
+            ''
+        );
+    });
+    return modifiedText.trim(); // Remove the added spaces
+}
