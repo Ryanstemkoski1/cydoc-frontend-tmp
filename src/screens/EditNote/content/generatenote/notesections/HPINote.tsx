@@ -26,7 +26,7 @@ export function ParseAndRenderHpiNote({
         const generatedParagraph = (parsedHPIText as HPIText[]).map((item) => {
             return (
                 <div key={item.title} style={{ marginBottom: '10px' }}>
-                    <b>{item.title}</b>
+                    <b style={{ textDecoration: 'underline' }}>{item.title}</b>
                     <br />
                     <span>
                         {processSentence(
@@ -194,7 +194,9 @@ const HpiNote = ({
         ? text.map((item) => {
               return (
                   <p key={item.title}>
-                      <b>{capitalizeFirstLetter(item.title)}</b>
+                      <b style={{ textDecoration: 'underline' }}>
+                          {capitalizeFirstLetter(item.title)}
+                      </b>
                       <br />
                       {capitalizeFirstLetter(formatSentence(item.text))}
                       {item.miscNote ? (
@@ -217,7 +219,9 @@ const HpiNote = ({
                   .filter((sentence) => sentence.trim().length > 0);
               return (
                   <li key={item.title} className={styles.listItem}>
-                      <b>{item.title}</b>
+                      <b style={{ textDecoration: 'underline' }}>
+                          {item.title}
+                      </b>
                       <ul className={styles.noBullets}>
                           {sentences.map((sentence: string, index: number) => (
                               <li key={index}>

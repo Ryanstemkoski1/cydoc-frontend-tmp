@@ -2,6 +2,7 @@ import { UserInfo } from '@redux/reducers/additionalSurveyReducer';
 import { UPDATE_ADDITIONAL_DETAILS } from './actionTypes';
 
 export interface UpdateAdditionalSurveyAction {
+    [key: string]: any;
     type: UPDATE_ADDITIONAL_DETAILS.UPDATE_ADDITIONAL_DETAILS;
     payload: {
         legalFirstName: string;
