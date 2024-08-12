@@ -14,6 +14,7 @@ import {
     HPI,
     createHPI,
     createInitialHPI,
+    splitByPeriod,
 } from '@screens/EditNote/content/generatenote/generateHpiText';
 import { ChiefComplaintsState } from '@redux/reducers/chiefComplaintsReducer';
 import { FamilyHistoryState } from '@redux/reducers/familyHistoryReducer';
@@ -625,23 +626,6 @@ export const extractHpi = (state: HPINoteProps): { [key: string]: HPI } => {
     return formattedHpis;
 };
 
-// TODOJING: this function to remove specific phrases looks like it's
-// duplicated across multiple files. delete it from this file.
-// it should go in the other file. TODO: [it will be moved to the generateHpiText.tsx]
-
-// Function to remove specified phrases
-// function removePhrases(text: string, phrases: string[]): string {
-//     let modifiedText = ' ' + text + ' '; // Padding with spaces
-//     phrases.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
-//     phrases.forEach((phrase) => {
-//         modifiedText = modifiedText.replace(
-//             new RegExp(`\\b${phrase}\\b`, 'g'),
-//             ''
-//         );
-//     });
-//     return modifiedText.trim(); // Remove the added spaces
-// }
-
 /**
  * Represents generated text details.
  *
@@ -747,22 +731,19 @@ export interface HPIReduxValues {
 
 // TODOJING: what is this function, getHPIText? this also looks redundant. TODO: [The descirption is added.]
 /**
- * Generates HPI (History of Present Illness) text from Redux state, handling
+ * Generates text from Redux state, handling
  * various response types and removing duplicate answer sentences.
  *
- * - Formats chief complaints and survey responses.
- * - Removes duplicate sentences across paragraphs within multiple questionnaires.
- * - Optionally formats text based on advanced report settings.
+ * - Retrieves and formats chief complaints and survey responses.
+ * - Removes duplicate sentences across paragraphs.
+ * - Optionally applies advanced formatting based on the `isAdvancedReport` flag.
+ * - Adds miscellaneous notes from the state.
  *
  * @param state related data
  * @param isAdvancedReport flag to enable advanced report formatting
  * @returns Array of HPIText objects, including titles, text, and miscellaneous notes.
  */
-function getHPIText(
-    bulletNoteView = false,
-    state: HPIReduxValues,
-    isAdvancedReport = false
-) {
+function getHPIText(state: HPIReduxValues, isAdvancedReport = false) {
     /*
     formattedHpis is a dictionary in which each key is the chief complaint
     and the value is an array of template sentences.
@@ -795,16 +776,18 @@ function getHPIText(
     const initialPara = Object.keys(formattedHpis).map((key) => {
         const formattedHpi = formattedHpis[key];
         // Populate actual response fields in the text, then split into a set of sentences.
+        // // Split by '. ' without retain the period with each sentence
         return new Set(
-            createInitialHPI(formattedHpi)
-                .split(/(?<=\.\s)/) // Split by '. ' but retain the period with each sentence
-                .filter(Boolean) // Remove any empty strings resulting from the split
+            splitByPeriod(
+                createInitialHPI(formattedHpi, isAdvancedReport),
+                true
+            ).filter(Boolean) // Remove any empty strings resulting from the split
         );
     });
 
     // Remove duplicate sentences by comparing each set of sentences with subsequent sets. This retains unique sentences in each set and excludes duplicates found in later sets.
-    // e.g: before: setA ['Patient feels tired.', 'Patient has a cough'], setB ['Patient has a fever.', 'Patient has a cough']
-    //      after:  setA ['Patient feels tired.', 'Patient has a cough'], setB ['Patient has a fever.']
+    // e.g: before: setA ['Patient feels tired.', ' Patient has a cough '], setB ['Patient has a fever.', 'Patient has a cough']
+    //      after:  setA ['Patient feels tired.', ' Patient has a cough '], setB ['Patient has a fever.']
     for (let i = 0; i < initialPara.length - 1; i++) {
         for (let j = i + 1; j < initialPara.length; j++) {
             const setA = initialPara[i];
@@ -822,37 +805,13 @@ function getHPIText(
                 createHPI(
                     Array.from(hpiStringSet).join(' '),
                     state.patientInformation.patientName,
-                    state.patientInformation.pronouns,
-                    isAdvancedReport
+                    state.patientInformation.pronouns
                 ),
             ];
         }
         // don't include chief complaint if it was a subset of another CC paragraph (i.e. set B is a subset of set A)
         return acc;
     }, []);
-
-    // TODOJING: this text removal step needs to be its own function,
-    // defined as its own function, in the OTHER MODULE, NOT HERE.
-    // it should ONLY be used when advanced report generation is FALSE. TODO: [it will be moved to the generateHpiText.tsx]
-
-    // After the finalPara array is constructed, perform the removal operation.
-    // const phrasesToRemove = [
-    //     'The patient has been ',
-    //     'The patient has ',
-    //     'The patient is ',
-    //     'The patients ',
-    //     'The patient ',
-    //     "The patient's ",
-    //     'He ',
-    //     'She ',
-    //     'They ',
-    // ];
-
-    // finalPara.forEach((paragraph, i) => {
-    //     finalPara[i] = !isAdvancedReport
-    //         ? removePhrases(paragraph, phrasesToRemove)
-    //         : paragraph;
-    // });
 
     const miscText: string[] = [];
     /**

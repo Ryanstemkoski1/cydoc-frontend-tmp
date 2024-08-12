@@ -43,9 +43,7 @@ export default function getHPIFormData(
         last_name: sanitizeString(last_name),
         date_of_birth,
         last_4_ssn,
-        hpi_text: JSON.stringify(
-            getHPIText(true, updatedState, isAdvancedReport)
-        ),
+        hpi_text: JSON.stringify(getHPIText(updatedState, isAdvancedReport)),
         clinician_last_name: sanitizeString(
             (userSurvey?.nodes['9']?.response ?? '') as string
         ).trim(),

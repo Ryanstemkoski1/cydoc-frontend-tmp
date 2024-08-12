@@ -303,7 +303,6 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                         <HPINote
                             text={
                                 getHPIText(
-                                    isBulletNoteView,
                                     {
                                         hpi: props.hpi,
                                         chiefComplaints: props.chiefComplaints,
