@@ -4,7 +4,7 @@ import { splitByPeriod, capitalize, removePhrases } from '../generateHpiText';
 import styles from './HPINote.module.scss';
 
 /**
- * Processes a given sentence and formats it into JSX elements based on certain rules.
+ * Helper function to process a given sentence and formats it into JSX elements based on certain rules.
  *
  * This function takes a string sentence and formats it into an array of JSX elements. It handles the differentiation
  * between headings and normal text based on the length of text and specific characters such as newlines and colons.
@@ -15,9 +15,11 @@ import styles from './HPINote.module.scss';
  * - Handles newlines and colons for formatting.
  * - Adds extra line breaks if `isParagraphFormat` is true.
  *
- * TODO: Issue caused by .trim(), also it should be removed to generateHPIText file.
  */
-function processSentence(sentence: string, isParagraphFormat?: boolean) {
+function formatSentenceHeadingsAndNewlines(
+    sentence: string,
+    isParagraphFormat?: boolean
+) {
     let id = 1;
     const addHeading = (str: string) => {
         str = str
@@ -43,7 +45,6 @@ function processSentence(sentence: string, isParagraphFormat?: boolean) {
     let toggle = false; // To control new lines in paragraphs, separating headings from text.
     const jsx: JSX.Element[] = [];
 
-    // TODO: trim is always call here();
     for (const char of sentence) {
         // Handle newlines
         if (char === '\n') {
@@ -83,7 +84,7 @@ function processSentence(sentence: string, isParagraphFormat?: boolean) {
 
         if ((char.match(/[A-Z]/g) ?? []).length) {
             headingText += char;
-            jsx.push(addNormalText(normalText));
+            jsx.push(addNormalText(normalText + ' '));
             normalText = '';
         } else {
             normalText += char;
@@ -139,16 +140,19 @@ const HpiNote = ({
             ? item.miscNote
             : capitalize(removePhrases(item.miscNote));
 
-        // TODO: extract headings and normal text values.
         if (isAdvancedReport || isParagraphFormat) {
             return (
                 <div key={item.title} style={{ marginBottom: '10px' }}>
                     <b>{item.title}</b>
                     <br />
-                    <span>{processSentence(mainTexts, true)}</span>
+                    <span>
+                        {formatSentenceHeadingsAndNewlines(mainTexts, true)}
+                    </span>
                     <br />
                     {miscTexts && (
-                        <span>{processSentence(miscTexts, true)}</span>
+                        <span>
+                            {formatSentenceHeadingsAndNewlines(miscTexts, true)}
+                        </span>
                     )}
                 </div>
             );
@@ -167,7 +171,9 @@ const HpiNote = ({
                 <b>{item.title}</b>
                 <ul className={styles.noBullets}>
                     {sentences.map((sentence: string, index: number) => (
-                        <li key={index}>{processSentence(sentence)}</li>
+                        <li key={index}>
+                            {formatSentenceHeadingsAndNewlines(sentence)}
+                        </li>
                     ))}
                 </ul>
                 <br />
