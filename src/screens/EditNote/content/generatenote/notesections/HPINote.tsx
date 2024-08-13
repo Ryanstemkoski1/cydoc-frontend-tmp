@@ -127,8 +127,8 @@ const HpiNote = ({
     isParagraphFormat?: boolean;
     isAdvancedReport?: boolean; // A boolean flag to identify Advanced Report generation.
 }) => {
-    if (!text || text.length === 0) {
-        return null;
+    if (!text || text.length === 0 || !Array.isArray(text)) {
+        return <div>No history of present illness reported</div>;
     }
 
     const notes = text.map((item) => {
