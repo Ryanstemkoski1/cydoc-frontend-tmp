@@ -15,7 +15,7 @@ import styles from './HPINote.module.scss';
  * - Handles newlines and colons for formatting.
  * - Adds extra line breaks if `isParagraphFormat` is true.
  *
- * TODO: Issue caused by .trim()
+ * TODO: Issue caused by .trim(), also it should be removed to generateHPIText file.
  */
 function processSentence(sentence: string, isParagraphFormat?: boolean) {
     let id = 1;
@@ -139,6 +139,7 @@ const HpiNote = ({
             ? item.miscNote
             : capitalize(removePhrases(item.miscNote));
 
+        // TODO: extract headings and normal text values.
         if (isAdvancedReport || isParagraphFormat) {
             return (
                 <div key={item.title} style={{ marginBottom: '10px' }}>
