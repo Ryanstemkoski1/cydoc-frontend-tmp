@@ -1,69 +1,22 @@
 import React from 'react';
 import { HPIText } from '@utils/getHPIText';
-import { capitalizeFirstLetter } from '../generateHpiText';
+import { splitByPeriod, capitalize, removePhrases } from '../generateHpiText';
 import styles from './HPINote.module.scss';
 
-// TODOJING: what are all these functions doing? they seem redundant
-// and not needed based on functionality that is available elsewhere.
-
-export function ParseAndRenderHpiNote({
-    hpiText = '',
-    isParagraphFormat = false,
-    isAdvancedReport = false,
-}: {
-    hpiText: string;
-    isParagraphFormat: boolean;
-    isAdvancedReport: boolean;
-}) {
-    let parsedHPIText: HPIText[] | string = '';
-    try {
-        parsedHPIText = JSON.parse(hpiText) as HPIText[] | string;
-    } catch (err) {
-        parsedHPIText = hpiText;
-    }
-
-    if (isParagraphFormat) {
-        const generatedParagraph = (parsedHPIText as HPIText[]).map((item) => {
-            return (
-                <div key={item.title} style={{ marginBottom: '10px' }}>
-                    <b>{item.title}</b>
-                    <br />
-                    <span>
-                        {processSentence(
-                            formatSentence(item.text),
-                            isParagraphFormat
-                        )}
-                    </span>
-                    <br />
-                </div>
-            );
-        });
-        return <>{generatedParagraph}</>;
-    } else {
-        return (
-            <HpiNote
-                text={parsedHPIText}
-                bulletNoteView={true}
-                isAdvancedReport={isAdvancedReport}
-            />
-        );
-    }
-}
-
-// TODOJING: this kind of formatting operation needs to be done
-// within generateHpiText.tsx
-// we can't have random formatting strewn across all these modules.
-
-function formatSentence(sentence: string) {
-    // Replace 'Mr.|Ms.|Mx.' ends with space ' '.
-    const updatedSentence = sentence
-        .replace(/(\.)(?!\s)/g, '$1 ')
-        // .replace(/\b(Mr\.|Ms\.|Mx\.)\b/g, (match) => match + ' ')
-        .replace(/PARAGRAPHBREAK/g, '\n');
-
-    return updatedSentence;
-}
-
+/**
+ * Processes a given sentence and formats it into JSX elements based on certain rules.
+ *
+ * This function takes a string sentence and formats it into an array of JSX elements. It handles the differentiation
+ * between headings and normal text based on the length of text and specific characters such as newlines and colons.
+ * The output format is affected by the `isParagraphFormat` flag which determines whether to add additional line breaks.
+ *
+ * - Headings are bold and capitalized, added if text length exceeds 7 characters.
+ * - Normal text is rendered as is.
+ * - Handles newlines and colons for formatting.
+ * - Adds extra line breaks if `isParagraphFormat` is true.
+ *
+ * TODO: Issue caused by .trim()
+ */
 function processSentence(sentence: string, isParagraphFormat?: boolean) {
     let id = 1;
     const addHeading = (str: string) => {
@@ -71,7 +24,7 @@ function processSentence(sentence: string, isParagraphFormat?: boolean) {
             .trim()
             .toLowerCase()
             .split(' ')
-            .map((word) => capitalizeFirstLetter(word))
+            .map((word) => capitalize(word))
             .join(' ');
         return (
             <React.Fragment key={str + id++}>
@@ -90,6 +43,7 @@ function processSentence(sentence: string, isParagraphFormat?: boolean) {
     let toggle = false; // To control new lines in paragraphs, separating headings from text.
     const jsx: JSX.Element[] = [];
 
+    // TODO: trim is always call here();
     for (const char of sentence) {
         // Handle newlines
         if (char === '\n') {
@@ -155,101 +109,75 @@ function processSentence(sentence: string, isParagraphFormat?: boolean) {
     });
 }
 
+/**
+ * HpiNote: Formats and displays the generated text based on `isAdvancedReport` and `isParagraphFormat`.
+ *
+ * - Advanced Report: Formats text without changing any punctuation or capitalization.
+ * - Other Formats: Truncates sentences at the beginning and capitalizes the first letter of each sentence.
+ * - Processes special tokens like PARAGRAPHBREAK as needed (this is not specific to a particular product type).
+ * - Finalizes formatting and displays the text and titles appropriately.
+ *
+ */
 const HpiNote = ({
     text,
-    bulletNoteView = false,
+    isParagraphFormat = false,
     isAdvancedReport = false,
 }: {
-    text: HPIText[] | string;
-    bulletNoteView?: boolean;
+    text: HPIText[];
+    isParagraphFormat?: boolean;
     isAdvancedReport?: boolean; // A boolean flag to identify Advanced Report generation.
 }) => {
-    if (typeof text === 'string') {
-        return <p>{formatSentence(text)}</p>;
+    if (!text || text.length === 0) {
+        return null;
     }
 
-    // This note is generated for the Advanced Report with changing any capitalization and punctuation.
-    const notesForAdvancedReport = text.map((item) => {
+    const notes = text.map((item) => {
+        const mainTexts = isAdvancedReport
+            ? item.text
+            : capitalize(removePhrases(item.text));
+        const miscTexts = isAdvancedReport
+            ? item.miscNote
+            : capitalize(removePhrases(item.miscNote));
+
+        if (isAdvancedReport || isParagraphFormat) {
+            return (
+                <div key={item.title} style={{ marginBottom: '10px' }}>
+                    <b>{item.title}</b>
+                    <br />
+                    <span>{processSentence(mainTexts, true)}</span>
+                    <br />
+                    {miscTexts && (
+                        <span>{processSentence(miscTexts, true)}</span>
+                    )}
+                </div>
+            );
+        }
+
+        const sentences = item.text.length
+            ? splitByPeriod(mainTexts).filter((sentence) => sentence.length > 0)
+            : [];
+
+        const miscSentences = item.miscNote
+            ? splitByPeriod(miscTexts).filter((sentence) => sentence.length > 0)
+            : [];
+
         return (
-            <li key={item.title} className={styles.listItem}>
+            <li key={item.title} className={styles.noBullets}>
                 <b>{item.title}</b>
                 <ul className={styles.noBullets}>
-                    <span>
-                        {processSentence(formatSentence(item.text), true)}
-                    </span>
+                    {sentences.map((sentence: string, index: number) => (
+                        <li key={index}>{processSentence(sentence)}</li>
+                    ))}
                 </ul>
-
+                <br />
                 {item.miscNote &&
-                    item.miscNote.split('. ').map((sentence, index) => (
-                        <li key={index}>
-                            {capitalizeFirstLetter(sentence.trim())}
-                            {sentence.trim().endsWith('.') ? '' : '.'}
-                        </li>
+                    miscSentences.map((sentence, index) => (
+                        <li key={index}>{sentence}</li>
                     ))}
             </li>
         );
     });
 
-    const notes = isAdvancedReport
-        ? text.map((item) => {
-              return (
-                  <p key={item.title}>
-                      <b>{capitalizeFirstLetter(item.title)}</b>
-                      <br />
-                      {capitalizeFirstLetter(formatSentence(item.text))}
-                      {item.miscNote ? (
-                          <>
-                              {' '}
-                              <br />
-                              <br />
-                              {capitalizeFirstLetter(item.miscNote)}
-                          </>
-                      ) : (
-                          ''
-                      )}
-                  </p>
-              );
-          })
-        : text.map((item) => {
-              // Split the text into sentences only at '. ' (period followed by space)
-              const sentences = item.text
-                  .split(/(?<=\.\s)/)
-                  .filter((sentence) => sentence.trim().length > 0);
-              return (
-                  <li key={item.title} className={styles.listItem}>
-                      <b>{item.title}</b>
-                      <ul className={styles.noBullets}>
-                          {sentences.map((sentence: string, index: number) => (
-                              <li key={index}>
-                                  {processSentence(
-                                      capitalizeFirstLetter(
-                                          formatSentence(sentence.trim())
-                                      )
-                                  )}
-                              </li>
-                          ))}
-                      </ul>
-
-                      {item.miscNote &&
-                          item.miscNote.split('. ').map((sentence, index) => (
-                              <li key={index}>
-                                  {capitalizeFirstLetter(sentence.trim())}
-                                  {sentence.trim().endsWith('.') ? '' : '.'}
-                              </li>
-                          ))}
-                  </li>
-              );
-          });
-
-    // Display Notes
-    const renderNotes =
-        isAdvancedReport || bulletNoteView ? (
-            <ul className={styles.noBullets}>
-                {isAdvancedReport ? notesForAdvancedReport : notes}
-            </ul>
-        ) : (
-            <>{notes}</>
-        );
-    return renderNotes;
+    return notes;
 };
 export default HpiNote;

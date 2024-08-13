@@ -319,10 +319,6 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                                         ?.useAdvancedReportTextGeneration
                                 ) as HPIText[]
                             }
-                            bulletNoteView={
-                                props.productDefinition
-                                    ?.useAdvancedReportTextGeneration
-                            }
                             isAdvancedReport={
                                 props.productDefinition
                                     ?.useAdvancedReportTextGeneration

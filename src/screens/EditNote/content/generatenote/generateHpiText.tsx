@@ -501,7 +501,6 @@ export const abbreviate = (hpiString: string): string => {
  * Capitalizes first word of every sentence and all ' i 's
  * */
 export const capitalize = (hpiString: string): string => {
-    hpiString = hpiString.trim();
     // replace 'i' with I
     hpiString = hpiString.replace(
         /(^|\s|\b)i(\s|$|\b)/g,
@@ -563,14 +562,14 @@ const phrasesToRemove = [
 
 // Function to remove specified phrases TODO:[Added]
 // TODO: Address issues to consider case sensitivity and spacing.
-export function removePhrases(text: string, phrases: string[]): string {
+export function removePhrases(text: string): string {
     let modifiedText = ' ' + text + ' '; // Padding with spaces
-    phrases.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
-    phrases.forEach((phrase) => {
+    phrasesToRemove.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
+    phrasesToRemove.forEach((phrase) => {
         modifiedText = modifiedText.replace(
             new RegExp(`\\b${phrase}\\b`, 'g'),
             ''
         );
     });
-    return modifiedText.trim(); // Remove the added spaces
+    return modifiedText; // Remove the added spaces
 }

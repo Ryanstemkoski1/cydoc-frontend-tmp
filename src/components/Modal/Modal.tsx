@@ -2,7 +2,7 @@ import {
     AppointmentUser,
     formatFullName,
 } from '@screens/BrowseNotes/BrowseNotes';
-import { ParseAndRenderHpiNote } from '@screens/EditNote/content/generatenote/notesections/HPINote';
+import HpiNote from '@screens/EditNote/content/generatenote/notesections/HPINote';
 import { MouseEvent, default as React, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import style from './Modal.module.scss';
@@ -100,8 +100,8 @@ const Modal = ({
                         className={`${style.modal__scroll} scrollbar`}
                         id='copy-notes'
                     >
-                        <ParseAndRenderHpiNote
-                            hpiText={hpiText}
+                        <HpiNote
+                            text={JSON.parse(hpiText)}
                             isParagraphFormat={isParagraphFormat}
                             isAdvancedReport={
                                 productDefinition?.useAdvancedReportTextGeneration ??
