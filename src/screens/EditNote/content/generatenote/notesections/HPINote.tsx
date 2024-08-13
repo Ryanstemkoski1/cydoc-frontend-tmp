@@ -111,13 +111,21 @@ function formatSentenceHeadingsAndNewlines(
 }
 
 /**
- * HpiNote: Formats and displays the generated text based on `isAdvancedReport` and `isParagraphFormat`.
+ * The HpiNote component is responsible for formatting and displaying Generate Notes. It manages the presentation of
+ * notes either as a list or paragraph based on the provided flags[`isAdvancedReport` and `isParagraphFormat`].
  *
- * - Advanced Report: Formats text without changing any punctuation or capitalization.
- * - Other Formats: Truncates sentences at the beginning and capitalizes the first letter of each sentence.
- * - Processes special tokens like PARAGRAPHBREAK as needed (this is not specific to a particular product type).
- * - Finalizes formatting and displays the text and titles appropriately.
+ * - Advanced Report: Formats the text without altering punctuation or capitalization.
+ * - Standard Format: Truncates the beginning of sentences, capitalizes the first letter of each sentence, and applies specific formatting rules.
  *
+ * Function Calls:
+ * - removePhrases: Truncates the beginning of sentences
+ * - capitalize: Capitalizes the first letter of each sentence
+ * - formatSentenceHeadingsAndNewlines: Formats text by handling sentence headings and inserting newlines as needed. Adjusts formatting based on whether it’s an advanced report or not.
+ * - splitByPeriod: Splits text into individual sentences based on periods. Helps in creating list items from the text.
+ *
+ * @param {HPIText[]} props.text - The text data to be formatted and displayed.
+ * @param {boolean} [props.isParagraphFormat=false] - Flag to determine if the text should be displayed in paragraph format.
+ * @param {boolean} [props.isAdvancedReport=false] - Flag to determine if the text is for an advanced report, which affects text formatting.
  */
 const HpiNote = ({
     text,
@@ -133,6 +141,7 @@ const HpiNote = ({
     }
 
     const notes = text.map((item) => {
+        // For non-advanced reports: Sentence beginnings are being cut off, and each sentence appears on a new line.
         const mainTexts = isAdvancedReport
             ? item.text
             : capitalize(removePhrases(item.text));
@@ -140,6 +149,7 @@ const HpiNote = ({
             ? item.miscNote
             : capitalize(removePhrases(item.miscNote));
 
+        // Display the generated notes as a paragraph:
         if (isAdvancedReport || isParagraphFormat) {
             return (
                 <div key={item.title} style={{ marginBottom: '10px' }}>
@@ -158,6 +168,7 @@ const HpiNote = ({
             );
         }
 
+        // Display the generated notes as a list:
         const sentences = item.text.length
             ? splitByPeriod(mainTexts).filter((sentence) => sentence.length > 0)
             : [];
@@ -179,7 +190,9 @@ const HpiNote = ({
                 <br />
                 {item.miscNote &&
                     miscSentences.map((sentence, index) => (
-                        <li key={index}>{sentence}</li>
+                        <li key={index}>
+                            {formatSentenceHeadingsAndNewlines(sentence)}
+                        </li>
                     ))}
             </li>
         );
