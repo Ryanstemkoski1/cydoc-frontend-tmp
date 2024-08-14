@@ -143,7 +143,9 @@ const HpiNote = ({
         const mainTexts = isAdvancedReport
             ? item.text
             : standardFormatter(item.text);
-        const miscTexts = isAdvancedReport ? item.miscNote : item.miscNote;
+        const miscTexts = isAdvancedReport
+            ? item.miscNote
+            : standardFormatter(item.miscNote);
 
         // Display the generated notes as a paragraph:
         if (isAdvancedReport || isParagraphFormat) {
