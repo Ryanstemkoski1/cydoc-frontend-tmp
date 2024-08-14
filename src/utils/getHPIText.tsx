@@ -87,11 +87,6 @@ export type ReduxNodeInterface = {
     response: HpiResponseType;
 };
 
-// TODOJING: please add documentation at the top of this module explaining
-// what this module is doing. It looks to me as if it's going through
-// each question type and gathering some information from it as a string.
-// but that's not documented and needs to be made clear. -- TODO: [Finsihed]
-
 /* Returns whether the user has responded to this node or not */
 export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
     switch (node.responseType) {

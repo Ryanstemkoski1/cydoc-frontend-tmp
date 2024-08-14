@@ -229,10 +229,6 @@ const replacePronouns = (sentence: string, pronounPack: string[]) => {
     return sentence;
 };
 
-const PART_OF_SPEECH_CORRECTION_MAP_FIRST_COLUMN = [
-    ...PART_OF_SPEECH_CORRECTION_MAP.keys(),
-];
-
 /**
  * TODO: consider other cases [!?.]
  * Splits a string into sentences based on periods followed by whitespace.
@@ -295,7 +291,7 @@ const replaceMappedWords = (
     const END_OF_SENTENCE_PUNC = '.!?';
     Object.entries(mapping).forEach(([key, value]) => {
         hpiString = hpiString.replace(
-            new RegExp(`\\b${key}([\b${END_OF_SENTENCE_PUNC},:]?)`),
+            new RegExp(`\\b${key}([\b${END_OF_SENTENCE_PUNC},:]?)`, 'i'),
             `${value}$1`
         );
     });
@@ -606,7 +602,6 @@ export const fillNameAndPronouns = (
 const conjugateThirdPerson = (hpiString: string) => hpiString;
 
 /** Corrects grammatical errors in the input string based on predefined mappings. */
-// TODO: Address issues with handling cases like ' She wish ' and 'She wish' considering case sensitivity and spacing.
 const partOfSpeechCorrection = (hpiString: string): string => {
     PART_OF_SPEECH_CORRECTION_MAP.forEach((value: string, key: string) => {
         const regEx = new RegExp(`${key}`, 'gi');
@@ -615,12 +610,12 @@ const partOfSpeechCorrection = (hpiString: string): string => {
     return hpiString;
 };
 
-// TODO: Address issues to consider case sensitivity and spacing.
+// Address medical term replacement operation
 export const fillMedicalTerms = (hpiString: string): string => {
     return replaceMappedWords(hpiString, MEDICAL_TERM_TRANSLATOR);
 };
 
-// TODO: Address issues to consider case sensitivity and spacing.
+// Address abbreviate term replacement operation
 export const abbreviate = (hpiString: string): string => {
     return replaceMappedWords(hpiString, ABBREVIFY);
 };
@@ -636,12 +631,9 @@ export const createHPI = (
     // name and pronoun handling
     hpiString = fillNameAndPronouns(hpiString, patientInfo);
 
-    // TODO: organize it later
     // hpiString = conjugateThirdPerson(hpiString); TODO: add to conjugate a base verb into its third-person singular form.
     hpiString = partOfSpeechCorrection(hpiString);
-    // medical term replacement operation
     hpiString = fillMedicalTerms(hpiString);
-    // abbreviate term replacement operation
     hpiString = abbreviate(hpiString);
     return hpiString;
 };
