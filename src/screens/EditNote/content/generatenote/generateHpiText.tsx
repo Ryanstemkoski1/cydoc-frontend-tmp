@@ -623,15 +623,6 @@ export const abbreviate = (hpiString: string): string => {
     return replaceMappedWords(hpiString, ABBREVIFY);
 };
 
-/**
- * This function inserts the user's responses into the ANSWER and NOTANSWER tokens and
- * concatenates the sentences based on the specified question order.
- *
- */
-export const createInitialHPI = (hpi: HPI): string => {
-    return fillAnswers(hpi);
-};
-
 export const createHPI = (
     hpiString: string,
     patientName: string,
