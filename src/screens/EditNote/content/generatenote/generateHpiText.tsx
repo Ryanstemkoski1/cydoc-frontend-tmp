@@ -31,9 +31,11 @@ export interface HPI {
 interface PatientDisplayName {
     name: string;
     pronouns: PatientPronouns;
-    objPronoun: string;
-    posPronoun: string;
-    pronounPack: string[];
+    subPronoun: string; // she, he, they
+    posAdjective: string; // her, his, their
+    objPronoun: string; // her, him, them
+    posPronoun: string; // hers, his, theirs
+    refPronoun: string; // herself, himself, themselves
 }
 
 // Capitalizes specific terms from ETHNICITY and MONTHS arrays in the input string.
@@ -399,8 +401,8 @@ export const fillAnswers = (hpi: HPI): string => {
  * - An object containing:
  *   - `name`: Capitalized patient's name.
  *   - `pronouns`: The selected pronouns.
- *   - `objPronoun`: Object form of the pronoun.
- *   - `posPronoun`: Possessive form of the pronoun.
+ *   - `subPronoun`: Subject form of the Pronouns.
+ *   - `posAdjective`: Possessive form of the Adjectives.
  *   - `pronounPack`: Array of all relevant pronoun package. [subject, object, possessive adjectivies, reflexive, possessive pronoun]
  */
 export const definePatientNameAndPronouns = (
@@ -408,30 +410,32 @@ export const definePatientNameAndPronouns = (
     pronouns: PatientPronouns
 ): PatientDisplayName => {
     // define pronouns
-    let objPronoun: string = 'they'; // subPronouns
-    let posPronoun: string = 'their'; // posPronouns
-    let pronounPack: string[] = [
-        'they', // subPronoun
-        'them', // objPronoun
-        'their', // posAdjective
-        'themselves', // refPronoun
-        'theirs', // posPronoun
-    ];
+    let subPronoun: string = 'they';
+    let posAdjective: string = 'their';
+    let objPronoun: string = 'them';
+    let posPronoun: string = 'theirs';
+    let refPronoun: string = 'themselves';
     if (pronouns === PatientPronouns.She) {
-        objPronoun = 'she';
-        posPronoun = 'her';
-        pronounPack = ['she', 'her', 'her', 'herself', 'hers'];
+        subPronoun = 'she';
+        posAdjective = 'her';
+        objPronoun = 'her';
+        posPronoun = 'hers';
+        refPronoun = 'herself';
     } else if (pronouns === PatientPronouns.He) {
-        objPronoun = 'he';
+        subPronoun = 'he';
+        posAdjective = 'his';
+        objPronoun = 'him';
         posPronoun = 'his';
-        pronounPack = ['he', 'him', 'him', 'himself', 'his'];
+        refPronoun = 'himself';
     }
     return {
         name: capitalizeFirstLetter(patientName),
         pronouns,
+        subPronoun,
+        posAdjective,
         objPronoun,
         posPronoun,
-        pronounPack,
+        refPronoun,
     };
 };
 
@@ -476,11 +480,27 @@ export const fillNameAndPronouns = (
     hpiString: string,
     patientInfo: PatientDisplayName
 ): string => {
-    const { name, pronouns, objPronoun, posPronoun, pronounPack } = patientInfo;
+    const {
+        name,
+        pronouns,
+        subPronoun,
+        posAdjective,
+        objPronoun,
+        posPronoun,
+        refPronoun,
+    } = patientInfo;
 
-    // Replace "the patient's" and "their" with given posPronoun.
+    const pronounPack = [
+        subPronoun,
+        objPronoun,
+        posAdjective,
+        refPronoun,
+        posPronoun,
+    ];
+
+    // Replace "the patient's" and "their" with given posAdjective.
     hpiString = name.length
-        ? hpiString.replace(/\bthe patient's\b|\btheir\b/g, posPronoun)
+        ? hpiString.replace(/\bthe patient's\b|\btheir\b/g, posAdjective)
         : hpiString;
 
     let toggle = 1; // change this so that it gets replaced at random rather than alternating.
@@ -497,22 +517,22 @@ export const fillNameAndPronouns = (
                 sentence = toggle
                     ? sentence.replace(
                           /\b[Tt]he patient\b|\b[Pp]atient\b/g, // TODO: remember add space between title and name
-                          objPronoun === 'he'
+                          subPronoun === 'he'
                               ? `Mr. ${name}`
-                              : objPronoun === 'she'
+                              : subPronoun === 'she'
                                 ? `Ms. ${name}`
                                 : `Mx. ${name}`
                       )
                     : sentence.replace(
                           /\b[Tt]he patient\b|\b[Pp]atient\b/g,
-                          (match) => replaceWordCaseSensitive(match, objPronoun)
+                          (match) => replaceWordCaseSensitive(match, subPronoun)
                       );
             } else {
                 sentence = toggle
                     ? sentence
                     : sentence.replace(
                           /\b[Tt]he patient\b|\b[Pp]atient\b/g,
-                          (match) => replaceWordCaseSensitive(match, objPronoun)
+                          (match) => replaceWordCaseSensitive(match, subPronoun)
                       );
             }
             toggle = (toggle + 1) % 2;
@@ -524,7 +544,7 @@ export const fillNameAndPronouns = (
         // Replace "she's/he's/they's" with "her/his/their"
         sentence = sentence.replace(
             / she's | he's | they's /g,
-            ' ' + posPronoun + ' '
+            ' ' + posAdjective + ' '
         );
 
         // If patient's pronouns are not they/them/their, replace:
@@ -535,9 +555,12 @@ export const fillNameAndPronouns = (
         }
 
         // other cases:
-        sentence = sentence.replace(/ yourself /g, ' ' + posPronoun + 'self ');
-        sentence = sentence.replace(/ your /g, ' ' + posPronoun + ' ');
-        sentence = sentence.replace(/ you /g, ' ' + objPronoun + ' ');
+        sentence = sentence.replace(
+            / yourself /g,
+            ' ' + posAdjective + 'self '
+        );
+        sentence = sentence.replace(/ your /g, ' ' + posAdjective + ' ');
+        sentence = sentence.replace(/ you /g, ' ' + subPronoun + ' ');
 
         return sentence;
     });
