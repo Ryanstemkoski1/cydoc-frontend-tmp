@@ -64,6 +64,8 @@ class NotePage extends Component<Props, State> {
         const handleFetchFilledForm = async () => {
             //temp constants for fetchFilledFormToDb
             const getAppointmentId = '660e8400-e29b-41d4-a716-446622444411';
+            const appointmentTemplateStepId =
+                '660e8400-e29b-41d4-a716-446622444413';
             const getFormCategory = 'diabetes';
             //temp constants for fetchFilledFormToDb
 
@@ -71,6 +73,7 @@ class NotePage extends Component<Props, State> {
             try {
                 const formData = await getFilledForm(
                     getAppointmentId,
+                    appointmentTemplateStepId,
                     getFormCategory
                 );
 

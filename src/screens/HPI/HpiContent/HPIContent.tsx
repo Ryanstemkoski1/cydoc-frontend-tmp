@@ -237,6 +237,8 @@ class HPIContent extends React.Component<Props, State> {
         const handleOnSave = async () => {
             //temp constants for saveFilledFormToDb
             const appointmentId = '660e8400-e29b-41d4-a716-446622444411';
+            const appointmentTemplateStepId =
+                '660e8400-e29b-41d4-a716-446622444413';
             const formCategory = 'diabetes';
             const status = 'inProgress';
             //temp constants for saveFilledFormToDb
@@ -251,6 +253,7 @@ class HPIContent extends React.Component<Props, State> {
             try {
                 await postFilledForm({
                     appointmentId,
+                    appointmentTemplateStepId,
                     formCategory,
                     formContent,
                     status,

@@ -16,6 +16,7 @@ interface GetFilledFormResponse {
 
 interface FilledFormParams {
     appointmentId: string;
+    appointmentTemplateStepId: string;
     formCategory: string;
     formContent: object;
     status: string;
@@ -23,9 +24,15 @@ interface FilledFormParams {
 
 export const getFilledForm = async (
     appointment_id: string,
+    appointment_template_step_id: string,
     form_category: string
 ) => {
     invariant(appointment_id, '[getFilledForm] missing appointment_id');
+    invariant(
+        appointment_template_step_id,
+        '[getFilledForm] missing appointment_template_step_id'
+    );
+    invariant(form_category, '[getFilledForm] missing form_category');
 
     const response = (await getFromApi<GetFilledFormResponse>(
         `/filled-form/${appointment_id}/${form_category}`,
@@ -38,6 +45,7 @@ export const getFilledForm = async (
 
 export const postFilledForm = async ({
     appointmentId,
+    appointmentTemplateStepId,
     formCategory,
     formContent,
     status,
@@ -59,6 +67,7 @@ export const postFilledForm = async ({
 
     const response = await apiClient.post('/filled-form/', {
         appointment_id: appointmentId,
+        appointment_template_step_id: appointmentTemplateStepId,
         form_category: formCategory,
         form_content: JSON.stringify(formContent),
         status: status,
