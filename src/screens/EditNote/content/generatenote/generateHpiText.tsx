@@ -108,9 +108,12 @@ const removeSentence = (fillSentence: string, keyword: string): string => {
         .join(' ');
 };
 
-// A Helper function to Remove punctuation except
-// periods (.), commas (,), forward slashes (/),
-// apostrophes ('), colons (:), hyphens (-), and parentheses (()).
+/**
+ * A Helper function to Remove punctuation except periods (.), commas (,), forward slashes (/),
+ * apostrophes ('), colons (:), hyphens (-), and parentheses (()).
+ *
+ * TODO: This function maintains the previous logic, should it consider double quotation marks (")?
+ */
 export const retainAllowedPunctuation = (str: string): string => {
     return str.replace(/[^\w\s'.,:/@()-]/g, '');
 };
@@ -128,6 +131,53 @@ export const fullClean = (sentence: string): string => {
     sentence = sentence.split(/\s+/).join(' ');
     // Trim leading and trailing whitespace.
     sentence = sentence.trim();
+    return sentence;
+};
+
+// A Helper Function to generate a title prefix for the given lastname based on the specified pronoun.
+const generateTitleWithName = (name: string, subPronoun: string) => {
+    return subPronoun === 'he'
+        ? `Mr. ${name}`
+        : subPronoun === 'she'
+          ? `Ms. ${name}`
+          : `Mx. ${name}`;
+};
+
+/**
+ * A Helper Function is part of 'fillNameAndPronouns' and retain the previous logic involving the boolean flags toggle.
+ * - Replace "[t]he patient's" and "[t]heir" with the patient's possessive adjective (e.g: 'her', 'his', 'them')
+ * - Replace "[t]he patient|[patient]" with "she/he/they/name". (e.g., "Ms. Smith" or "she" or "he" or "they").
+ */
+const replacePatientPronounsOrName = (
+    patientRegex: RegExp,
+    sentence: string,
+    name: string,
+    subPronoun: string,
+    posAdjective: string,
+    toggle: number
+): string => {
+    // Replace "[t]he patient's" and "[t]heir" with given posAdjective.
+    sentence = name
+        ? sentence.replace(/\bthe patient's\b|\btheir\b/g, posAdjective)
+        : sentence;
+
+    // replace "[t]he patient|[patient]" with "she/he/they/name".
+    if (name) {
+        sentence = toggle
+            ? sentence.replace(
+                  patientRegex,
+                  generateTitleWithName(name, subPronoun)
+              )
+            : sentence.replace(patientRegex, (match) =>
+                  replaceWordCaseSensitive(match, subPronoun)
+              );
+    } else {
+        sentence = toggle
+            ? sentence
+            : sentence.replace(patientRegex, (match) =>
+                  replaceWordCaseSensitive(match, subPronoun)
+              );
+    }
     return sentence;
 };
 
@@ -182,9 +232,6 @@ const replacePronouns = (sentence: string, pronounPack: string[]) => {
 const PART_OF_SPEECH_CORRECTION_MAP_FIRST_COLUMN = [
     ...PART_OF_SPEECH_CORRECTION_MAP.keys(),
 ];
-
-// TODO: organize it later
-const END_OF_SENTENCE_PUNC = '.!?';
 
 /**
  * TODO: consider other cases [!?.]
@@ -245,6 +292,7 @@ const replaceMappedWords = (
     hpiString: string,
     mapping: { [key: string]: string }
 ): string => {
+    const END_OF_SENTENCE_PUNC = '.!?';
     Object.entries(mapping).forEach(([key, value]) => {
         hpiString = hpiString.replace(
             new RegExp(`\\b${key}([\b${END_OF_SENTENCE_PUNC},:]?)`),
@@ -292,7 +340,6 @@ function removePhrases(text: string): string {
  * - Capitalizes the first letter of the entire string if it's not empty.
  * - Capitalizes the first letter of each sentence following punctuation marks (.!?).
  * - Capitalizes the first letter following a colon when used in headings.
- *
  * */
 export const capitalize = (hpiString: string): string => {
     // replace 'i' with I
@@ -401,9 +448,11 @@ export const fillAnswers = (hpi: HPI): string => {
  * - An object containing:
  *   - `name`: Capitalized patient's name.
  *   - `pronouns`: The selected pronouns.
- *   - `subPronoun`: Subject form of the Pronouns.
- *   - `posAdjective`: Possessive form of the Adjectives.
- *   - `pronounPack`: Array of all relevant pronoun package. [subject, object, possessive adjectivies, reflexive, possessive pronoun]
+ *   - `subPronoun`: The subject pronouns (e.g., 'she', 'he', 'they').
+ *   - `posAdjective`: The possessive adjective (e.g., 'her', 'his', 'their').
+ *   - `objPronoun`: The object pronouns (e.g., 'her', 'him', 'them').
+ *   - `posPronoun`: The possessive pronoun (e.g., 'hers', 'his', 'theirs').
+ *   - `refPronoun`: The reflexive pronoun (e.g., 'herself', 'himself', 'themselves').
  */
 export const definePatientNameAndPronouns = (
     patientName: string,
@@ -451,7 +500,7 @@ export const definePatientNameAndPronouns = (
  *
  * other case: Replaces "him/her" with 'them'.
  */
-export const fillPatient = (hpiString: string) => {
+export const fillPatientPronoun = (hpiString: string) => {
     hpiString = hpiString.replace(/\brespondent/gi, (match) =>
         replaceWordCaseSensitive(match, 'patient')
     );
@@ -472,8 +521,8 @@ export const fillPatient = (hpiString: string) => {
 
 /**
  * Returns modified hpiString such that:
- * - Replaces "the patient's" and "their" with the patient's possessive pronoun (e.g., "her").
- * - Replaces "the patient" with the patient's name or object pronoun (e.g., "Ms. Smith" or "she").
+ * - Replaces "the patient's" and "their" with the patient's possessive adjective (e.g., "her").
+ * - Replaces "the patient" with the patient's name or subject pronoun (e.g., "Ms. Smith" or "she").
  * - Handles special cases for pronouns, including alternating replacements and updating various pronouns.
  */
 export const fillNameAndPronouns = (
@@ -498,43 +547,26 @@ export const fillNameAndPronouns = (
         posPronoun,
     ];
 
-    // Replace "the patient's" and "their" with given posAdjective.
-    hpiString = name.length
-        ? hpiString.replace(/\bthe patient's\b|\btheir\b/g, posAdjective)
-        : hpiString;
-
     let toggle = 1; // change this so that it gets replaced at random rather than alternating.
-    const newHpiStringList = splitByPeriod(hpiString, true); // Split the input string by periods while retaining the periods. [consider 'NEW LINE']
 
+    // Split the hpiString by periods while retaining the periods. [consider 'NEW LINE']
     // If patient's pronouns ia available, replace "[t]he patient|[patient]" with "she/he/they/name".
     // Otherwise, if patient's pronouns are not they/them, replace:
     // 1) they with she/he 2) their with her/his 3) she's/he's with her/his 4) theirs with hers/his
     // 5) them with her/him 6) himselves/herselves with himself/herself
-    const newHpiString = newHpiStringList.map((sentence) => {
+    const newHpiString = splitByPeriod(hpiString, true).map((sentence) => {
         // Replace "[t]he patient|[patient]" with "she/he/they/name"
-        if (/\b[Tt]he patient\b|\b[Pp]atient\b/.test(sentence)) {
-            if (name) {
-                sentence = toggle
-                    ? sentence.replace(
-                          /\b[Tt]he patient\b|\b[Pp]atient\b/g, // TODO: remember add space between title and name
-                          subPronoun === 'he'
-                              ? `Mr. ${name}`
-                              : subPronoun === 'she'
-                                ? `Ms. ${name}`
-                                : `Mx. ${name}`
-                      )
-                    : sentence.replace(
-                          /\b[Tt]he patient\b|\b[Pp]atient\b/g,
-                          (match) => replaceWordCaseSensitive(match, subPronoun)
-                      );
-            } else {
-                sentence = toggle
-                    ? sentence
-                    : sentence.replace(
-                          /\b[Tt]he patient\b|\b[Pp]atient\b/g,
-                          (match) => replaceWordCaseSensitive(match, subPronoun)
-                      );
-            }
+        const patientRegex = /\b[Tt]he patient\b|\b[Pp]atient\b/g;
+        if (patientRegex.test(sentence)) {
+            sentence = replacePatientPronounsOrName(
+                patientRegex,
+                sentence,
+                name,
+                subPronoun,
+                posAdjective,
+                toggle
+            );
+
             toggle = (toggle + 1) % 2;
         }
 
@@ -565,7 +597,7 @@ export const fillNameAndPronouns = (
         return sentence;
     });
 
-    return newHpiString.join(' ');
+    return newHpiString.join('');
 };
 
 // TODO: add it applying 'getThirdPersonSingularForm'
@@ -607,9 +639,10 @@ export const createHPI = (
 ): string => {
     const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
     // Patient handling
-    hpiString = fillPatient(hpiString);
+    hpiString = fillPatientPronoun(hpiString);
     // name and pronoun handling
     hpiString = fillNameAndPronouns(hpiString, patientInfo);
+
     // TODO: organize it later
     // hpiString = conjugateThirdPerson(hpiString); TODO: add to conjugate a base verb into its third-person singular form.
     hpiString = partOfSpeechCorrection(hpiString);
@@ -617,7 +650,6 @@ export const createHPI = (
     hpiString = fillMedicalTerms(hpiString);
     // abbreviate term replacement operation
     hpiString = abbreviate(hpiString);
-    console.log('hpiString', hpiString);
     return hpiString;
 };
 

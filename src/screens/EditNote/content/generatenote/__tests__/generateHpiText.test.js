@@ -8,7 +8,7 @@ import {
     fillMedicalTerms,
     fillNameAndPronouns,
     fullClean,
-    fillPatient,
+    fillPatientPronoun,
     retainAllowedPunctuation,
 } from '../generateHpiText';
 
@@ -197,7 +197,7 @@ describe('generateHpiText', () => {
                 posAdjective: 'his',
             };
             const expected =
-                "Mr. Judy's dog is cute.  His dog's name is Muffin and Muffin likes icecream.";
+                "Mr. Judy's dog is cute. His dog's name is Muffin and Muffin likes icecream.";
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
                 expected
             );
@@ -257,7 +257,7 @@ describe('generateHpiText', () => {
         // });
     });
 
-    describe('fillPatient', () => {
+    describe('fillPatientPronoun', () => {
         it('replaces respondent', () => {
             const hpiString = 'respondent loves cat.';
             const patientInfo = {
@@ -267,7 +267,7 @@ describe('generateHpiText', () => {
                 posAdjective: 'their',
             };
             const expected = 'patient loves cat.';
-            expect(fillPatient(hpiString, patientInfo)).toEqual(expected);
+            expect(fillPatientPronoun(hpiString, patientInfo)).toEqual(expected);
         });
         it("replaces the client's", () => {
             const hpiString = "the client's cat name is Molly.";
@@ -278,7 +278,7 @@ describe('generateHpiText', () => {
                 posAdjective: 'their',
             };
             const expected = "the patient's cat name is Molly.";
-            expect(fillPatient(hpiString, patientInfo)).toEqual(expected);
+            expect(fillPatientPronoun(hpiString, patientInfo)).toEqual(expected);
         });
         it('replaces He/she', () => {
             const hpiString = 'He/she loves dog, and he/she also loves cat.';
@@ -289,7 +289,7 @@ describe('generateHpiText', () => {
                 posAdjective: 'their',
             };
             const expected = 'Patient loves dog, and patient also loves cat.';
-            expect(fillPatient(hpiString, patientInfo)).toEqual(expected);
+            expect(fillPatientPronoun(hpiString, patientInfo)).toEqual(expected);
         });
     });
 
