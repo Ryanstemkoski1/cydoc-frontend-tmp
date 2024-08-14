@@ -111,7 +111,7 @@ const removeSentence = (fillSentence: string, keyword: string): string => {
 // A Helper function to Remove punctuation except
 // periods (.), commas (,), forward slashes (/),
 // apostrophes ('), colons (:), hyphens (-), and parentheses (()).
-const retainAllowedPunctuation = (str: string): string => {
+export const retainAllowedPunctuation = (str: string): string => {
     return str.replace(/[^\w\s'.,:/@()-]/g, '');
 };
 
@@ -142,38 +142,38 @@ export const fullClean = (sentence: string): string => {
  *
  */
 const replacePronouns = (sentence: string, pronounPack: string[]) => {
-    const [subject, object, possessive, reflexive, possessivePronoun] =
+    const [subPronoun, objPronoun, posAdjective, refPronoun, posPronoun] =
         pronounPack;
 
     // Replace pronouns in the senetence
     sentence = sentence.replace(/\b(he|she|they)\b/gi, (match) =>
-        replaceWordCaseSensitive(match, subject)
+        replaceWordCaseSensitive(match, subPronoun)
     );
     sentence = sentence.replace(/\b(him|them)\b/gi, (match) =>
-        replaceWordCaseSensitive(match, object)
+        replaceWordCaseSensitive(match, objPronoun)
     );
     sentence = sentence.replace(/\b(?:his|their)\b/gi, (match) =>
-        replaceWordCaseSensitive(match, possessive)
+        replaceWordCaseSensitive(match, posAdjective)
     );
     // Handle special cases for 'her' to avoid wrong replacement
     sentence = sentence.replace(/\bher\b\s+(\b\w+\b)/gi, (match, noun) => {
         return noun
-            ? replaceWordCaseSensitive(match, possessive + ` ${noun}`)
-            : replaceWordCaseSensitive(match, object);
+            ? replaceWordCaseSensitive(match, posAdjective + ` ${noun}`)
+            : replaceWordCaseSensitive(match, objPronoun);
     });
 
     sentence = sentence.replace(
         /\bher\b(?=\s*\b(?:\w|[a-zA-Z])\b)/gi,
-        (match) => replaceWordCaseSensitive(match, possessive)
+        (match) => replaceWordCaseSensitive(match, posAdjective)
     );
 
     // Handle "theirs" and "hers" plural
     sentence = sentence.replace(/\b(hers|theirs)\b/gi, (match) =>
-        replaceWordCaseSensitive(match, possessivePronoun)
+        replaceWordCaseSensitive(match, posPronoun)
     );
 
     sentence = sentence.replace(/\b(himself|herself|themselves)\b/gi, (match) =>
-        replaceWordCaseSensitive(match, reflexive)
+        replaceWordCaseSensitive(match, refPronoun)
     );
 
     return sentence;
