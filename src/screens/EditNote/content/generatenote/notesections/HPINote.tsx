@@ -142,12 +142,12 @@ const HpiNote = ({
         // For non-advanced reports: Sentence beginnings are being cut off, and each sentence appears on a new line.
         const mainTexts =
             !isAdvancedReport && item.text
-                ? standardFormatter(item.text)
+                ? standardFormatter(item.text, isParagraphFormat)
                 : item.text;
 
         const miscTexts =
             !isAdvancedReport && item.miscNote
-                ? standardFormatter(item.miscNote)
+                ? standardFormatter(item.miscNote, isParagraphFormat)
                 : item.miscNote;
 
         // Display the generated notes as a paragraph:

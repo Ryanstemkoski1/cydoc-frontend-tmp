@@ -321,7 +321,9 @@ const phrasesToRemove = [
  */
 function removePhrases(text: string): string {
     // TODO: Replace the title with 'The patient', to ensure remove the title with lastname. However, it might not need.
-    // text = text? text.replace(/\b(Ms\.|Mr\.|Mx\.)\s+[A-Za-z]+\b/g, 'The patient') : '';
+    text = text
+        ? text.replace(/\b(Ms\.|Mr\.|Mx\.)\s+[A-Za-z]+\b/g, 'The patient')
+        : '';
     let modifiedText = ' ' + text + ' '; // Padding with spaces
     phrasesToRemove.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
     phrasesToRemove.forEach((phrase) => {
@@ -650,13 +652,19 @@ export const createHPI = (
  *
  * Usage: HpiNote
  */
-export function standardFormatter(str: string): string {
+export function standardFormatter(
+    str: string,
+    isParagraphFormat: boolean
+): string {
     // Remove punctuation except periods, commas, forward slashes, apostrophes, colons, hyphens, and parentheses
     let sentence = retainAllowedPunctuation(str);
     // Apply selective uppercasing.
     sentence = selectivelyUppercase(sentence);
     // Removing specific phrases
-    sentence = removePhrases(sentence);
+    if (!isParagraphFormat) {
+        // TODO: If isParagraphFormat, do not cuts off the beginning of the sentences.
+        sentence = removePhrases(sentence);
+    }
     // Capitalizing the first letter of each sentence
     sentence = capitalize(sentence);
     return sentence;
