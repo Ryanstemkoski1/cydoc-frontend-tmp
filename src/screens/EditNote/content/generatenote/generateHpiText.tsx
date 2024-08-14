@@ -3,7 +3,7 @@ import { PatientPronouns } from '@constants/patientInformation';
 import { ABBREVIFY, MEDICAL_TERM_TRANSLATOR } from '@constants/word-mappings';
 
 /**
- * This interface represents a collection of Health Patient Information enties.
+ * This interface represents a collection of HPI enties.
  *
  * Keys: Integers representing the display order of answers.
  * Values: Tuples with three elements:
@@ -15,10 +15,10 @@ import { ABBREVIFY, MEDICAL_TERM_TRANSLATOR } from '@constants/word-mappings';
  * answer they gave, and the patient's answer can be the empty string
  *
  * Example:
- * - Key `0` with value `['ANSWER likes dog but NOTANSWER doesn't.', 'Lily', 'Kevin']`
- *   - Fill-in-the-blank sentence: 'ANSWER likes dog but NOTANSWER doesn't.'
- *   - Patient's answer: 'Lily'
- *   - Negated answer: 'Kevin'
+ * - Key `0` with value `['MENTAL STATUS EXAMINATION: Patient was oriented to ANSWER. Patient was not oriented to NOTANSWER.', 'person', 'place']`
+ *   - Fill-in-the-blank sentence: 'MENTAL STATUS EXAMINATION: Patient was oriented to ANSWER. Patient was not oriented to NOTANSWER.'
+ *   - Patient's answer: 'person'
+ *   - Negated answer: 'place'
  *
  * Usage: 'fillAnswers', 'createInitialHPI'
  */
@@ -76,24 +76,8 @@ export const selectivelyUppercase = (str: string): string => {
     return str;
 };
 
-// TODO: Add to consider PART_OF_SPEECH_CORRECTION_MAP_FIRST_COLUMN
-const selectivelyLowercase = (str: string): string => {
-    [
-        'ANSWER',
-        'NOTANSWER',
-        'ANSWER\\.',
-        'NOTANSWER\\.',
-        ...PART_OF_SPEECH_CORRECTION_MAP_FIRST_COLUMN, // TODO: add this part!
-    ].forEach((item) => {
-        const regEx = new RegExp(item, 'ig');
-        str = str.replace(regEx, item.toLowerCase().replace(/[\\]/g, ''));
-    });
-
-    return str;
-};
-
 // Checks if string has I in it, if so, returns it with quotes around.
-// e.g. ' I love my cat. ' --> '"I love cat."'
+// e.g. ' I love my cat. ' --> '"I love my cat."'
 const stringHasI = (str: string): string => {
     str = ' ' + str + ' ';
     return str.includes(' i ') || str.includes(' I ')
@@ -105,14 +89,11 @@ const stringHasI = (str: string): string => {
  * Filter sentences so that only those that don't have the keyword are kept in (unless both 'ANSWER' and 'NOTANSWER' are in it)
  *
  * e.g.
- * keyword = 'result'
- * text = "This is a notANSWER test. This ANSWER and NOTANSWER should not be removed. The answer is unclear. The result is inconclusive. Notanswer is also here."
- * return text = "This is a notANSWER test. This ANSWER and NOTANSWER should not be removed. The answer is unclear. Notanswer is also here."
+ * keyword = 'NOTANSWER'
+ * text = "Thought content, as expressed through their speech, revealed ANSWER thought processes. There was no evidence of NOTANSWER or other formal thought disturbance."
+ * return text = "Thought content, as expressed through their speech, revealed ANSWER thought processes."
  */
-export const removeSentence = (
-    fillSentence: string,
-    keyword: string
-): string => {
+const removeSentence = (fillSentence: string, keyword: string): string => {
     const containsBoth = (sentence: string): boolean =>
         /\bANSWER\b/.test(sentence) && /\bNOTANSWER\b/.test(sentence);
     // Split by period followed by a space but retain the periods in the result
@@ -125,37 +106,26 @@ export const removeSentence = (
         .join(' ');
 };
 
+// A Helper function to Remove punctuation except
+// periods (.), commas (,), forward slashes (/),
+// apostrophes ('), colons (:), hyphens (-), and parentheses (()).
+const retainAllowedPunctuation = (str: string): string => {
+    return str.replace(/[^\w\s'.,:/@()-]/g, '');
+};
+
 /**
- * Cleans and formats a sentence by managing unexpected punctuation and whitespace.
- *
- * If `isAdvancedReport` is true:
- * - Retains all punctuation and sentence case. [TODO: it might be removed.]
- *
- * Otherwise:
- * - Remove punctuation except periods (.), commas (,), forward slashes (/), apostrophes ('), colons (:), hyphens (-), and parentheses (()).
- * - Apply selective uppercasing.
+ * Cleans and formats a sentence by managing unexpected whitespace.
  * - Condense multiple spaces into a single space.
  * - Trim leading and trailing whitespace.
  *
  * e.g. Input:  "  This month is may. The lesion measures:      2.5cm.  "
  *      Output: "This month is May. The lesion measures 2.5cm."
  */
-export const fullClean = (
-    sentence: string,
-    isAdvancedReport: boolean
-): string => {
-    if (!isAdvancedReport) {
-        // TODO: Remove punctuation except periods, commas, forward slashes, apostrophes, colons, hyphens, and parentheses
-        sentence = sentence.replace(/[^\w\s'.,:/@()-]/g, '');
-        // TODO: Apply selective uppercasing.
-        sentence = selectivelyUppercase(sentence);
-    }
+export const fullClean = (sentence: string): string => {
     // Condense multiple spaces into a single space
     sentence = sentence.split(/\s+/).join(' ');
-
     // Trim leading and trailing whitespace.
     sentence = sentence.trim();
-
     return sentence;
 };
 
@@ -166,7 +136,7 @@ export const fullClean = (
  *
  * Parameters:
  * - `sentence` (string): The text with pronouns to replace.
- * - `pronounPack` (string[]): Pronoun forms [subject, object, possessive, reflexive, possessive pronoun].
+ * - `pronounPack` (string[]): Pronoun forms [subject, object, possessive adjectives, reflexive, possessive pronoun].
  *
  */
 const replacePronouns = (sentence: string, pronounPack: string[]) => {
@@ -211,7 +181,11 @@ const PART_OF_SPEECH_CORRECTION_MAP_FIRST_COLUMN = [
     ...PART_OF_SPEECH_CORRECTION_MAP.keys(),
 ];
 
+// TODO: organize it later
+const END_OF_SENTENCE_PUNC = '.!?';
+
 /**
+ * TODO: consider other cases [!?.]
  * Splits a string into sentences based on periods followed by whitespace.
  *
  * - By default, uses regex to split on periods followed by one or more whitespace characters.
@@ -242,6 +216,16 @@ export function capitalizeFirstLetter(str: string) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+// A Helper Function to capitalize the first letter of each word in the sentence,
+// ensuring that all other letters are in lowercase.
+export function capitalizeWords(str: string) {
+    return str
+        .toLowerCase() // Convert the entire sentence to lowercase first
+        .split(' ') // Split the sentence into words
+        .map((word) => capitalizeFirstLetter(word)) // Capitalize the first letter of each word
+        .join(' ');
+}
+
 // A Helper Function to capitalizes the replacement word if the original word starts with an uppercase letter.
 const replaceWordCaseSensitive = (word: string, replace: string) => {
     return /^[A-Z]/.test(word.trim())
@@ -249,9 +233,12 @@ const replaceWordCaseSensitive = (word: string, replace: string) => {
         : replace;
 };
 
-// TODO: organize it later
-const END_OF_SENTENCE_PUNC = '.!?';
-// TODO: organize it later
+/**
+ * A Helper Function is designed to replace specific words in a string with new words based on a given mapping,
+ * while also handling punctuation and sentence boundaries.
+ *
+ * Usage: fillMedicalTerms, abbreviate
+ */
 const replaceMappedWords = (
     hpiString: string,
     mapping: { [key: string]: string }
@@ -265,6 +252,92 @@ const replaceMappedWords = (
     return hpiString;
 };
 
+// Constant list of phrases to remove from the text.
+const phrasesToRemove = [
+    'The patient has been ',
+    'The patient has ',
+    'The patient is ',
+    'The patients ',
+    'The patient ',
+    "The patient's ",
+    'He ',
+    'She ',
+    'They ',
+];
+
+/**
+ * Function to remove specified phrases from provided text.
+ * It addresses cut-offs at the beginning for non-advanced reports.
+ */
+function removePhrases(text: string): string {
+    // TODO: Replace the title with 'The patient', to ensure remove the title with lastname. However, it might not need.
+    // text = text? text.replace(/\b(Ms\.|Mr\.|Mx\.)\s+[A-Za-z]+\b/g, 'The patient') : '';
+    let modifiedText = ' ' + text + ' '; // Padding with spaces
+    phrasesToRemove.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
+    phrasesToRemove.forEach((phrase) => {
+        modifiedText = modifiedText.replace(
+            new RegExp(`\\b${phrase}\\b`, 'g'),
+            ''
+        );
+    });
+    return modifiedText; // Remove the added spaces
+}
+
+/**
+ * Capitalizes the first letter of each sentence and the standalone 'i' in the text.
+ *
+ * - Replaces standalone 'i' with 'I' to ensure proper capitalization.
+ * - Capitalizes the first letter of the entire string if it's not empty.
+ * - Capitalizes the first letter of each sentence following punctuation marks (.!?).
+ * - Capitalizes the first letter following a colon when used in headings.
+ *
+ * */
+export const capitalize = (hpiString: string): string => {
+    // replace 'i' with I
+    hpiString = hpiString.replace(
+        /(^|\s|\b)i(\s|$|\b)/g,
+        (match, p1, p2) => p1 + 'I' + p2
+    );
+    // Capitalize the very first letter of the string
+    if (hpiString.length > 0) {
+        hpiString = capitalizeFirstLetter(hpiString);
+    }
+    // Capitalize the first letter of each sentence after each [.?!]
+    hpiString = hpiString.replace(
+        /([.?!])\s*([a-z])/g,
+        (match, p1, p2) => `${p1} ${p2.toUpperCase()}`
+    );
+    // replace to capitalize the word after heading ends with ':'
+    hpiString = hpiString.replace(/:\s+(\w)/g, (match, p1) => {
+        return `: ${capitalizeFirstLetter(p1)}`;
+    });
+    return hpiString;
+};
+
+// TODO: A Helper function to convert a verb into its third-person singular form. [NEW]
+// resource: https://road2english2.blogspot.com/2018/12/spelling-rules-for-present-simple-third.html
+function getThirdPersonSingularForm(verb: string) {
+    // Regular expression patterns for different cases
+    const endWithS = /[sxz]$/;
+    const endWithShCh = /(sh|ch)$/;
+    const endWithY = /[^aeiou]y$/;
+    const endWithO = /o$/;
+    // Handle verbs ending in -s, -x, -z, -sh, -ch
+    if (endWithS.test(verb) || endWithShCh.test(verb)) {
+        return verb + 'es';
+    }
+    // Handle verbs ending in consonant + -y
+    if (endWithY.test(verb)) {
+        return verb.slice(0, -1) + 'ies';
+    }
+    // Handle verbs ending in -o
+    if (endWithO.test(verb)) {
+        return verb + 'es';
+    }
+    // Handle all other verbs
+    return verb + 's';
+}
+
 /**
  * Processes fill sentences by inserting answers and negAnswers:
  * 1. Sorts numeric keys from the HPI object.
@@ -274,7 +347,7 @@ const replaceMappedWords = (
  *    - Replaces 'PARAGRAPHBREAK' with a new line.
  * 3. Combines and returns the processed sentences.
  */
-export const fillAnswers = (hpi: HPI, isAdvancedReport: boolean): string => {
+export const fillAnswers = (hpi: HPI): string => {
     const sortedKeys: number[] = Object.keys(hpi).map((val) => parseInt(val));
     // JS sorts numbers lexicographically by default
     sortedKeys.sort((lhs, rhs) => lhs - rhs);
@@ -282,9 +355,9 @@ export const fillAnswers = (hpi: HPI, isAdvancedReport: boolean): string => {
     let hpiString = '';
     sortedKeys.forEach((key) => {
         let [fillSentence, answer, negAnswer] = hpi[key] || hpi[key.toString()];
-        answer = fullClean(answer, isAdvancedReport);
-        negAnswer = fullClean(negAnswer, isAdvancedReport);
-        fillSentence = fullClean(fillSentence, isAdvancedReport);
+        answer = fullClean(answer);
+        negAnswer = fullClean(negAnswer);
+        fillSentence = fullClean(fillSentence);
 
         // 1. Handle the 'ANSWER' placeholder
         if (!answer.length)
@@ -292,7 +365,7 @@ export const fillAnswers = (hpi: HPI, isAdvancedReport: boolean): string => {
             fillSentence = removeSentence(fillSentence, 'ANSWER');
         else if (answer === 'all no') {
             // If the answer is 'all no', keep everything after 'ANSWER_'.
-            // e.g 'Question 6 reports ANSWER. Question 6 denies NOTANSWER.' --> 'Question 6 denies NOTANSWER.'
+            // e.g. 'Question 6 reports ANSWER. Question 6 denies NOTANSWER.' --> 'Question 6 denies NOTANSWER.'
             fillSentence = fillSentence.substring(
                 fillSentence.indexOf('ANSWER') + 7
             );
@@ -328,21 +401,21 @@ export const fillAnswers = (hpi: HPI, isAdvancedReport: boolean): string => {
  *   - `pronouns`: The selected pronouns.
  *   - `objPronoun`: Object form of the pronoun.
  *   - `posPronoun`: Possessive form of the pronoun.
- *   - `pronounPack`: Array of all relevant pronoun package.
+ *   - `pronounPack`: Array of all relevant pronoun package. [subject, object, possessive adjectivies, reflexive, possessive pronoun]
  */
 export const definePatientNameAndPronouns = (
     patientName: string,
     pronouns: PatientPronouns
 ): PatientDisplayName => {
     // define pronouns
-    let objPronoun: string = 'they';
-    let posPronoun: string = 'their';
+    let objPronoun: string = 'they'; // subPronouns
+    let posPronoun: string = 'their'; // posPronouns
     let pronounPack: string[] = [
-        'they',
-        'them',
-        'their',
-        'themselves',
-        'theirs',
+        'they', // subPronoun
+        'them', // objPronoun
+        'their', // posAdjective
+        'themselves', // refPronoun
+        'theirs', // posPronoun
     ];
     if (pronouns === PatientPronouns.She) {
         objPronoun = 'she';
@@ -351,7 +424,7 @@ export const definePatientNameAndPronouns = (
     } else if (pronouns === PatientPronouns.He) {
         objPronoun = 'he';
         posPronoun = 'his';
-        pronounPack = ['he', 'him', 'his', 'himself', 'his'];
+        pronounPack = ['he', 'him', 'him', 'himself', 'his'];
     }
     return {
         name: capitalizeFirstLetter(patientName),
@@ -394,7 +467,6 @@ export const fillPatient = (hpiString: string) => {
 };
 
 /**
- * TODO: organize it later.
  * Returns modified hpiString such that:
  * - Replaces "the patient's" and "their" with the patient's possessive pronoun (e.g., "her").
  * - Replaces "the patient" with the patient's name or object pronoun (e.g., "Ms. Smith" or "she").
@@ -473,7 +545,7 @@ export const fillNameAndPronouns = (
     return newHpiString.join(' ');
 };
 
-// TODO: add it
+// TODO: add it applying 'getThirdPersonSingularForm'
 const conjugateThirdPerson = (hpiString: string) => hpiString;
 
 /** Corrects grammatical errors in the input string based on predefined mappings. */
@@ -497,37 +569,12 @@ export const abbreviate = (hpiString: string): string => {
 };
 
 /**
- * TODO: organzie it later.
- * Capitalizes first word of every sentence and all ' i 's
- * */
-export const capitalize = (hpiString: string): string => {
-    // replace 'i' with I
-    hpiString = hpiString.replace(
-        /(^|\s|\b)i(\s|$|\b)/g,
-        (match, p1, p2) => p1 + 'I' + p2
-    );
-    // Capitalize the very first letter of the string
-    if (hpiString.length > 0) {
-        hpiString = capitalizeFirstLetter(hpiString);
-    }
-    // Capitalize the first letter of each sentence
-    hpiString = hpiString.replace(
-        /([.?!])\s*([a-z])/g,
-        (match, p1, p2) => `${p1} ${p2.toUpperCase()}`
-    );
-    // replace to capitalize the word after heading ends with ':'
-    hpiString = hpiString.replace(/:\s+(\w)/g, (match, p1) => {
-        return `: ${capitalizeFirstLetter(p1)}`;
-    });
-    return hpiString;
-};
-
-export const createInitialHPI = (
-    hpi: HPI,
-    isAdvancedReport: boolean
-): string => {
-    console.log('hpi', hpi);
-    return fillAnswers(hpi, isAdvancedReport);
+ * This function inserts the user's responses into the ANSWER and NOTANSWER tokens and
+ * concatenates the sentences based on the specified question order.
+ *
+ */
+export const createInitialHPI = (hpi: HPI): string => {
+    return fillAnswers(hpi);
 };
 
 export const createHPI = (
@@ -536,40 +583,35 @@ export const createHPI = (
     pronouns: PatientPronouns
 ): string => {
     const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
+    // Patient handling
     hpiString = fillPatient(hpiString);
+    // name and pronoun handling
     hpiString = fillNameAndPronouns(hpiString, patientInfo);
     // TODO: organize it later
     // hpiString = conjugateThirdPerson(hpiString); TODO: add to conjugate a base verb into its third-person singular form.
-    hpiString = partOfSpeechCorrection(hpiString); // TODO: add to consider case sensitivity and spacing.
-    hpiString = fillMedicalTerms(hpiString); // TODO:  add to consider case sensitivity and spacing.
-    hpiString = abbreviate(hpiString); // TODO:  add to consider case sensitivity and spacing.
+    hpiString = partOfSpeechCorrection(hpiString);
+    // medical term replacement operation
+    hpiString = fillMedicalTerms(hpiString);
+    // abbreviate term replacement operation
+    hpiString = abbreviate(hpiString);
     console.log('hpiString', hpiString);
     return hpiString;
 };
 
-// TODO: call in HPINote
-const phrasesToRemove = [
-    'The patient has been ',
-    'The patient has ',
-    'The patient is ',
-    'The patients ',
-    'The patient ',
-    "The patient's ",
-    'He ',
-    'She ',
-    'They ',
-];
-
-// Function to remove specified phrases TODO:[Added]
-// TODO: Address issues to consider case sensitivity and spacing.
-export function removePhrases(text: string): string {
-    let modifiedText = ' ' + text + ' '; // Padding with spaces
-    phrasesToRemove.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
-    phrasesToRemove.forEach((phrase) => {
-        modifiedText = modifiedText.replace(
-            new RegExp(`\\b${phrase}\\b`, 'g'),
-            ''
-        );
-    });
-    return modifiedText; // Remove the added spaces
+/**
+ * This function is designed to standardize and clean up generated text for consistency in non-advanced reporting contexts.
+ * It formats text by removing specific phrases and capitalizing the first letter of each sentence.
+ *
+ * Usage: HpiNote
+ */
+export function standardFormatter(str: string): string {
+    // Remove punctuation except periods, commas, forward slashes, apostrophes, colons, hyphens, and parentheses
+    let sentence = retainAllowedPunctuation(str);
+    // Apply selective uppercasing.
+    sentence = selectivelyUppercase(sentence);
+    // Removing specific phrases
+    sentence = removePhrases(sentence);
+    // Capitalizing the first letter of each sentence
+    sentence = capitalize(sentence);
+    return sentence;
 }

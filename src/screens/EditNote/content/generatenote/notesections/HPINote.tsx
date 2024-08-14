@@ -1,6 +1,10 @@
 import React from 'react';
 import { HPIText } from '@utils/getHPIText';
-import { splitByPeriod, capitalize, removePhrases } from '../generateHpiText';
+import {
+    splitByPeriod,
+    standardFormatter,
+    capitalizeWords,
+} from '../generateHpiText';
 import styles from './HPINote.module.scss';
 
 /**
@@ -22,12 +26,7 @@ function formatSentenceHeadingsAndNewlines(
 ) {
     let id = 1;
     const addHeading = (str: string) => {
-        str = str
-            .trim()
-            .toLowerCase()
-            .split(' ')
-            .map((word) => capitalize(word))
-            .join(' ');
+        str = capitalizeWords(str.trim());
         return (
             <React.Fragment key={str + id++}>
                 <br />
@@ -118,8 +117,7 @@ function formatSentenceHeadingsAndNewlines(
  * - Standard Format: Truncates the beginning of sentences, capitalizes the first letter of each sentence, and applies specific formatting rules.
  *
  * Function Calls:
- * - removePhrases: Truncates the beginning of sentences
- * - capitalize: Capitalizes the first letter of each sentence
+ * - standardFormatter: Truncates the beginning of sentences and capitalizes the first letter of each sentence
  * - formatSentenceHeadingsAndNewlines: Formats text by handling sentence headings and inserting newlines as needed. Adjusts formatting based on whether it’s an advanced report or not.
  * - splitByPeriod: Splits text into individual sentences based on periods. Helps in creating list items from the text.
  *
@@ -144,10 +142,8 @@ const HpiNote = ({
         // For non-advanced reports: Sentence beginnings are being cut off, and each sentence appears on a new line.
         const mainTexts = isAdvancedReport
             ? item.text
-            : capitalize(removePhrases(item.text));
-        const miscTexts = isAdvancedReport
-            ? item.miscNote
-            : capitalize(removePhrases(item.miscNote));
+            : standardFormatter(item.text);
+        const miscTexts = isAdvancedReport ? item.miscNote : item.miscNote;
 
         // Display the generated notes as a paragraph:
         if (isAdvancedReport || isParagraphFormat) {

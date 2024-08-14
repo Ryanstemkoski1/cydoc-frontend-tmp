@@ -778,10 +778,7 @@ function getHPIText(state: HPIReduxValues, isAdvancedReport = false) {
         // Populate actual response fields in the text, then split into a set of sentences.
         // // Split by '. ' without retain the period with each sentence
         return new Set(
-            splitByPeriod(
-                createInitialHPI(formattedHpi, isAdvancedReport),
-                true
-            ).filter(Boolean) // Remove any empty strings resulting from the split
+            splitByPeriod(createInitialHPI(formattedHpi), true).filter(Boolean) // Remove any empty strings resulting from the split
         );
     });
 
