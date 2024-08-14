@@ -13,7 +13,7 @@ import {
 import {
     HPI,
     createHPI,
-    createInitialHPI,
+    fillAnswers,
     splitByPeriod,
 } from '@screens/EditNote/content/generatenote/generateHpiText';
 import { ChiefComplaintsState } from '@redux/reducers/chiefComplaintsReducer';
@@ -729,7 +729,6 @@ export interface HPIReduxValues {
     userSurvey: UserSurveyState;
 }
 
-// TODOJING: what is this function, getHPIText? this also looks redundant. TODO: [The descirption is added.]
 /**
  * Generates text from Redux state, handling
  * various response types and removing duplicate answer sentences.
@@ -778,7 +777,7 @@ function getHPIText(state: HPIReduxValues, isAdvancedReport = false) {
         // Populate actual response fields in the text, then split into a set of sentences.
         // // Split by '. ' without retain the period with each sentence
         return new Set(
-            splitByPeriod(createInitialHPI(formattedHpi), true).filter(Boolean) // Remove any empty strings resulting from the split
+            splitByPeriod(fillAnswers(formattedHpi), true).filter(Boolean) // Remove any empty strings resulting from the split
         );
     });
 
