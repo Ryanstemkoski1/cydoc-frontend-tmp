@@ -46,7 +46,6 @@ import { selectPatientInformationState } from '@redux/selectors/patientInformati
 import { selectHpiState } from '@redux/selectors/hpiSelectors';
 import { selectMedicalHistoryState } from '@redux/selectors/medicalHistorySelector';
 import { redirect } from 'next/navigation';
-import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
 
 interface OwnProps {
     continue: (args?: OnNextClickParams) => void;
@@ -255,22 +254,16 @@ const CCSelection = (props: Props) => {
         setLoading(true);
         apiClient
             .post('/appointment', {
-                ...getHPIFormData(
-                    additionalSurvey,
-                    userSurveyState,
-                    {
-                        hpi: props.hpi,
-                        chiefComplaints: props.chiefComplaints,
-                        familyHistory: props.familyHistoryState,
-                        medications: props.medicationsState,
-                        medicalHistory: props.medicalHistoryState,
-                        patientInformation: props.patientInformationState,
-                        surgicalHistory: props.surgicalHistory,
-                        userSurvey: props.userSurveyState,
-                    },
-                    props.productDefinition
-                        ?.useAdvancedReportTextGeneration as boolean
-                ),
+                ...getHPIFormData(additionalSurvey, userSurveyState, {
+                    hpi: props.hpi,
+                    chiefComplaints: props.chiefComplaints,
+                    familyHistory: props.familyHistoryState,
+                    medications: props.medicationsState,
+                    medicalHistory: props.medicalHistoryState,
+                    patientInformation: props.patientInformationState,
+                    surgicalHistory: props.surgicalHistory,
+                    userSurvey: props.userSurveyState,
+                }),
                 clinician_id,
                 institution_id,
             })
@@ -338,7 +331,6 @@ const mapStateToProps = (state: CurrentNoteState) => {
         patientInformationState: selectPatientInformationState(state),
         surgicalHistory: selectSurgicalHistoryProcedures(state),
         userSurveyState: selectInitialPatientSurvey(state),
-        productDefinition: selectProductDefinitions(state),
     };
 };
 

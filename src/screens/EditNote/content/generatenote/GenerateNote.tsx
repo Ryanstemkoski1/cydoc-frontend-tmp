@@ -302,22 +302,17 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                         <h3> History of Present Illness </h3>
                         <HPINote
                             text={
-                                getHPIText(
-                                    {
-                                        hpi: props.hpi,
-                                        chiefComplaints: props.chiefComplaints,
-                                        familyHistory: props.familyHistoryState,
-                                        medications: props.medicationsState,
-                                        medicalHistory:
-                                            props.medicalHistoryState,
-                                        patientInformation:
-                                            props.patientInformationState,
-                                        surgicalHistory: props.surgicalHistory,
-                                        userSurvey: props.userSurvey,
-                                    },
-                                    props.productDefinition
-                                        ?.useAdvancedReportTextGeneration
-                                ) as HPIText[]
+                                getHPIText({
+                                    hpi: props.hpi,
+                                    chiefComplaints: props.chiefComplaints,
+                                    familyHistory: props.familyHistoryState,
+                                    medications: props.medicationsState,
+                                    medicalHistory: props.medicalHistoryState,
+                                    patientInformation:
+                                        props.patientInformationState,
+                                    surgicalHistory: props.surgicalHistory,
+                                    userSurvey: props.userSurvey,
+                                }) as HPIText[]
                             }
                             isAdvancedReport={
                                 props.productDefinition

@@ -34,12 +34,15 @@ import { isHPIResponseValid } from './getHPIFormData';
  * from nodes, handle conditional logic for displaying child nodes, and generate formatted HPI text.
  *
  * Key Functions:
+ * 1. Node Processing:
  * - `isEmpty(state: HPINoteProps, node: GraphNode): boolean`: Determines if a node's response is empty based on its type.
  * - `joinLists(items: string[], lastSeparator = 'and'): string`: Joins a list of strings into a grammatically correct sentence.
  * - `extractNode(state: HPINoteProps, node: GraphNode): [string, string, string]`: Formats a node's response for output.
  * - `getNodeConditions(node: ReduxNodeInterface): string[]`: Extracts conditional logic from a node's text.
  * - `checkParent(node: ReduxNodeInterface, state: HPINoteProps): string[]`: Determines which child nodes should be hidden based on the parent node's response.
  * - `extractNodes(source: string, state: HPINoteProps): [string, string, string][]`: Extracts and formats all nodes connected to a source node according to a specific order.
+ *
+ * 2. HPI Text Generation:
  * - `getHPIText(state: HPIReduxValues, isAdvancedReport: boolean): string`: Generates formatted HPI text based on the input state and report type, incorporating responses, conditional logic, and formatting rules.
  *
  */
@@ -730,14 +733,12 @@ export interface HPIReduxValues {
  *
  * - Retrieves and formats chief complaints and survey responses.
  * - Removes duplicate sentences across paragraphs.
- * - Optionally applies advanced formatting based on the `isAdvancedReport` flag.
  * - Adds miscellaneous notes from the state.
  *
  * @param state related data
- * @param isAdvancedReport flag to enable advanced report formatting
  * @returns Array of HPIText objects, including titles, text, and miscellaneous notes.
  */
-function getHPIText(state: HPIReduxValues, isAdvancedReport = false) {
+function getHPIText(state: HPIReduxValues) {
     /*
     formattedHpis is a dictionary in which each key is the chief complaint
     and the value is an array of template sentences.

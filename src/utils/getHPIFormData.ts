@@ -15,8 +15,7 @@ function sanitizeString(str: string) {
 export default function getHPIFormData(
     additionalSurvey: AdditionalSurvey,
     userSurvey: UserSurveyState,
-    state: HPIReduxValues,
-    isAdvancedReport: boolean
+    state: HPIReduxValues
 ) {
     const {
         legalFirstName: first_name = '',
@@ -43,7 +42,7 @@ export default function getHPIFormData(
         last_name: sanitizeString(last_name),
         date_of_birth,
         last_4_ssn,
-        hpi_text: JSON.stringify(getHPIText(updatedState, isAdvancedReport)),
+        hpi_text: JSON.stringify(getHPIText(updatedState)),
         clinician_last_name: sanitizeString(
             (userSurvey?.nodes['9']?.response ?? '') as string
         ).trim(),
