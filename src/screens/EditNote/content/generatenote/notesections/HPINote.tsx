@@ -139,15 +139,15 @@ const HpiNote = ({
     }
 
     const notes = text.map((item) => {
-        // For non-advanced reports: Sentence beginnings are being cut off, and each sentence appears on a new line.
+        // For non-advanced reports: Sentence beginnings are being cut off, and capitalizes the first letter of each sentence.
         const mainTexts =
             !isAdvancedReport && item.text
-                ? standardFormatter(item.text, isParagraphFormat)
+                ? standardFormatter(item.text)
                 : item.text;
 
         const miscTexts =
             !isAdvancedReport && item.miscNote
-                ? standardFormatter(item.miscNote, isParagraphFormat)
+                ? standardFormatter(item.miscNote)
                 : item.miscNote;
 
         // Display the generated notes as a paragraph:
