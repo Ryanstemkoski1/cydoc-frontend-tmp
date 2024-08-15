@@ -252,7 +252,7 @@ export const splitByPeriod = (str: string, flag?: boolean) => {
     const strArr = flag ? str.split(/(?<=\.\s)/) : str.split(/(?<=\.)\s+/);
     // Re-add spaces after titles
     const result = strArr.map((sentence) => {
-        return sentence.replace(/^(Mr\.|Mx\.|Ms\.)\s*/, '$1 ');
+        return sentence.replace(/\bMr\.|Mx\.|Ms\.\b/, (match) => match + ' ');
     });
     return result;
 };
@@ -699,18 +699,23 @@ function extractHeadings(str: string): string[] {
 }
 
 /**
- * Function to extract headings and normal text from a string.
+ * Extracts headings and associated normal text from a string.
  *
- * Headings: Identifies headings formatted with each word capitalized and followed by a colon.
- * Normal Text: Extracts and formats the text following the headings, ensuring the first sentence starts with a capital letter.
+ * The function identifies headings based on a specific format (capitalized words followed by a colon),
+ * then extracts the normal text that follows each heading. The result is an array of objects where each
+ * object contains a heading and its corresponding normal text.
  *
- * [{'Reason For Referral' : '......'}, {'Presentation' : '.......'}]
+ * Example output:
+ * [
+ *   { heading: 'Reason For Referral', normalText: '...' },
+ *   { heading: 'Presentation', normalText: '...' }
+ * ]
  */
 export function extractHeadingsWithNormalText(str: string) {
     const headings = extractHeadings(str);
     let heading: string = '';
     let normalText: string = str;
-    let result: { heading: string; normalText: string }[] = [];
+    const result: { heading: string; normalText: string }[] = [];
     let remainingText = str;
 
     for (let i = 0; i < headings.length; i++) {
@@ -721,7 +726,8 @@ export function extractHeadingsWithNormalText(str: string) {
             if (i === 0) {
                 normalText = remainingTextArr[0];
             } else {
-                heading = headings[i - 1]?.replace(':', '').trim();
+                // TODO: Removes the colon (':') from the heading. Consider whether this behavior should be different for advanced reports.
+                heading = capitalizeWords(headings[i - 1].replace(':', ''));
                 normalText = remainingTextArr[0];
             }
             result.push({ heading, normalText });
@@ -731,10 +737,13 @@ export function extractHeadingsWithNormalText(str: string) {
         }
     }
     if (remainingText.length && headings.length) {
-        heading = headings[headings.length - 1].replace(':', '').trim();
+        heading = capitalizeWords(
+            headings[headings.length - 1].replace(':', '')
+        );
+        normalText = remainingText;
         result.push({ heading, normalText });
     } else {
         result.push({ heading, normalText });
     }
-    // console.log('result', result, Object.keys(result).length);
+    return result;
 }
