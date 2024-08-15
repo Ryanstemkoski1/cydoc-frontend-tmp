@@ -1,6 +1,7 @@
 import { PART_OF_SPEECH_CORRECTION_MAP } from '@constants/hpiTextGenerationMapping';
 import { PatientPronouns } from '@constants/patientInformation';
 import { ABBREVIFY, MEDICAL_TERM_TRANSLATOR } from '@constants/word-mappings';
+import { text } from 'stream/consumers';
 
 /**
  * This interface represents a collection of HPI enties.
@@ -433,6 +434,11 @@ export const fillAnswers = (hpi: HPI): string => {
         // 3. Handle 'PARAGRAPHBREAK' token
         fillSentence = fillSentence.replace(/PARAGRAPHBREAK/g, '\n');
 
+        // 4. Handle 'HYPERLINK'
+        if (fillSentence.includes('HYPERLINK')) {
+            console.log('Hello, this is HYPERLINK');
+        }
+
         // Combines all fillSentence
         hpiString += `${fillSentence} `;
     });
@@ -654,6 +660,7 @@ export const createHPI = (
     hpiString = partOfSpeechCorrection(hpiString); // Apply part-of-speech corrections
     hpiString = fillMedicalTerms(hpiString); // Fill or correct medical terms
     hpiString = abbreviate(hpiString); // Apply common abbreviations
+    // extractHeadingsWithNormalText(hpiString);
     return hpiString;
 };
 
@@ -673,4 +680,61 @@ export function standardFormatter(str: string): string {
     // Capitalizing the first letter of each sentence
     sentence = capitalize(sentence);
     return sentence;
+}
+
+/**
+ * A Helper Function to extract headings from a string based on a specific format.
+ *
+ * Headings are defined as at least 8 uppercase letters followed by a colon (`:`).
+ *
+ * e.g., ['REASON FOR REFERRAL:', 'PRESENTATION:'].
+ */
+function extractHeadings(str: string): string[] {
+    // Regular expression to match potential headings
+    const headingRegex = /([A-Z\s]{8,}:)/g;
+    // Extract headings
+    const headings = str.match(headingRegex)?.filter(Boolean);
+    // If no headings are found, return an empty array
+    return headings || [];
+}
+
+/**
+ * Function to extract headings and normal text from a string.
+ *
+ * Headings: Identifies headings formatted with each word capitalized and followed by a colon.
+ * Normal Text: Extracts and formats the text following the headings, ensuring the first sentence starts with a capital letter.
+ *
+ * [{'Reason For Referral' : '......'}, {'Presentation' : '.......'}]
+ */
+export function extractHeadingsWithNormalText(str: string) {
+    const headings = extractHeadings(str);
+    let heading: string = '';
+    let normalText: string = str;
+    let result: { heading: string; normalText: string }[] = [];
+    let remainingText = str;
+
+    for (let i = 0; i < headings.length; i++) {
+        const remainingTextArr = remainingText
+            .split(headings[i])
+            .filter(Boolean);
+        if (remainingTextArr.length > 1) {
+            if (i === 0) {
+                normalText = remainingTextArr[0];
+            } else {
+                heading = headings[i - 1]?.replace(':', '').trim();
+                normalText = remainingTextArr[0];
+            }
+            result.push({ heading, normalText });
+            remainingText = remainingTextArr[1];
+        } else {
+            remainingText = remainingTextArr[0];
+        }
+    }
+    if (remainingText.length && headings.length) {
+        heading = headings[headings.length - 1].replace(':', '').trim();
+        result.push({ heading, normalText });
+    } else {
+        result.push({ heading, normalText });
+    }
+    // console.log('result', result, Object.keys(result).length);
 }
