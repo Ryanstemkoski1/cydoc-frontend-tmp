@@ -14,7 +14,7 @@ import styles from './HPINote.module.scss';
  * between headings and normal text based on the length of text and specific characters such as newlines and colons.
  * The output format is affected by the `isParagraphFormat` flag which determines whether to add additional line breaks.
  *
- * - Headings are bold and capitalized, added if text length exceeds 7 characters.
+ * - Headings are bold and capitalized (each word's first letter), added if text length exceeds 7 characters.
  * - Normal text is rendered as is.
  * - Handles newlines and colons for formatting.
  * - Adds extra line breaks if `isParagraphFormat` is true.
@@ -119,7 +119,7 @@ function formatSentenceHeadingsAndNewlines(
  * Function Calls:
  * - standardFormatter: Truncates the beginning of sentences and capitalizes the first letter of each sentence
  * - formatSentenceHeadingsAndNewlines: Formats text by handling sentence headings and inserting newlines as needed. Adjusts formatting based on whether it’s an advanced report or not.
- * - splitByPeriod: Splits text into individual sentences based on periods. Helps in creating list items from the text.
+ * - splitByPeriod: Splits text into individual sentences based on periods, while retaining periods. Helps in creating list items from the text.
  *
  * @param {HPIText[]} props.text - The text data to be formatted and displayed.
  * @param {boolean} [props.isParagraphFormat=false] - Flag to determine if the text should be displayed in paragraph format.
@@ -134,8 +134,9 @@ const HpiNote = ({
     isParagraphFormat?: boolean;
     isAdvancedReport?: boolean; // A boolean flag to identify Advanced Report generation.
 }) => {
-    if (!text || text.length === 0 || !Array.isArray(text)) {
-        return <div>No history of present illness reported</div>;
+    // Handle 'No history of present illness reported.'
+    if (typeof text === 'string') {
+        return <p>{text}</p>;
     }
 
     const notes = text.map((item) => {
