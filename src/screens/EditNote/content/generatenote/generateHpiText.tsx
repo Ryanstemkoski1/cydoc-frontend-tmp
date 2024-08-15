@@ -545,13 +545,13 @@ export const fillNameAndPronouns = (
         posPronoun,
     ];
 
+    // TODO: This retains the original logic. Split the hpiString to ensure the toggle control behavior works.
     let toggle = 1; // change this so that it gets replaced at random rather than alternating.
-
     // Split the hpiString by periods while retaining the periods. [consider 'NEW LINE']
-    // If patient's pronouns ia available, replace "[t]he patient|[patient]" with "she/he/they/name".
+    // If patient's pronouns is available, replace "[t]he patient|[patient]" with "she/he/they/name".
     // Otherwise, if patient's pronouns are not they/them, replace:
-    // 1) they with she/he 2) their with her/his 3) she's/he's with her/his 4) theirs with hers/his
-    // 5) them with her/him 6) himselves/herselves with himself/herself
+    // 1) they -> she/he 2) their -> her/his 3) she's/he's -> her/his 4) theirs -> hers/his
+    // 5) them -> her/him 6) himselves/herselves -> himself/herself
     const newHpiString = splitByPeriod(hpiString, true).map((sentence) => {
         // Replace "[t]he patient|[patient]" with "she/he/they/name"
         const patientRegex = /\b[Tt]he patient\b|\b[Pp]atient\b/g;
@@ -564,12 +564,20 @@ export const fillNameAndPronouns = (
                 posAdjective,
                 toggle
             );
-
+            // Toggle to alternate the replacements.
             toggle = (toggle + 1) % 2;
         }
 
-        // Replace all pronouns for PatientPronouns.They with ['they', 'them', 'their', 'themselves', 'theirs']
-        sentence = replacePronouns(sentence, pronounPack);
+        // Always replace all pronouns associated with [PatientPronouns.They] first, using this default set:
+        // ['they', 'them', 'their', 'themselves', 'theirs']
+        const defaultPronounPack = [
+            'they',
+            'them',
+            'their',
+            'themselves',
+            'theirs',
+        ];
+        sentence = replacePronouns(sentence, defaultPronounPack);
 
         // Replace "she's/he's/they's" with "her/his/their"
         sentence = sentence.replace(
@@ -577,14 +585,14 @@ export const fillNameAndPronouns = (
             ' ' + posAdjective + ' '
         );
 
-        // If patient's pronouns are not they/them/their, replace:
+        // If the patient's pronouns are "she" or "he", apply additional replacements with the specific pronoun pack.
         if (pronouns == PatientPronouns.She) {
             sentence = replacePronouns(sentence, pronounPack);
         } else if (pronouns == PatientPronouns.He) {
             sentence = replacePronouns(sentence, pronounPack);
         }
 
-        // other cases:
+        // Handle other specific cases, such as replacing "yourself" with "herself/himself".
         sentence = sentence.replace(
             / yourself /g,
             ' ' + posAdjective + 'self '
@@ -595,13 +603,16 @@ export const fillNameAndPronouns = (
         return sentence;
     });
 
-    return newHpiString.join('');
+    return newHpiString.join(''); // Combine the modified sentences back into a single string, retaining the original punctuation.
 };
 
 // TODO: add it applying 'getThirdPersonSingularForm'
 const conjugateThirdPerson = (hpiString: string) => hpiString;
 
-/** Corrects grammatical errors in the input string based on predefined mappings. */
+/**
+ * Corrects grammatical errors in the input string based on predefined mappings.
+ * e.g. ' she do ' -> ' she does '
+ **/
 const partOfSpeechCorrection = (hpiString: string): string => {
     PART_OF_SPEECH_CORRECTION_MAP.forEach((value: string, key: string) => {
         const regEx = new RegExp(`${key}`, 'gi');
@@ -610,31 +621,39 @@ const partOfSpeechCorrection = (hpiString: string): string => {
     return hpiString;
 };
 
-// Address medical term replacement operation
+/** Address medical term replacement operation **/
 export const fillMedicalTerms = (hpiString: string): string => {
     return replaceMappedWords(hpiString, MEDICAL_TERM_TRANSLATOR);
 };
 
-// Address abbreviate term replacement operation
+/** Address abbreviate term replacement operation **/
 export const abbreviate = (hpiString: string): string => {
     return replaceMappedWords(hpiString, ABBREVIFY);
 };
 
+/**
+ * Generates a complete HPI text by processing the input string with the patient's name and pronouns.
+ *
+ * This function handles several key tasks:
+ * 1. Defines and initializes the patient's name and pronouns using `definePatientNameAndPronouns`.
+ * 2. Replaces general patient references with appropriate pronouns using `fillPatientPronoun`.
+ * 3. Replaces specific occurrences of the patient's name and pronouns within the HPI string using `fillNameAndPronouns`.
+ * 4. Applies part-of-speech corrections to ensure grammatical accuracy with `partOfSpeechCorrection`.
+ * 5. Expands or corrects medical terms within the HPI string using `fillMedicalTerms`.
+ * 6. Applies common abbreviations where appropriate using `abbreviate`.
+ */
 export const createHPI = (
     hpiString: string,
     patientName: string,
     pronouns: PatientPronouns
 ): string => {
     const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
-    // Patient handling
-    hpiString = fillPatientPronoun(hpiString);
-    // name and pronoun handling
-    hpiString = fillNameAndPronouns(hpiString, patientInfo);
-
+    hpiString = fillPatientPronoun(hpiString); // General patient pronoun handling
+    hpiString = fillNameAndPronouns(hpiString, patientInfo); // Specific name and pronoun handling
     // hpiString = conjugateThirdPerson(hpiString); TODO: add to conjugate a base verb into its third-person singular form.
-    hpiString = partOfSpeechCorrection(hpiString);
-    hpiString = fillMedicalTerms(hpiString);
-    hpiString = abbreviate(hpiString);
+    hpiString = partOfSpeechCorrection(hpiString); // Apply part-of-speech corrections
+    hpiString = fillMedicalTerms(hpiString); // Fill or correct medical terms
+    hpiString = abbreviate(hpiString); // Apply common abbreviations
     return hpiString;
 };
 
