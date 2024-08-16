@@ -49,7 +49,7 @@ interface PatientDisplayName {
 }
 
 // Capitalizes specific terms from ETHNICITY and MONTHS arrays in the input.
-export const selectivelyUppercase = (str: string): string => {
+export const uppercaseEthnicityAndMonths = (str: string): string => {
     const ETHNICITY = ['Hispanic', 'Latino'];
     const MONTHS = [
         'January',
@@ -90,7 +90,7 @@ export const selectivelyUppercase = (str: string): string => {
 
 // Checks if string has I in it, if so, returns it with quotes around.
 // e.g. ' I love my cat. ' --> '"I love my cat."'
-const stringHasI = (str: string): string => {
+const putQuotesAroundFirstPerson = (str: string): string => {
     str = ' ' + str + ' ';
     return str.includes(' i ') || str.includes(' I ')
         ? '"' + str.replace(/ i /, ' I ').trim() + '"'
@@ -291,7 +291,7 @@ export function capitalizeFirstLetter(str: string) {
 
 // A Helper Function to capitalize the first letter of each word in the sentence,
 // ensuring that all other letters are in lowercase.
-export function capitalizeWords(str: string) {
+export function applyTitleCase(str: string) {
     return str
         .toLowerCase() // Convert the entire sentence to lowercase first
         .split(' ') // Split the sentence into words
@@ -328,38 +328,8 @@ const replaceMappedWords = (
     return hpiString;
 };
 
-// Constant list of phrases to remove from the text.
-const phrasesToRemove = [
-    'The patient has been ',
-    'The patient has ',
-    'The patient is ',
-    'The patients ',
-    'The patient ',
-    "The patient's ",
-    'He ',
-    'She ',
-    'They ',
-];
 
-/**
- * Function to remove specified phrases from provided text.
- * It addresses cut-offs at the beginning for non-advanced reports.
- */
-function removePhrases(text: string): string {
-    // TODO: Replace the title with 'The patient', to ensure remove the title with lastname. However, it might not need. ???
-    // text = text
-    //     ? text.replace(/\b(Ms\.|Mr\.|Mx\.)\s+[A-Za-z]+\b/g, 'The patient')
-    //     : '';
-    let modifiedText = ' ' + text + ' '; // Padding with spaces
-    phrasesToRemove.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
-    phrasesToRemove.forEach((phrase) => {
-        modifiedText = modifiedText.replace(
-            new RegExp(`\\b${phrase}\\b`, 'g'),
-            ''
-        );
-    });
-    return modifiedText; // Remove the added spaces
-}
+
 
 /**
  * Capitalizes the first letter of each sentence and the standalone 'i' in the text.
@@ -448,7 +418,7 @@ export const fillAnswers = (hpi: HPI): string => {
             );
         } else if (fillSentence.match(/ANSWER/)) {
             // Replace 'ANSWER' with the cleaned answer
-            fillSentence = fillSentence.replace(/ANSWER/, stringHasI(answer));
+            fillSentence = fillSentence.replace(/ANSWER/, putQuotesAroundFirstPerson(answer));
         }
 
         // 2. Handle the 'NOTANSWER' placeholder
@@ -535,7 +505,7 @@ export const definePatientNameAndPronouns = (
  *
  * other case: Replaces "him/her" with 'them'.
  */
-export const fillPatientPronoun = (hpiString: string) => {
+export const handlePAITerms = (hpiString: string) => {
     hpiString = hpiString.replace(/\brespondent/gi, (match) =>
         replaceWordCaseSensitive(match, 'patient')
     );
@@ -680,7 +650,7 @@ export const abbreviate = (hpiString: string): string => {
  * 1. Defines and initializes the patient's name and pronouns using 
  *   `definePatientNameAndPronouns`.
  * 2. Replaces general patient references with appropriate pronouns 
- *    using `fillPatientPronoun`.
+ *    using `handlePAITerms`.
  * 3. Replaces specific occurrences of the patient's name and pronouns within 
  *    the HPI string using `fillNameAndPronouns`.
  * 4. Applies part-of-speech corrections to ensure grammatical accuracy with 
@@ -689,13 +659,13 @@ export const abbreviate = (hpiString: string): string => {
  *    `fillMedicalTerms`.
  * 6. Applies common abbreviations where appropriate using `abbreviate`.
  */
-export const createHPI = (
+export const doAllHPIWordReplacements = (
     hpiString: string,
     patientName: string,
     pronouns: PatientPronouns
 ): string => {
     const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
-    hpiString = fillPatientPronoun(hpiString); // General patient pronoun handling
+    hpiString = handlePAITerms(hpiString); // General patient pronoun handling
     hpiString = fillNameAndPronouns(hpiString, patientInfo); // Specific name and pronoun handling
     // hpiString = conjugateThirdPerson(hpiString); TODO: add to conjugate a base verb into its third-person singular form.
     hpiString = partOfSpeechCorrection(hpiString); // Apply part-of-speech corrections
@@ -713,13 +683,11 @@ export const createHPI = (
  *
  * Usage: HpiNote
  */
-export function standardFormatter(str: string): string {
+export function advancedReportFormatter(str: string): string {
     // Remove punctuation except periods, commas, forward slashes, apostrophes, colons, hyphens, and parentheses
     let sentence = retainAllowedPunctuation(str);
     // Apply selective uppercasing.
-    sentence = selectivelyUppercase(sentence);
-    // Removing specific phrases
-    sentence = removePhrases(sentence);
+    sentence = uppercaseEthnicityAndMonths(sentence);
     // Capitalizing the first letter of each sentence
     sentence = capitalize(sentence);
     return sentence;
@@ -742,10 +710,14 @@ function extractHeadings(str: string): string[] {
 }
 
 /**
- * Extracts headings and associated normal text from a string.
- *
- * The function identifies headings based on a specific format (capitalized words followed by a colon),
- * then extracts the normal text that follows each heading. The result is an array of objects where each
+ * Extracts manually specified headings and 
+ * associated normal text from a string.
+ * 
+ * Manually specified headings are those that are hardcoded into the 
+ * knowledge graph via a specific capitalization and colon format.
+ * The function identifies headings based on a specific format (capitalized 
+ * words followed by a colon), then extracts the normal text that follows 
+ * each heading. The result is an array of objects where each
  * object contains a heading and its corresponding normal text.
  *
  * Example output:
@@ -770,7 +742,7 @@ export function extractHeadingsWithNormalText(str: string) {
                 normalText = remainingTextArr[0];
             } else {
                 // TODO: Removes the colon (':') from the heading. Consider whether this behavior should be different for advanced reports.
-                heading = capitalizeWords(headings[i - 1].replace(':', ''));
+                heading = applyTitleCase(headings[i - 1].replace(':', ''));
                 normalText = remainingTextArr[0];
             }
             result.push({ heading, normalText });
@@ -780,7 +752,7 @@ export function extractHeadingsWithNormalText(str: string) {
         }
     }
     if (remainingText.length && headings.length) {
-        heading = capitalizeWords(
+        heading = applyTitleCase(
             headings[headings.length - 1].replace(':', '')
         );
         normalText = remainingText;

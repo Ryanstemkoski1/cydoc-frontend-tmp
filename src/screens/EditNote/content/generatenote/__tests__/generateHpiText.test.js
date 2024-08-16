@@ -2,13 +2,13 @@ import { PatientPronouns } from '../../../../../constants/patientInformation';
 import {
     abbreviate,
     capitalize,
-    // createHPI,
+    // doAllHPIWordReplacements,
     // definePatientNameAndPronouns,
     fillAnswers,
     fillMedicalTerms,
     fillNameAndPronouns,
     fullClean,
-    fillPatientPronoun,
+    handlePAITerms,
     retainAllowedPunctuation,
 } from '../generateHpiText';
 
@@ -257,7 +257,7 @@ describe('generateHpiText', () => {
         // });
     });
 
-    describe('fillPatientPronoun', () => {
+    describe('handlePAITerms', () => {
         it('replaces respondent', () => {
             const hpiString = 'respondent loves cat.';
             const patientInfo = {
@@ -267,7 +267,7 @@ describe('generateHpiText', () => {
                 possessiveAdjective: 'their',
             };
             const expected = 'patient loves cat.';
-            expect(fillPatientPronoun(hpiString, patientInfo)).toEqual(expected);
+            expect(handlePAITerms(hpiString, patientInfo)).toEqual(expected);
         });
         it("replaces the client's", () => {
             const hpiString = "the client's cat name is Molly.";
@@ -278,7 +278,7 @@ describe('generateHpiText', () => {
                 possessiveAdjective: 'their',
             };
             const expected = "the patient's cat name is Molly.";
-            expect(fillPatientPronoun(hpiString, patientInfo)).toEqual(expected);
+            expect(handlePAITerms(hpiString, patientInfo)).toEqual(expected);
         });
         it('replaces He/she', () => {
             const hpiString = 'He/she loves dog, and he/she also loves cat.';
@@ -289,7 +289,7 @@ describe('generateHpiText', () => {
                 possessiveAdjective: 'their',
             };
             const expected = 'Patient loves dog, and patient also loves cat.';
-            expect(fillPatientPronoun(hpiString, patientInfo)).toEqual(expected);
+            expect(handlePAITerms(hpiString, patientInfo)).toEqual(expected);
         });
     });
 
@@ -378,7 +378,7 @@ describe('generateHpiText', () => {
         });
     });
 
-    describe.todo('createHPI', () => {
+    describe.todo('doAllHPIWordReplacements', () => {
         // // TODO: Fix below tests
         // it('chains everything together', () => {
         //     const hpi = {
@@ -398,14 +398,14 @@ describe('generateHpiText', () => {
         //         'Additionally, his family has a history of hypertension. ' +
         //         // TODO: need to account for direct object pronouns
         //         'Barriers that make it difficult for he: so I work long hours. ';
-        //     expect(createHPI(hpi, patientName, PatientPronouns.He)).toEqual(
+        //     expect(doAllHPIWordReplacements(hpi, patientName, PatientPronouns.He)).toEqual(
         //         expected
         //     );
         // });
         // it('generates text for the example', () => {
         //     const patientName = 'Ms. Lee';
         //     expect(
-        //         createHPI(EXAMPLE, patientName, PatientPronouns.She)
+        //         doAllHPIWordReplacements(EXAMPLE, patientName, PatientPronouns.She)
         //     ).toMatchSnapshot();
         // });
     });

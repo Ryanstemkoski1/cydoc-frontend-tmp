@@ -2,7 +2,7 @@ import React from 'react';
 import { HPIText } from '@utils/getHPIText';
 import {
     splitByPeriod,
-    standardFormatter,
+    advancedReportFormatter,
     extractHeadingsWithNormalText,
 } from '../generateHpiText';
 import styles from './HPINote.module.scss';
@@ -18,7 +18,7 @@ import styles from './HPINote.module.scss';
  *   and applies specific formatting rules.
  *
  * Function Calls:
- * - standardFormatter: Truncates the beginning of sentences and capitalizes 
+ * - advancedReportFormatter: Truncates the beginning of sentences and capitalizes 
  *   the first letter of each sentence for standard formatting.
  * - formatSentenceHeadingsAndNewlines: Formats text by managing headings 
  *   and newlines, adjusting for advanced reports if applicable.
@@ -48,12 +48,12 @@ const HpiNote = ({
         // and capitalizes the first letter of each sentence.
         const mainTexts =
             !isAdvancedReport && item.text
-                ? standardFormatter(item.text)
+                ? advancedReportFormatter(item.text)
                 : item.text;
 
         const miscTexts =
             !isAdvancedReport && item.miscNote
-                ? standardFormatter(item.miscNote)
+                ? advancedReportFormatter(item.miscNote)
                 : item.miscNote;
 
         // extract heading and associated normal text

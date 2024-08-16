@@ -12,7 +12,7 @@ import {
 } from '@constants/hpiEnums';
 import {
     HPI,
-    createHPI,
+    doAllHPIWordReplacements,
     fillAnswers,
     splitByPeriod,
 } from '@screens/EditNote/content/generatenote/generateHpiText';
@@ -810,7 +810,7 @@ function getHpiArrayWithNoDups(state: WholeNoteReduxValues) {
             title.push(Object.keys(formattedHpis)[i]);
             return [
                 ...acc,
-                createHPI(
+                doAllHPIWordReplacements(
                     Array.from(hpiStringSet).join(' '),
                     state.patientInformation.patientName,
                     state.patientInformation.pronouns
