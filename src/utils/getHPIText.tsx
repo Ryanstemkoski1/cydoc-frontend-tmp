@@ -1,7 +1,7 @@
 import { YesNoResponse } from '@constants/enums';
 import {
     BodyLocationType,
-    HpiResponseType,
+    NodeResponseType,
     LabTestType,
     ListTextInput,
     NodeInterface,
@@ -27,24 +27,35 @@ import { UserSurveyState } from '@redux/reducers/userViewReducer';
 import { isHPIResponseValid } from './getHPIFormData';
 
 /**
- * @module getHPIText
+ * @module getHpiArrayWithNoDups
  *
- * This module provides utilities for processing and formatting responses from an input questionnaire.
- * It includes functions to check if responses are empty, join lists of strings, extract and format data
- * from nodes, handle conditional logic for displaying child nodes, and generate formatted HPI text.
+ * This module provides utilities for processing and formatting responses 
+ * from an input questionnaire. It includes functions to check if responses 
+ * are empty, join lists of strings, extract and format data from nodes, 
+ * handle conditional logic for displaying child nodes, and generate 
+ * formatted HPI text.
  *
  * Key Functions:
  * 1. Node Processing:
- * - `isEmpty(state: HPINoteProps, node: GraphNode): boolean`: Determines if a node's response is empty based on its type.
- * - `joinLists(items: string[], lastSeparator = 'and'): string`: Joins a list of strings into a grammatically correct sentence.
- * - `extractNode(state: HPINoteProps, node: GraphNode): [string, string, string]`: Formats a node's response for output.
- * - `getNodeConditions(node: ReduxNodeInterface): string[]`: Extracts conditional logic from a node's text.
- * - `checkParent(node: ReduxNodeInterface, state: HPINoteProps): string[]`: Determines which child nodes should be hidden based on the parent node's response.
- * - `extractNodes(source: string, state: HPINoteProps): [string, string, string][]`: Extracts and formats all nodes connected to a source node according to a specific order.
+ * - `isEmpty(state: WholeNoteProps, node: GraphNode): boolean`: 
+ *    Determines if a node's response is empty based on its type.
+ * - `joinLists(items: string[], lastSeparator = 'and'): string`: 
+ *    Joins a list of strings into a grammatically correct sentence.
+ * - `extractNode(state: WholeNoteProps, node: GraphNode): [string, string, string]`: 
+ *    Formats a node's response for output.
+ * - `getNodeConditions(node: ReduxNodeInterface): string[]`: 
+ *    Extracts conditional logic from a node's text.
+ * - `checkParent(node: ReduxNodeInterface, state: WholeNoteProps): string[]`: 
+ *    Determines which child nodes should be hidden based on the parent node's 
+ *    response.
+ * - `extractNodes(source: string, state: WholeNoteProps): [string, string, string][]`: 
+ *    Extracts and formats all nodes connected to a source node according to 
+ *    a specific order.
  *
  * 2. HPI Text Generation:
- * - `getHPIText(state: HPIReduxValues, isAdvancedReport: boolean): string`: Generates formatted HPI text based on the input state and report type, incorporating responses, conditional logic, and formatting rules.
- *
+ * - `getHpiArrayWithNoDups(state: WholeNoteReduxValues, isAdvancedReport: boolean): string`: 
+ *   Generates formatted HPI text based on the input state and report type, 
+ *   incorporating responses, conditional logic, and formatting rules.
  */
 
 /**
@@ -59,7 +70,7 @@ import { isHPIResponseValid } from './getHPIFormData';
  * - `patientInformation`: Basic patient info.
  * - `chiefComplaints`: Main complaints from the patient.
  */
-interface HPINoteProps {
+interface WholeNoteProps {
     hpi: HpiState;
     familyHistory: FamilyHistoryState;
     medications: MedicationsState;
@@ -70,9 +81,11 @@ interface HPINoteProps {
 }
 
 /* Represents a node in the graph with associated HPI response data. */
-export type GraphNode = NodeInterface & { response: HpiResponseType };
+export type GraphNode = NodeInterface & { response: NodeResponseType };
 
-/* Defines the structure of a Redux node, utilized in getNodeConditions and checkParent functions. */
+/* Defines the structure of a Redux node, utilized in getNodeConditions 
+* and checkParent functions. 
+*/
 export type ReduxNodeInterface = {
     uid: string;
     medID: string;
@@ -87,11 +100,11 @@ export type ReduxNodeInterface = {
     blankTemplate: string;
     blankYes: string;
     blankNo: string;
-    response: HpiResponseType;
+    response: NodeResponseType;
 };
 
 /* Returns whether the user has responded to this node or not */
-export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
+export const isEmpty = (state: WholeNoteProps, node: GraphNode): boolean => {
     switch (node.responseType) {
         case ResponseTypes.YES_NO:
         case ResponseTypes.NO_YES:
@@ -204,7 +217,7 @@ export const joinLists = (items: string[], lastSeparator = 'and'): string => {
  * Pre-condition: node has non-empty response according to its type
  */
 export const extractNode = (
-    state: HPINoteProps,
+    state: WholeNoteProps,
     node: GraphNode
 ): [string, string, string] => {
     /* eslint-disable no-case-declarations, no-fallthrough */
@@ -521,7 +534,7 @@ export function getNodeConditions(node: ReduxNodeInterface) {
 */
 export const checkParent = (
     node: ReduxNodeInterface,
-    state: HPINoteProps
+    state: WholeNoteProps
 ): string[] => {
     const medId = node.medID;
     const { response, responseType } = node;
@@ -581,7 +594,7 @@ export const checkParent = (
  */
 export const extractNodes = (
     source: string,
-    state: HPINoteProps
+    state: WholeNoteProps
 ): [string, string, string][] => {
     const formattedHpi: [string, string, string][] = [],
         order = state.hpi.order[source];
@@ -603,7 +616,7 @@ export const extractNodes = (
  * Pre-condition: hpi.graph is already sorted according to edge order and
  * there are no cycles
  */
-export const extractHpi = (state: HPINoteProps): { [key: string]: HPI } => {
+export const extractHpiArray = (state: WholeNoteProps): { [key: string]: HPI } => {
     const formattedHpis: { [key: string]: HPI } = {};
     if (Object.keys(state.hpi.order).length) {
         for (const nodeId of Object.keys(state.hpi.order)) {
@@ -661,8 +674,9 @@ export function getListTextResponseAsSingleString(response = {}): string {
 }
 
 /*
- * Generates an array of HPIText objects from the UserSurveyState, formatting responses based on their type and excluding a specific node.
- * Used with the `getHPIText` function.
+ * Generates an array of HPIText objects from the UserSurveyState, formatting 
+ * responses based on their type and excluding a specific node.
+ * Used with the `getHpiArrayWithNoDups` function.
  */
 function getInitialSurveyResponses(state: UserSurveyState): HPIText[] {
     const responses: HPIText[] = [];
@@ -714,9 +728,9 @@ function getInitialSurveyResponses(state: UserSurveyState): HPIText[] {
  * Includes states for HPI, family history, medications, surgical history,
  * medical history, patient information, chief complaints, and user survey.
  *
- * Used with the `getHPIText` function.
+ * Used with the `getHpiArrayWithNoDups` function.
  */
-export interface HPIReduxValues {
+export interface WholeNoteReduxValues {
     hpi: HpiState;
     familyHistory: FamilyHistoryState;
     medications: MedicationsState;
@@ -738,15 +752,15 @@ export interface HPIReduxValues {
  * @param state related data
  * @returns Array of HPIText objects, including titles, text, and miscellaneous notes.
  */
-function getHPIText(state: HPIReduxValues) {
+function getHpiArrayWithNoDups(state: WholeNoteReduxValues) {
     /*
-    formattedHpis is a dictionary in which each key is the chief complaint
-    and the value is an array of template sentences.
+    Return an array of HPIText objects from which duplicate sentences have 
+    been removed.
 
-    The following will convert each CC's array of template sentences into a
+    Convert each chief complaint's array of template sentences into a
     paragraph, which is then re-split into an array and converted into a Set
     of sentences for de-duplication within the paragraph and comparison with
-    latter chief complaints.
+    later chief complaints.
 
     Specifically, each chief complaint set will be compared with later chief
     complaint sets to look for duplicate sentences (finding the complement of
@@ -757,8 +771,10 @@ function getHPIText(state: HPIReduxValues) {
     const initialSurveyResponse = getInitialSurveyResponses(state.userSurvey);
 
     const hpiTextResult: HPIText[] = [];
-
-    const formattedHpis = extractHpi(state);
+    
+    // formattedHpis is a dictionary in which each key is the chief complaint
+    // and the value is an array of template sentences.
+    const formattedHpis = extractHpiArray(state);
 
     if (!Object.keys(formattedHpis).length) {
         if (!initialSurveyResponse.length) {
@@ -825,4 +841,4 @@ function getHPIText(state: HPIReduxValues) {
     return [...hpiTextResult, ...initialSurveyResponse];
 }
 
-export default getHPIText;
+export default getHpiArrayWithNoDups;

@@ -1,10 +1,10 @@
 import {
-    HpiResponseType,
+    NodeResponseType,
     ResponseTypes,
     SelectManyInput,
     SelectOneInput,
 } from '@constants/hpiEnums';
-import getHPIText, { HPIReduxValues } from './getHPIText';
+import getHpiArrayWithNoDups, { WholeNoteReduxValues } from './getHpiArrayWithNoDups';
 import { UserSurveyState } from '@redux/reducers/userViewReducer';
 import { AdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
 
@@ -15,7 +15,7 @@ function sanitizeString(str: string) {
 export default function getHPIFormData(
     additionalSurvey: AdditionalSurvey,
     userSurvey: UserSurveyState,
-    state: HPIReduxValues
+    state: WholeNoteReduxValues
 ) {
     const {
         legalFirstName: first_name = '',
@@ -42,7 +42,7 @@ export default function getHPIFormData(
         last_name: sanitizeString(last_name),
         date_of_birth,
         last_4_ssn,
-        hpi_text: JSON.stringify(getHPIText(updatedState)),
+        hpi_text: JSON.stringify(getHpiArrayWithNoDups(updatedState)),
         clinician_last_name: sanitizeString(
             (userSurvey?.nodes['9']?.response ?? '') as string
         ).trim(),
@@ -64,7 +64,7 @@ export function isResponseValid(response = {}): boolean {
 }
 
 export function isHPIResponseValid(
-    response: HpiResponseType,
+    response: NodeResponseType,
     responseType: ResponseTypes
 ): boolean {
     switch (responseType) {

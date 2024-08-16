@@ -8,16 +8,22 @@ import {
 import styles from './HPINote.module.scss';
 
 /**
- * The HpiNote component is responsible for formatting and displaying Generate Notes. It manages the presentation of
- * notes either as a list or paragraph based on the provided flags[`isAdvancedReport` and `isParagraphFormat`].
- *
- * - Advanced Report: Formats the text without altering punctuation or capitalization.
- * - Standard Format: Truncates the beginning of sentences, capitalizes the first letter of each sentence, and applies specific formatting rules.
+ * The HpiNote component is responsible for formatting and displaying the HPI.
+ * Text can be displayed either as a list or paragraph based on the provided 
+ * flags[`isAdvancedReport` and `isParagraphFormat`].
+ * - Advanced Report: Formats the text without altering punctuation or 
+ *   capitalization.
+ * - Standard Format (for Smart Patient Intake Form): Truncates the beginning 
+ *   of sentences, capitalizes the first letter of each sentence, 
+ *   and applies specific formatting rules.
  *
  * Function Calls:
- * - standardFormatter: Truncates the beginning of sentences and capitalizes the first letter of each sentence for standard formatting.
- * - formatSentenceHeadingsAndNewlines: Formats text by managing headings and newlines, adjusting for advanced reports if applicable.
- * - splitByPeriod: Splits text into sentences while retaining periods, useful for creating list items from text.
+ * - standardFormatter: Truncates the beginning of sentences and capitalizes 
+ *   the first letter of each sentence for standard formatting.
+ * - formatSentenceHeadingsAndNewlines: Formats text by managing headings 
+ *   and newlines, adjusting for advanced reports if applicable.
+ * - splitByPeriod: Splits text into sentences while retaining periods, 
+ *   useful for creating list items from text.
  *
  * @param {HPIText[]} props.text - The text data to be formatted and displayed.
  * @param {boolean} [props.isParagraphFormat=false] - Flag to determine if the text should be displayed in paragraph format.
@@ -38,7 +44,8 @@ const HpiNote = ({
     }
 
     const notes = text.map((item) => {
-        // For non-advanced reports: Sentence beginnings are being cut off, and capitalizes the first letter of each sentence.
+        // For non-advanced reports: Sentence beginnings are being cut off, 
+        // and capitalizes the first letter of each sentence.
         const mainTexts =
             !isAdvancedReport && item.text
                 ? standardFormatter(item.text)

@@ -51,7 +51,7 @@ import SurgicalHistoryNote from './notesections/SurgicalHistoryNote';
 import NavigationButton from '@components/tools/NavigationButton/NavigationButton';
 import { PatientPronouns } from '@constants/patientInformation';
 import 'screens/EditNote/content/hpi/knowledgegraph/css/Button.css';
-import getHPIText, { HPIText } from '@utils/getHPIText';
+import getHpiArrayWithNoDups, { HPIText } from '@utils/getHPIText';
 import './GenerateNote.css';
 import PatientInfo from './PatientInfo';
 
@@ -302,7 +302,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                         <h3> History of Present Illness </h3>
                         <HPINote
                             text={
-                                getHPIText({
+                                getHpiArrayWithNoDups({
                                     hpi: props.hpi,
                                     chiefComplaints: props.chiefComplaints,
                                     familyHistory: props.familyHistoryState,
