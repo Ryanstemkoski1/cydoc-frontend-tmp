@@ -125,8 +125,8 @@ describe('generateHpiText', () => {
         //     const gender = 'M';
         //     const expected = {
         //         name: 'Mr. Foo',
-        //         subPronoun: 'he',
-        //         posAdjective: 'his',
+        //         subjectPronoun: 'he',
+        //         possessiveAdjective: 'his',
         //     };
         //     expect(
         //         definePatientNameAndPronouns(title, lastname, gender)
@@ -138,8 +138,8 @@ describe('generateHpiText', () => {
         //     const gender = 'F';
         //     const expected = {
         //         name: 'Ms. Foo',
-        //         subPronoun: 'she',
-        //         posAdjective: 'her',
+        //         subjectPronoun: 'she',
+        //         possessiveAdjective: 'her',
         //     };
         //     expect(
         //         definePatientNameAndPronouns(title, lastname, gender)
@@ -151,8 +151,8 @@ describe('generateHpiText', () => {
         //     const gender = 'F';
         //     const expected = {
         //         name: 'Dr. Foo',
-        //         subPronoun: 'she',
-        //         posAdjective: 'her',
+        //         subjectPronoun: 'she',
+        //         possessiveAdjective: 'her',
         //     };
         //     expect(
         //         definePatientNameAndPronouns(title, lastname, gender)
@@ -166,8 +166,8 @@ describe('generateHpiText', () => {
             const patientInfo = {
                 name: '',
                 pronouns: PatientPronouns.She,
-                subPronoun: 'she',
-                posAdjective: 'her',
+                subjectPronoun: 'she',
+                possessiveAdjective: 'her',
             };
             const expected = 'her dog is cute.';
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
@@ -179,8 +179,8 @@ describe('generateHpiText', () => {
             const patientInfo = {
                 name: 'Judy',
                 pronouns: PatientPronouns.She,
-                subPronoun: 'she',
-                posAdjective: 'her',
+                subjectPronoun: 'she',
+                possessiveAdjective: 'her',
             };
             const expected = "Ms. Judy's dog is cute.";
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
@@ -193,8 +193,8 @@ describe('generateHpiText', () => {
             const patientInfo = {
                 name: 'Judy',
                 pronouns: PatientPronouns.He,
-                subPronoun: 'he',
-                posAdjective: 'his',
+                subjectPronoun: 'he',
+                possessiveAdjective: 'his',
             };
             const expected =
                 "Mr. Judy's dog is cute. His dog's name is Muffin and Muffin likes icecream.";
@@ -208,11 +208,11 @@ describe('generateHpiText', () => {
             const patientInfo = {
                 name: 'Mike',
                 pronouns: PatientPronouns.They,
-                subPronoun: 'they',
-                posAdjective: 'their',
-                objPronoun: 'them',
-                posPronoun: 'theirs',
-                refPronoun: 'themselves',
+                subjectPronoun: 'they',
+                possessiveAdjective: 'their',
+                objectPronoun: 'them',
+                possessivePronoun: 'theirs',
+                reflexivePronoun: 'themselves',
             };
             const expected =
                 'They has many problems with their dogs; nobody loves them.';
@@ -226,8 +226,8 @@ describe('generateHpiText', () => {
         //     expect(
         //         fillNameAndPronouns('', {
         //             name: '',
-        //             subPronoun: '',
-        //             posAdjective: '',
+        //             subjectPronoun: '',
+        //             possessiveAdjective: '',
         //         })
         //     ).toEqual('');
         // });
@@ -235,8 +235,8 @@ describe('generateHpiText', () => {
         //     const inp = "their name? the patient's age?";
         //     const patient = {
         //         name: 'foo',
-        //         subPronoun: 'she',
-        //         posAdjective: 'her',
+        //         subjectPronoun: 'she',
+        //         possessiveAdjective: 'her',
         //     };
         //     const expected = 'her name? her age?';
         //     expect(fillNameAndPronouns(inp, patient)).toEqual(expected);
@@ -247,8 +247,8 @@ describe('generateHpiText', () => {
         //         'patient feels better. the patient recovered';
         //     const patient = {
         //         name: 'foo',
-        //         subPronoun: 'she',
-        //         posAdjective: 'her',
+        //         subjectPronoun: 'she',
+        //         possessiveAdjective: 'her',
         //     };
         //     const expected =
         //         'foo is tired. she slept, and she feels better.' +
@@ -263,8 +263,8 @@ describe('generateHpiText', () => {
             const patientInfo = {
                 name: '',
                 pronouns: PatientPronouns.They,
-                subPronoun: 'they',
-                posAdjective: 'their',
+                subjectPronoun: 'they',
+                possessiveAdjective: 'their',
             };
             const expected = 'patient loves cat.';
             expect(fillPatientPronoun(hpiString, patientInfo)).toEqual(expected);
@@ -274,8 +274,8 @@ describe('generateHpiText', () => {
             const patientInfo = {
                 name: '',
                 pronouns: PatientPronouns.They,
-                subPronoun: 'they',
-                posAdjective: 'their',
+                subjectPronoun: 'they',
+                possessiveAdjective: 'their',
             };
             const expected = "the patient's cat name is Molly.";
             expect(fillPatientPronoun(hpiString, patientInfo)).toEqual(expected);
@@ -285,8 +285,8 @@ describe('generateHpiText', () => {
             const patientInfo = {
                 name: '',
                 pronouns: PatientPronouns.They,
-                subPronoun: 'they',
-                posAdjective: 'their',
+                subjectPronoun: 'they',
+                possessiveAdjective: 'their',
             };
             const expected = 'Patient loves dog, and patient also loves cat.';
             expect(fillPatientPronoun(hpiString, patientInfo)).toEqual(expected);
