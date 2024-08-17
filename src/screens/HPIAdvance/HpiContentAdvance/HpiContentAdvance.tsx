@@ -28,6 +28,10 @@ import { selectSurgicalHistoryProcedures } from '@redux/selectors/surgicalHistor
 import { NotificationTypeEnum } from '@components/tools/Notification/Notification';
 import useQuery from '@hooks/useQuery';
 import { ReadonlyURLSearchParams } from 'next/navigation';
+import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
+import { setProductDefinitionAction } from '@redux/actions/productDefinitionAction';
+import { ProductType } from '@constants/FormPreferencesConstant';
+import MiscBox from '../../EditNote/content/hpi/knowledgegraph/components/MiscBox';
 
 interface OwnProps {
     notification: {
@@ -71,6 +75,11 @@ class HPIContent extends React.Component<Props, State> {
             const data = hpiHeaders;
             data.then((res) => this.props.saveHpiHeader(res.data));
         }
+
+        // set the product definition according to any API result for product definition
+        this.props.setProductDefinitionAction(
+            ProductType.ADVANCED_REPORT_GENERATION
+        );
     }
 
     getData = async (complaint: string) => {
@@ -149,9 +158,8 @@ class HPIContent extends React.Component<Props, State> {
     };
 
     render() {
-        const { chiefComplaints, hpiHeaders } = this.props;
+        const { chiefComplaints, hpiHeaders, productDefinition } = this.props;
         const { bodySystems, parentNodes } = hpiHeaders;
-
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
         /* Creates list of body system buttons to add in the front page. 
            Loops through state variable, bodySystems, saved from the API */
@@ -187,6 +195,16 @@ class HPIContent extends React.Component<Props, State> {
         ) {
             return (
                 <>
+                    {productDefinition?.showMiscNotesBox && (
+                        <MiscBox
+                            activeThing={
+                                Object.keys(
+                                    parentNodes[this.props.activeItem]
+                                )[0]
+                            }
+                            step={0}
+                        />
+                    )}
                     {this.props.activeItem in parentNodes && (
                         <DiseaseForm
                             key={
@@ -251,6 +269,7 @@ const mapStateToProps = (state: CurrentNoteState) => {
         medicalHistoryState: selectMedicalHistoryState(state),
         surgicalHistory: selectSurgicalHistoryProcedures(state),
         userSurveyState: selectInitialPatientSurvey(state),
+        productDefinition: selectProductDefinitions(state),
     };
 };
 
@@ -259,6 +278,7 @@ const mapDispatchToProps = {
     saveHpiHeader,
     setChiefComplaint,
     setNotesChiefComplaint,
+    setProductDefinitionAction,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
