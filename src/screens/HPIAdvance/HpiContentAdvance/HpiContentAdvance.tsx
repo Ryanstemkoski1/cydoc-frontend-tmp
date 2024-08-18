@@ -196,14 +196,7 @@ class HPIContent extends React.Component<Props, State> {
             return (
                 <>
                     {productDefinition?.showMiscNotesBox && (
-                        <MiscBox
-                            activeThing={
-                                Object.keys(
-                                    parentNodes[this.props.activeItem]
-                                )[0]
-                            }
-                            step={0}
-                        />
+                        <MiscBox activeThing={this.props.activeItem} step={0} />
                     )}
                     {this.props.activeItem in parentNodes && (
                         <DiseaseForm
