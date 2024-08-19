@@ -34,7 +34,7 @@ import { isSelectOneResponse } from '@redux/reducers/hpiReducer';
 import { InitialQuestionsState } from '@redux/reducers/userViewReducer';
 import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
 import getHPIFormData, { isResponseValid } from '@utils/getHPIFormData';
-import { getListTextResponseAsSingleString } from '@utils/getHPIText';
+import { getListTextResponseAsSingleString } from '@utils/textGeneration/extraction/getHPIArray';
 import { getQuestionnairesFromText } from '@utils/getQuestionnairesFromText';
 import { loadChiefComplaintsData } from '@utils/loadKnowledgeGraphData';
 import { OnNextClickParams } from '../Hpi';

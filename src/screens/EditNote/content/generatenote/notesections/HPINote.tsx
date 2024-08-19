@@ -1,5 +1,5 @@
 import React from 'react';
-import { HPIText } from '@utils/getHPIText';
+import { HPIText } from '@utils/textGeneration/extraction/getHPIArray';
 import { extractHeadingsWithNormalText } from '../formatter/handleManuallySpecifiedHeadings';
 import styles from './HPINote.module.scss';
 import { splitByPeriod } from '@utils/textGeneration/common/textUtils';
