@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter } from '../common/textUtils';
+import { capitalizeFirstLetter } from '../../../../../utils/textGeneration/common/textUtils';
 
 /**
  * A Helper function to remove punctuation except periods (.), commas (,),

@@ -3,7 +3,7 @@ import { HPIText } from '@utils/getHPIText';
 import { extractHeadingsWithNormalText } from '../generateHpiText';
 import styles from './HPINote.module.scss';
 import { splitByPeriod } from '@utils/textGeneration/common/textUtils';
-import { smartFormFormatter } from '@utils/textGeneration/formatter/handleSmartFormFormatting';
+import { smartFormFormatter } from '../formatter/handleSmartFormFormatting';
 
 /**
  * The HpiNote component is responsible for formatting and displaying the HPI.
