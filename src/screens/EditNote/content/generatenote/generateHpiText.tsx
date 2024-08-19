@@ -16,20 +16,20 @@ import { text } from 'stream/consumers';
  * answer they gave, and the patient's answer can be the empty string
  *
  * Example:
- * - Key `0` with value `['MENTAL STATUS EXAMINATION: Patient was oriented to 
- *                        ANSWER. Patient was not oriented to NOTANSWER.', 
- *                        'person', 
+ * - Key `0` with value `['MENTAL STATUS EXAMINATION: Patient was oriented to
+ *                        ANSWER. Patient was not oriented to NOTANSWER.',
+ *                        'person',
  *                        'place']`
- *   - Fill-in-the-blank sentence: 'MENTAL STATUS EXAMINATION: Patient was 
+ *   - Fill-in-the-blank sentence: 'MENTAL STATUS EXAMINATION: Patient was
  *                  oriented to ANSWER. Patient was not oriented to NOTANSWER.'
  *   - Selected answer: 'person'
  *   - Negated answer: 'place'
- * 
+ *
  * Later on, the selected answer (which was an answer that was clicked or
  * marked Yes) will be inserted in place of the ANSWER token, while the
  * negated answer if present (which was an answer marked No) will be inserted
  * in place of the NOTANSWER token.
- * 
+ *
  * Usage: 'fillAnswers', 'createInitialHPI'
  */
 export interface HPI {
@@ -98,15 +98,15 @@ const putQuotesAroundFirstPerson = (str: string): string => {
 };
 
 /**
- * Filter sentences so that only those that don't have the keyword are kept in 
+ * Filter sentences so that only those that don't have the keyword are kept in
  * (unless both 'ANSWER' and 'NOTANSWER' are in it)
  *
  * e.g.
  * keyword = 'NOTANSWER'
- * text = "Thought content, as expressed through their speech, revealed 
- *         ANSWER thought processes. There was no evidence of NOTANSWER 
+ * text = "Thought content, as expressed through their speech, revealed
+ *         ANSWER thought processes. There was no evidence of NOTANSWER
  *         or other formal thought disturbance."
- * return text = "Thought content, as expressed through their speech, 
+ * return text = "Thought content, as expressed through their speech,
  *         revealed ANSWER thought processes."
  */
 const removeSentence = (fillSentence: string, keyword: string): string => {
@@ -116,7 +116,7 @@ const removeSentence = (fillSentence: string, keyword: string): string => {
     return splitByPeriod(fillSentence)
         .filter(
             (sentence) =>
-                // Keep the sentence if it doesn't contain the keyword or if 
+                // Keep the sentence if it doesn't contain the keyword or if
                 // it contains both 'ANSWER' and 'NOTANSWER'
                 !sentence.match(new RegExp(keyword) || containsBoth(sentence))
         )
@@ -124,11 +124,11 @@ const removeSentence = (fillSentence: string, keyword: string): string => {
 };
 
 /**
- * A Helper function to remove punctuation except periods (.), commas (,), 
- * forward slashes (/), apostrophes ('), colons (:), hyphens (-), 
+ * A Helper function to remove punctuation except periods (.), commas (,),
+ * forward slashes (/), apostrophes ('), colons (:), hyphens (-),
  * and parentheses (()).
  *
- * TODO: This function maintains the previous logic, should it consider 
+ * TODO: This function maintains the previous logic, should it consider
  * double quotation marks (")?
  */
 export const retainAllowedPunctuation = (str: string): string => {
@@ -151,7 +151,7 @@ export const fullClean = (sentence: string): string => {
     return sentence;
 };
 
-// A Helper Function to generate a title prefix for the given lastname based 
+// A Helper Function to generate a title prefix for the given lastname based
 // on the specified pronoun.
 const generateTitleWithName = (name: string, subjectPronoun: string) => {
     return subjectPronoun === 'he'
@@ -162,11 +162,11 @@ const generateTitleWithName = (name: string, subjectPronoun: string) => {
 };
 
 /**
- * A Helper Function is part of 'fillNameAndPronouns' and retain the previous 
+ * A Helper Function is part of 'fillNameAndPronouns' and retain the previous
  * logic involving the boolean flags toggle.
- * - Replace "[t]he patient's" and "[t]heir" with the patient's possessive 
+ * - Replace "[t]he patient's" and "[t]heir" with the patient's possessive
  *   adjective (e.g: 'her', 'his', 'their')
- * - Replace "[t]he patient|[patient]" with "she/he/they/name". 
+ * - Replace "[t]he patient|[patient]" with "she/he/they/name".
  *   (e.g., "Ms. Smith" or "she" or "he" or "they").
  */
 const replacePatientPronounsOrName = (
@@ -209,13 +209,18 @@ const replacePatientPronounsOrName = (
  *
  * Parameters:
  * - `sentence` (string): The text with pronouns to replace.
- * - `pronounPack` (string[]): Pronoun forms [subject, object, 
+ * - `pronounPack` (string[]): Pronoun forms [subject, object,
  *   possessive adjectives, reflexive, possessive pronoun].
  *
  */
 const replacePronouns = (sentence: string, pronounPack: string[]) => {
-    const [subjectPronoun, objectPronoun, possessiveAdjective, reflexivePronoun, possessivePronoun] =
-        pronounPack;
+    const [
+        subjectPronoun,
+        objectPronoun,
+        possessiveAdjective,
+        reflexivePronoun,
+        possessivePronoun,
+    ] = pronounPack;
 
     // Replace pronouns in the sentence
     sentence = sentence.replace(/\b(he|she|they)\b/gi, (match) =>
@@ -255,9 +260,9 @@ const replacePronouns = (sentence: string, pronounPack: string[]) => {
  * TODO: consider other cases [!?.]
  * Splits a string into sentences based on periods followed by whitespace.
  *
- * - By default, uses regex to split on periods followed by one or more 
+ * - By default, uses regex to split on periods followed by one or more
  *   whitespace characters.
- * - If `flag` is true, splits on periods followed by whitespace while 
+ * - If `flag` is true, splits on periods followed by whitespace while
  *   preserving [NEW LINE] characters.
  *
  * Examples:
@@ -265,11 +270,11 @@ const replacePronouns = (sentence: string, pronounPack: string[]) => {
  *  I work at Ms. Rachel's company.
  *  How can I assist you today?`;
  *
- * - Default: ["Hello.", "My name is Mr. Huang.", 
+ * - Default: ["Hello.", "My name is Mr. Huang.",
  *             "I work at Ms.Rachel's company.", "How can I assist you today?"]
- * - With flag: ["Hello. ", 
- *               "My name is Mr. Huang.\n", 
- *               "    I work at Ms.Rachel's company.\n", 
+ * - With flag: ["Hello. ",
+ *               "My name is Mr. Huang.\n",
+ *               "    I work at Ms.Rachel's company.\n",
  *               "    How can I assist you today?\n"]
  */
 export const splitByPeriod = (str: string, flag?: boolean) => {
@@ -299,7 +304,7 @@ export function applyTitleCase(str: string) {
         .join(' ');
 }
 
-// A Helper Function to capitalizes the replacement word if the original 
+// A Helper Function to capitalizes the replacement word if the original
 // word starts with an uppercase letter.
 const replaceWordCaseSensitive = (word: string, replace: string) => {
     return /^[A-Z]/.test(word.trim())
@@ -308,7 +313,7 @@ const replaceWordCaseSensitive = (word: string, replace: string) => {
 };
 
 /**
- * A Helper Function is designed to replace specific words in a string with 
+ * A Helper Function is designed to replace specific words in a string with
  * new words based on a given mapping,
  * while also handling punctuation and sentence boundaries.
  *
@@ -327,9 +332,6 @@ const replaceMappedWords = (
     });
     return hpiString;
 };
-
-
-
 
 /**
  * Capitalizes the first letter of each sentence and the standalone 'i' in the text.
@@ -418,7 +420,10 @@ export const fillAnswers = (hpi: HPI): string => {
             );
         } else if (fillSentence.match(/ANSWER/)) {
             // Replace 'ANSWER' with the cleaned answer
-            fillSentence = fillSentence.replace(/ANSWER/, putQuotesAroundFirstPerson(answer));
+            fillSentence = fillSentence.replace(
+                /ANSWER/,
+                putQuotesAroundFirstPerson(answer)
+            );
         }
 
         // 2. Handle the 'NOTANSWER' placeholder
@@ -498,9 +503,9 @@ export const definePatientNameAndPronouns = (
  * instead of "patient" and "the patient's," and "he/she" instead of "patient."
  *
  * Perform the following string replacements before inserting name and pronouns:
- * Replace "respondent" with "patient" | Replace "the client's" with 
+ * Replace "respondent" with "patient" | Replace "the client's" with
  * "the patient's" |
- * Replace "he/she" with "patient" (as in literally the strong "he/she" with 
+ * Replace "he/she" with "patient" (as in literally the strong "he/she" with
  * the slash included, needs to be changed to "patient")
  *
  * other case: Replaces "him/her" with 'them'.
@@ -592,7 +597,7 @@ export const fillNameAndPronouns = (
             ' ' + possessiveAdjective + ' '
         );
 
-        // If the patient's pronouns are "she" or "he", apply 
+        // If the patient's pronouns are "she" or "he", apply
         // additional replacements with the specific pronoun pack.
         if (pronouns == PatientPronouns.She) {
             sentence = replacePronouns(sentence, pronounPack);
@@ -600,7 +605,7 @@ export const fillNameAndPronouns = (
             sentence = replacePronouns(sentence, pronounPack);
         }
 
-        // Handle other specific cases, such as replacing "yourself" 
+        // Handle other specific cases, such as replacing "yourself"
         // with "herself/himself".
         sentence = sentence.replace(
             / yourself /g,
@@ -612,9 +617,9 @@ export const fillNameAndPronouns = (
         return sentence;
     });
 
-    // Combine the modified sentences back into a single string, 
+    // Combine the modified sentences back into a single string,
     // retaining the original punctuation.
-    return newHpiString.join(''); 
+    return newHpiString.join('');
 };
 
 // TODO: add it applying 'getThirdPersonSingularForm'
@@ -643,19 +648,19 @@ export const abbreviate = (hpiString: string): string => {
 };
 
 /**
- * Generates a complete HPI text by processing the input string with the 
+ * Generates a complete HPI text by processing the input string with the
  * patient's name and pronouns.
  *
  * This function handles several key tasks:
- * 1. Defines and initializes the patient's name and pronouns using 
+ * 1. Defines and initializes the patient's name and pronouns using
  *   `definePatientNameAndPronouns`.
- * 2. Replaces general patient references with appropriate pronouns 
+ * 2. Replaces general patient references with appropriate pronouns
  *    using `handlePAITerms`.
- * 3. Replaces specific occurrences of the patient's name and pronouns within 
+ * 3. Replaces specific occurrences of the patient's name and pronouns within
  *    the HPI string using `fillNameAndPronouns`.
- * 4. Applies part-of-speech corrections to ensure grammatical accuracy with 
+ * 4. Applies part-of-speech corrections to ensure grammatical accuracy with
  *   `partOfSpeechCorrection`.
- * 5. Expands or corrects medical terms within the HPI string using 
+ * 5. Expands or corrects medical terms within the HPI string using
  *    `fillMedicalTerms`.
  * 6. Applies common abbreviations where appropriate using `abbreviate`.
  */
@@ -676,9 +681,9 @@ export const doAllHPIWordReplacements = (
 };
 
 /**
- * This function is designed to standardize and clean up generated text for 
+ * This function is designed to standardize and clean up generated text for
  * consistency in non-advanced reporting contexts.
- * It formats text by removing specific phrases and capitalizing the first 
+ * It formats text by removing specific phrases and capitalizing the first
  * letter of each sentence.
  *
  * Usage: HpiNote
@@ -710,13 +715,13 @@ function extractHeadings(str: string): string[] {
 }
 
 /**
- * Extracts manually specified headings and 
+ * Extracts manually specified headings and
  * associated normal text from a string.
- * 
- * Manually specified headings are those that are hardcoded into the 
+ *
+ * Manually specified headings are those that are hardcoded into the
  * knowledge graph via a specific capitalization and colon format.
- * The function identifies headings based on a specific format (capitalized 
- * words followed by a colon), then extracts the normal text that follows 
+ * The function identifies headings based on a specific format (capitalized
+ * words followed by a colon), then extracts the normal text that follows
  * each heading. The result is an array of objects where each
  * object contains a heading and its corresponding normal text.
  *

@@ -29,32 +29,32 @@ import { isHPIResponseValid } from './getHPIFormData';
 /**
  * @module getHpiArrayWithNoDups
  *
- * This module provides utilities for processing and formatting responses 
- * from an input questionnaire. It includes functions to check if responses 
- * are empty, join lists of strings, extract and format data from nodes, 
- * handle conditional logic for displaying child nodes, and generate 
+ * This module provides utilities for processing and formatting responses
+ * from an input questionnaire. It includes functions to check if responses
+ * are empty, join lists of strings, extract and format data from nodes,
+ * handle conditional logic for displaying child nodes, and generate
  * formatted HPI text.
  *
  * Key Functions:
  * 1. Node Processing:
- * - `isEmpty(state: WholeNoteProps, node: GraphNode): boolean`: 
+ * - `isEmpty(state: WholeNoteProps, node: GraphNode): boolean`:
  *    Determines if a node's response is empty based on its type.
- * - `joinLists(items: string[], lastSeparator = 'and'): string`: 
+ * - `joinLists(items: string[], lastSeparator = 'and'): string`:
  *    Joins a list of strings into a grammatically correct sentence.
- * - `extractNode(state: WholeNoteProps, node: GraphNode): [string, string, string]`: 
+ * - `extractNode(state: WholeNoteProps, node: GraphNode): [string, string, string]`:
  *    Formats a node's response for output.
- * - `getNodeConditions(node: ReduxNodeInterface): string[]`: 
+ * - `getNodeConditions(node: ReduxNodeInterface): string[]`:
  *    Extracts conditional logic from a node's text.
- * - `checkParent(node: ReduxNodeInterface, state: WholeNoteProps): string[]`: 
- *    Determines which child nodes should be hidden based on the parent node's 
+ * - `checkParent(node: ReduxNodeInterface, state: WholeNoteProps): string[]`:
+ *    Determines which child nodes should be hidden based on the parent node's
  *    response.
- * - `extractNodes(source: string, state: WholeNoteProps): [string, string, string][]`: 
- *    Extracts and formats all nodes connected to a source node according to 
+ * - `extractNodes(source: string, state: WholeNoteProps): [string, string, string][]`:
+ *    Extracts and formats all nodes connected to a source node according to
  *    a specific order.
  *
  * 2. HPI Text Generation:
- * - `getHpiArrayWithNoDups(state: WholeNoteReduxValues, isAdvancedReport: boolean): string`: 
- *   Generates formatted HPI text based on the input state and report type, 
+ * - `getHpiArrayWithNoDups(state: WholeNoteReduxValues, isAdvancedReport: boolean): string`:
+ *   Generates formatted HPI text based on the input state and report type,
  *   incorporating responses, conditional logic, and formatting rules.
  */
 
@@ -83,9 +83,9 @@ interface WholeNoteProps {
 /* Represents a node in the graph with associated HPI response data. */
 export type GraphNode = NodeInterface & { response: NodeResponseType };
 
-/* Defines the structure of a Redux node, utilized in getNodeConditions 
-* and checkParent functions. 
-*/
+/* Defines the structure of a Redux node, utilized in getNodeConditions
+ * and checkParent functions.
+ */
 export type ReduxNodeInterface = {
     uid: string;
     medID: string;
@@ -616,7 +616,9 @@ export const extractNodes = (
  * Pre-condition: hpi.graph is already sorted according to edge order and
  * there are no cycles
  */
-export const extractHpiArray = (state: WholeNoteProps): { [key: string]: HPI } => {
+export const extractHpiArray = (
+    state: WholeNoteProps
+): { [key: string]: HPI } => {
     const formattedHpis: { [key: string]: HPI } = {};
     if (Object.keys(state.hpi.order).length) {
         for (const nodeId of Object.keys(state.hpi.order)) {
@@ -674,7 +676,7 @@ export function getListTextResponseAsSingleString(response = {}): string {
 }
 
 /*
- * Generates an array of HPIText objects from the UserSurveyState, formatting 
+ * Generates an array of HPIText objects from the UserSurveyState, formatting
  * responses based on their type and excluding a specific node.
  * Used with the `getHpiArrayWithNoDups` function.
  */
@@ -771,7 +773,7 @@ function getHpiArrayWithNoDups(state: WholeNoteReduxValues) {
     const initialSurveyResponse = getInitialSurveyResponses(state.userSurvey);
 
     const hpiTextResult: HPIText[] = [];
-    
+
     // formattedHpis is a dictionary in which each key is the chief complaint
     // and the value is an array of template sentences.
     const formattedHpis = extractHpiArray(state);

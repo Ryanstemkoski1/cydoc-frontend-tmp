@@ -4,7 +4,7 @@ import {
     SelectManyInput,
     SelectOneInput,
 } from '@constants/hpiEnums';
-import getHpiArrayWithNoDups, { WholeNoteReduxValues } from './getHpiArrayWithNoDups';
+import getHpiArrayWithNoDups, { WholeNoteReduxValues } from './getHPIText';
 import { UserSurveyState } from '@redux/reducers/userViewReducer';
 import { AdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
 
