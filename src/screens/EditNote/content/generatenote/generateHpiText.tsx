@@ -688,7 +688,7 @@ export const doAllHPIWordReplacements = (
  *
  * Usage: HpiNote
  */
-export function advancedReportFormatter(str: string): string {
+export function smartFormFormatter(str: string): string {
     // Remove punctuation except periods, commas, forward slashes, apostrophes, colons, hyphens, and parentheses
     let sentence = retainAllowedPunctuation(str);
     // Apply selective uppercasing.
