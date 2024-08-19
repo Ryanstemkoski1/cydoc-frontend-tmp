@@ -34,3 +34,13 @@ export const splitByPeriod = (str: string, flag?: boolean) => {
     });
     return result;
 };
+
+/**
+ * Function to capitalizes the replacement word if the original
+ * word starts with an uppercase letter.
+ */
+export const replaceWordCaseSensitive = (word: string, replace: string) => {
+    return /^[A-Z]/.test(word.trim())
+        ? capitalizeFirstLetter(replace)
+        : replace;
+};
