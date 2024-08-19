@@ -7,7 +7,7 @@ import {
 } from '@constants/hpiEnums';
 import { CurrentNoteState } from '@redux/reducers';
 import { isHPIResponseValid } from '@utils/getHPIFormData';
-import { getNodeConditions } from '@utils/getHPIText';
+import { getNodeConditions } from '@utils/textGeneration/extraction/extractHpi';
 
 function traverseNodes(
     currNodes: string[],
