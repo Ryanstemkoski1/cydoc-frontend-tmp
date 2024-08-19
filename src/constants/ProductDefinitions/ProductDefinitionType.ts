@@ -8,4 +8,5 @@ export interface ProductDefinitions {
     showNewPatientGeneration: boolean;
     useAdvancedReportTextGeneration: boolean;
     displayedNodesCutOff: number;
+    showMiscNotesBox: boolean;
 }

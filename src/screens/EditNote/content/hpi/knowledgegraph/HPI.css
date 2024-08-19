@@ -148,20 +148,19 @@
 
 .hpi-text-drop {
     position: fixed;
-    bottom: 80px;
-    left: 50%;
-    transform: translate(-50%, 0px);
+    bottom: 135px;
+    right: 20px;
     background: white;
     padding: 20px;
     border-radius: 20px;
     z-index: 100;
     opacity: 0.9;
-    width: calc(100% - 30px);
+    /* width: calc(100% - 30px); */
     box-shadow: 0 0 12px rgb(0 0 0 / 30%);
 }
 .hpi-text-drop-folded {
     position: fixed;
-    bottom: 80px;
+    bottom: 135px;
     right: 20px;
     background: white;
     padding: 20px;
@@ -184,17 +183,17 @@
 }
 @media only screen and (min-width: 767px) and (max-width: 991px) {
     .hpi-text-drop {
-        width: 723px;
+        width: 450px;
     }
 }
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
     .hpi-text-drop {
-        width: 933px;
+        width: 675px;
     }
 }
 @media only screen and (min-width: 1200px) {
     .hpi-text-drop {
-        width: 1127px;
+        width: 880px;
     }
 }
 

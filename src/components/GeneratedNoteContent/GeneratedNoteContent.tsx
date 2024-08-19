@@ -229,6 +229,7 @@ const GeneratedNoteContent = (
                         <ParseAndRenderHpiNote
                             hpiText={hpiText}
                             isParagraphFormat={false}
+                            isAdvancedReport={true}
                         />
                     </Box>
                 )}

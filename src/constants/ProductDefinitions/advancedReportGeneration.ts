@@ -6,4 +6,5 @@ export const AdvancedReportGeneration: ProductDefinitions = {
     showNewPatientGeneration: true,
     useAdvancedReportTextGeneration: true,
     displayedNodesCutOff: 1000,
+    showMiscNotesBox: true,
 };
