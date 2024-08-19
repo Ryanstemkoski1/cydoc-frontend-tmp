@@ -17,7 +17,7 @@ import {
     SelectManyInput,
 } from '@constants/hpiEnums';
 import { HPI } from '../processing/fillHPIAnswers'; // TODO: fixing
-import { extractNode } from '@utils/getHPIText';
+import { extractNode } from './extractNodeDetails';
 import { YesNoResponse } from '@constants/enums';
 import { isHPIResponseValid } from '@utils/getHPIFormData';
 
