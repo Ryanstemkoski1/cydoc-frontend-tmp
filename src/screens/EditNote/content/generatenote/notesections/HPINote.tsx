@@ -1,6 +1,6 @@
 import React from 'react';
 import { HPIText } from '@utils/getHPIText';
-import { extractHeadingsWithNormalText } from '../generateHpiText';
+import { extractHeadingsWithNormalText } from '../formatter/handleManuallySpecifiedHeadings';
 import styles from './HPINote.module.scss';
 import { splitByPeriod } from '@utils/textGeneration/common/textUtils';
 import { smartFormFormatter } from '../formatter/handleSmartFormFormatting';
