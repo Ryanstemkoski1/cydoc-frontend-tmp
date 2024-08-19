@@ -128,18 +128,6 @@ const removeSentence = (fillSentence: string, keyword: string): string => {
 };
 
 /**
- * A Helper function to remove punctuation except periods (.), commas (,),
- * forward slashes (/), apostrophes ('), colons (:), hyphens (-),
- * and parentheses (()).
- *
- * TODO: This function maintains the previous logic, should it consider
- * double quotation marks (")?
- */
-export const retainAllowedPunctuation = (str: string): string => {
-    return str.replace(/[^\w\s'.,:/@()-]/g, '');
-};
-
-/**
  * Cleans and formats a sentence by managing unexpected whitespace.
  * - Condense multiple spaces into a single space.
  * - Trim leading and trailing whitespace.
@@ -298,60 +286,6 @@ const replaceMappedWords = (
     });
     return hpiString;
 };
-
-/**
- * Capitalizes the first letter of each sentence and the standalone 'i' in the text.
- *
- * - Replaces standalone 'i' with 'I' to ensure proper capitalization.
- * - Capitalizes the first letter of the entire string if it's not empty.
- * - Capitalizes the first letter of each sentence following punctuation marks (.!?).
- * - Capitalizes the first letter following a colon when used in headings.
- * */
-export const capitalize = (hpiString: string): string => {
-    // replace 'i' with I
-    hpiString = hpiString.replace(
-        /(^|\s|\b)i(\s|$|\b)/g,
-        (match, p1, p2) => p1 + 'I' + p2
-    );
-    // Capitalize the very first letter of the string
-    if (hpiString.length > 0) {
-        hpiString = capitalizeFirstLetter(hpiString);
-    }
-    // Capitalize the first letter of each sentence after each [.?!]
-    hpiString = hpiString.replace(
-        /([.?!])\s*([a-z])/g,
-        (match, p1, p2) => `${p1} ${p2.toUpperCase()}`
-    );
-    // replace to capitalize the word after heading ends with ':'
-    hpiString = hpiString.replace(/:\s+(\w)/g, (match, p1) => {
-        return `: ${capitalizeFirstLetter(p1)}`;
-    });
-    return hpiString;
-};
-
-// TODO: A Helper function to convert a verb into its third-person singular form. [NEW]
-// resource: https://road2english2.blogspot.com/2018/12/spelling-rules-for-present-simple-third.html
-function getThirdPersonSingularForm(verb: string) {
-    // Regular expression patterns for different cases
-    const endWithS = /[sxz]$/;
-    const endWithShCh = /(sh|ch)$/;
-    const endWithY = /[^aeiou]y$/;
-    const endWithO = /o$/;
-    // Handle verbs ending in -s, -x, -z, -sh, -ch
-    if (endWithS.test(verb) || endWithShCh.test(verb)) {
-        return verb + 'es';
-    }
-    // Handle verbs ending in consonant + -y
-    if (endWithY.test(verb)) {
-        return verb.slice(0, -1) + 'ies';
-    }
-    // Handle verbs ending in -o
-    if (endWithO.test(verb)) {
-        return verb + 'es';
-    }
-    // Handle all other verbs
-    return verb + 's';
-}
 
 /**
  * Processes fill sentences by inserting answers and negAnswers:
@@ -645,24 +579,6 @@ export const doAllHPIWordReplacements = (
     // extractHeadingsWithNormalText(hpiString);
     return hpiString;
 };
-
-/**
- * This function is designed to standardize and clean up generated text for
- * consistency in non-advanced reporting contexts.
- * It formats text by removing specific phrases and capitalizing the first
- * letter of each sentence.
- *
- * Usage: HpiNote
- */
-export function smartFormFormatter(str: string): string {
-    // Remove punctuation except periods, commas, forward slashes, apostrophes, colons, hyphens, and parentheses
-    let sentence = retainAllowedPunctuation(str);
-    // Apply selective uppercasing.
-    sentence = uppercaseEthnicityAndMonths(sentence);
-    // Capitalizing the first letter of each sentence
-    sentence = capitalize(sentence);
-    return sentence;
-}
 
 /**
  * A Helper Function to extract headings from a string based on a specific format.
