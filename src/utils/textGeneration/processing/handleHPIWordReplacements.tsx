@@ -2,10 +2,9 @@ import { replaceWordCaseSensitive } from '../common/textUtils';
 import { PART_OF_SPEECH_CORRECTION_MAP } from '@constants/hpiTextGenerationMapping';
 import { ABBREVIFY, MEDICAL_TERM_TRANSLATOR } from '@constants/word-mappings';
 import { PatientPronouns } from '@constants/patientInformation';
-import {
-    definePatientNameAndPronouns,
-    fillNameAndPronouns,
-} from '@screens/EditNote/content/generatenote/generateHpiText';
+import { definePatientNameAndPronouns } from './handlePatientNameAndPronouns';
+import { fillNameAndPronouns } from './handlePatientNameAndPronouns';
+
 /**
  * A Helper Function is designed to replace specific words in a string with
  * new words based on a given mapping,
