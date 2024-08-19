@@ -14,7 +14,6 @@ import {
     HPI,
     doAllHPIWordReplacements,
     fillAnswers,
-    splitByPeriod,
 } from '@screens/EditNote/content/generatenote/generateHpiText';
 import { ChiefComplaintsState } from '@redux/reducers/chiefComplaintsReducer';
 import { FamilyHistoryState } from '@redux/reducers/familyHistoryReducer';
@@ -25,6 +24,7 @@ import { PatientInformationState } from '@redux/reducers/patientInformationReduc
 import { SurgicalHistoryElements } from '@redux/reducers/surgicalHistoryReducer';
 import { UserSurveyState } from '@redux/reducers/userViewReducer';
 import { isHPIResponseValid } from './getHPIFormData';
+import { splitByPeriod } from './textGeneration/common/textUtils';
 
 /**
  * @module getHpiArrayWithNoDups

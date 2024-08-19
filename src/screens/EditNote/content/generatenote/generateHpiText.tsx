@@ -2,6 +2,10 @@ import { PART_OF_SPEECH_CORRECTION_MAP } from '@constants/hpiTextGenerationMappi
 import { PatientPronouns } from '@constants/patientInformation';
 import { ABBREVIFY, MEDICAL_TERM_TRANSLATOR } from '@constants/word-mappings';
 import { text } from 'stream/consumers';
+import {
+    capitalizeFirstLetter,
+    splitByPeriod,
+} from '@utils/textGeneration/common/textUtils';
 
 /**
  * This interface represents a collection of HPI entities.
@@ -255,44 +259,6 @@ const replacePronouns = (sentence: string, pronounPack: string[]) => {
 
     return sentence;
 };
-
-/**
- * TODO: consider other cases [!?.]
- * Splits a string into sentences based on periods followed by whitespace.
- *
- * - By default, uses regex to split on periods followed by one or more
- *   whitespace characters.
- * - If `flag` is true, splits on periods followed by whitespace while
- *   preserving [NEW LINE] characters.
- *
- * Examples:
- * const text = `Hello. My name is Mr. Huang.
- *  I work at Ms. Rachel's company.
- *  How can I assist you today?`;
- *
- * - Default: ["Hello.", "My name is Mr. Huang.",
- *             "I work at Ms.Rachel's company.", "How can I assist you today?"]
- * - With flag: ["Hello. ",
- *               "My name is Mr. Huang.\n",
- *               "    I work at Ms.Rachel's company.\n",
- *               "    How can I assist you today?\n"]
- */
-export const splitByPeriod = (str: string, flag?: boolean) => {
-    // Remove spaces after titles for processing
-    str = str.replace(/(Mr\.|Mx\.|Ms\.)\s+/g, '$1');
-    // Split the string by '. ' or '.\n', but not after titles if flag is true
-    const strArr = flag ? str.split(/(?<=\.\s)/) : str.split(/(?<=\.)\s+/);
-    // Re-add spaces after titles
-    const result = strArr.map((sentence) => {
-        return sentence.replace(/\bMr\.|Mx\.|Ms\.\b/, (match) => match + ' ');
-    });
-    return result;
-};
-
-// A Helper Function to capitalize first letter.
-export function capitalizeFirstLetter(str: string) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
 
 // A Helper Function to capitalize the first letter of each word in the sentence,
 // ensuring that all other letters are in lowercase.

@@ -1,11 +1,11 @@
 import React from 'react';
 import { HPIText } from '@utils/getHPIText';
 import {
-    splitByPeriod,
     smartFormFormatter,
     extractHeadingsWithNormalText,
 } from '../generateHpiText';
 import styles from './HPINote.module.scss';
+import { splitByPeriod } from '@utils/textGeneration/common/textUtils';
 
 /**
  * The HpiNote component is responsible for formatting and displaying the HPI.
