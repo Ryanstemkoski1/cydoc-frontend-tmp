@@ -41,6 +41,8 @@ export interface HPI {
  *
  * e.g. Input:  "  This month is may. The lesion measures:      2.5cm.  "
  *      Output: "This month is May. The lesion measures 2.5cm."
+ *
+ * Used in fillAnswers.
  */
 export const fullClean = (sentence: string): string => {
     // Condense multiple spaces into a single space
@@ -61,6 +63,8 @@ export const fullClean = (sentence: string): string => {
  *         or other formal thought disturbance."
  * return text = "Thought content, as expressed through their speech,
  *         revealed ANSWER thought processes."
+ *
+ * Used in fillAnswers.
  */
 const removeSentence = (fillSentence: string, keyword: string): string => {
     const containsBoth = (sentence: string): boolean =>
@@ -79,6 +83,8 @@ const removeSentence = (fillSentence: string, keyword: string): string => {
 /**
  * A Helper Function to check if string has I in it, if so, returns it with quotes around.
  * e.g. ' I love my cat. ' --> '"I love my cat."'
+ *
+ * Used in fillAnswers.
  */
 const putQuotesAroundFirstPerson = (str: string): string => {
     str = ' ' + str + ' ';
@@ -89,6 +95,8 @@ const putQuotesAroundFirstPerson = (str: string): string => {
 
 /**
  * A Helper Function to capitalizes specific terms from ETHNICITY and MONTHS arrays in the input.
+ *
+ * Used in fillAnswers.
  */
 export const uppercaseEthnicityAndMonths = (str: string): string => {
     const ETHNICITY = ['Hispanic', 'Latino'];

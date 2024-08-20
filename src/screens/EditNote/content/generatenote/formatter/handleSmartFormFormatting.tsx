@@ -1,12 +1,30 @@
 import { capitalizeFirstLetter } from '../../../../../utils/textGeneration/common/textUtils';
 
 /**
- * A Helper function to remove punctuation except periods (.), commas (,),
+ * This function is designed to standardize and clean up generated text for
+ * consistency in smart form contexts.
+ * It formats text by editing punctuation and capitalizing the first
+ * letter of each sentence.
+ *
+ * Usage: HpiNote
+ */
+export function smartFormFormatter(str: string): string {
+    // Remove punctuation except periods, commas, forward slashes, apostrophes, colons, hyphens, and parentheses
+    let sentence = retainAllowedPunctuation(str);
+    // Capitalizing the first letter of each sentence
+    sentence = capitalize(sentence);
+    return sentence;
+}
+
+/**
+ * Removes punctuation except periods (.), commas (,),
  * forward slashes (/), apostrophes ('), colons (:), hyphens (-),
  * and parentheses (()).
  *
  * TODO: This function maintains the previous logic, should it consider
  * double quotation marks (")?
+ *
+ * Usage: smartFromFormatter()
  */
 export const retainAllowedPunctuation = (str: string): string => {
     return str.replace(/[^\w\s'.,:/@()-]/g, '');
@@ -19,6 +37,8 @@ export const retainAllowedPunctuation = (str: string): string => {
  * - Capitalizes the first letter of the entire string if it's not empty.
  * - Capitalizes the first letter of each sentence following punctuation marks (.!?).
  * - Capitalizes the first letter following a colon when used in headings.
+ *
+ * Usage: smartFromFormatter()
  * */
 export const capitalize = (hpiString: string): string => {
     // replace 'i' with I
@@ -41,19 +61,3 @@ export const capitalize = (hpiString: string): string => {
     });
     return hpiString;
 };
-
-/**
- * This function is designed to standardize and clean up generated text for
- * consistency in smart form contexts.
- * It formats text by editing punctuation and capitalizing the first
- * letter of each sentence.
- *
- * Usage: HpiNote
- */
-export function smartFormFormatter(str: string): string {
-    // Remove punctuation except periods, commas, forward slashes, apostrophes, colons, hyphens, and parentheses
-    let sentence = retainAllowedPunctuation(str);
-    // Capitalizing the first letter of each sentence
-    sentence = capitalize(sentence);
-    return sentence;
-}

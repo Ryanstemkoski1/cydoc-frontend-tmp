@@ -5,7 +5,11 @@ import {
     splitByPeriod,
 } from '../common/textUtils';
 
-/** Patient's display name in the note */
+/**
+ * Patient's display name in the note
+ * Used in definePatientNameAndPronouns
+ * Used in fillNameAndPronouns
+ */
 interface PatientDisplayName {
     name: string;
     pronouns: PatientPronouns;
@@ -28,6 +32,8 @@ interface PatientDisplayName {
  *   - `objectPronoun`: The object pronouns (e.g., 'her', 'him', 'them').
  *   - `possessivePronoun`: The possessive pronoun (e.g., 'hers', 'his', 'theirs').
  *   - `reflexivePronoun`: The reflexive pronoun (e.g., 'herself', 'himself', 'themselves').
+ *
+ * Used in DoAllHPIWordReplacements
  */
 export const definePatientNameAndPronouns = (
     patientName: string,
@@ -68,6 +74,8 @@ export const definePatientNameAndPronouns = (
  * - Replaces "the patient's" and "their" with the patient's possessive adjective (e.g., "her").
  * - Replaces "the patient" with the patient's name or subject pronoun (e.g., "Ms. Smith" or "she").
  * - Handles special cases for pronouns, including alternating replacements and updating various pronouns.
+ *
+ * Used in DoAllHPIWordReplacements
  */
 export const fillNameAndPronouns = (
     hpiString: string,
@@ -91,7 +99,7 @@ export const fillNameAndPronouns = (
         possessivePronoun,
     ];
 
-    // TODO: This retains the original logic. Split the hpiString to ensure the toggle control behavior works.
+    // This retains the original logic. Split the hpiString to ensure the toggle control behavior works.
     let toggle = 1; // change this so that it gets replaced at random rather than alternating.
     // Split the hpiString by periods while retaining the periods. [consider 'NEW LINE']
     // If patient's pronouns is available, replace "[t]he patient|[patient]" with "she/he/they/name".
@@ -156,8 +164,12 @@ export const fillNameAndPronouns = (
     return newHpiString.join('');
 };
 
-// A Helper Function to generate a title prefix for the given lastname based
-// on the specified pronoun.
+/**
+ * A Helper Function to generate a title prefix for the given lastname based
+ * on the specified pronoun.
+ *
+ * Used in replacepatientPronounsOrName
+ */
 const generateTitleWithName = (name: string, subjectPronoun: string) => {
     return subjectPronoun === 'he'
         ? `Mr. ${name}`
@@ -173,6 +185,8 @@ const generateTitleWithName = (name: string, subjectPronoun: string) => {
  *   adjective (e.g: 'her', 'his', 'their')
  * - Replace "[t]he patient|[patient]" with "she/he/they/name".
  *   (e.g., "Ms. Smith" or "she" or "he" or "they").
+ *
+ * Used in fillNameAndPronouns
  */
 const replacePatientPronounsOrName = (
     patientRegex: RegExp,
@@ -216,6 +230,8 @@ const replacePatientPronounsOrName = (
  * - `sentence` (string): The text with pronouns to replace.
  * - `pronounPack` (string[]): Pronoun forms [subject, object,
  *   possessive adjectives, reflexive, possessive pronoun].
+ *
+ * Used in fillNameAndPronouns
  *
  */
 const replacePronouns = (sentence: string, pronounPack: string[]) => {

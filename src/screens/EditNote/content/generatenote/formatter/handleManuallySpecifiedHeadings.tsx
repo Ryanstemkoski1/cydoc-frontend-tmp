@@ -1,34 +1,6 @@
 import { capitalizeFirstLetter } from '@utils/textGeneration/common/textUtils';
 
 /**
- *  A Helper Function to capitalize the first letter of each word in the sentence,
- *  ensuring that all other letters are in lowercase.
- */
-export function applyTitleCase(str: string) {
-    return str
-        .toLowerCase() // Convert the entire sentence to lowercase first
-        .split(' ') // Split the sentence into words
-        .map((word) => capitalizeFirstLetter(word)) // Capitalize the first letter of each word
-        .join(' ');
-}
-
-/**
- * A Helper Function to extract headings from a string based on a specific format.
- *
- * Headings are defined as at least 8 uppercase letters followed by a colon (`:`).
- *
- * e.g., ['REASON FOR REFERRAL:', 'PRESENTATION:'].
- */
-function extractHeadings(str: string): string[] {
-    // Regular expression to match potential headings
-    const headingRegex = /([A-Z\s]{8,}:)/g;
-    // Extract headings
-    const headings = str.match(headingRegex)?.filter(Boolean);
-    // If no headings are found, return an empty array
-    return headings || [];
-}
-
-/**
  * Extracts manually specified headings and
  * associated normal text from a string.
  *
@@ -60,7 +32,6 @@ export function extractHeadingsWithNormalText(str: string) {
             if (i === 0) {
                 normalText = remainingTextArr[0];
             } else {
-                // TODO: Removes the colon (':') from the heading. Consider whether this behavior should be different for advanced reports.
                 heading = applyTitleCase(headings[i - 1].replace(':', ''));
                 normalText = remainingTextArr[0];
             }
@@ -80,4 +51,35 @@ export function extractHeadingsWithNormalText(str: string) {
         result.push({ heading, normalText });
     }
     return result;
+}
+
+/**
+ * A Helper Function to extract headings from a string based on a specific format.
+ *
+ * Headings are defined as at least 8 uppercase letters followed by a colon (`:`).
+ *
+ * e.g., ['REASON FOR REFERRAL:', 'PRESENTATION:'].
+ * Usage: extractheadingsWithNormalText()
+ */
+function extractHeadings(str: string): string[] {
+    // Regular expression to match potential headings
+    const headingRegex = /([A-Z\s]{8,}:)/g;
+    // Extract headings
+    const headings = str.match(headingRegex)?.filter(Boolean);
+    // If no headings are found, return an empty array
+    return headings || [];
+}
+
+/**
+ * A Helper Function to capitalize the first letter of each word in the sentence,
+ * ensuring that all other letters are in lowercase.
+ *
+ * Usage: extractheadingsWithNormalText()
+ */
+export function applyTitleCase(str: string) {
+    return str
+        .toLowerCase() // Convert the entire sentence to lowercase first
+        .split(' ') // Split the sentence into words
+        .map((word) => capitalizeFirstLetter(word)) // Capitalize the first letter of each word
+        .join(' ');
 }

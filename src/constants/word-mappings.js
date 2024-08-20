@@ -70,6 +70,13 @@ export const ABBREVIFY = {
     'postural orthostatic tachycardia syndrome': 'POTS',
 };
 
+export const PAITERMS = {
+    respondent: 'patient',
+    client: 'patient',
+    'he/she': 'patient',
+    'him/her': 'them',
+};
+
 const generateMedicalMapping = () => {
     const mapping = {};
     Object.keys(MEDICAL_TERM_TRANSLATOR).forEach((term) => {
