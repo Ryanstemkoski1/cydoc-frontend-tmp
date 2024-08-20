@@ -1,5 +1,5 @@
 import { capitalizeFirstLetter } from '../common/textUtils';
-import { PART_OF_SPEECH_CORRECTION_MAP } from '@constants/hpiTextGenerationMapping';
+import { PART_OF_SPEECH_CORRECTION_OBJECT } from '@constants/hpiTextGenerationMapping';
 import {
     ABBREVIFY,
     MEDICAL_TERM_TRANSLATOR,
@@ -88,16 +88,11 @@ export const handlePAITerms = (hpiString: string) => {
 };
 
 /**
- * TODO: change the implementation of this so that it uses the replaceMappedWords function
  * Corrects grammatical errors in the input string based on predefined mappings.
  * e.g. ' she do ' -> ' she does '
  **/
 const partOfSpeechCorrection = (hpiString: string): string => {
-    PART_OF_SPEECH_CORRECTION_MAP.forEach((value: string, key: string) => {
-        const regEx = new RegExp(`${key}`, 'gi');
-        hpiString = hpiString.replace(regEx, value);
-    });
-    return hpiString;
+    return replaceMappedWords(hpiString, PART_OF_SPEECH_CORRECTION_OBJECT);
 };
 
 /** Address medical term replacement operation **/

@@ -16,10 +16,43 @@ import {
     SelectOneInput,
     SelectManyInput,
 } from '@constants/hpiEnums';
-import { HPI } from '../processing/fillHPIAnswers'; // TODO: fixing
 import { extractNode } from './extractNodeDetails';
 import { YesNoResponse } from '@constants/enums';
 import { isHPIResponseValid } from '@utils/getHPIFormData';
+
+/**
+ * This interface represents a collection of HPI entities.
+ *
+ * Keys: Integers representing the display order of answers.
+ * Values: Tuples with three elements:
+ *  - The fill-in-the-blank sentence.
+ *  - The patient's answer.
+ *  - An optional negated or alternative answer (usually empty).
+ *
+ * for yes/no questions, we only need the fill in the blank phrase for the
+ * answer they gave, and the patient's answer can be the empty string
+ *
+ * Example:
+ * - Key `0` with value `['MENTAL STATUS EXAMINATION: Patient was oriented to
+ *                        ANSWER. Patient was not oriented to NOTANSWER.',
+ *                        'person',
+ *                        'place']`
+ *   - Fill-in-the-blank sentence: 'MENTAL STATUS EXAMINATION: Patient was
+ *                  oriented to ANSWER. Patient was not oriented to NOTANSWER.'
+ *   - Selected answer: 'person'
+ *   - Negated answer: 'place'
+ *
+ * Later on, the selected answer (which was an answer that was clicked or
+ * marked Yes) will be inserted in place of the ANSWER token, while the
+ * negated answer if present (which was an answer marked No) will be inserted
+ * in place of the NOTANSWER token.
+ *
+ * Usage: 'fillAnswers'
+ */
+export interface HPI {
+    [questionOrder: number]: [string, string, string];
+    [questionOrder: string]: [string, string, string];
+}
 
 /**
  * Defines the properties for HPI (History of Present Illness) note state.

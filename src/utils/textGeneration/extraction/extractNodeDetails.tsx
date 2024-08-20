@@ -6,7 +6,6 @@ import {
     BodyLocationType,
     LabTestType,
     ListTextInput,
-    SelectManyInput,
     SelectOneInput,
 } from '@constants/hpiEnums';
 /**

@@ -21,9 +21,6 @@ export function smartFormFormatter(str: string): string {
  * forward slashes (/), apostrophes ('), colons (:), hyphens (-),
  * and parentheses (()).
  *
- * TODO: This function maintains the previous logic, should it consider
- * double quotation marks (")?
- *
  * Usage: smartFromFormatter()
  */
 export const retainAllowedPunctuation = (str: string): string => {

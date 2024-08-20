@@ -7,8 +7,7 @@ import {
 
 /**
  * Patient's display name in the note
- * Used in definePatientNameAndPronouns
- * Used in fillNameAndPronouns
+ * Usage: definePatientNameAndPronouns, fillNameAndPronouns
  */
 interface PatientDisplayName {
     name: string;
@@ -33,7 +32,7 @@ interface PatientDisplayName {
  *   - `possessivePronoun`: The possessive pronoun (e.g., 'hers', 'his', 'theirs').
  *   - `reflexivePronoun`: The reflexive pronoun (e.g., 'herself', 'himself', 'themselves').
  *
- * Used in DoAllHPIWordReplacements
+ * Usage: DoAllHPIWordReplacements
  */
 export const definePatientNameAndPronouns = (
     patientName: string,
