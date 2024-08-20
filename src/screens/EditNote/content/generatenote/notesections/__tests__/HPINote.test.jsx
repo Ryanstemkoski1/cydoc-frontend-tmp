@@ -5,7 +5,10 @@ import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { initialHpiState } from '../../../../../../redux/reducers/hpiReducer';
 import { initialSurgicalHistoryState } from '../../../../../../redux/reducers/surgicalHistoryReducer';
-import { extractNode, joinLists } from '../../../../../../utils/getHPIText';
+import {
+    extractNode,
+    joinLists,
+} from '../../../../../../utils/textGeneration/extraction/extractNodeDetails';
 import HPINote from '../HPINote';
 
 Enzyme.configure({ adapter: new Adapter() });
