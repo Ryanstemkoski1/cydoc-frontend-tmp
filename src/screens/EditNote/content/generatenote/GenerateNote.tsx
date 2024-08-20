@@ -51,7 +51,6 @@ import SurgicalHistoryNote from './notesections/SurgicalHistoryNote';
 import NavigationButton from '@components/tools/NavigationButton/NavigationButton';
 import { PatientPronouns } from '@constants/patientInformation';
 import 'screens/EditNote/content/hpi/knowledgegraph/css/Button.css';
-// import getHpiArrayWithNoDups, { HPIText } from '@utils/getHPIText';
 import getHpiArrayWithNoDups, {
     HPIText,
 } from '@utils/textGeneration/extraction/getHPIArray';
