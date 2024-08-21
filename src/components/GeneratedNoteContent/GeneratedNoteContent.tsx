@@ -227,7 +227,7 @@ const GeneratedNoteContent = (
                 {hpiText !== undefined && !hpiText.includes('No history') && (
                     <Box className={style.genNoteDetail} id='copy-notes'>
                         <HpiNote
-                            text={hpiText}
+                            text={JSON.parse(hpiText)}
                             isParagraphFormat={false}
                             isAdvancedReport={true}
                         />
