@@ -11,9 +11,9 @@
 
     h5 {
         font-weight: 400;
-        font-size: $font-size-base;
+        font-size: 18px;
         font-family: $font-family-primary;
-        margin-bottom: 5px !important;
+        margin: 14px 0 !important;
 
         @include max-screen($mobile) {
             margin-bottom: 10px !important;
@@ -28,9 +28,8 @@
 
             .symptomsBlockBtn,
             .reviewOfSystemsItem {
-                @include min-screen($tablet) {
-                    padding-right: 49.6%;
-                }
+                max-width: 634px;
+                position: relative;
             }
 
             .input-max-wrap {
