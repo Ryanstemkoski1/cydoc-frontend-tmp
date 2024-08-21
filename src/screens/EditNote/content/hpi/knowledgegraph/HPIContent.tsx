@@ -10,6 +10,7 @@ import { saveHpiHeader } from '@redux/actions/hpiHeadersActions';
 import { CurrentNoteState } from '@redux/reducers';
 import { selectPlanConditions } from '@redux/selectors/planSelectors';
 import { selectPatientViewState } from '@redux/selectors/userViewSelectors';
+import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
 import { Search, Segment } from 'semantic-ui-react';
 import Tab from '@components/tools/Tab';
 import './HPI.css';
@@ -20,6 +21,8 @@ import DiseaseForm from './components/DiseaseForm';
 import MiscBox from './components/MiscBox';
 import './css/App.css';
 import { favChiefComplaints } from 'classes/institution.class';
+import { setProductDefinitionAction } from '@redux/actions/productDefinitionAction';
+import { ProductType } from '@constants/FormPreferencesConstant';
 
 interface OwnProps {
     step: number;
@@ -60,6 +63,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             const data = hpiHeaders;
             data.then((res) => this.props.saveHpiHeader(res.data));
         }
+        // set the product definition according to any API result for product definition
+        this.props.setProductDefinitionAction(
+            ProductType.ADVANCED_REPORT_GENERATION
+        );
     }
 
     getData = async (complaint: string) => {
@@ -76,9 +83,8 @@ class HPIContent extends React.Component<Props, HPIContentState> {
     back = (e: any) => this.props.back(e);
 
     render() {
-        const { chiefComplaints, hpiHeaders } = this.props;
+        const { chiefComplaints, hpiHeaders, productDefinition } = this.props;
         const { bodySystems, parentNodes } = hpiHeaders;
-
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
         /* Creates list of body system buttons to add in the front page. 
            Loops through state variable, bodySystems, saved from the API */
@@ -213,10 +219,12 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                 }}
                             ></Tab>
                             <Segment className='margin-bottom-for-notes'>
-                                <MiscBox
-                                    activeThing={this.props.activeTab}
-                                    step={step}
-                                />
+                                {productDefinition?.showMiscNotesBox && (
+                                    <MiscBox
+                                        activeThing={this.props.activeTab}
+                                        step={step}
+                                    />
+                                )}
                                 <DiseaseForm
                                     key={this.props.activeTab}
                                     category={this.props.activeTab}
@@ -245,6 +253,7 @@ const mapStateToProps = (state: CurrentNoteState) => {
         planConditions: selectPlanConditions(state),
         hpiHeaders: state.hpiHeaders,
         patientView: selectPatientViewState(state),
+        productDefinition: selectProductDefinitions(state),
     };
 };
 
@@ -252,6 +261,7 @@ const mapDispatchToProps = {
     setChiefComplaint,
     processKnowledgeGraph,
     saveHpiHeader,
+    setProductDefinitionAction,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

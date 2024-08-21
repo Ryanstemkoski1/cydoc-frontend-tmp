@@ -6,4 +6,5 @@ export const SmartPatientIntakeForm: ProductDefinitions = {
     showNewPatientGeneration: false,
     useAdvancedReportTextGeneration: false,
     displayedNodesCutOff: 150,
+    showMiscNotesBox: false,
 };

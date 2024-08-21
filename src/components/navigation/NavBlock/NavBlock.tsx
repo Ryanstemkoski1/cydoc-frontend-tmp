@@ -13,10 +13,16 @@ import {
 } from '@constants/drawerMenuItems';
 import NoteNameMenuItem from '../NoteNameMenuItem';
 import LightTooltip from '@components/LightTooltip/LightTooltip';
+import { selectAdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
+import { useEffect, useState } from 'react';
 
 const NavBlock = () => {
+    const additionalSurvey = useSelector(selectAdditionalSurvey);
     const doctorView = useSelector(selectDoctorViewState);
     const pathname = usePathname();
+
+    const [navTitle, setNavTitle] = useState('');
+
     const isEditNotePage = pathname?.includes('editnote');
     const isAppointmentTemplatePage = pathname?.includes(
         'appointment-templates'
@@ -31,6 +37,25 @@ const NavBlock = () => {
 
     const currentRoute = menuItems.find((item) => item.href.includes(pathname));
 
+    useEffect(() => {
+        if (pathname === '/') {
+            setNavTitle('Home');
+        } else if (pathname === '/hpi/patient-advance') {
+            const { legalFirstName, legalLastName, dateOfBirth } =
+                additionalSurvey;
+
+            setNavTitle(
+                `Form for ${legalFirstName} ${legalLastName}     DOB: ${formatDate(dateOfBirth)}`
+            );
+        } else {
+            setNavTitle(currentRoute?.label || ''); // Provide a default value of an empty string
+        }
+    }, [pathname, additionalSurvey]);
+
+    function formatDate(date: string) {
+        return new Date(date).toLocaleDateString();
+    }
+
     return (
         <Box className={style.navBlockWrapper}>
             {doctorView && isEditNotePage && (
@@ -38,9 +63,7 @@ const NavBlock = () => {
                     <NoteNameMenuItem />
                 </div>
             )}
-            <Typography className={style.typo}>
-                {pathname === '/' ? 'Home' : currentRoute?.label}
-            </Typography>
+            <Typography className={style.typo}>{navTitle}</Typography>
             {isAppointmentTemplatePage && (
                 <LightTooltip
                     title={
