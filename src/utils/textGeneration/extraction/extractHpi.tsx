@@ -6,7 +6,6 @@ import { MedicalHistoryState } from '@redux/reducers/medicalHistoryReducer';
 import { PatientInformationState } from '@redux/reducers/patientInformationReducer';
 import { ChiefComplaintsState } from '@redux/reducers/chiefComplaintsReducer';
 import {
-    NodeInterface,
     NodeResponseType,
     ResponseTypes,
     ListTextInput,
@@ -16,7 +15,7 @@ import {
     SelectOneInput,
     SelectManyInput,
 } from '@constants/hpiEnums';
-import { extractNode } from './extractNodeDetails';
+import { extractNode, GraphNode } from './extractNodeDetails';
 import { YesNoResponse } from '@constants/enums';
 import { isHPIResponseValid } from '@utils/getHPIFormData';
 
@@ -96,9 +95,6 @@ export type ReduxNodeInterface = {
     response: NodeResponseType;
 };
 
-/* Represents a node in the graph with associated HPI response data. */
-export type GraphNode = NodeInterface & { response: NodeResponseType };
-
 /**
  * Returns array of HPI question and answer fields sorted according to
  * question. Each list item represents a disjoint graph.
@@ -130,8 +126,8 @@ export const extractHpiArray = (
 };
 
 /**
- * Extracts and formats all nodes connected to the source according to
- * questionOrder
+ * A Helper Function to extract and formats all nodes connected to the source
+ * according to questionOrder.
  */
 export const extractNodes = (
     source: string,
@@ -151,7 +147,7 @@ export const extractNodes = (
 };
 
 /**
- * Extracts conditional logic from a node's text.
+ * A Helper Function to extract conditional logic from a node's text.
  * e.g.
  * "This node should be shown ONLYIF[condition1, condition2] if applicable."
  * return ['condition1', 'condition2']
@@ -170,11 +166,11 @@ export function getNodeConditions(node: ReduxNodeInterface) {
     return conditions;
 }
 
-/*
-    Checks if a given node has children nodes that should not be displayed
-    (i.e. in the case if the user clicks "NO" to a YES/NO question, "YES"
-    to a NO/YES question or there is NO selected option for SELECTONE and SELECTMANY question)
-*/
+/**
+ * A Helper Function to check if a given node has children nodes that should not be displayed
+ * (i.e. in the case if the user clicks "NO" to a YES/NO question, "YES"
+ * to a NO/YES question or there is NO selected option for SELECTONE and SELECTMANY question)
+ */
 export const checkParent = (
     node: ReduxNodeInterface,
     state: WholeNoteProps
@@ -231,7 +227,7 @@ export const checkParent = (
     return childNodesToHide;
 };
 
-/* Returns whether the user has responded to this node or not */
+/* A Helper Function to return whether the user has responded to this node or not */
 export const isEmpty = (state: WholeNoteProps, node: GraphNode): boolean => {
     switch (node.responseType) {
         case ResponseTypes.YES_NO:
