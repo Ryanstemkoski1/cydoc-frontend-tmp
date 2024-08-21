@@ -29,8 +29,6 @@ import { NotificationTypeEnum } from '@components/tools/Notification/Notificatio
 import useQuery from '@hooks/useQuery';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
-import { setProductDefinitionAction } from '@redux/actions/productDefinitionAction';
-import { ProductType } from '@constants/FormPreferencesConstant';
 import MiscBox from '../../EditNote/content/hpi/knowledgegraph/components/MiscBox';
 
 interface OwnProps {
@@ -75,11 +73,6 @@ class HPIContent extends React.Component<Props, State> {
             const data = hpiHeaders;
             data.then((res) => this.props.saveHpiHeader(res.data));
         }
-
-        // set the product definition according to any API result for product definition
-        this.props.setProductDefinitionAction(
-            ProductType.ADVANCED_REPORT_GENERATION
-        );
     }
 
     getData = async (complaint: string) => {
@@ -270,7 +263,6 @@ const mapDispatchToProps = {
     saveHpiHeader,
     setChiefComplaint,
     setNotesChiefComplaint,
-    setProductDefinitionAction,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
