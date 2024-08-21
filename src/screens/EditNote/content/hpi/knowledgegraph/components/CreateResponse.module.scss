@@ -62,10 +62,8 @@
     }
 
     &__wrap {
-        margin: 0 -5px;
-
-        button {
-            margin: 5px !important;
-        }
+        display: flex;
+        align-items: center;
+        gap: 9px;
     }
 }
