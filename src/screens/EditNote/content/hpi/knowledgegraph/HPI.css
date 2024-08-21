@@ -57,7 +57,11 @@
 }
 
 .diseases-array {
-    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 0;
 }
 .diseases-array.btn-wrap .button {
     margin-top: 5px;
