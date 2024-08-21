@@ -166,21 +166,16 @@ const CreatePatientModal = ({
 
             apiClient
                 .post('/appointment', {
-                    ...getHPIFormData(
-                        additionalSurvey,
-                        userSurveyState,
-                        {
-                            hpi: hpi,
-                            chiefComplaints: chiefComplaints,
-                            familyHistory: familyHistoryState,
-                            medications: medicationsState,
-                            medicalHistory: medicalHistoryState,
-                            patientInformation: patientInformationState,
-                            surgicalHistory: surgicalHistory,
-                            userSurvey: userSurveyState,
-                        },
-                        true
-                    ),
+                    ...getHPIFormData(additionalSurvey, userSurveyState, {
+                        hpi: hpi,
+                        chiefComplaints: chiefComplaints,
+                        familyHistory: familyHistoryState,
+                        medications: medicationsState,
+                        medicalHistory: medicalHistoryState,
+                        patientInformation: patientInformationState,
+                        surgicalHistory: surgicalHistory,
+                        userSurvey: userSurveyState,
+                    }),
                     clinician_id,
                     institution_id,
                 })
