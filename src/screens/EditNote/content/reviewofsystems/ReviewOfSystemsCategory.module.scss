@@ -20,7 +20,6 @@
             margin: 0;
             padding: 0 10px;
             text-align: center;
-            text-transform: capitalize;
             
             @include max-screen($mobile) {
                 width: calc(100% - 130px);
