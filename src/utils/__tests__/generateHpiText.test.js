@@ -1,18 +1,18 @@
-import { PatientPronouns } from '../../../../../constants/patientInformation';
+import { PatientPronouns } from '../../constants/patientInformation';
 import {
     abbreviate,
     fillMedicalTerms,
     handlePAITerms,
-} from '../../../../../utils/textGeneration/processing/handleHPIWordReplacements';
+} from '../textGeneration/processing/handleHPIWordReplacements';
 import {
     fillAnswers,
     fullClean,
-} from '../../../../../utils/textGeneration/processing/fillHPIAnswers';
+} from '../textGeneration/processing/fillHPIAnswers';
 import {
     retainAllowedPunctuation,
     capitalize,
-} from '../../../../../screens/EditNote/content/generatenote/formatter/handleSmartFormFormatting';
-import { fillNameAndPronouns } from '../../../../../utils/textGeneration/processing/handlePatientNameAndPronouns';
+} from '../../screens/EditNote/content/generatenote/formatter/handleSmartFormFormatting';
+import { fillNameAndPronouns } from '../textGeneration/processing/handlePatientNameAndPronouns';
 
 // const EXAMPLE = {
 //     1: ['the patient has hypertension', ''],
