@@ -4,6 +4,8 @@ import { extractHeadingsWithNormalText } from '../formatter/handleManuallySpecif
 import styles from './HPINote.module.scss';
 import { splitByPeriod } from '@utils/textGeneration/common/textUtils';
 import { smartFormFormatter } from '../formatter/handleSmartFormFormatting';
+import { useSelector } from 'react-redux';
+import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
 
 /**
  * The HpiNote component is responsible for formatting and displaying the HPI.
@@ -30,12 +32,14 @@ import { smartFormFormatter } from '../formatter/handleSmartFormFormatting';
 const HpiNote = ({
     text,
     isParagraphFormat = false,
-    isAdvancedReport = false,
 }: {
     text: HPIText[];
     isParagraphFormat?: boolean;
-    isAdvancedReport?: boolean; // A boolean flag to identify Advanced Report generation.
 }) => {
+    const isAdvancedReport = useSelector(
+        selectProductDefinitions
+    )?.useAdvancedReportTextGeneration; //A boolean flag to identify Advanced Report generation
+
     // Handle 'No history of present illness reported.'
     if (typeof text === 'string') {
         return <p>{text}</p>;

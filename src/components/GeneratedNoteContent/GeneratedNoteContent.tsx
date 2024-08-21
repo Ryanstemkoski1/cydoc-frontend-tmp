@@ -229,7 +229,6 @@ const GeneratedNoteContent = (
                         <HpiNote
                             text={JSON.parse(hpiText)}
                             isParagraphFormat={false}
-                            isAdvancedReport={true}
                         />
                     </Box>
                 )}
