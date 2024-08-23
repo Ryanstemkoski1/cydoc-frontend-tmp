@@ -218,6 +218,7 @@ const FormPreferencesPage = () => {
             setLoading(true);
 
             // depends on the product type, we will set the product definition file on action
+            localStorage.setItem('productType', productType);
             dispatch(setProductDefinitionAction(productType));
 
             const { showDefaultForm, diseaseForm, institutionId } =
@@ -371,6 +372,14 @@ const FormPreferencesPage = () => {
         productType,
     ]);
 
+    useEffect(() => {
+        const productName = localStorage.getItem('productType');
+
+        if (productName) {
+            setProductType(productName);
+        }
+    }, []);
+
     const disableWhenSmartPatientIntakeForm =
         (!showChiefComplaints && !showDefaultForm) ||
         (showDefaultForm && !nonDeletedDiseaseForm.length);
@@ -378,6 +387,32 @@ const FormPreferencesPage = () => {
     const disableWhenAdvancedReportGeneration =
         disableWhenSmartPatientIntakeForm &&
         productType === ProductType.SMART_PATIENT_INTAKE_FORM;
+
+    const submitStyle = {
+        padding: '8px 22px',
+        backgroundColor: '#047A9B',
+        color: 'white',
+        fontSize: '16px',
+        fontFamily: 'Nunito',
+        fontWeight: '500',
+        lineHeight: '26px',
+
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 'fit-content',
+        borderRadius: '10px',
+        textTransform: 'none',
+
+        '&:hover': {
+            backgroundColor: '#0684a8',
+        },
+
+        '&:disabled': {
+            backgroundColor: 'rgba(0, 0, 0, 0.12)',
+            color: 'rgba(0, 0, 0, 0.38)',
+        },
+    };
 
     return (
         <Box className={style.formPreferences}>
@@ -514,9 +549,9 @@ const FormPreferencesPage = () => {
                 </RadioGroup>
 
                 <Button
-                    sx={{ width: 'fit-content' }}
+                    sx={submitStyle}
                     type='submit'
-                    className='button'
+                    className={style.formPreferences__submit}
                     onClick={handleSubmit}
                     disabled={
                         (disableWhenSmartPatientIntakeForm &&
@@ -524,7 +559,7 @@ const FormPreferencesPage = () => {
                         loading
                     }
                 >
-                    Update Preferences
+                    Update settings
                     {loading && <ButtonLoader />}
                 </Button>
             </Box>
