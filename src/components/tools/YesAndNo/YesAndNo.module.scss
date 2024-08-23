@@ -1,14 +1,9 @@
 @import '../../../assets/scss/variables.scss';
 .YesNoButton {
     text-transform: capitalize;
-    button {
-        border-color: darken($color-gray, 20%) !important;
-        background-color: $color-gray !important;
-    }
-    :global {
-        button.active {
-            border-color: $color-primary !important;
-            background-color: $color-primary !important;
-        }
-    }
+    
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    z-index: 1;
 }
