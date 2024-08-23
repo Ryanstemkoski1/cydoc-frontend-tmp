@@ -9,11 +9,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setLoadingStatus } from '@redux/actions/loadingStatusActions';
 import { selectLoadingStatus } from '@redux/reducers/loadingStatusReducer';
 import style from './BrowseNotes.module.scss';
-import { Box } from '@mui/material';
+import { Box, List, ListItem, ListItemText, Typography } from '@mui/material';
 import useSignInRequired from '@hooks/useSignInRequired';
+import MobileDatePicker from '@components/Input/MobileDatePicker';
+import GeneratedNoteContent from '@components/GeneratedNoteContent/GeneratedNoteContent';
+import CreatePatientModal from '@components/CreatePatientModal/CreatePatientModal';
+import AddIcon from '@mui/icons-material/Add';
+import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
+import CustomTextField from '@components/Input/CustomTextField';
+import useIsMobile from '@hooks/useIsMobile';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
-    return `${lastName}, ${firstName} ${middleName}`;
+    return `${firstName} ${middleName ? middleName : ''} ${lastName}`;
 }
 
 const months = [
@@ -81,19 +88,36 @@ export interface AppointmentUser {
 const BrowseNotes = () => {
     useSignInRequired(); // this route is private, sign in required
     const [date, setDate] = useState(new Date());
+    const [dateAdvance, setDateAdvance] = useState('');
     const [users, setUsers] = useState<AppointmentUser[]>([]);
     const { user } = useUser();
     const { cognitoUser } = useAuth();
     const dispatch = useDispatch();
-
+    const definitions = useSelector(selectProductDefinitions);
     const [showModal, setShowModal] = useState<boolean>(false);
-    const [selectedAppointment, setSelectedAppointment] =
-        useState<AppointmentUser>();
+    const [showModalAdvance, setShowModalAdvance] = useState<boolean>(false);
+    const [selectedAppointment, setSelectedAppointment] = useState<any>();
     const loadingStatus = useSelector(selectLoadingStatus);
+    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const isMobile = useIsMobile();
+
+    useEffect(() => {
+        const initialDate = new Date().toISOString().slice(0, 10); // yyyy-mm-dd format
+        setDateAdvance(initialDate);
+    }, []);
+
+    const handleListItemClick = (index: number, user: any) => {
+        setSelectedIndex(index);
+        setSelectedAppointment(user);
+    };
 
     const openModal = (user: AppointmentUser) => {
         setSelectedAppointment(user);
         setShowModal(true);
+    };
+
+    const openModalAdvance = () => {
+        setShowModalAdvance(true);
     };
 
     const goBack = () => {
@@ -104,6 +128,22 @@ const BrowseNotes = () => {
         setDate(new Date(date.getTime() + 86400000));
     };
 
+    const goBackAdvance = () => {
+        const currentDate = new Date(dateAdvance);
+        currentDate.setDate(currentDate.getDate() - 1);
+        setDateAdvance(currentDate.toISOString().slice(0, 10));
+        setSelectedIndex(null);
+        setSelectedAppointment(undefined);
+    };
+
+    const goForwardAdvance = () => {
+        const currentDate = new Date(dateAdvance);
+        currentDate.setDate(currentDate.getDate() + 1);
+        setDateAdvance(currentDate.toISOString().slice(0, 10));
+        setSelectedIndex(null);
+        setSelectedAppointment(undefined);
+    };
+
     const loadPatientHistory = useCallback(async () => {
         dispatch(setLoadingStatus(true));
         if (!user) {
@@ -112,21 +152,52 @@ const BrowseNotes = () => {
         }
         try {
             const users = await getAppointment(
-                formatDateOfBirth(date),
+                formatDateOfBirth(
+                    definitions?.showNewPatientGeneration ? dateAdvance : date
+                ),
                 user?.institutionId,
                 cognitoUser
             );
-            setUsers(users);
+
+            const filteredUsers = users.reduce(
+                (acc: AppointmentUser[], current) => {
+                    const x = acc.find((item) => item.id === current.id);
+                    if (!x) {
+                        return acc.concat([current]);
+                    } else {
+                        if (!current.hpiText.includes('No history')) {
+                            const index = acc.indexOf(x);
+                            acc[index] = current;
+                        }
+                        return acc;
+                    }
+                },
+                []
+            );
+
+            setUsers(filteredUsers);
             dispatch(setLoadingStatus(false));
         } catch (err) {
             setUsers([]);
             dispatch(setLoadingStatus(false));
         }
-    }, [cognitoUser, date, dispatch, user]);
+    }, [cognitoUser, date, dateAdvance, dispatch, user]);
 
     useEffect(() => {
         loadPatientHistory();
     }, [loadPatientHistory]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setDateAdvance(e.target.value);
+        setSelectedIndex(null);
+        setSelectedAppointment(undefined);
+    };
+
+    const handleMobileChange = (value: string) => {
+        setDateAdvance(value);
+        setSelectedIndex(null);
+        setSelectedAppointment(undefined);
+    };
 
     function renderUsers(users: AppointmentUser[]) {
         return (
@@ -171,72 +242,282 @@ const BrowseNotes = () => {
         );
     }
 
-    return (
-        <div className={style.notesBlock}>
-            <h1>Generated Notes</h1>
-            <div className={style.notesBlock__notesWrap}>
-                <div
-                    className={` ${style.notesBlock__header} flex align-center justify-between`}
+    function renderUsersAdvance(addedPatients: any[]) {
+        return (
+            <Box className={`${style.notesBlockAdvance__tableWrapper}`}>
+                <Box
+                    className={style.notesBlockAdvance__tableWrapper__addBtn}
+                    onClick={openModalAdvance}
                 >
-                    <a
-                        className='flex align-center justify-center'
-                        onClick={goBack}
-                    >
-                        <img src={'/images/left-arrow.svg'} alt='Left arrow' />
-                    </a>
-                    <span>{formatDate(date)}</span>
-                    <a
-                        className='flex align-center justify-center'
-                        onClick={goForward}
-                    >
-                        <img
-                            src={'/images/right-arrow.svg'}
-                            alt='Right arrow'
-                        />
-                    </a>
-                </div>
-
-                <div className={` ${style.notesBlock__content} `}>
-                    <div className={style.notesBlock__contentInner}>
-                        {renderUsers(users)}
-                    </div>
-                    <div className={`${style.notesBlock__reload}`}>
-                        <button
-                            onClick={loadPatientHistory}
-                            style={{ borderStyle: 'none' }}
-                        >
-                            <Box
+                    <AddIcon style={{ color: '#047A9B' }} />
+                    <Typography component='p'>Add patient</Typography>
+                </Box>
+                <List sx={{ padding: '0' }}>
+                    {!loadingStatus && addedPatients.length === 0 ? (
+                        <ListItem>
+                            <ListItemText
+                                primary={
+                                    <Typography
+                                        variant='body1'
+                                        className={style.nodata}
+                                    >
+                                        No users found
+                                    </Typography>
+                                }
+                            />
+                        </ListItem>
+                    ) : (
+                        addedPatients.map((user, index) => (
+                            <ListItem
+                                key={index}
+                                onClick={() => handleListItemClick(index, user)}
                                 sx={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    paddingY: '.5em',
+                                    backgroundColor:
+                                        selectedIndex === index
+                                            ? '#047A9B'
+                                            : 'inherit',
+                                    border: '1px solid var(--Divider, #D7E5E9)',
+                                    borderRadius: '10px',
+                                    marginTop: '4px',
+                                    padding: '16px 20px',
+                                    cursor: 'pointer',
                                 }}
                             >
+                                <Box
+                                    className={
+                                        style.notesBlockAdvance__tableWrapper__itemWrapper
+                                    }
+                                >
+                                    <Box
+                                        className={
+                                            style.notesBlockAdvance__tableWrapper__left
+                                        }
+                                    >
+                                        <img
+                                            src={
+                                                selectedIndex === index
+                                                    ? '/images/add-patient-select.svg'
+                                                    : '/images/add-patient.svg'
+                                            }
+                                            alt={`${index} patient image`}
+                                        />
+                                        <Typography
+                                            component='p'
+                                            style={{
+                                                color:
+                                                    selectedIndex === index
+                                                        ? 'white'
+                                                        : 'black',
+                                            }}
+                                        >
+                                            {formatFullName(
+                                                user?.firstName,
+                                                user?.middleName ?? '',
+                                                user?.lastName
+                                            )}
+                                        </Typography>
+                                    </Box>
+                                    <Typography
+                                        component='p'
+                                        style={{
+                                            color:
+                                                selectedIndex === index
+                                                    ? 'white'
+                                                    : '#00000099',
+                                        }}
+                                        className={
+                                            style.notesBlockAdvance__tableWrapper__right
+                                        }
+                                    >
+                                        {formatDateOfBirth(user.dob)}
+                                    </Typography>
+                                </Box>
+                            </ListItem>
+                        ))
+                    )}
+                </List>
+            </Box>
+        );
+    }
+
+    return (
+        <>
+            {!definitions?.showNewPatientGeneration ? (
+                <div className={style.notesBlock}>
+                    <h1>Generated Notes</h1>
+                    <div className={style.notesBlock__notesWrap}>
+                        <div
+                            className={` ${style.notesBlock__header} flex align-center justify-between`}
+                        >
+                            <a
+                                className='flex align-center justify-center'
+                                onClick={goBack}
+                            >
+                                <img
+                                    src={'/images/left-arrow.svg'}
+                                    alt='Left arrow'
+                                />
+                            </a>
+                            <span>{formatDate(date)}</span>
+                            <a
+                                className='flex align-center justify-center'
+                                onClick={goForward}
+                            >
+                                <img
+                                    src={'/images/right-arrow.svg'}
+                                    alt='Right arrow'
+                                />
+                            </a>
+                        </div>
+
+                        <div className={` ${style.notesBlock__content} `}>
+                            <div className={style.notesBlock__contentInner}>
+                                {renderUsers(users)}
+                            </div>
+                            <div className={`${style.notesBlock__reload}`}>
+                                <button
+                                    onClick={loadPatientHistory}
+                                    style={{ borderStyle: 'none' }}
+                                >
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            paddingY: '.5em',
+                                        }}
+                                    >
+                                        <img
+                                            alt='Refresh'
+                                            height={14}
+                                            width={14}
+                                            style={{
+                                                marginRight: '10px',
+                                                marginLeft: '7px',
+                                            }}
+                                            src={'/images/refresh.png'}
+                                        />
+                                        Check for new questionnaires
+                                    </Box>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {selectedAppointment && (
+                        <Modal
+                            key={selectedAppointment.id}
+                            showModal={showModal}
+                            setShowModal={setShowModal}
+                            selectedAppointment={selectedAppointment}
+                        />
+                    )}
+                </div>
+            ) : (
+                <>
+                    <Box className={style.notesBlockAdvance}>
+                        <Box className={style.notesBlockAdvance__notesWrap}>
+                            {isMobile ? (
+                                <Box
+                                    className={` ${style.notesBlockAdvance__header}`}
+                                >
+                                    <MobileDatePicker
+                                        value={dateAdvance}
+                                        handleChange={(value) =>
+                                            handleMobileChange(value)
+                                        }
+                                    />
+                                </Box>
+                            ) : (
+                                <Box
+                                    className={` ${style.notesBlockAdvance__header} flex align-center justify-between`}
+                                >
+                                    <Box
+                                        className={
+                                            style.notesBlockAdvance__header__dateWrapper
+                                        }
+                                    >
+                                        <CustomTextField
+                                            id='dateOfBirth'
+                                            required={true}
+                                            type='date'
+                                            name='dateOfBirth'
+                                            placeholder='mm/dd/yyyy'
+                                            value={dateAdvance}
+                                            max={new Date()
+                                                .toJSON()
+                                                .slice(0, 10)}
+                                            onChange={handleChange}
+                                        />
+                                    </Box>
+                                    <a
+                                        className={` ${style.notesBlockAdvance__header__arrow} flex align-center justify-center`}
+                                        onClick={goBackAdvance}
+                                    >
+                                        <img
+                                            src={'/images/left-arrow.svg'}
+                                            alt='Left arrow'
+                                        />
+                                    </a>
+                                    <a
+                                        className={` ${style.notesBlockAdvance__header__arrow} flex align-center justify-center`}
+                                        onClick={goForwardAdvance}
+                                    >
+                                        <img
+                                            src={'/images/right-arrow.svg'}
+                                            alt='Right arrow'
+                                        />
+                                    </a>
+                                </Box>
+                            )}
+
+                            <Box
+                                className={` ${style.notesBlockAdvance__content} `}
+                            >
+                                {/* {renderUsersAdvance(addedPatients)} */}
+                                {renderUsersAdvance(users)}
+                            </Box>
+                        </Box>
+                        {selectedAppointment && (
+                            <Box
+                                className={
+                                    style.notesBlockAdvance__notesDescription
+                                }
+                            >
+                                <GeneratedNoteContent
+                                    selectedAppointment={selectedAppointment}
+                                    user={user}
+                                />
+                            </Box>
+                        )}
+                    </Box>
+                    <Box className={`${style.checkReloadAdvance}`}>
+                        <button
+                            onClick={loadPatientHistory}
+                            style={{
+                                borderStyle: 'none',
+                                backgroundColor: 'transparent',
+                                cursor: 'pointer',
+                            }}
+                        >
+                            <Box className={style.checkReloadAdvance__inner}>
                                 <img
                                     alt='Refresh'
-                                    height={14}
-                                    width={14}
                                     style={{
                                         marginRight: '10px',
                                         marginLeft: '7px',
                                     }}
                                     src={'/images/refresh.png'}
                                 />
-                                Check for new questionnaires
+                                {isMobile ? '' : 'Check for new notes'}
                             </Box>
                         </button>
-                    </div>
-                </div>
-            </div>
-            {selectedAppointment && (
-                <Modal
-                    key={selectedAppointment.id}
-                    showModal={showModal}
-                    setShowModal={setShowModal}
-                    selectedAppointment={selectedAppointment}
-                />
+                    </Box>
+                    <CreatePatientModal
+                        showModal={showModalAdvance}
+                        setShowModal={setShowModalAdvance}
+                    />
+                </>
             )}
-        </div>
+        </>
     );
 };
 

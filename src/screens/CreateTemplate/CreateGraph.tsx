@@ -35,7 +35,7 @@ const CreateGraph = () => {
 
     return (
         <TemplateTitlePage
-            header='New History of Present Illness Template'
+            header=''
             label='Enter a short title for your new template.'
             inputComponent={inputComponent}
             onSubmit={onSubmit}

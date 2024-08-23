@@ -23,6 +23,7 @@
         "@mui/material": "^5.16.4",
         "@mui/system": "^5.16.4",
         "@sentry/nextjs": "^8.20.0",
+        "@svgr/webpack": "^8.1.0",
         "amazon-cognito-identity-js": "^6.3.13",
         "aws-amplify": "^5.3.19",
         "axios": "~0.28.1",

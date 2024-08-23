@@ -50,7 +50,9 @@ import SurgicalHistoryNote from './notesections/SurgicalHistoryNote';
 import NavigationButton from '@components/tools/NavigationButton/NavigationButton';
 import { PatientPronouns } from '@constants/patientInformation';
 import 'screens/EditNote/content/hpi/knowledgegraph/css/Button.css';
-import getHPIText, { HPIText } from '@utils/getHPIText';
+import getHpiArrayWithNoDups, {
+    HPIText,
+} from '@utils/textGeneration/extraction/getHPIArray';
 import './GenerateNote.css';
 import PatientInfo from './PatientInfo';
 
@@ -191,19 +193,6 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
         </Button.Group>
     );
 
-    const bulletPointToggler = (
-        <Button.Group className='btn-right'>
-            <Button
-                onClick={() => setIsBulletNoteView(!isBulletNoteView)}
-                className={`margin-left-1 hpi-ph-button${
-                    isBulletNoteView ? '-selected' : ''
-                }`}
-            >
-                Bullet Point HPI
-            </Button>
-        </Button.Group>
-    );
-
     const generateNoteButtons = (
         <Fragment>
             <div className={'ui input large'}>
@@ -246,7 +235,6 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                 </Button>
             </Button.Group>
             {richOrPlainButtons}
-            {bulletPointToggler}
         </Fragment>
     );
 
@@ -315,7 +303,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                         <h3> History of Present Illness </h3>
                         <HPINote
                             text={
-                                getHPIText(isBulletNoteView, {
+                                getHpiArrayWithNoDups({
                                     hpi: props.hpi,
                                     chiefComplaints: props.chiefComplaints,
                                     familyHistory: props.familyHistoryState,
@@ -327,7 +315,6 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                                     userSurvey: props.userSurvey,
                                 }) as HPIText[]
                             }
-                            bulletNoteView={isBulletNoteView}
                         />
                         <h3> Patient History </h3>
                         <h4> Medical History </h4>

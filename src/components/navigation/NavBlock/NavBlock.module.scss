@@ -1,0 +1,25 @@
+@import '../../../assets/scss/variables.scss';
+
+.navBlockWrapper {
+    width: 100%;
+    min-height: 80px;
+    padding: 22px 32px;
+    box-shadow: 0px 3px 6px 0px #cbdfe3;
+    background-color: $color-white;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    position: sticky;
+    top: 0;
+
+    .typo {
+        font-family: $font-family-poppins;
+        font-weight: $font-weight-medium;
+        font-size: 24px;
+        line-height: 36px;
+        color: rgba($color-black, 0.87);
+        white-space: pre;
+    }
+}

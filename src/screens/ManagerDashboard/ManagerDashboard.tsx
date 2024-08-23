@@ -169,9 +169,6 @@ const ManagerDashboard = () => {
                         <Grid container>
                             <Grid item xs={12} sm={9}>
                                 <Stack marginTop={'1rem'}>
-                                    <h3 style={{ marginBottom: '0rem' }}>
-                                        Clinic Users
-                                    </h3>
                                     <p>
                                         {` Every clinician or staff member in your
                                     clinic who requires access to Cydoc should

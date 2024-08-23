@@ -7,7 +7,7 @@ import {
 } from '@constants/hpiEnums';
 import { CurrentNoteState } from '@redux/reducers';
 import { isHPIResponseValid } from '@utils/getHPIFormData';
-import { getNodeConditions } from '@utils/getHPIText';
+import { getNodeConditions } from '@utils/textGeneration/extraction/extractHpi';
 
 function traverseNodes(
     currNodes: string[],
@@ -18,6 +18,20 @@ function traverseNodes(
     let nodesArr: string[] = [],
         stack = currNodes,
         totalNodes = stack;
+
+    /*Sort Stack based on displayOrder if available.*/
+    stack.sort((a, b) => {
+        const nodeA = state.hpi.nodes[a] as { displayOrder?: number };
+        const nodeB = state.hpi.nodes[b] as { displayOrder?: number };
+        if (
+            nodeA?.displayOrder !== undefined &&
+            nodeB?.displayOrder !== undefined
+        ) {
+            return nodeB.displayOrder - nodeA.displayOrder;
+        }
+        return 0; // If displayOrder is not defined, maintain order
+    });
+
     while (stack.length) {
         const currNode = stack.pop();
         if (!currNode) continue;
@@ -33,9 +47,11 @@ function traverseNodes(
         );
 
         if (
-            [ResponseTypes.SELECTMANY, ResponseTypes.SELECTONE].includes(
-                nodes[currNode].responseType
-            ) &&
+            [
+                ResponseTypes.SELECTMANY,
+                ResponseTypes.SELECTONE,
+                ResponseTypes.SELECTMANYDENSE,
+            ].includes(nodes[currNode].responseType) &&
             isValidResponseResult
         ) {
             const childNodesToDisplay: string[] = [];
@@ -64,6 +80,8 @@ function traverseNodes(
                 nodes[currNode].response == YesNoResponse.Yes) ||
             (nodes[currNode].responseType == ResponseTypes.NO_YES &&
                 nodes[currNode].response == YesNoResponse.No) ||
+            (nodes[currNode].responseType == ResponseTypes.SELECTMANYDENSE &&
+                isValidResponseResult) ||
             (nodes[currNode].responseType == ResponseTypes.SELECTMANY &&
                 isValidResponseResult) ||
             (nodes[currNode].responseType == ResponseTypes.SELECTONE &&
@@ -80,7 +98,7 @@ export function nodesToDisplayInOrder(
     currCat: string,
     state: CurrentNoteState
 ): string[] {
-    const { chiefComplaints, hpi } = state,
+    const { chiefComplaints, hpi, productDefinition } = state,
         [firstOrderNodesMap, totalNodes] = firstOrderNodes(state) as [
             {
                 [chiefComplaint: string]: string[];
@@ -88,21 +106,25 @@ export function nodesToDisplayInOrder(
             string[],
         ];
     let loopCount = 0;
-    if (totalNodes.length < displayedNodesCutOff) {
+
+    // Ensure maxLimit defaults to displayedNodesCutOff to avoid being null.
+    const maxLimit =
+        productDefinition.definitions?.displayedNodesCutOff ??
+        displayedNodesCutOff;
+
+    if (totalNodes.length < maxLimit) {
         let nodesArr = totalNodes, // for the count
             nodesSoFar: string[] = [];
-        while (
-            nodesArr.length < displayedNodesCutOff &&
-            loopCount < displayedNodesCutOff
-        ) {
+        while (nodesArr.length < maxLimit && loopCount < maxLimit) {
             loopCount++;
             for (let i = 0; i < Object.keys(chiefComplaints).length; i++) {
                 const chiefComplaint = Object.keys(chiefComplaints)[i],
                     currNodesArr = traverseNodes(
                         firstOrderNodesMap[chiefComplaint],
                         state,
-                        displayedNodesCutOff - nodesArr.length
+                        maxLimit - nodesArr.length
                     ).filter((node) => !nodesSoFar.includes(node));
+
                 if (chiefComplaint == currCat) return currNodesArr;
                 nodesArr = [
                     ...new Set([

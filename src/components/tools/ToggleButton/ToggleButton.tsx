@@ -72,7 +72,9 @@ export default function ToggleButton<T = string>(props: ButtonProps<T>) {
             }
         >
             {active && <CheckRoundedIcon />}
-            <span className={style.toogleButton__title}>{title}</span>
+            <span className={style.toogleButton__title}>
+                {title === 'yes' ? 'Yes' : title === 'no' ? 'No' : title}
+            </span>
         </Button>
     );
 }

@@ -56,6 +56,11 @@ import {
     surgicalHistoryReducer,
 } from './surgicalHistoryReducer';
 import { initialUserViewState, userViewReducer } from './userViewReducer';
+import {
+    initialProductDefinitionState,
+    productDefinitionReducer,
+} from './productDefinitionReducer';
+import { initialPatientsState, patientReducer } from './patientReducer';
 
 const currentNoteReducer = combineReducers({
     reviewOfSystems: reviewOfSystemsReducer,
@@ -76,7 +81,9 @@ const currentNoteReducer = combineReducers({
     userView: userViewReducer,
     activeItem: activeItemReducer,
     additionalSurvey: additionalSurveyReducer,
+    productDefinition: productDefinitionReducer,
     loadingStatus: loadingStatusReducer,
+    patientsDetails: patientReducer,
 });
 
 export type CurrentNoteState = ReturnType<typeof currentNoteReducer>;
@@ -100,7 +107,9 @@ export const initialState: CurrentNoteState = {
     userView: initialUserViewState,
     activeItem: initialActiveItemState,
     additionalSurvey: initialAdditionalSurveyData,
+    productDefinition: initialProductDefinitionState,
     loadingStatus: initialLoadingStatus,
+    patientsDetails: initialPatientsState,
 };
 
 export function rootReducer(

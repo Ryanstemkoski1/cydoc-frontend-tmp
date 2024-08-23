@@ -23,12 +23,14 @@ export default function LogoHeader({ title }: Props) {
                 />
                 <Header as='h1' className='logo-text' content='Cydoc' />
             </Stack>
-            <Container
-                className='login-header'
-                color='black'
-                textAlign='center'
-                content={title}
-            />
+            {!!title && (
+                <Container
+                    className='login-header'
+                    color='black'
+                    textAlign='center'
+                    content={title}
+                />
+            )}
         </>
     );
 }

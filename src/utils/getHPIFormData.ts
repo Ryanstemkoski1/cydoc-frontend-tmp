@@ -1,10 +1,12 @@
 import {
-    HpiResponseType,
+    NodeResponseType,
     ResponseTypes,
     SelectManyInput,
     SelectOneInput,
 } from '@constants/hpiEnums';
-import getHPIText, { HPIReduxValues } from './getHPIText';
+import getHpiArrayWithNoDups, {
+    WholeNoteReduxValues,
+} from '@utils/textGeneration/extraction/getHPIArray';
 import { UserSurveyState } from '@redux/reducers/userViewReducer';
 import { AdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
 
@@ -15,7 +17,7 @@ function sanitizeString(str: string) {
 export default function getHPIFormData(
     additionalSurvey: AdditionalSurvey,
     userSurvey: UserSurveyState,
-    state: HPIReduxValues
+    state: WholeNoteReduxValues
 ) {
     const {
         legalFirstName: first_name = '',
@@ -25,13 +27,24 @@ export default function getHPIFormData(
         socialSecurityNumber: last_4_ssn = '',
     } = additionalSurvey;
 
+    // Set patientName to the value from additionalSurvey.legalLastName.
+    const updatedState = {
+        ...state,
+        patientInformation: {
+            ...state.patientInformation,
+            patientName: additionalSurvey.legalLastName
+                ? additionalSurvey.legalLastName
+                : '',
+        },
+    };
+
     return {
         first_name: sanitizeString(first_name),
         middle_name: sanitizeString(middle_name),
         last_name: sanitizeString(last_name),
         date_of_birth,
         last_4_ssn,
-        hpi_text: JSON.stringify(getHPIText(true, state)),
+        hpi_text: JSON.stringify(getHpiArrayWithNoDups(updatedState)),
         clinician_last_name: sanitizeString(
             (userSurvey?.nodes['9']?.response ?? '') as string
         ).trim(),
@@ -53,10 +66,11 @@ export function isResponseValid(response = {}): boolean {
 }
 
 export function isHPIResponseValid(
-    response: HpiResponseType,
+    response: NodeResponseType,
     responseType: ResponseTypes
 ): boolean {
     switch (responseType) {
+        case ResponseTypes.SELECTMANYDENSE:
         case ResponseTypes.SELECTMANY:
         case ResponseTypes.SELECTONE: {
             const newResponse = response as SelectManyInput | SelectOneInput;

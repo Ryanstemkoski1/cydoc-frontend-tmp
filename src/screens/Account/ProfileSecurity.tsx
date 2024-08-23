@@ -124,9 +124,6 @@ const ProfileSecurity = () => {
 
     return (
         <CenteredPaper>
-            <Header as='h2' textAlign='center' content='Profile Security' />
-            <Divider />
-            <Header textAlign='center' as='h3' content='Change Password' />
             <Form onSubmit={handleChangePasswordSubmit}>
                 <Form.Input
                     fluid
