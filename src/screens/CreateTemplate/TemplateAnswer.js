@@ -5,10 +5,8 @@ import { graphClient } from 'constants/api';
 import diseaseCodes from 'constants/diseaseCodes';
 import { questionTypeMapping, questionTypes } from 'constants/questionTypes';
 import FamilyHistoryContent from 'screens/EditNote/content/familyhistory/FamilyHistoryContent';
-import {
-    capitalize,
-    fillAnswers,
-} from 'screens/EditNote/content/generatenote/generateHpiText';
+import { capitalize } from '@screens/EditNote/content/generatenote/formatter/handleSmartFormFormatting';
+import { fillAnswers } from '@utils/textGeneration/processing/fillHPIAnswers';
 import MedicalHistoryContent from 'screens/EditNote/content/medicalhistory/MedicalHistoryContent';
 import MedicationsContent from 'screens/EditNote/content/medications/MedicationsContent';
 import SurgicalHistoryContent from 'screens/EditNote/content/surgicalhistory/SurgicalHistoryContent';
@@ -23,7 +21,7 @@ import {
     Message,
 } from 'semantic-ui-react';
 import HPITemplateContext from '../../contexts/HPITemplateContext';
-import { joinLists } from '../../utils/getHPIText';
+import { joinLists } from '@utils/textGeneration/extraction/extractNodeDetails';
 import GeneratedSentence from './modules/GeneratedSentence';
 import ImportQuestionForm from './modules/ImportQuestionForm';
 import { RESPONSE_PLACEHOLDER } from './placeholders';

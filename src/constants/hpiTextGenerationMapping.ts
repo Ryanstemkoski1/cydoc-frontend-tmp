@@ -40,3 +40,11 @@ export const PART_OF_SPEECH_CORRECTION_MAP: Map<string, string> = new Map([
     [' they reports ', ' they report '],
     [' theys ', ' their '],
 ]);
+
+// Convert Map to an Object with Spaces Removed
+export const PART_OF_SPEECH_CORRECTION_OBJECT = Object.fromEntries(
+    Array.from(PART_OF_SPEECH_CORRECTION_MAP, ([key, value]) => [
+        key.trim(),
+        value.trim(),
+    ])
+);

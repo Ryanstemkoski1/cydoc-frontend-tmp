@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import style from './GeneratedNoteContent.module.scss';
-import { ParseAndRenderHpiNote } from '@screens/EditNote/content/generatenote/notesections/HPINote';
+import HpiNote from '@screens/EditNote/content/generatenote/notesections/HPINote';
 import { toast } from 'react-toastify';
 import { Box, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -226,10 +226,9 @@ const GeneratedNoteContent = (
                 </Box>
                 {hpiText !== undefined && !hpiText.includes('No history') && (
                     <Box className={style.genNoteDetail} id='copy-notes'>
-                        <ParseAndRenderHpiNote
-                            hpiText={hpiText}
+                        <HpiNote
+                            text={JSON.parse(hpiText)}
                             isParagraphFormat={false}
-                            isAdvancedReport={true}
                         />
                     </Box>
                 )}

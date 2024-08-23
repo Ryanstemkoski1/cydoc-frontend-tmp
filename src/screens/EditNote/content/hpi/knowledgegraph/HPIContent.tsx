@@ -21,8 +21,6 @@ import DiseaseForm from './components/DiseaseForm';
 import MiscBox from './components/MiscBox';
 import './css/App.css';
 import { favChiefComplaints } from 'classes/institution.class';
-import { setProductDefinitionAction } from '@redux/actions/productDefinitionAction';
-import { ProductType } from '@constants/FormPreferencesConstant';
 
 interface OwnProps {
     step: number;
@@ -63,10 +61,6 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             const data = hpiHeaders;
             data.then((res) => this.props.saveHpiHeader(res.data));
         }
-        // set the product definition according to any API result for product definition
-        this.props.setProductDefinitionAction(
-            ProductType.ADVANCED_REPORT_GENERATION
-        );
     }
 
     getData = async (complaint: string) => {
@@ -261,7 +255,6 @@ const mapDispatchToProps = {
     setChiefComplaint,
     processKnowledgeGraph,
     saveHpiHeader,
-    setProductDefinitionAction,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

@@ -1,14 +1,18 @@
-import { PatientPronouns } from '../../../../../constants/patientInformation';
+import { PatientPronouns } from '../../constants/patientInformation';
 import {
     abbreviate,
-    capitalize,
-    // createHPI,
-    // definePatientNameAndPronouns,
-    fillAnswers,
     fillMedicalTerms,
-    fillNameAndPronouns,
+    handlePAITerms,
+} from '../textGeneration/processing/handleHPIWordReplacements';
+import {
+    fillAnswers,
     fullClean,
-} from '../generateHpiText';
+} from '../textGeneration/processing/fillHPIAnswers';
+import {
+    retainAllowedPunctuation,
+    capitalize,
+} from '../../screens/EditNote/content/generatenote/formatter/handleSmartFormFormatting';
+import { fillNameAndPronouns } from '../textGeneration/processing/handlePatientNameAndPronouns';
 
 // const EXAMPLE = {
 //     1: ['the patient has hypertension', ''],
@@ -123,8 +127,8 @@ describe('generateHpiText', () => {
         //     const gender = 'M';
         //     const expected = {
         //         name: 'Mr. Foo',
-        //         objPronoun: 'he',
-        //         posPronoun: 'his',
+        //         subjectPronoun: 'he',
+        //         possessiveAdjective: 'his',
         //     };
         //     expect(
         //         definePatientNameAndPronouns(title, lastname, gender)
@@ -136,8 +140,8 @@ describe('generateHpiText', () => {
         //     const gender = 'F';
         //     const expected = {
         //         name: 'Ms. Foo',
-        //         objPronoun: 'she',
-        //         posPronoun: 'her',
+        //         subjectPronoun: 'she',
+        //         possessiveAdjective: 'her',
         //     };
         //     expect(
         //         definePatientNameAndPronouns(title, lastname, gender)
@@ -149,8 +153,8 @@ describe('generateHpiText', () => {
         //     const gender = 'F';
         //     const expected = {
         //         name: 'Dr. Foo',
-        //         objPronoun: 'she',
-        //         posPronoun: 'her',
+        //         subjectPronoun: 'she',
+        //         possessiveAdjective: 'her',
         //     };
         //     expect(
         //         definePatientNameAndPronouns(title, lastname, gender)
@@ -164,8 +168,8 @@ describe('generateHpiText', () => {
             const patientInfo = {
                 name: '',
                 pronouns: PatientPronouns.She,
-                objPronoun: 'she',
-                posPronoun: 'her',
+                subjectPronoun: 'she',
+                possessiveAdjective: 'her',
             };
             const expected = 'her dog is cute.';
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
@@ -177,10 +181,10 @@ describe('generateHpiText', () => {
             const patientInfo = {
                 name: 'Judy',
                 pronouns: PatientPronouns.She,
-                objPronoun: 'she',
-                posPronoun: 'her',
+                subjectPronoun: 'she',
+                possessiveAdjective: 'her',
             };
-            const expected = "Ms.Judy's dog is cute.";
+            const expected = "Ms. Judy's dog is cute.";
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
                 expected
             );
@@ -191,11 +195,11 @@ describe('generateHpiText', () => {
             const patientInfo = {
                 name: 'Judy',
                 pronouns: PatientPronouns.He,
-                objPronoun: 'he',
-                posPronoun: 'his',
+                subjectPronoun: 'he',
+                possessiveAdjective: 'his',
             };
             const expected =
-                "Mr.Judy's dog is cute. His dog's name is Muffin and Muffin likes icecream.";
+                "Mr. Judy's dog is cute. His dog's name is Muffin and Muffin likes icecream.";
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
                 expected
             );
@@ -206,50 +210,14 @@ describe('generateHpiText', () => {
             const patientInfo = {
                 name: 'Mike',
                 pronouns: PatientPronouns.They,
-                objPronoun: 'they',
-                posPronoun: 'their',
+                subjectPronoun: 'they',
+                possessiveAdjective: 'their',
+                objectPronoun: 'them',
+                possessivePronoun: 'theirs',
+                reflexivePronoun: 'themselves',
             };
             const expected =
                 'They has many problems with their dogs; nobody loves them.';
-            expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
-                expected
-            );
-        });
-        it('replaces He/she', () => {
-            const hpiString = 'He/she loves dog, and he/she also loves cat.';
-            const patientInfo = {
-                name: '',
-                pronouns: PatientPronouns.They,
-                objPronoun: 'they',
-                posPronoun: 'their',
-            };
-            const expected = 'Patient loves dog, and patient also loves cat.';
-            expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
-                expected
-            );
-        });
-        it("replaces the client's", () => {
-            const hpiString = "the client's cat name is Molly.";
-            const patientInfo = {
-                name: '',
-                pronouns: PatientPronouns.They,
-                objPronoun: 'they',
-                posPronoun: 'their',
-            };
-            const expected = 'the patient\'s cat name is Molly.';
-            expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
-                expected
-            );
-        });
-        it('replaces respondent', () => {
-            const hpiString = 'respondent loves cat.';
-            const patientInfo = {
-                name: '',
-                pronouns: PatientPronouns.They,
-                objPronoun: 'they',
-                posPronoun: 'their',
-            };
-            const expected = 'patient loves cat.';
             expect(fillNameAndPronouns(hpiString, patientInfo)).toEqual(
                 expected
             );
@@ -260,8 +228,8 @@ describe('generateHpiText', () => {
         //     expect(
         //         fillNameAndPronouns('', {
         //             name: '',
-        //             objPronoun: '',
-        //             posPronoun: '',
+        //             subjectPronoun: '',
+        //             possessiveAdjective: '',
         //         })
         //     ).toEqual('');
         // });
@@ -269,8 +237,8 @@ describe('generateHpiText', () => {
         //     const inp = "their name? the patient's age?";
         //     const patient = {
         //         name: 'foo',
-        //         objPronoun: 'she',
-        //         posPronoun: 'her',
+        //         subjectPronoun: 'she',
+        //         possessiveAdjective: 'her',
         //     };
         //     const expected = 'her name? her age?';
         //     expect(fillNameAndPronouns(inp, patient)).toEqual(expected);
@@ -281,14 +249,50 @@ describe('generateHpiText', () => {
         //         'patient feels better. the patient recovered';
         //     const patient = {
         //         name: 'foo',
-        //         objPronoun: 'she',
-        //         posPronoun: 'her',
+        //         subjectPronoun: 'she',
+        //         possessiveAdjective: 'her',
         //     };
         //     const expected =
         //         'foo is tired. she slept, and she feels better.' +
         //         ' foo recovered';
         //     expect(fillNameAndPronouns(inp, patient)).toEqual(expected);
         // });
+    });
+
+    describe('handlePAITerms', () => {
+        it('replaces respondent', () => {
+            const hpiString = 'respondent loves cat.';
+            const patientInfo = {
+                name: '',
+                pronouns: PatientPronouns.They,
+                subjectPronoun: 'they',
+                possessiveAdjective: 'their',
+            };
+            const expected = 'patient loves cat.';
+            expect(handlePAITerms(hpiString, patientInfo)).toEqual(expected);
+        });
+        it("replaces the client's", () => {
+            const hpiString = "the client's cat name is Molly.";
+            const patientInfo = {
+                name: '',
+                pronouns: PatientPronouns.They,
+                subjectPronoun: 'they',
+                possessiveAdjective: 'their',
+            };
+            const expected = "the patient's cat name is Molly.";
+            expect(handlePAITerms(hpiString, patientInfo)).toEqual(expected);
+        });
+        it('replaces He/she', () => {
+            const hpiString = 'He/she loves dog, and he/she also loves cat.';
+            const patientInfo = {
+                name: '',
+                pronouns: PatientPronouns.They,
+                subjectPronoun: 'they',
+                possessiveAdjective: 'their',
+            };
+            const expected = 'Patient loves dog, and patient also loves cat.';
+            expect(handlePAITerms(hpiString, patientInfo)).toEqual(expected);
+        });
     });
 
     describe('fillMedicalTerms', () => {
@@ -366,17 +370,17 @@ describe('generateHpiText', () => {
         it('removes appropriate punctuation', () => {
             const inp = 'foo!:;? bar, 42. 24';
             const expected = 'foo: bar, 42. 24';
-            expect(fullClean(inp)).toEqual(expected);
+            expect(fullClean(retainAllowedPunctuation(inp))).toEqual(expected);
         });
 
         it('chains the rules', () => {
             const inp = '  foo?  BAR!! 42?   24,  eom';
             const expected = 'foo BAR 42 24, eom';
-            expect(fullClean(inp)).toEqual(expected);
+            expect(fullClean(retainAllowedPunctuation(inp))).toEqual(expected);
         });
     });
 
-    describe.todo('createHPI', () => {
+    describe.todo('doAllHPIWordReplacements', () => {
         // // TODO: Fix below tests
         // it('chains everything together', () => {
         //     const hpi = {
@@ -396,14 +400,14 @@ describe('generateHpiText', () => {
         //         'Additionally, his family has a history of hypertension. ' +
         //         // TODO: need to account for direct object pronouns
         //         'Barriers that make it difficult for he: so I work long hours. ';
-        //     expect(createHPI(hpi, patientName, PatientPronouns.He)).toEqual(
+        //     expect(doAllHPIWordReplacements(hpi, patientName, PatientPronouns.He)).toEqual(
         //         expected
         //     );
         // });
         // it('generates text for the example', () => {
         //     const patientName = 'Ms. Lee';
         //     expect(
-        //         createHPI(EXAMPLE, patientName, PatientPronouns.She)
+        //         doAllHPIWordReplacements(EXAMPLE, patientName, PatientPronouns.She)
         //     ).toMatchSnapshot();
         // });
     });
