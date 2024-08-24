@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter } from '../common/textUtils';
+import { capitalizeFirstLetter, replaceMappedWords } from '../common/textUtils';
 import { PART_OF_SPEECH_CORRECTION_OBJECT } from '@constants/hpiTextGenerationMapping';
 import {
     ABBREVIFY,
@@ -37,35 +37,6 @@ export const doAllHPIWordReplacements = (
     hpiString = partOfSpeechCorrection(hpiString); // Apply part-of-speech corrections
     hpiString = fillMedicalTerms(hpiString); // Fill or correct medical terms
     hpiString = abbreviate(hpiString); // Apply common abbreviations
-    return hpiString;
-};
-
-/**
- * A Helper Function is designed to replace specific words in a string with
- * new words based on a given mapping,
- * while also handling punctuation and sentence boundaries.
- *
- * Usage: fillMedicalTerms, abbreviate, handlePAITerms
- */
-const replaceMappedWords = (
-    hpiString: string,
-    mapping: { [key: string]: string }
-): string => {
-    const END_OF_SENTENCE_PUNC = '.!?';
-    Object.entries(mapping).forEach(([key, value]) => {
-        const regex = new RegExp(
-            `\\b${key}([${END_OF_SENTENCE_PUNC},:]?)\\b`,
-            'gi'
-        );
-        hpiString = hpiString.replace(regex, (match, punctuation) => {
-            // Preserve the original case of the first letter
-            const replacement =
-                match[0] === match[0].toUpperCase()
-                    ? capitalizeFirstLetter(value)
-                    : value;
-            return `${replacement}${punctuation}`;
-        });
-    });
     return hpiString;
 };
 

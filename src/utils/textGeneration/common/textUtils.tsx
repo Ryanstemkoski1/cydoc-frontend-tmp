@@ -44,3 +44,72 @@ export const replaceWordCaseSensitive = (word: string, replace: string) => {
         ? capitalizeFirstLetter(replace)
         : replace;
 };
+
+/**
+ * A Helper Function that extracts text inside quotation marks, replaces it with a keyword,
+ * and returns both the modified text and a map of the keywords to their original quoted text.
+ *
+ * e.g:
+ * text = 'When asked to describe her father\'s occupation at that time, she replied, "He was a carpenter,"
+ *         and when asked about her mother\'s occupation, she stated, "She cleaned houses."';
+ *
+ * returns:
+ * --> replacedText = 'When asked to describe her father\'s occupation at that time, she replied, "Q1R,"
+ *                      and when asked about her mother\'s occupation, she stated, "Q2R."'
+ *
+ * --> quotedTextMap = { Q1R: '"He was a carpenter,"', Q2R: '"She cleaned houses."' }
+ */
+export const replaceQuotedTextWithKeyword = (
+    text: string
+): { replacedText: string; quotedTextMap: { [key: string]: string } } => {
+    const regex = /"([^"]*)"/g;
+    const quotedTextMap: { [key: string]: string } = {};
+    let replacedText = text;
+    let match: RegExpExecArray | null;
+    let counter = 1;
+
+    // Find all matches and replace with keywords
+    while ((match = regex.exec(text)) !== null) {
+        const quotedText = match[1];
+        const keyword = `Q${counter}R`;
+
+        // Update the map with the quoted text and its keyword
+        quotedTextMap[keyword] = quotedText;
+
+        // Replace the quoted text with its keyword in the replacedText
+        replacedText = replacedText.replace(`"${quotedText}"`, `"${keyword}"`);
+
+        counter++;
+    }
+
+    return { replacedText, quotedTextMap };
+};
+
+/**
+ * A Helper Function is designed to replace specific words in a string with
+ * new words based on a given mapping,
+ * while also handling punctuation and sentence boundaries.
+ *
+ * Usage: fillMedicalTerms, abbreviate, handlePAITerms, fillNameAndPronouns
+ */
+export const replaceMappedWords = (
+    hpiString: string,
+    mapping: { [key: string]: string }
+): string => {
+    const END_OF_SENTENCE_PUNC = '.!?';
+    Object.entries(mapping).forEach(([key, value]) => {
+        const regex = new RegExp(
+            `\\b${key}([${END_OF_SENTENCE_PUNC},:]?)\\b`,
+            'gi'
+        );
+        hpiString = hpiString.replace(regex, (match, punctuation) => {
+            // Preserve the original case of the first letter
+            const replacement =
+                match[0] === match[0].toUpperCase()
+                    ? capitalizeFirstLetter(value)
+                    : value;
+            return `${replacement}${punctuation}`;
+        });
+    });
+    return hpiString;
+};

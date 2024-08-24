@@ -3,6 +3,8 @@ import {
     replaceWordCaseSensitive,
     capitalizeFirstLetter,
     splitByPeriod,
+    replaceQuotedTextWithKeyword,
+    replaceMappedWords,
 } from '../common/textUtils';
 
 /**
@@ -75,6 +77,8 @@ export const definePatientNameAndPronouns = (
  * - Handles special cases for pronouns, including alternating replacements and updating various pronouns.
  *
  * Used in DoAllHPIWordReplacements
+ *
+ * // TODO: it should consider the inside quotation marks remain unchanged.
  */
 export const fillNameAndPronouns = (
     hpiString: string,
@@ -106,6 +110,12 @@ export const fillNameAndPronouns = (
     // 1) they -> she/he 2) their -> her/his 3) she's/he's -> her/his 4) theirs -> hers/his
     // 5) them -> her/him 6) himselves/herselves -> himself/herself
     const newHpiString = splitByPeriod(hpiString, true).map((sentence) => {
+        // Consider the case: text inside quotation marks:
+        const { replacedText, quotedTextMap } =
+            replaceQuotedTextWithKeyword(sentence);
+
+        sentence = replacedText;
+
         // Replace "[t]he patient|[patient]" with "she/he/they/name"
         const patientRegex = /\b[Tt]he patient\b|\b[Pp]atient\b/g;
         if (patientRegex.test(sentence)) {
@@ -155,6 +165,8 @@ export const fillNameAndPronouns = (
         sentence = sentence.replace(/ your /g, ' ' + possessiveAdjective + ' ');
         sentence = sentence.replace(/ you /g, ' ' + subjectPronoun + ' ');
 
+        // put back the content back within quotation marks.
+        sentence = replaceMappedWords(sentence, quotedTextMap);
         return sentence;
     });
 
