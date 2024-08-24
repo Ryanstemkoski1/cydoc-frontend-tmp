@@ -5,15 +5,14 @@ import { capitalizeFirstLetter } from '../../../../../utils/textGeneration/commo
  * consistency in smart form contexts.
  * It formats text by editing punctuation and capitalizing the first
  * letter of each sentence.
- *
+ * TODO: Consider more cases
  * Usage: HpiNote
  */
 export function smartFormFormatter(str: string): string {
     // Remove punctuation except periods, commas, forward slashes, apostrophes, colons, hyphens, and parentheses
-    let sentence = retainAllowedPunctuation(str);
+    // let sentence = retainAllowedPunctuation(str);
     // Capitalizing the first letter of each sentence
-    sentence = capitalize(sentence);
-    return sentence;
+    return capitalize(str);
 }
 
 /**

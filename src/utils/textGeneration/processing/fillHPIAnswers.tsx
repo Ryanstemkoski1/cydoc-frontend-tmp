@@ -9,6 +9,8 @@ import { HPI } from '../extraction/extractHpi';
  *    - Replaces 'ANSWER' and 'NOTANSWER' placeholders based on their values.
  *    - Replaces 'PARAGRAPHBREAK' with a new line.
  * 3. Combines and returns the processed sentences.
+ * 4. Handle 'HYPERLINK'.
+ * 5. Handle the incorrect combined puncturation in the fillSentence.
  */
 export const fillAnswers = (hpi: HPI): string => {
     const sortedKeys: number[] = Object.keys(hpi).map((val) => parseInt(val));
@@ -36,7 +38,7 @@ export const fillAnswers = (hpi: HPI): string => {
             // Replace 'ANSWER' with the cleaned answer
             fillSentence = fillSentence.replace(
                 /ANSWER/,
-                putQuotesAroundFirstPerson(answer)
+                putQuotesAroundFirstPerson(answer, fillSentence)
             );
         }
 
@@ -56,6 +58,9 @@ export const fillAnswers = (hpi: HPI): string => {
         if (fillSentence.includes('HYPERLINK')) {
             console.log('Hello, this is HYPERLINK');
         }
+
+        // 5. Handle the incorrect combined puncturation in the fillSentence.
+        fillSentence = handleCombinedPunctuation(fillSentence);
 
         // Combines all fillSentence
         hpiString += `${fillSentence} `;
@@ -110,13 +115,47 @@ const removeSentence = (fillSentence: string, keyword: string): string => {
 };
 
 /**
+ * A Helper Function to check if the sentence contains keyword 'ANSWER' and
+ * the key word "ANSWER" appears within quotation marks in a sentence, then
+ * return false.
+ */
+export const isAnswerWithinQuotes = (sentence: string): boolean => {
+    const regex = /"[^"]*"/g; // Match text within quotation marks
+    let match: RegExpExecArray | null;
+
+    while ((match = regex.exec(sentence)) !== null) {
+        if (match[0].includes('ANSWER')) {
+            // "ANSWER" is found within quotation marks
+            return true;
+        }
+    }
+
+    return false;
+};
+
+/**
  * A Helper Function to check if string has I in it, if so, returns it with quotes around.
+ *
+ * NOTE: If `fillSentence` contains the keyword 'ANSWER' and is within quotation marks
+ * (determined by `isAnswerWithinQuotes`), only capitalizes "i" and trims spaces.
+ * Otherwise, if "I" is present and `fillSentence` is not in quotes, adds quotes
+ * around the string, capitalizes "i", and trims spaces.
  * e.g. ' I love my cat. ' --> '"I love my cat."'
  *
  * Used in fillAnswers.
  */
-const putQuotesAroundFirstPerson = (str: string): string => {
+const putQuotesAroundFirstPerson = (
+    str: string,
+    fillSentence: string
+): string => {
     str = ' ' + str + ' ';
+    //Check if keyword 'ANSWER' in the fillSentence is within quotation marks
+    // not need to add quotation marks.
+    if (isAnswerWithinQuotes(fillSentence)) {
+        return str.includes(' i ') || str.includes(' I ')
+            ? str.replace(/ i /, ' I ').trim()
+            : str.trim();
+    }
     return str.includes(' i ') || str.includes(' I ')
         ? '"' + str.replace(/ i /, ' I ').trim() + '"'
         : str.trim();
@@ -164,4 +203,17 @@ export const uppercaseEthnicityAndMonths = (str: string): string => {
         }
     });
     return str;
+};
+
+/**
+ * A Helper Function to resolve incorrect combined punctuation (e,g ',.' or '!.')
+ */
+const handleCombinedPunctuation = (text: string): string => {
+    // Regex to find incorrect combined punctuation
+    const regex = /([,.!?])([,.!?])/g;
+    text = text.replace(regex, (match, p1, p2) => {
+        // p1 is the first punctuation mark, p2 is the second one
+        return `${p2}`;
+    });
+    return text;
 };
