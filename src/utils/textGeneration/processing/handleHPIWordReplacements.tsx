@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter, replaceMappedWords } from '../common/textUtils';
+import { replaceMappedWords } from '../common/textUtils';
 import { PART_OF_SPEECH_CORRECTION_OBJECT } from '@constants/hpiTextGenerationMapping';
 import {
     ABBREVIFY,
@@ -6,8 +6,10 @@ import {
     PAITERMS,
 } from '@constants/word-mappings';
 import { PatientPronouns } from '@constants/patientInformation';
-import { definePatientNameAndPronouns } from './handlePatientNameAndPronouns';
-import { fillNameAndPronouns } from './handlePatientNameAndPronouns';
+import {
+    definePatientNameAndPronouns,
+    fillNameAndPronouns,
+} from './handlePatientNameAndPronouns';
 
 /**
  * Generates a complete HPI text by processing the input string with the

@@ -1,3 +1,4 @@
+import { extractHeadings } from '@screens/EditNote/content/generatenote/formatter/handleManuallySpecifiedHeadings';
 import { PatientPronouns } from '@constants/patientInformation';
 import {
     replaceWordCaseSensitive,
@@ -104,6 +105,7 @@ export const fillNameAndPronouns = (
 
     // This retains the original logic. Split the hpiString to ensure the toggle control behavior works.
     let toggle = 1; // change this so that it gets replaced at random rather than alternating.
+    let prevEndsWithNewLine = false; // track the beginning of paragraph.
     // Split the hpiString by periods while retaining the periods. [consider 'NEW LINE']
     // If patient's pronouns is available, replace "[t]he patient|[patient]" with "she/he/they/name".
     // Otherwise, if patient's pronouns are not they/them, replace:
@@ -115,6 +117,13 @@ export const fillNameAndPronouns = (
             replaceQuotedTextWithKeyword(sentence);
 
         sentence = replacedText;
+
+        // This ensure to insert 'Mx.Lastname' title:
+        // The previous sentence is ends with paragraph
+        // The sentences contains the headings.
+        if (prevEndsWithNewLine || extractHeadings(sentence).length) {
+            toggle = 1;
+        }
 
         // Replace "[t]he patient|[patient]" with "she/he/they/name"
         const patientRegex = /\b[Tt]he patient\b|\b[Pp]atient\b/g;
@@ -167,6 +176,9 @@ export const fillNameAndPronouns = (
 
         // put back the content back within quotation marks.
         sentence = replaceMappedWords(sentence, quotedTextMap);
+
+        // update prevEndsWithNewLine
+        prevEndsWithNewLine = sentence.endsWith('\n');
         return sentence;
     });
 

@@ -61,7 +61,7 @@ export function extractHeadingsWithNormalText(str: string) {
  * e.g., ['REASON FOR REFERRAL:', 'PRESENTATION:'].
  * Usage: extractheadingsWithNormalText()
  */
-function extractHeadings(str: string): string[] {
+export function extractHeadings(str: string): string[] {
     // Regular expression to match potential headings
     const headingRegex = /([A-Z\s]{8,}:)/g;
     // Extract headings
