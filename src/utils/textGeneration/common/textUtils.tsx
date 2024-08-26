@@ -26,11 +26,16 @@ export function capitalizeFirstLetter(str: string) {
 export const splitByPeriod = (str: string, flag?: boolean) => {
     // Remove spaces after titles for processing
     str = str.replace(/(Mr\.|Mx\.|Ms\.)\s+/g, '$1');
-    // Split the string by '. ' or '.\n', but not after titles if flag is true
+    // Replace "e.g." and "i.e." with placeholders to avoid splitting them
+    str = str.replace(/\be\.g\./g, '__EG__').replace(/\bi\.e\./g, '__IE__');
+    // Split the string by '. ' or '.\n', but not after titles if flag is true,
     const strArr = flag ? str.split(/(?<=\.\s)/) : str.split(/(?<=\.)\s+/);
-    // Re-add spaces after titles
+    // Re-add spaces after titles; revert the placeholders back to "e.g" and "i.g"
     const result = strArr.map((sentence) => {
-        return sentence.replace(/\bMr\.|Mx\.|Ms\.\b/, (match) => match + ' ');
+        return sentence
+            .replace(/__EG__/g, 'e.g.')
+            .replace(/__IE__/g, 'i.e.')
+            .replace(/\bMr\.|Mx\.|Ms\.\b/, (match) => match + ' ');
     });
     return result;
 };

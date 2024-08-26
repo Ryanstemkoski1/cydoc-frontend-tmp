@@ -28,7 +28,7 @@ export const retainAllowedPunctuation = (str: string): string => {
 
 /**
  * Capitalizes the first letter of each sentence and the standalone 'i' in the text.
- *
+ * However, ignore cases ("e.g", "i.g")
  * - Replaces standalone 'i' with 'I' to ensure proper capitalization.
  * - Capitalizes the first letter of the entire string if it's not empty.
  * - Capitalizes the first letter of each sentence following punctuation marks (.!?).
@@ -37,20 +37,23 @@ export const retainAllowedPunctuation = (str: string): string => {
  * Usage: smartFromFormatter()
  * */
 export const capitalize = (hpiString: string): string => {
-    // replace 'i' with I
-    hpiString = hpiString.replace(
-        /(^|\s|\b)i(\s|$|\b)/g,
-        (match, p1, p2) => p1 + 'I' + p2
-    );
+    // Replace 'i' with a placeholder to avoid affecting 'i.e.'
+    hpiString = hpiString.replace(/\bi\b(?!\.\s*(e\.|i\.e\.))/g, '__TEMP__');
+
     // Capitalize the very first letter of the string
     if (hpiString.length > 0) {
         hpiString = capitalizeFirstLetter(hpiString);
     }
     // Capitalize the first letter of each sentence after each [.?!]
+    // but skip if followed by 'e.g.', 'i.e.', etc.
     hpiString = hpiString.replace(
-        /([.?!])\s*([a-z])/g,
+        /([.?!])\s+(?!e\.g\.|i\.e\.)([a-z])/g,
         (match, p1, p2) => `${p1} ${p2.toUpperCase()}`
     );
+
+    // Replace the placeholder back to 'i'
+    hpiString = hpiString.replace(/__TEMP__/g, 'I');
+
     // replace to capitalize the word after heading ends with ':'
     hpiString = hpiString.replace(/:\s+(\w)/g, (match, p1) => {
         return `: ${capitalizeFirstLetter(p1)}`;
