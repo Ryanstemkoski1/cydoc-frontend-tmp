@@ -224,7 +224,9 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
     //Method to generate the table header row
     makeHeader() {
         const fields = this.props.hide
-            ? ['Procedure', '']
+            ? this.props.responseType === ResponseTypes.PSH_POP
+                ? []
+                : ['Procedure', '']
             : ['Procedure', '', 'Year', 'Comments'];
         return fields.map((item) => ({ title: item, col: 1 }));
     }

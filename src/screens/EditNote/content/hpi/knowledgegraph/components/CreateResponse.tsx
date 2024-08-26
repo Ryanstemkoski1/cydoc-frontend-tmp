@@ -320,7 +320,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         responseChoice={choices}
                         responseType={responseType}
                         node={node}
-                        hide={false}
+                        hide={true}
                     />
                 );
             case ResponseTypes.PSH_BLANK:
