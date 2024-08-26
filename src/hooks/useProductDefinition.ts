@@ -4,16 +4,16 @@ import { useDispatch } from 'react-redux';
 
 const useProductDefinition = () => {
     const dispatch = useDispatch();
+    let productType = ProductName.SMART_PATIENT_INTAKE_FORM;
 
-    const productType = localStorage.getItem('productType');
+    try {
+        const storedVal = localStorage.getItem('productType') || '';
+        if (storedVal) {
+            productType = storedVal as ProductName;
+        }
+    } catch (error) {}
 
-    if (!productType) {
-        dispatch(
-            setProductDefinitionAction(ProductName.SMART_PATIENT_INTAKE_FORM)
-        );
-    } else {
-        dispatch(setProductDefinitionAction(productType as ProductName));
-    }
+    dispatch(setProductDefinitionAction(productType as ProductName));
 };
 
 export default useProductDefinition;
