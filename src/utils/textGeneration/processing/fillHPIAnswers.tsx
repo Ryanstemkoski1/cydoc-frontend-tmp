@@ -9,8 +9,7 @@ import { HPI } from '../extraction/extractHpi';
  *    - Replaces 'ANSWER' and 'NOTANSWER' placeholders based on their values.
  *    - Replaces 'PARAGRAPHBREAK' with a new line.
  * 3. Combines and returns the processed sentences.
- * 4. Handle 'HYPERLINK'.
- * 5. Handle the incorrect combined puncturation in the fillSentence.
+ * 4. Handle the incorrect combined puncturation in the fillSentence.
  */
 export const fillAnswers = (hpi: HPI): string => {
     const sortedKeys: number[] = Object.keys(hpi).map((val) => parseInt(val));
@@ -54,12 +53,7 @@ export const fillAnswers = (hpi: HPI): string => {
         // 3. Handle 'PARAGRAPHBREAK' token
         fillSentence = fillSentence.replace(/PARAGRAPHBREAK/g, '\n');
 
-        // 4. Handle 'HYPERLINK'
-        if (fillSentence.includes('HYPERLINK')) {
-            console.log('Hello, this is HYPERLINK');
-        }
-
-        // 5. Handle the incorrect combined puncturation in the fillSentence.
+        // 4. Handle the incorrect combined puncturation in the fillSentence.
         fillSentence = handleCombinedPunctuation(fillSentence);
 
         // Combines all fillSentence

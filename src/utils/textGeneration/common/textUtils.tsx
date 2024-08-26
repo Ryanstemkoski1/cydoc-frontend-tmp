@@ -24,6 +24,17 @@ export function capitalizeFirstLetter(str: string) {
  *               "    How can I assist you today?\n"]
  */
 export const splitByPeriod = (str: string, flag?: boolean) => {
+    // Regular expression to match hyperlinks including those without schema
+    const hyperlinkRegex =
+        /(\b(?:http|https):\/\/[^\s]+|www\.[^\s]+)(?=\s|$)/gi;
+    const hyperlinkPlaceholder = '__HYPERLINK__';
+    const hyperlinkMap = new Map<string, string>();
+    // Replace hyperlinks with placeholders
+    str = str.replace(hyperlinkRegex, (match) => {
+        const key = `${hyperlinkPlaceholder}${hyperlinkMap.size}`;
+        hyperlinkMap.set(key, match);
+        return key;
+    });
     // Remove spaces after titles for processing
     str = str.replace(/(Mr\.|Mx\.|Ms\.)\s+/g, '$1');
     // Replace "e.g." and "i.e." with placeholders to avoid splitting them
@@ -35,7 +46,11 @@ export const splitByPeriod = (str: string, flag?: boolean) => {
         return sentence
             .replace(/__EG__/g, 'e.g.')
             .replace(/__IE__/g, 'i.e.')
-            .replace(/\bMr\.|Mx\.|Ms\.\b/, (match) => match + ' ');
+            .replace(/\bMr\.|Mx\.|Ms\.\b/, (match) => match + ' ')
+            .replace(
+                /__HYPERLINK__\d+/g,
+                (match) => hyperlinkMap.get(match) || match
+            );
     });
     return result;
 };
