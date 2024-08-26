@@ -10,6 +10,8 @@ const useProductDefinition = () => {
         const storedVal = localStorage.getItem('productType') || '';
         if (storedVal) {
             productType = storedVal as ProductName;
+        } else {
+            localStorage.setItem('productType', productType);
         }
     } catch (error) {}
 
