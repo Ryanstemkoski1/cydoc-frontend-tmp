@@ -37,6 +37,10 @@ export const retainAllowedPunctuation = (str: string): string => {
  * Usage: smartFromFormatter()
  * */
 export const capitalize = (hpiString: string): string => {
+    // Define special cases to be handled
+    const specialCases = /e\.g\.|i\.e\./gi;
+    const placeholder = '__SPECIAL_CASE__';
+
     // Replace 'i' with a placeholder to avoid affecting 'i.e.'
     hpiString = hpiString.replace(/\bi\b(?!\.\s*(e\.|i\.e\.))/g, '__TEMP__');
 
@@ -46,10 +50,15 @@ export const capitalize = (hpiString: string): string => {
     }
     // Capitalize the first letter of each sentence after each [.?!]
     // but skip if followed by 'e.g.', 'i.e.', etc.
-    hpiString = hpiString.replace(
-        /([.?!])\s+(?!e\.g\.|i\.e\.)([a-z])/g,
-        (match, p1, p2) => `${p1} ${p2.toUpperCase()}`
-    );
+    hpiString = hpiString.replace(/([.?!])\s+([a-z])/g, (match, p1, p2) => {
+        // Check if the previous text ends with a special case
+        const precedingText = hpiString.slice(
+            0,
+            hpiString.indexOf(match) + match.length
+        );
+        const isSpecialCase = specialCases.test(precedingText);
+        return isSpecialCase ? match : `${p1} ${p2.toUpperCase()}`;
+    });
 
     // Replace the placeholder back to 'i'
     hpiString = hpiString.replace(/__TEMP__/g, 'I');
