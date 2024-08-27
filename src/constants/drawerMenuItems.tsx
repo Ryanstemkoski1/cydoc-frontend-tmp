@@ -34,7 +34,7 @@ export const clinicalWorkflowItems: MenuItem[] = [
 
 export const practiceAdminMenuItems: MenuItem[] = [
     {
-        href: '/form-preferences',
+        href: '/templates/edit',
         label: 'Form Templates',
         icon: <ArticleRoundedIcon />,
     },
