@@ -6,6 +6,7 @@ import { splitByPeriod } from '@utils/textGeneration/common/textUtils';
 import { smartFormFormatter } from '../formatter/handleSmartFormFormatting';
 import { useSelector } from 'react-redux';
 import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
+import HandleHyperlinkFormatter from '../formatter/handleHyperlinkFormatter';
 
 /**
  * The HpiNote component is responsible for formatting and displaying the HPI.
@@ -77,7 +78,7 @@ const HpiNote = ({
                                     <br />
                                 </>
                             )}
-                            <span>{normalText}</span>
+                            <span>{HandleHyperlinkFormatter(normalText)}</span>
                         </div>
                     ))}
                     {miscTexts && <span>{miscTexts}</span>}
@@ -105,7 +106,11 @@ const HpiNote = ({
                             )}
                             {splitByPeriod(normalText).map(
                                 (sentence: string, index: number) => {
-                                    return <li key={index}>{sentence}</li>;
+                                    return (
+                                        <li key={index}>
+                                            {HandleHyperlinkFormatter(sentence)}
+                                        </li>
+                                    );
                                 }
                             )}
                         </ul>

@@ -1,8 +1,11 @@
+import { extractHeadings } from '@screens/EditNote/content/generatenote/formatter/handleManuallySpecifiedHeadings';
 import { PatientPronouns } from '@constants/patientInformation';
 import {
     replaceWordCaseSensitive,
     capitalizeFirstLetter,
     splitByPeriod,
+    replaceQuotedTextWithKeyword,
+    replaceMappedWords,
 } from '../common/textUtils';
 
 /**
@@ -75,6 +78,8 @@ export const definePatientNameAndPronouns = (
  * - Handles special cases for pronouns, including alternating replacements and updating various pronouns.
  *
  * Used in DoAllHPIWordReplacements
+ *
+ * // TODO: it should consider the inside quotation marks remain unchanged.
  */
 export const fillNameAndPronouns = (
     hpiString: string,
@@ -100,12 +105,26 @@ export const fillNameAndPronouns = (
 
     // This retains the original logic. Split the hpiString to ensure the toggle control behavior works.
     let toggle = 1; // change this so that it gets replaced at random rather than alternating.
+    let prevEndsWithNewLine = false; // track the beginning of paragraph.
     // Split the hpiString by periods while retaining the periods. [consider 'NEW LINE']
     // If patient's pronouns is available, replace "[t]he patient|[patient]" with "she/he/they/name".
     // Otherwise, if patient's pronouns are not they/them, replace:
     // 1) they -> she/he 2) their -> her/his 3) she's/he's -> her/his 4) theirs -> hers/his
     // 5) them -> her/him 6) himselves/herselves -> himself/herself
     const newHpiString = splitByPeriod(hpiString, true).map((sentence) => {
+        // Consider the case: text inside quotation marks:
+        const { replacedText, quotedTextMap } =
+            replaceQuotedTextWithKeyword(sentence);
+
+        sentence = replacedText;
+
+        // This ensure to insert 'Mx.Lastname' title:
+        // The previous sentence is ends with paragraph
+        // The sentences contains the headings.
+        if (prevEndsWithNewLine || extractHeadings(sentence).length) {
+            toggle = 1;
+        }
+
         // Replace "[t]he patient|[patient]" with "she/he/they/name"
         const patientRegex = /\b[Tt]he patient\b|\b[Pp]atient\b/g;
         if (patientRegex.test(sentence)) {
@@ -155,6 +174,11 @@ export const fillNameAndPronouns = (
         sentence = sentence.replace(/ your /g, ' ' + possessiveAdjective + ' ');
         sentence = sentence.replace(/ you /g, ' ' + subjectPronoun + ' ');
 
+        // put back the content back within quotation marks.
+        sentence = replaceMappedWords(sentence, quotedTextMap);
+
+        // update prevEndsWithNewLine
+        prevEndsWithNewLine = sentence.endsWith('\n');
         return sentence;
     });
 
