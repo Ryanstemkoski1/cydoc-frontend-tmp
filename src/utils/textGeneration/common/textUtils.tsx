@@ -4,12 +4,26 @@ export function capitalizeFirstLetter(str: string) {
 }
 
 /**
- * Splits a string into sentences based on periods followed by whitespace.
+ * Splits a string into sentences, while carefully handling special cases
+ * like hyperlinks, titles, and abbreviations to prevent them from being
+ * split incorrectly.
  *
+ * This function performs the following steps:
+ * 1. Temporarily replaces hyperlinks with placeholders to prevent them from being split.
+ * 2. Removes spaces after titles (e.g., "Mr.", "Ms.") to avoid incorrect splitting.
+ * 3. Replaces common abbreviations like "e.g." and "i.e." with placeholders to prevent them from being split.
+ * 4. Splits the string into sentences based on periods, with an optional flag to modify the splitting behavior.
+ * 5. Restores the original content for titles, abbreviations, and hyperlinks after splitting.
+ *
+ * Details:
  * - By default, uses regex to split on periods followed by one or more
  *   whitespace characters.
  * - If `flag` is true, splits on periods followed by whitespace while
  *   preserving [NEW LINE] characters.
+ * - Unique placedholders to avoid splitting these cases:
+ *   a. hyperlinks,
+ *   b. titles(e.g., "Mr.", "Ms."),
+ *   c. common abbreviations (e.g., "e.g.", "i.e.")
  *
  * Examples:
  * const text = `Hello. My name is Mr. Huang.
@@ -29,19 +43,24 @@ export const splitByPeriod = (str: string, flag?: boolean) => {
         /(\b(?:http|https):\/\/[^\s]+|www\.[^\s]+)(?=\s|$)/gi;
     const hyperlinkPlaceholder = '__HYPERLINK__';
     const hyperlinkMap = new Map<string, string>();
+
     // Replace hyperlinks with placeholders
     str = str.replace(hyperlinkRegex, (match) => {
         const key = `${hyperlinkPlaceholder}${hyperlinkMap.size}`;
         hyperlinkMap.set(key, match);
         return key;
     });
-    // Remove spaces after titles for processing
+
+    // Handle titles like "Mr.", "Mx.", "Ms." by removing the space after them
     str = str.replace(/(Mr\.|Mx\.|Ms\.)\s+/g, '$1');
+
     // Replace "e.g." and "i.e." with placeholders to avoid splitting them
     str = str.replace(/\be\.g\./g, '__EG__').replace(/\bi\.e\./g, '__IE__');
+
     // Split the string by '. ' or '.\n', but not after titles if flag is true,
     const strArr = flag ? str.split(/(?<=\.\s)/) : str.split(/(?<=\.)\s+/);
-    // Re-add spaces after titles; revert the placeholders back to "e.g" and "i.g"
+
+    // Restore placeholders to their original content for each sentence
     const result = strArr.map((sentence) => {
         return sentence
             .replace(/__EG__/g, 'e.g.')
