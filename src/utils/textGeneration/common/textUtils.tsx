@@ -10,7 +10,7 @@ export function capitalizeFirstLetter(str: string) {
  *
  * This function performs the following steps:
  * 1. Temporarily replaces hyperlinks with placeholders to prevent them from being split.
- * 2. Removes spaces after titles (e.g., "Mr.", "Ms.") to avoid incorrect splitting.
+ * 2. Replaces titles (e.g., "Mr.", "Ms.") with placeholders to avoid incorrect splitting.
  * 3. Replaces common abbreviations like "e.g." and "i.e." with placeholders to prevent them from being split.
  * 4. Splits the string into sentences based on periods, with an optional flag to modify the splitting behavior.
  * 5. Restores the original content for titles, abbreviations, and hyperlinks after splitting.
@@ -51,8 +51,11 @@ export const splitByPeriod = (str: string, flag?: boolean) => {
         return key;
     });
 
-    // Handle titles like "Mr.", "Mx.", "Ms." by removing the space after them
-    str = str.replace(/(Mr\.|Mx\.|Ms\.)\s+/g, '$1');
+    // Replace titles like "Mr.", "Mx.", "Ms." with placeholders to avoid splitting them
+    str = str
+        .replace(/Mr\.\s+/g, '__MR__')
+        .replace(/Ms\.\s+/g, '__MS__')
+        .replace(/Mx\.\s+/g, '__MX__');
 
     // Replace "e.g." and "i.e." with placeholders to avoid splitting them
     str = str.replace(/\be\.g\./g, '__EG__').replace(/\bi\.e\./g, '__IE__');
@@ -65,7 +68,9 @@ export const splitByPeriod = (str: string, flag?: boolean) => {
         return sentence
             .replace(/__EG__/g, 'e.g.')
             .replace(/__IE__/g, 'i.e.')
-            .replace(/\bMr\.|Mx\.|Ms\.\b/, (match) => match + ' ')
+            .replace(/__MR__/g, 'Mr. ')
+            .replace(/__MS__/g, 'Ms. ')
+            .replace(/__MX__/g, 'Mx. ')
             .replace(
                 /__HYPERLINK__\d+/g,
                 (match) => hyperlinkMap.get(match) || match
