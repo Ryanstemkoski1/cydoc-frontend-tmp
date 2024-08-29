@@ -196,15 +196,25 @@ const SurgicalHistoryTableBodyRowNew = (props: Props) => {
     };
 
     //returns a Table.Row with a cell for each item in tableBodyPlaceholders
-    const { fields, hide } = props;
+    const { fields, hide, pop } = props;
 
     const tableRows = hide
         ? fields.map((field: string, index: number) => {
+              // handle PSH-POP
+              if (pop) {
+                  if (field == 'procedure' || field == 'hasHadSurgery') {
+                      return <td key={index}>{getCell(field)}</td>;
+                  } else {
+                      return <td key={index}></td>;
+                  }
+              }
               //   const textAlign = field == 'hasHadSurgery' ? 'center' : 'left';
+              // handle PSH-BLANK
               if (field !== 'procedure') {
                   return null;
+              } else {
+                  return <td key={index}>{getCell(field)}</td>;
               }
-              return <td key={index}>{getCell(field)}</td>;
           })
         : fields.map((field: string, index: number) => {
               //   const textAlign = field == 'hasHadSurgery' ? 'center' : 'left';
@@ -212,15 +222,17 @@ const SurgicalHistoryTableBodyRowNew = (props: Props) => {
           });
 
     return (
-        <tr>
+        <tr style={{ width: '100%' }}>
             {tableRows}
-            <td>
-                <RemoveButton
-                    onClick={() => {
-                        props.deleteRow(props.rowIndex as string);
-                    }}
-                />
-            </td>
+            {!(pop && hide) && (
+                <td>
+                    <RemoveButton
+                        onClick={() => {
+                            props.deleteRow(props.rowIndex as string);
+                        }}
+                    />
+                </td>
+            )}
         </tr>
     );
 };

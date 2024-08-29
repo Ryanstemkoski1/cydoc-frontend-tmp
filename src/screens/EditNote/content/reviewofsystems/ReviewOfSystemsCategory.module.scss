@@ -17,13 +17,11 @@
             padding-bottom: 0;
         }
         p {
+            width: 100%;
             margin: 0;
+            padding: 0 104px;
             text-align: center;
-            padding: 0 10px;
-            width: calc(100% - 120px);
-            @include max-screen($mobile) {
-                width: calc(100% - 130px);
-            }
+            position: absolute;
         }
         > div {
             &:nth-child(1) {

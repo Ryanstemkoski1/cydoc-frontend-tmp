@@ -294,7 +294,7 @@ export type YesNoInput =
     | YesNoResponse.Yes
     | YesNoResponse.No
     | YesNoResponse.None;
-export type HpiResponseType =
+export type NodeResponseType =
     | string
     | boolean
     | NumberInput

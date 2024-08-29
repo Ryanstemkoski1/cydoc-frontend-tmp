@@ -12,9 +12,9 @@ import style from './DiseaseForm.module.scss';
 //The order goes DiseaseForm -> CreateResponse -> ButtonTag
 
 interface OwnProps {
-    nextStep: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-    prevStep: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     category: string;
+    nextStep: (e: any) => void;
+    prevStep: (e: any) => void;
 }
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -25,14 +25,6 @@ class DiseaseForm extends React.Component<Props> {
     constructor(props: Props) {
         super(props);
     }
-
-    continue = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-        this.props.nextStep(e);
-    };
-
-    back = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-        this.props.prevStep(e);
-    };
 
     traverseChildNodes(): JSX.Element[] {
         return this.props.nodesToDisplayInOrder?.map((node) => (

@@ -88,12 +88,6 @@
                         align-items: center;
                         display: inline-flex;
                         font-family: $font-family-primary;
-                        span {
-                            padding: 3px 0 0 8px;
-                            @include min-screen($mobile) {
-                                display: none;
-                            }
-                        }
                     }
                 }
             }

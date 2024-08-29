@@ -2,7 +2,7 @@ import { HpiActionTypes } from '@redux/actions/hpiActions';
 import { CHIEF_COMPLAINTS, HPI_ACTION } from '../actions/actionTypes';
 import { YesNoResponse } from '@constants/enums';
 import {
-    HpiResponseType,
+    NodeResponseType,
     ResponseTypes,
     TimeOption,
     ExpectedResponseDict,
@@ -38,7 +38,7 @@ export interface HpiState {
             blankTemplate: string;
             blankYes: string;
             blankNo: string;
-            response: HpiResponseType;
+            response: NodeResponseType;
         };
     };
     edges: {
@@ -63,7 +63,7 @@ export const medId = 'medId';
 
 function updateResponse(
     medId: string,
-    response: HpiResponseType,
+    response: NodeResponseType,
     state: HpiState
 ): HpiState {
     return {
@@ -81,7 +81,7 @@ function updateResponse(
 function labTestResponse(
     node: NodeInterface,
     response: keyof ExpectedResponseInterface
-): HpiResponseType {
+): NodeResponseType {
     /* 
     Passed from ADD_NODE - parses 'text' string to get each of 
     name, snomed, components, and units and places them into a

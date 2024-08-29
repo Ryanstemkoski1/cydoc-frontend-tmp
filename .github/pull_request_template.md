@@ -2,10 +2,6 @@
 
 Include a one-sentence summary of the PR here.
 
-### Spreadsheet tasks
-
-If this PR addresses any spreadsheet tasks, list the task numbers here.
-
 ### Type of change
 
 - [ ] Bug fix (non-breaking change which fixes an issue)

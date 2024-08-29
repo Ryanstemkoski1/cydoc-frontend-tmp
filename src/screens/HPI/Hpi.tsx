@@ -126,12 +126,11 @@ const HPI = () => {
 
     const changeFavComplaintsBasedOnInstitute = useCallback(() => {
         const { graph, nodes, order } = userSurveyState;
-
         if (
             !institution ||
-            Object.keys(graph).length ||
-            Object.keys(nodes).length ||
-            Object.keys(order).length
+            Object.keys(graph).length === 0 ||
+            Object.keys(nodes).length === 0 ||
+            Object.keys(order).length === 0
         ) {
             return;
         }
@@ -169,7 +168,7 @@ const HPI = () => {
                 break;
             }
         }
-    }, [dispatch, institution, userSurveyState]);
+    }, [dispatch, institution]);
 
     // FIXME: this logic should be combined with the logic in the next button handler! it currently doesn't work the same
     const onTabChange = useCallback(
@@ -384,70 +383,68 @@ const HPI = () => {
 
     /* EFFECTS */
     useEffect(() => {
+        let component: React.ReactNode = null;
+        let title = '';
+
         switch (activeItem) {
             case 'InitialSurvey': {
-                return setScreenForPatient({
-                    component: (
-                        <InitialSurveyHPI
-                            continue={onNextClick}
-                            setErrorMessage={setNotificationMessage}
-                        />
-                    ),
-                    title: 'Please enter the details below',
-                });
+                component = (
+                    <InitialSurveyHPI
+                        continue={onNextClick}
+                        setErrorMessage={setNotificationMessage}
+                    />
+                );
+                title = 'Please enter the details below';
+                break;
             }
             case 'PreHPI': {
-                return setScreenForPatient({
-                    component: (
-                        <PreHPI
-                            continue={onNextClick}
-                            onPreviousClick={onPreviousClick}
-                            notification={{
-                                setNotificationMessage,
-                                setNotificationType,
-                            }}
-                        />
-                    ),
-                    title: 'Help Cydoc personalize your questionnaire',
-                });
+                component = (
+                    <PreHPI
+                        continue={onNextClick}
+                        onPreviousClick={onPreviousClick}
+                        notification={{
+                            setNotificationMessage,
+                            setNotificationType,
+                        }}
+                    />
+                );
+                title = 'Help Cydoc personalize your questionnaire';
+                break;
             }
             case 'CCSelection': {
-                return setScreenForPatient({
-                    component: (
-                        <CCSelection
-                            continue={onNextClick}
-                            onPreviousClick={onPreviousClick}
-                            notification={{
-                                setNotificationMessage,
-                                setNotificationType,
-                            }}
-                            defaultInstitutionChiefComplaints={
-                                institutionDefaultCC
-                            }
-                        />
-                    ),
-                    title: `Please select the top 3 conditions or symptoms you'd like to discuss`,
-                });
+                component = (
+                    <CCSelection
+                        continue={onNextClick}
+                        onPreviousClick={onPreviousClick}
+                        notification={{
+                            setNotificationMessage,
+                            setNotificationType,
+                        }}
+                        defaultInstitutionChiefComplaints={institutionDefaultCC}
+                    />
+                );
+                title = `Please select the top 3 conditions or symptoms you'd like to discuss`;
+                break;
             }
             default: {
-                return setScreenForPatient({
-                    component: (
-                        <NewNotePage
-                            onNextClick={onNextClick}
-                            onPreviousClick={onPreviousClick}
-                            notification={{
-                                setNotificationMessage,
-                                setNotificationType,
-                            }}
-                        />
-                    ),
-                    title:
-                        activeItem in hpiHeaders.parentNodes
-                            ? hpiHeaders.parentNodes[activeItem].patientView
-                            : activeItem,
-                });
+                component = (
+                    <NewNotePage
+                        onNextClick={onNextClick}
+                        onPreviousClick={onPreviousClick}
+                        notification={{
+                            setNotificationMessage,
+                            setNotificationType,
+                        }}
+                    />
+                );
+                title =
+                    activeItem in hpiHeaders.parentNodes
+                        ? hpiHeaders.parentNodes[activeItem].patientView
+                        : activeItem;
             }
         }
+
+        setScreenForPatient({ component, title });
     }, [
         onNextClick,
         onPreviousClick,

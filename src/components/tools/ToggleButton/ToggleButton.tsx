@@ -1,5 +1,8 @@
 import '@screens/EditNote/content/hpi/knowledgegraph/css/Button.css';
 import React from 'react';
+import { Button } from '@mui/material';
+import style from './ToggleButton.module.scss';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 
 export interface ButtonProps<T = string> {
     active?: boolean;
@@ -36,20 +39,42 @@ export default function ToggleButton<T = string>(props: ButtonProps<T>) {
 
     const extraProps = { condition };
 
+    const customButtonStyle = {
+        padding: '8px 22px',
+        borderRadius: '10px',
+        color: active ? 'white' : '#047A9B',
+        backgroundColor: active ? '#047A9B' : '#EAF3F5',
+        boxShadow: active
+            ? '0px 1px 20px 0px rgba(5, 122, 155, 0.04), 0px 2px 20px 0px rgba(5, 122, 155, 0.12), 0px 3px 2px -2px rgba(26, 82, 97, 0.20)'
+            : 'none',
+
+        '&:hover': {
+            backgroundColor: active ? '#047A9B' : '#EAF3F5',
+            boxShadow: active
+                ? '0px 1px 20px 0px rgba(5, 122, 155, 0.04), 0px 2px 20px 0px rgba(5, 122, 155, 0.12), 0px 3px 2px -2px rgba(26, 82, 97, 0.20)'
+                : 'none',
+        },
+    };
+
     return (
-        <button
+        <Button
+            {...extraProps}
+            variant='contained'
             data-testid={`toggle-button-${condition}-${title}`}
             title={title}
-            {...extraProps}
+            data-hover={false}
+            disabled={disabled}
+            sx={customButtonStyle}
+            className={style.toogleButton}
             onClick={(e) =>
                 onToggleButtonClick &&
                 onToggleButtonClick(e, propsWithCondition)
             }
-            disabled={disabled}
-            data-hover={false}
-            className={`button outline info pill sm ${active ? 'active' : ''}`}
         >
-            {title === 'yes' ? 'Yes' : title === 'no' ? 'No' : title}
-        </button>
+            {active && <CheckRoundedIcon />}
+            <span className={style.toogleButton__title}>
+                {title === 'yes' ? 'Yes' : title === 'no' ? 'No' : title}
+            </span>
+        </Button>
     );
 }

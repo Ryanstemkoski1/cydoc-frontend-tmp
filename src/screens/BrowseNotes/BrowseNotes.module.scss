@@ -150,3 +150,256 @@
         }
     }
 }
+
+.notesBlockAdvance {
+    width: 100%;
+    // max-width: 1312px;
+    // margin: 0 auto;
+    padding: 32px;
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+
+    @include max-screen($tablet) {
+        padding-top: 30px;
+    }
+
+    @include max-screen($mobile) {
+        padding: 20px 0;
+        display: block;
+    }
+
+    h1 {
+        color: $color-green-dark;
+        text-align: center;
+    }
+
+    &__notesWrap {
+        border-radius: $radius;
+        background-color: $color-white;
+        border: 1px solid $color-light;
+        box-shadow: 0 0 20px rgba($color-black, 0.05);
+        width: 35.2%;
+        max-width: 440px;
+        min-width: 360px;
+        // padding: 0 10px 10px 8px;
+
+        @include max-screen($mobile) {
+            min-width: auto;
+            width: 100%;
+        }
+    }
+
+    &__header {
+        padding-bottom: 8px;
+        border-bottom: 1px solid $color-primary-light;
+
+        @include max-screen($mobile) {
+            padding: 20px;
+        }
+
+        &__dateWrapper {
+            flex: 1;
+            padding-left: 8px;
+        }
+
+        &__arrow {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            margin-left: 10px;
+            background: rgba(4, 122, 155, 0.04);
+
+            img {
+                width: 8px;
+            }
+        }
+
+        &__arrow:last-child {
+            margin-right: 10px;
+        }
+    }
+
+    &__tableWrapper {
+        // max-height: 300px;
+        overflow-y: auto;
+        min-height: 220px;
+        overflow-x: auto;
+
+        @include max-screen($mobile) {
+            max-height: 300px;
+            margin-right: -20px;
+            padding-right: 20px;
+        }
+
+        &::-webkit-scrollbar {
+            width: 3px;
+            height: 3px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: rgba($color-primary, 0.13);
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: rgba($color-primary-light, 0.7);
+        }
+
+        .nodata {
+            text-align: center;
+        }
+
+        &__addBtn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: $color-light;
+            border-radius: $radius;
+            cursor: pointer;
+            padding: 6px;
+
+            img {
+                width: 20px;
+                height: 20px;
+            }
+
+            p {
+                color: $color-green-dark;
+                font-family: $font-family-primary;
+                font-size: 14px;
+                font-weight: $font-weight-medium;
+                line-height: 24px;
+                letter-spacing: 0.4px;
+                text-align: left;
+                margin-left: 5px;
+            }
+        }
+
+        &__itemWrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        &__left {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            img {
+                width: 24px;
+                height: 24px;
+            }
+
+            p {
+                font-family: $font-family-primary;
+                font-size: $font-size-h4;
+                font-weight: $font-weight-normal;
+                line-height: 24px;
+                letter-spacing: 0.15px;
+                text-align: left;
+                color: $color-black;
+                margin-left: 8px;
+            }
+        }
+
+        &__right {
+            align-items: flex-end;
+            color: rgba($color-black, 0.6);
+            font-family: $font-family-primary;
+            font-size: 14px;
+            font-weight: $font-weight-normal;
+            line-height: 20.02px;
+            letter-spacing: 0.17px;
+            text-align: left;
+        }
+    }
+
+    &__content {
+        padding: 10px;
+        gap: 30px;
+
+        @include max-screen($mobile) {
+            padding: 20px;
+            gap: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+
+            tr {
+                td {
+                    padding: 10px 0;
+                    width: 70%;
+
+                    &:last-child {
+                        text-align: right;
+                    }
+
+                    @include max-screen($mobile) {
+                        width: 55%;
+                    }
+
+                    &.nodata {
+                        text-align: center;
+                    }
+
+                    span {
+                        &:hover {
+                            color: $color-green-dark;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &__notesDescription {
+        border-radius: $radius;
+        background-color: $color-white;
+        border: 1px solid $color-light;
+        box-shadow: 0 0 20px rgba($color-black, 0.05);
+        // width: 64.8%;
+        flex: 1;
+        margin-left: 20px;
+
+        @include max-screen($mobile) {
+            width: 100%;
+        }
+    }
+}
+
+.checkReloadAdvance {
+    position: absolute;
+    top: 20px;
+    right: 32px;
+    z-index: 10;
+    padding: 8px 22px;
+
+    @include max-screen($mobile) {
+        top: 24px;
+        right: 20px;
+        padding: 8px 0;
+    }
+
+    &__inner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $color-green-dark;
+        font-family: $font-family-primary;
+        font-size: $font-size-h4;
+        font-style: normal;
+        font-weight: $font-weight-medium;
+        line-height: 26px; /* 162.5% */
+        letter-spacing: 0.46px;
+
+        img {
+            width: 18px;
+            height: 18px;
+        }
+    }
+}

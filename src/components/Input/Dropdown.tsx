@@ -74,7 +74,7 @@ function Dropdown({
                         setShowDropdown(true);
                     }}
                     placeholder={placeholder}
-                    value={value}
+                    value={defaultValue}
                 />
             </div>
 

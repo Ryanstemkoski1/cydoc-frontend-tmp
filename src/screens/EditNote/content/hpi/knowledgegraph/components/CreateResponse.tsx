@@ -208,10 +208,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                                         alignItems: 'center',
                                     }}
                                 >
-                                    <MultipleChoice
-                                        name={item.toLowerCase()}
-                                        node={node}
-                                    />
+                                    <MultipleChoice name={item} node={node} />
                                     {isOther && (
                                         <HandleWriteInInput
                                             name={item}
@@ -323,7 +320,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         responseChoice={choices}
                         responseType={responseType}
                         node={node}
-                        hide={false}
+                        hide={true}
                     />
                 );
             case ResponseTypes.PSH_BLANK:
