@@ -1,4 +1,3 @@
-import { ProductType } from '@constants/FormPreferencesConstant';
 import { ProductDefinitions } from './ProductDefinitionType';
 
 export const SmartPatientIntakeForm: ProductDefinitions = {
@@ -7,4 +6,5 @@ export const SmartPatientIntakeForm: ProductDefinitions = {
     useAdvancedReportTextGeneration: false,
     displayedNodesCutOff: 150,
     showMiscNotesBox: false,
+    showClinicQRCodeAndLink: true,
 };
