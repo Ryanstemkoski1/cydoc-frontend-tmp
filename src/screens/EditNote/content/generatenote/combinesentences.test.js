@@ -117,3 +117,23 @@ describe('compare function tests', () => {
         );
     });
 });
+describe('tests compare function_v2', () => {
+    it('should combine similar sentences', () => {
+        const result = compare(
+            'The patient reports dizziness, sore throat, and headache.',
+            'The patient reports chest pain, nausea, and vomiting.',
+            3
+        );
+        expect(result).toBe(
+            ' The patient reports dizziness, sore throat, headache, chest pain, nausea, and vomiting.'
+        );
+    });
+    it('should work with multiple ands', () => {
+        const result = compare(
+            'The patient reports dizziness',
+            'The patient reports chest pain.',
+            2
+        );
+        expect(result).toBe(' The patient reports dizziness and chest pain.');
+    });
+});
