@@ -38,8 +38,6 @@
 
 .doctor-view-wrapper {
     width: 100%;
-    height: 800px;
-    overflow-y: auto;
     position: relative;
 }
 

@@ -78,6 +78,17 @@ class ReviewOfSystemsCategory extends Component<Props, State> {
         }
     };
 
+    customOptionStyle = (option: string) => {
+        const isMobile = window.innerWidth < 425;
+
+        return option.length > 10 && isMobile
+            ? {
+                  padding: '16px 0',
+                  position: 'relative' as 'relative' | undefined,
+              }
+            : {};
+    };
+
     render() {
         const { category, ROSOptions } = this.props;
         let { ROSState } = this.props;
@@ -101,22 +112,31 @@ class ReviewOfSystemsCategory extends Component<Props, State> {
                             className={`${style.reviewOfSystems__item} reviewOfSystemsItem flex flex-wrap align-center justify-between`}
                             key={option}
                         >
-                            <YesAndNo
-                                yesButtonActive={
-                                    ROSState[category][option] ===
-                                    YesNoResponse.Yes
-                                }
-                                handleYesButtonClick={() =>
-                                    this.handleChange(option, YesNoResponse.Yes)
-                                }
-                                noButtonActive={
-                                    ROSState[category][option] ===
-                                    YesNoResponse.No
-                                }
-                                handleNoButtonClick={() => {
-                                    this.handleChange(option, YesNoResponse.No);
-                                }}
-                            />
+                            <div style={{ order: 1 }}>
+                                <YesAndNo
+                                    yesButtonActive={
+                                        ROSState[category][option] ===
+                                        YesNoResponse.Yes
+                                    }
+                                    handleYesButtonClick={() =>
+                                        this.handleChange(
+                                            option,
+                                            YesNoResponse.Yes
+                                        )
+                                    }
+                                    noButtonActive={
+                                        ROSState[category][option] ===
+                                        YesNoResponse.No
+                                    }
+                                    handleNoButtonClick={() => {
+                                        this.handleChange(
+                                            option,
+                                            YesNoResponse.No
+                                        );
+                                    }}
+                                />
+                            </div>
+
                             {option.toLowerCase() === 'other' &&
                             ROSState[category][option] === YesNoResponse.Yes ? (
                                 <HandleWriteInInput
@@ -125,24 +145,34 @@ class ReviewOfSystemsCategory extends Component<Props, State> {
                                     options={ROSOptions}
                                 />
                             ) : (
-                                <p>{option.replace('Δ', 'Changes in')}</p>
+                                <p style={this.customOptionStyle(option)}>
+                                    {option.replace('Δ', 'Changes in')}
+                                </p>
                             )}
-                            <YesAndNo
-                                yesButtonActive={
-                                    ROSState[category][option] ===
-                                    YesNoResponse.Yes
-                                }
-                                handleYesButtonClick={() =>
-                                    this.handleChange(option, YesNoResponse.Yes)
-                                }
-                                noButtonActive={
-                                    ROSState[category][option] ===
-                                    YesNoResponse.No
-                                }
-                                handleNoButtonClick={() => {
-                                    this.handleChange(option, YesNoResponse.No);
-                                }}
-                            />
+                            <div style={{ order: 2 }}>
+                                <YesAndNo
+                                    yesButtonActive={
+                                        ROSState[category][option] ===
+                                        YesNoResponse.Yes
+                                    }
+                                    handleYesButtonClick={() =>
+                                        this.handleChange(
+                                            option,
+                                            YesNoResponse.Yes
+                                        )
+                                    }
+                                    noButtonActive={
+                                        ROSState[category][option] ===
+                                        YesNoResponse.No
+                                    }
+                                    handleNoButtonClick={() => {
+                                        this.handleChange(
+                                            option,
+                                            YesNoResponse.No
+                                        );
+                                    }}
+                                />
+                            </div>
                         </div>
                     ))}
                 </AllNegativeButton>
