@@ -10,6 +10,7 @@ import {
     definePatientNameAndPronouns,
     fillNameAndPronouns,
 } from './handlePatientNameAndPronouns';
+import { combineHpiString } from './combineHPIString';
 
 /**
  * Generates a complete HPI text by processing the input string with the
@@ -35,6 +36,7 @@ export const doAllHPIWordReplacements = (
 ): string => {
     const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
     hpiString = handlePAITerms(hpiString); // General patient pronoun handling
+    // hpiString = combineHpiString(hpiString);
     hpiString = fillNameAndPronouns(hpiString, patientInfo); // Specific name and pronoun handling
     hpiString = partOfSpeechCorrection(hpiString); // Apply part-of-speech corrections
     hpiString = fillMedicalTerms(hpiString); // Fill or correct medical terms
