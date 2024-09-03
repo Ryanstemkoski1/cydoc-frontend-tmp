@@ -1,4 +1,7 @@
-import { compareAndCombine } from '../textGeneration/processing/combineHPIString';
+import {
+    combineHpiString,
+    compareAndCombine,
+} from '../textGeneration/processing/combineHPIString';
 
 test('combine regular sentences 1', () => {
     expect(
@@ -169,6 +172,42 @@ describe('tests compare function_v3', () => {
         );
         expect(result).toBe(
             ' The patient reports dizziness and vomiting and chest pain and nausea.'
+        );
+    });
+    it('incorrect combine --> [A, B] + [C, D] -> A and B and C', () => {
+        const result = compareAndCombine(
+            'The patient reports dizziness and vomiting.',
+            'The patient reports chest pain and nausea.',
+            2
+        );
+        expect(result).toBe(
+            ' The patient reports dizziness and vomiting and chest pain and nausea.'
+        );
+    });
+    it('combine sentence with duplicate words --> [A, B] + [B, A] -> A and B', () => {
+        const result = combineHpiString(
+            'The patient reports chest pain and headache.',
+            'The patient reports headache and chest pain.'
+        );
+        expect(result).toBe('The patient reports chest pain and headache.');
+    });
+});
+
+describe('tests combine sentences function', () => {
+    it('combine sentence --> [A, B] + [C] -> A and B and C', () => {
+        const result = combineHpiString(
+            'The patient reports dizziness and vomiting. The patient reports chest pain.'
+        );
+        expect(result.length).toBe(
+            ' The patient reports dizziness and vomiting and chest pain.'.length
+        );
+    });
+    it('combine sentence with new line characters --> [A, B] + [C] -> A and B and C', () => {
+        const result = combineHpiString(
+            'The patient reports dizziness and vomiting. The patient reports chest pain.\n'
+        );
+        expect(result).toBe(
+            ' The patient reports dizziness and vomiting and chest pain.\n'
         );
     });
 });

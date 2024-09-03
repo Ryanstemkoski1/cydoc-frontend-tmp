@@ -6,9 +6,9 @@ import { splitByPeriod } from '../common/textUtils';
  * str: A string containing sentences separated by periods and new lines.
  * n: The number of matching words required to combine sentences (default is 2).
  *
- * 1. Splits the input string into an array of sentences.
- * 2. Iterates through the array to combine sentences based on the `compareAndCombine` function.
- * 3. Handles edge cases like the last sentence and final combination.
+ * 1. Splits the input string into an array of sentences using the `splitByPeriod` function (retain period and new line).
+ * 2. Iterates through the array, attempting to combine adjacent sentences using the `compareAndCombine` function.
+ * 3. Handles special cases like the last sentence and ensures proper spacing and line breaks are maintained.
  *
  * e.g:
  *   Input = "The patient reports dizziness. The patient reports nausea. The patient is feeling better."
@@ -16,63 +16,41 @@ import { splitByPeriod } from '../common/textUtils';
  */
 export const combineHpiString = (str: string) => {
     let newStr = '';
-    const stringArr = splitByPeriod(str);
-    let tempComb;
-    // have to add space at beginning of first string to make comparison work.
-    // if the combination is on the final iteration and there isn't two strings to compare, add that string to the end of the current combined.
+    const stringArr = splitByPeriod(str, true);
+    let tempComb: string | string[];
+    // Iterate through the array of sentences
     for (let i = 0; i < stringArr.length; i++) {
+        // Last sentence: append it directly
         if (i == stringArr.length - 1) {
-            // The last sentences
             tempComb = stringArr[i];
             newStr += stringArr[i];
             return newStr;
-        } else if (i === 0) {
-            tempComb = compareAndCombine(stringArr[0], stringArr[1]); // TODO: handle new line char, call isCombineable()
-        } else tempComb = compareAndCombine(stringArr[i], stringArr[i + 1]); // TODO: handle new line char, call isCombineable()
-        // if the combination is on the final iteration and compare(str1, str2) returns an array, combine both and return that str
-        if (Array.isArray(tempComb) && i === stringArr.length - 2) {
-            newStr += tempComb[0] + tempComb[1];
-            return newStr;
-        }
-        // common case
-        if (Array.isArray(tempComb)) {
-            newStr += tempComb[0];
-            continue;
         } else {
-            newStr += tempComb;
-            i++;
+            // Attempt to combine the current sentence with the next one
+            tempComb = compareAndCombine(stringArr[i], stringArr[i + 1]);
+            const hasNewLineAtTheEnd = stringArr[i + 1].includes('\n');
+
+            // If it's the second-to-last iteration and combine failed, append both sentences
+            if (Array.isArray(tempComb) && i === stringArr.length - 2) {
+                newStr += stringArr[i] + stringArr[i + 1];
+                return newStr;
+            }
+            // If sentences can't be combined, append the current sentence with a space
+            if (Array.isArray(tempComb)) {
+                newStr += stringArr[i] + ' ';
+                continue;
+            } else {
+                // If sentences are combined, append the result
+                newStr += tempComb;
+                // Re-add a newline character if the next sentence had one
+                newStr = hasNewLineAtTheEnd ? newStr + '\n' : newStr;
+                // Skip the next sentence since it was combined with the current one
+                i++;
+            }
         }
     }
     return newStr;
 };
-
-/**
- * TODO: add more cases to consider
- * A Helper Function to check if a string can be combined based on specific condition.
- *
- * startStr - Indicates if this is the first string in the combination
- *
- * conditions to consider:
- * - Excludes strings with newlines.
- * - Includes strings starting with "The patients reports".
- * - Additional checks (e.g., length, quotation marks) may be added.
- */
-function isCombineable(str: string, startStr: boolean = false): boolean {
-    // check if the string contains a newline character
-    const hasNewLine = str.includes('\n');
-
-    // TODO: check if the string starts with "The patients reports", add more cases if needed.
-    const startWithPatterns = str.startsWith('The patients reports');
-
-    // TODO: check the string length, if the string length is too long, do not need combine.
-    // const isTooLong = str.length > 100;
-
-    // TODO: check if the string include quotation marks
-    const hasQuotationMarks = str.includes('"');
-
-    // if startStr = true && hasNewLine = true -> return false.
-    return !hasNewLine && startWithPatterns;
-}
 
 /**
  * A Helper Function to compare and combine two sentences if they share a specified
@@ -82,35 +60,23 @@ function isCombineable(str: string, startStr: boolean = false): boolean {
  * - `strA` and `strB`: Sentences to be compared.
  * - `n`: Minimum number of matching initial words required to combine the sentences.
  *
- * - Process:
- *   1. Split `strA` and `strB` into lists of words.
- *   2. Check if they have at least `n` matching initial words.
- *   3. If combining is valid:
- *      - Remove trailing period from `strA` if present.
- *      - Handle cases with connectors (e.g., "and", "but") in `strB`.
- *      - Adjust punctuation based on the presence of "and" after a comma.
- *   4. Ensure the combined string ends with a period.
- *
- * - Output: The combined sentence or the original sentences if combining isn't appropriate.
+ * Process:
+ * 1. Split both sentences into words.
+ * 2. Check if they have at least `n` matching initial words using `isCombineable`.
+ * 3. If combinable:
+ *    - Remove the trailing period from `strA` if present.
+ *    - Handle special connector words in `strB` (e.g., "and", "but").
+ *    - Adjust for cases where "and" follows a comma in `strA`.
+ * 4. Ensure the combined sentence ends with a period and remove any duplicate words.
  */
-export function compareAndCombine(strA: string, strB: string, n: number = 2) {
-    // Split both strings into lists of words.
-    const splitA = strA.split(' ');
-    const splitB = strB.split(' ');
+export function compareAndCombine(strA: string, strB: string, n: number = 3) {
+    const combineCheckResult = isCombineable(strA, strB, n);
 
-    let combinedStr = ''; // String to hold the combined result
-    // Count the number of matching words at the beginning of both strings.
-    const amtSame = numOfSameWords(splitA, splitB);
-
-    // Return original sentences if conditions are not met
-    if (amtSame < n) {
+    if (!combineCheckResult) {
         return [strA, strB];
     }
 
-    // Return original sentences if `strB` contains 'not' or 'denies' after the matching words.
-    if (splitB.slice(n).some((word) => word === 'not' || word === 'denies')) {
-        return [strA, strB];
-    }
+    const { splitA, splitB, amtSame } = combineCheckResult;
 
     // Remove trailing period from `strA` if present
     const lastWordIndex = splitA.length - 1; // Index of the last element splitA
@@ -119,15 +85,14 @@ export function compareAndCombine(strA: string, strB: string, n: number = 2) {
         newSplitA[lastWordIndex] = splitA[lastWordIndex].slice(0, -1);
     }
 
-    // Handle special connector words
-    if (
-        amtSame > n &&
-        ['and', 'but', 'so', 'for', 'with'].includes(splitB[amtSame])
-    ) {
+    // Handle special connector words in `strB`
+    if (['and', 'but', 'so', 'for', 'with'].includes(splitB[amtSame])) {
         return returnWithConnectorWord(splitA, splitB, amtSame);
     }
 
-    // Check for 'and' following a comma
+    // TODO: Handle [A and B] + [C and D]
+
+    // Check for 'and' following a comma in `strA`
     const searchFrom = splitA.length > 4 ? 5 : 4; // Determines how far back to search
     let hasAnd = false; // Flag to indicate if "and" was found after a comma in the first string.
     for (let i = splitA.length - searchFrom; i < splitA.length; i++) {
@@ -137,18 +102,65 @@ export function compareAndCombine(strA: string, strB: string, n: number = 2) {
             break;
         }
     }
-
     // Build the combined string
-    combinedStr = splitA.join(' ') + (hasAnd ? ',' : ' and');
+    let combinedStr = splitA.join(' ') + (hasAnd ? ',' : ' and');
     // Append the remaining words from splitB starting from the amtSame index.
-    combinedStr += ' ' + splitB.slice(amtSame).join(' ').trim();
-
+    combinedStr += ' ' + splitB.slice(amtSame).join(' ');
     // Ensure the combined string ends with a period.
     if (!combinedStr.endsWith('.')) {
         combinedStr += '.';
     }
 
-    return removeDoubleWords(' ' + combinedStr);
+    return ' ' + combinedStr;
+}
+
+/**
+ * TODO: add more cases to consider
+ * A Helper Function to determine if two strings can be combined based on specific conditions.
+ *
+ * startStr - Indicates if this is the first string in the combination
+ *
+ * Conditions:
+ * - Strings must start with at least `n` matching words.
+ * - Excludes strings containing newline characters.
+ * - Returns null if `strB` contains the words 'not' or 'denies' after the matching words.
+ * - Future enhancements may include additional checks (e.g., specific phrases, string length).
+ */
+function isCombineable(strA: string, strB: string, n: number = 2) {
+    // Split both strings into words, trimming any leading/trailing spaces.
+    const splitA = strA.trim().split(' ');
+    const splitB = strB.trim().split(' ');
+
+    // Count the number of matching words at the beginning of both strings.
+    const amtSame = numOfSameWords(splitA, splitB);
+
+    // Return null if there are not enough matching words.
+    if (amtSame === 0 || amtSame < n) {
+        return null;
+    }
+
+    // Return null if strB contains 'not' or 'denies' after the matching words.
+    if (splitB.slice(n).some((word) => word === 'not' || word === 'denies')) {
+        return null;
+    }
+
+    // Return null if strA contains a newline character.
+    if (strA.includes('\n')) {
+        return null;
+    }
+
+    // Other cases
+    // // TODO: check if the specific string starts with "The patients reports", add more cases if needed.
+    // const startWithPatterns = str.startsWith('The patients reports');
+    // // TODO: check the string length, if the string length is too long, do not need combine.
+    // // const isTooLong = str.length > 100;
+
+    // Return the results if the strings are combinable.
+    return {
+        splitA,
+        splitB,
+        amtSame,
+    };
 }
 
 /**
@@ -199,7 +211,7 @@ const returnWithConnectorWord = (
     stringA: Array<string>,
     stringB: Array<string>,
     n: number
-) => {
+): string => {
     stringA.unshift('');
     const combinedArray = stringA;
     stringB = stringB.slice(n, stringB.length);
@@ -210,27 +222,3 @@ const returnWithConnectorWord = (
         : combinedSentence + '.';
     return sentenceWithPeriod;
 };
-
-/**
- * Removes consecutive duplicate words from a string.
- *
- * 1. Splits the string into words.
- * 2. Iterates through the words and keeps only the unique consecutive words.
- * 3. Joins the words back into a single string.
- *
- * e.g.
- * Input = "The patient reports headache headache and chest pain."
- * Return "The patient reports headache and chest pain."
- */
-function removeDoubleWords(str: string) {
-    const words = str.split(' ');
-    const newWords: string[] = [];
-
-    for (let i = 0; i < words.length; i++) {
-        if (words[i] !== words[i + 1]) {
-            newWords.push(words[i]);
-        }
-    }
-
-    return newWords.join(' ');
-}

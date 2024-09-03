@@ -19,15 +19,16 @@ import { combineHpiString } from './combineHPIString';
  * This function handles several key tasks:
  * 1. Defines and initializes the patient's name and pronouns using
  *   `definePatientNameAndPronouns`.
- * 2. Replaces general patient references with appropriate pronouns
+ * 2. Combines consecutive sentences when appropriate using `combineHpiString`.
+ * 3. Replaces general patient references with appropriate pronouns
  *    using `handlePAITerms`.
- * 3. Replaces specific occurrences of the patient's name and pronouns within
+ * 4. Replaces specific occurrences of the patient's name and pronouns within
  *    the HPI string using `fillNameAndPronouns`.
- * 4. Applies part-of-speech corrections to ensure grammatical accuracy with
+ * 5. Applies part-of-speech corrections to ensure grammatical accuracy with
  *   `partOfSpeechCorrection`.
- * 5. Expands or corrects medical terms within the HPI string using
+ * 6. Expands or corrects medical terms within the HPI string using
  *    `fillMedicalTerms`.
- * 6. Applies common abbreviations where appropriate using `abbreviate`.
+ * 7. Applies common abbreviations where appropriate using `abbreviate`.
  */
 export const doAllHPIWordReplacements = (
     hpiString: string,
@@ -36,7 +37,7 @@ export const doAllHPIWordReplacements = (
 ): string => {
     const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
     hpiString = handlePAITerms(hpiString); // General patient pronoun handling
-    // hpiString = combineHpiString(hpiString);
+    hpiString = combineHpiString(hpiString); // Combine sentence if needed.
     hpiString = fillNameAndPronouns(hpiString, patientInfo); // Specific name and pronoun handling
     hpiString = partOfSpeechCorrection(hpiString); // Apply part-of-speech corrections
     hpiString = fillMedicalTerms(hpiString); // Fill or correct medical terms
