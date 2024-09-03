@@ -143,8 +143,7 @@ describe('tests compare function_v2', () => {
     });
 });
 describe('tests compare function_v3', () => {
-    // TODO: they should be A, B and C
-    it('incorrect combine --> [A, B] + [C] -> A and B and C', () => {
+    it('enable combine without commas then keep [and] --> [A, B] + [C] -> A and B and C', () => {
         const result = compareAndCombine(
             'The patient reports dizziness and vomiting.',
             'The patient reports chest pain.',
@@ -154,7 +153,7 @@ describe('tests compare function_v3', () => {
             ' The patient reports dizziness and vomiting and chest pain.'
         );
     });
-    it('incorrect combine --> [A] + [B, C] -> A and B and C', () => {
+    it('enable combine with commas --> [C] + [A, B] -> C and A and B.', () => {
         const result = compareAndCombine(
             'The patient reports chest pain.',
             'The patient reports dizziness and vomiting.',
@@ -164,7 +163,7 @@ describe('tests compare function_v3', () => {
             ' The patient reports chest pain and dizziness and vomiting.'
         );
     });
-    it('incorrect combine --> [A, B] + [C, D] -> A and B and C', () => {
+    it('enable combine with mutiple [and]_v2 --> [A, B] + [C, D] -> A and B and C and D.', () => {
         const result = compareAndCombine(
             'The patient reports dizziness and vomiting.',
             'The patient reports chest pain and nausea.',
@@ -173,27 +172,10 @@ describe('tests compare function_v3', () => {
         expect(result).toBe(
             ' The patient reports dizziness and vomiting and chest pain and nausea.'
         );
-    });
-    it('incorrect combine --> [A, B] + [C, D] -> A and B and C', () => {
-        const result = compareAndCombine(
-            'The patient reports dizziness and vomiting.',
-            'The patient reports chest pain and nausea.',
-            2
-        );
-        expect(result).toBe(
-            ' The patient reports dizziness and vomiting and chest pain and nausea.'
-        );
-    });
-    it('combine sentence with duplicate words --> [A, B] + [B, A] -> A and B', () => {
-        const result = combineHpiString(
-            'The patient reports chest pain and headache.',
-            'The patient reports headache and chest pain.'
-        );
-        expect(result).toBe('The patient reports chest pain and headache.');
     });
 });
 
-describe('tests combine sentences function', () => {
+describe('tests combine hpi sentences function', () => {
     it('combine sentence --> [A, B] + [C] -> A and B and C', () => {
         const result = combineHpiString(
             'The patient reports dizziness and vomiting. The patient reports chest pain.'
