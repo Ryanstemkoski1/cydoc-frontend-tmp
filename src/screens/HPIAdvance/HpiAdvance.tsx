@@ -37,6 +37,7 @@ import { selectHpiHeaders } from '@redux/reducers/hpiHeadersReducer';
 import useSignInRequired from '@hooks/useSignInRequired';
 import axios from 'axios';
 import { graphClientURL } from '@constants/api';
+import { getInstitutionClinicians } from '@modules/appointment-api';
 
 export interface OnNextClickParams {
     allSelectedChiefComplaints?: string[];
@@ -89,11 +90,11 @@ const HpiAdvance = () => {
         const selectedAppointment = localStorage.getItem('selectedAppointment');
         if (selectedAppointment) {
             const temp = JSON.parse(selectedAppointment);
-            const appointmentDate = temp.selectedAppointment.appointmentDate;
-            const legalFirstName = temp.selectedAppointment.firstName;
-            const legalLastName = temp.selectedAppointment.lastName;
-            const legalMiddleName = temp.selectedAppointment.middleName;
-            const dateOfBirth = temp.selectedAppointment.dob;
+            const appointmentDate = temp.appointmentDate;
+            const legalFirstName = temp.patient.firstName;
+            const legalLastName = temp.patient.lastName;
+            const legalMiddleName = temp.patient.middleName;
+            const dateOfBirth = temp.patient.dob;
 
             const reporter = temp.selectedForm.reporter;
             const title = temp.selectedForm.title;
@@ -164,38 +165,47 @@ const HpiAdvance = () => {
         const fetchInstitution = async () => {
             dispatch(setLoadingStatus(true));
             try {
-                const validatedInstitution = (await getInstitution(
-                    institutionId
-                )) as { detail: Institution };
-                const getInstitutionConfigResponse =
-                    await getInstitutionConfig(institutionId);
-
-                if (!(validatedInstitution as ApiResponse).errorMessage) {
-                    const { id, name } = validatedInstitution.detail;
-                    setInstitution(new InstitutionClass({ id, name }));
-                } else {
+                const validatedInstitution =
+                    await getInstitution(institutionId);
+                if (!validatedInstitution) {
                     log(`HPI error fetching institution`);
                     router.replace('/');
-                }
-
-                if (
-                    !(getInstitutionConfigResponse as ApiResponse).errorMessage
-                ) {
-                    const result = (
-                        getInstitutionConfigResponse as InstitutionConfigResponse
-                    ).config;
-
-                    const validationDiseaseFormResult =
-                        await validateDiseaseForm(result);
-
-                    if (!validationDiseaseFormResult) {
-                        throw new Error('DiseaseForm validation failed');
-                    }
-                    setInstitutionConfig(result);
                 } else {
-                    log(`HPI error fetching institution preferences`);
-                    router.replace('/');
+                    const { id, name } = validatedInstitution;
+                    setInstitution(new InstitutionClass({ id, name }));
                 }
+                // const validatedInstitution = (await getInstitution(
+                //     institutionId
+                // )) as { detail: Institution };
+                // const getInstitutionConfigResponse =
+                //     await getInstitutionConfig(institutionId);
+
+                // if (!(validatedInstitution as ApiResponse).errorMessage) {
+                //     const { id, name } = validatedInstitution.detail;
+                //     setInstitution(new InstitutionClass({ id, name }));
+                // } else {
+                //     log(`HPI error fetching institution`);
+                //     router.replace('/');
+                // }
+
+                // if (
+                //     !(getInstitutionConfigResponse as ApiResponse).errorMessage
+                // ) {
+                //     const result = (
+                //         getInstitutionConfigResponse as InstitutionConfigResponse
+                //     ).config;
+
+                //     const validationDiseaseFormResult =
+                //         await validateDiseaseForm(result);
+
+                //     if (!validationDiseaseFormResult) {
+                //         throw new Error('DiseaseForm validation failed');
+                //     }
+                //     setInstitutionConfig(result);
+                // } else {
+                //     log(`HPI error fetching institution preferences`);
+                //     router.replace('/');
+                // }
             } catch (e) {
                 log(`HPI error fetching institution`);
                 router.replace('/');
@@ -233,41 +243,41 @@ const HpiAdvance = () => {
     }, [notificationMessage]);
 
     // handle loading institution config
-    useEffect(() => {
-        if (!institutionConfig) return;
+    // useEffect(() => {
+    //     if (!institutionConfig) return;
 
-        const { diseaseForm, showChiefComplaints, showDefaultForm } =
-            institutionConfig;
+    //     const { diseaseForm, showChiefComplaints, showDefaultForm } =
+    //         institutionConfig;
 
-        const diseaseFormKeys = diseaseForm.map((form) => form.diseaseKey);
+    //     const diseaseFormKeys = diseaseForm.map((form) => form.diseaseKey);
 
-        loadChiefComplaintsData(diseaseFormKeys).then((values) => {
-            values.forEach((data) => dispatch(processKnowledgeGraph(data)));
-        });
+    //     loadChiefComplaintsData(diseaseFormKeys).then((values) => {
+    //         values.forEach((data) => dispatch(processKnowledgeGraph(data)));
+    //     });
 
-        if (showChiefComplaints || !showDefaultForm) return;
+    //     if (showChiefComplaints || !showDefaultForm) return;
 
-        // FIXME: this logic is not idempotent and it should be!
-        // here we're ensuring the default form is set locally in redux
-        // however, when this useEffect gets called twice, it will end up removing the default form
-        // this function: setChiefComplaint is the same for adding and removing items, causing bugs when called more than once...
-        // remove existing "default forms" chief complaints before updating with new ones
-        selectedChiefComplaints.forEach((item) => {
-            dispatch(setChiefComplaint(item));
-        });
+    //     // FIXME: this logic is not idempotent and it should be!
+    //     // here we're ensuring the default form is set locally in redux
+    //     // however, when this useEffect gets called twice, it will end up removing the default form
+    //     // this function: setChiefComplaint is the same for adding and removing items, causing bugs when called more than once...
+    //     // remove existing "default forms" chief complaints before updating with new ones
+    //     selectedChiefComplaints.forEach((item) => {
+    //         dispatch(setChiefComplaint(item));
+    //     });
 
-        institutionDefaultCC.forEach((item) => {
-            dispatch(setChiefComplaint(item));
-        });
+    //     institutionDefaultCC.forEach((item) => {
+    //         dispatch(setChiefComplaint(item));
+    //     });
 
-        // this effect changes selectedChiefComplaints, so don't add it to dependencies
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        dispatch,
-        institutionConfig,
-        institutionDefaultCC,
-        // selectedChiefComplaints <-- do not add this here, causes infinite loop
-    ]);
+    //     // this effect changes selectedChiefComplaints, so don't add it to dependencies
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [
+    //     dispatch,
+    //     institutionConfig,
+    //     institutionDefaultCC,
+    //     // selectedChiefComplaints <-- do not add this here, causes infinite loop
+    // ]);
 
     useEffect(() => {
         if (

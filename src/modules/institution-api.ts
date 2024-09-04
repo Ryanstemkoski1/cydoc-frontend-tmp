@@ -19,12 +19,10 @@ export const getInstitutionMembers = (
     );
 };
 
-export const getInstitution = (
-    institutionId: string
-): Promise<Institution | ApiResponse> => {
+export const getInstitution = (institutionId: string): Promise<any> => {
     invariant(institutionId, '[getInstitution] missing institutionId');
 
-    return getFromApi<Institution>(
+    return getFromApi(
         `/institution/${institutionId}/public`,
         'getInstitution',
         null // no authentication on get institution
@@ -44,7 +42,6 @@ export async function validateDiseaseForm(
                 diseaseName: key,
             }) as DiseaseForm
     );
-
     const { diseaseForm } = config;
 
     const result = diseaseForm.every((item) =>
