@@ -16,8 +16,25 @@ export const getAppointment = async (
     invariant(institutionId, '[getInstitution] missing institutionId');
 
     const response = (await getFromApi<GetAppointmentResponse>(
-        `/institution/${institutionId}/appointments?appointment_date=${date}`,
+        `/institution/${institutionId}/appointments?appointmentDate=${date}`,
         'getInstitution',
+        cognitoUser
+    )) as GetAppointmentResponse;
+
+    return (response?.data || []) as AppointmentUser[];
+};
+
+export const getAppointmentDetail = async (
+    institutionId: string,
+    appointmentId: string,
+    cognitoUser: CognitoUser | null
+) => {
+    invariant(institutionId, '[getInstitution] missing institutionId');
+    invariant(appointmentId, '[getInstitution] missing appointmentId');
+
+    const response = (await getFromApi<GetAppointmentResponse>(
+        `/institution/${institutionId}/appointments/${appointmentId}`,
+        'getAppointmentDetail',
         cognitoUser
     )) as GetAppointmentResponse;
 

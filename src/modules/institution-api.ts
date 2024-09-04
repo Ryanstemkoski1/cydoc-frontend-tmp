@@ -25,7 +25,7 @@ export const getInstitution = (
     invariant(institutionId, '[getInstitution] missing institutionId');
 
     return getFromApi<Institution>(
-        `/institution/${institutionId}`,
+        `/institution/${institutionId}/public`,
         'getInstitution',
         null // no authentication on get institution
     );

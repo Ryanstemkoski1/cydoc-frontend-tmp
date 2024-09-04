@@ -128,6 +128,17 @@ const CreatePatientModal = ({
         setShowModal(false);
     };
 
+    function formatDate(date: string | Date): string {
+        const inDateFormat = new Date(date);
+        return (
+            inDateFormat.getUTCFullYear().toString() +
+            '-' +
+            (inDateFormat.getUTCMonth() + 1).toString() +
+            '-' +
+            inDateFormat.getUTCDate().toString()
+        );
+    }
+
     const onCreatePatient = async (event: React.FormEvent) => {
         event.preventDefault();
         try {
@@ -139,6 +150,7 @@ const CreatePatientModal = ({
                 dateOfAppointment,
                 typeOfAppointment,
             } = patientDetails;
+
             if (
                 legalFirstName.trim() === '' ||
                 legalLastName.trim() === '' ||
@@ -161,42 +173,44 @@ const CreatePatientModal = ({
 
             const clinician_id =
                 query.get(HPIPatientQueryParams.CLINICIAN_ID) ?? '';
-            const institution_id = user?.institutionId;
+            const institution_id = user?.institutionId ?? '';
             // query.get(HPIPatientQueryParams.INSTITUTION_ID) ?? '';
 
-            apiClient
-                .post('/appointment', {
-                    ...getHPIFormData(additionalSurvey, userSurveyState, {
-                        hpi: hpi,
-                        chiefComplaints: chiefComplaints,
-                        familyHistory: familyHistoryState,
-                        medications: medicationsState,
-                        medicalHistory: medicalHistoryState,
-                        patientInformation: patientInformationState,
-                        surgicalHistory: surgicalHistory,
-                        userSurvey: userSurveyState,
-                    }),
-                    clinician_id,
-                    institution_id,
-                })
-                .then(() => {
-                    console.log('success');
-                })
-                .catch((_error) => {
-                    console.log('error', _error);
-                })
-                .finally(() => {
-                    console.log('finally');
-                    setShowModal(false);
-                    setPatientDetails({
-                        legalFirstName: '',
-                        legalLastName: '',
-                        legalMiddleName: '',
-                        dateOfBirth: '',
-                        dateOfAppointment: '',
-                        typeOfAppointment: '',
-                    });
-                });
+            const createPatientResult = await apiClient.post('/patient', {
+                firstName: legalFirstName.trim(),
+                middleName: legalMiddleName.trim(),
+                lastName: legalLastName.trim(),
+                ssn_last_four_digit: '',
+                dob: dateOfBirth.trim(),
+            });
+
+            const patientId = createPatientResult.data.id;
+
+            const createAppointRes = await apiClient.post('/appointment', {
+                ...getHPIFormData(additionalSurvey, userSurveyState, {
+                    hpi: hpi,
+                    chiefComplaints: chiefComplaints,
+                    familyHistory: familyHistoryState,
+                    medications: medicationsState,
+                    medicalHistory: medicalHistoryState,
+                    patientInformation: patientInformationState,
+                    surgicalHistory: surgicalHistory,
+                    userSurvey: userSurveyState,
+                }),
+                clinicianId: clinician_id,
+                institutionId: institution_id,
+                appointmentDate: dateOfAppointment,
+                patientId: patientId,
+            });
+            setShowModal(false);
+            setPatientDetails({
+                legalFirstName: '',
+                legalLastName: '',
+                legalMiddleName: '',
+                dateOfBirth: '',
+                dateOfAppointment: '',
+                typeOfAppointment: '',
+            });
         } catch (error) {
             console.error('Error creating patient:', error);
         }

@@ -5,49 +5,21 @@ import style from './GeneratedNoteContent.module.scss';
 import HpiNote from '@screens/EditNote/content/generatenote/notesections/HPINote';
 import { toast } from 'react-toastify';
 import { Box, Typography } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { addPatient } from '@redux/actions/patientActions';
-import axios from 'axios';
-import { selectPatientState } from '@redux/selectors/patientSelector';
 
 interface GeneratedNoteContentProps {
     selectedAppointment: any;
     user: any;
 }
-const GeneratedNoteContent = (
-    selectedAppointment: GeneratedNoteContentProps
-) => {
-    const {
-        firstName,
-        middleName,
-        lastName,
-        dob,
-        institutionId,
-        appointmentDate,
-        hpiText,
-    } = selectedAppointment.selectedAppointment;
+const GeneratedNoteContent = ({
+    selectedAppointment,
+    user,
+}: GeneratedNoteContentProps) => {
+    const { patient, institutionId, appointmentDate, hpiText } =
+        selectedAppointment;
 
-    const dispatch = useDispatch();
-    const mockyAPI =
-        'https://run.mocky.io/v3/355330c6-60a7-4502-a9fa-0ad0e19f1868';
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await axios.post(mockyAPI);
-            dispatch(addPatient(response.data));
-        };
-
-        fetchData();
-
-        // Cleanup function
-        return () => {
-            // Perform cleanup tasks if needed
-        };
-    }, []);
+    const { firstName, middleName, lastName, dob } = patient;
 
     const link = `${window.location.origin}/hpi/patient-advance?institution_id=${institutionId}`;
-
-    const patientsData = useSelector(selectPatientState);
 
     const data1 = {
         Name: `${firstName} ${middleName ? middleName : ''} ${lastName}`,

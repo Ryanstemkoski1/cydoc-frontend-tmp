@@ -63,26 +63,31 @@ function formatDate(date: Date): string {
 function formatDateOfBirth(date: string | Date): string {
     const inDateFormat = new Date(date);
     return (
+        inDateFormat.getUTCFullYear().toString() +
+        '-' +
         (inDateFormat.getUTCMonth() + 1).toString() +
-        '/' +
-        inDateFormat.getUTCDate().toString() +
-        '/' +
-        inDateFormat.getUTCFullYear().toString()
+        '-' +
+        inDateFormat.getUTCDate().toString()
     );
 }
 
 export interface AppointmentUser {
     id: string;
-    firstName: string;
-    lastName: string;
-    middleName: string | null;
-    dob: Date;
+    patient: Patient;
     clinicianId: string | null;
     appointmentDate: Date;
     clinicianLastName: string | null;
     hpiText: string;
-    ssnLastFourDigit: string | null;
     institutionId: string | null;
+}
+
+export interface Patient {
+    id: string;
+    firstName: string;
+    lastName: string;
+    middleName: string | null;
+    dob: string;
+    ssnLastFourDigit: string | null;
 }
 
 const BrowseNotes = () => {
@@ -158,7 +163,6 @@ const BrowseNotes = () => {
                 user?.institutionId,
                 cognitoUser
             );
-
             const filteredUsers = users.reduce(
                 (acc: AppointmentUser[], current) => {
                     const x = acc.find((item) => item.id === current.id);
@@ -222,14 +226,17 @@ const BrowseNotes = () => {
                                                     }
                                                 >
                                                     {formatFullName(
-                                                        user?.firstName,
-                                                        user?.middleName ?? '',
-                                                        user?.lastName
+                                                        user?.patient.firstName,
+                                                        user?.patient
+                                                            .middleName ?? '',
+                                                        user?.patient.lastName
                                                     )}
                                                 </span>
                                             </td>
                                             <td>
-                                                {formatDateOfBirth(user.dob)}
+                                                {formatDateOfBirth(
+                                                    user?.patient.dob
+                                                )}
                                             </td>
                                         </tr>
                                     );
@@ -311,9 +318,9 @@ const BrowseNotes = () => {
                                             }}
                                         >
                                             {formatFullName(
-                                                user?.firstName,
-                                                user?.middleName ?? '',
-                                                user?.lastName
+                                                user?.patient.firstName,
+                                                user?.patient.middleName ?? '',
+                                                user?.patient.lastName
                                             )}
                                         </Typography>
                                     </Box>
@@ -329,7 +336,7 @@ const BrowseNotes = () => {
                                             style.notesBlockAdvance__tableWrapper__right
                                         }
                                     >
-                                        {formatDateOfBirth(user.dob)}
+                                        {formatDateOfBirth(user?.patient.dob)}
                                     </Typography>
                                 </Box>
                             </ListItem>
@@ -472,7 +479,6 @@ const BrowseNotes = () => {
                             <Box
                                 className={` ${style.notesBlockAdvance__content} `}
                             >
-                                {/* {renderUsersAdvance(addedPatients)} */}
                                 {renderUsersAdvance(users)}
                             </Box>
                         </Box>
