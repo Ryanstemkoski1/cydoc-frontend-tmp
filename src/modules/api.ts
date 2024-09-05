@@ -7,7 +7,7 @@ import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
 
 const JSON_HEADER: (
     token: string | undefined,
-    method: 'POST' | 'GET'
+    method: 'POST' | 'GET' | 'PUT' | 'DELETE'
 ) => RequestInit = (token, method): RequestInit => ({
     method,
     headers: {
@@ -71,6 +71,59 @@ export async function postToApi<T>(
         return handledResponse;
     } catch (e) {
         log(`[postToApi] ${description}: ${stringFromError(e)}`, {
+            path,
+            description,
+            body,
+            response,
+        });
+
+        return {
+            errorMessage:
+                'Unexpected error occurred, check your internet connection',
+        };
+    }
+}
+
+export async function putToApi<T>(
+    path: string,
+    description: string,
+    body: any,
+    cognitoUser: CognitoUser | null
+): Promise<T | ApiResponse> {
+    const token = await getAuthToken(cognitoUser);
+
+    const url = `${API_URL}${path}`;
+
+    let response;
+    breadcrumb(`puting: ${JSON.stringify(path)}`, 'API', {
+        url,
+        path,
+        body,
+    });
+
+    try {
+        response = await fetch(url, {
+            ...JSON_HEADER(token, 'PUT'),
+            body: JSON.stringify({
+                ...(body || {}),
+            }),
+        });
+        const handledResponse = await handleResponse<T>(response);
+
+        breadcrumb(
+            `PutToApi${response.status} ${description} Response`,
+            'API',
+            {
+                handledResponse,
+                responseStatus: response.status,
+                responseOk: response.ok,
+                responseStatusText: response.statusText,
+            }
+        );
+
+        return handledResponse;
+    } catch (e) {
+        log(`[putToApi] ${description}: ${stringFromError(e)}`, {
             path,
             description,
             body,

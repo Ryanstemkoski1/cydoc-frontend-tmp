@@ -30,6 +30,7 @@ import useQuery from '@hooks/useQuery';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
 import MiscBox from '../../EditNote/content/hpi/knowledgegraph/components/MiscBox';
+import useAuth from '@hooks/useAuth';
 
 interface OwnProps {
     notification: {
@@ -39,12 +40,17 @@ interface OwnProps {
         >;
     };
     step?: number; // does not appear to be passed in from parent component correctly
+    auth: any;
 }
 
 interface State {
     searchVal: string;
     activeIndex: number;
     loading: boolean;
+    institutionId: string;
+    appointmentId: string;
+    appointmentDate: string;
+    patientId: string;
 }
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -58,6 +64,10 @@ class HPIContent extends React.Component<Props, State> {
             searchVal: '',
             activeIndex: 0, //misc notes box active
             loading: false,
+            institutionId: '',
+            appointmentId: '',
+            appointmentDate: '',
+            patientId: '',
         };
     }
 
@@ -72,6 +82,17 @@ class HPIContent extends React.Component<Props, State> {
         ) {
             const data = hpiHeaders;
             data.then((res) => this.props.saveHpiHeader(res.data));
+        }
+
+        const selectedAppointment = localStorage.getItem('selectedAppointment');
+        if (selectedAppointment) {
+            const temp = JSON.parse(selectedAppointment);
+            this.setState({
+                institutionId: temp.institutionId,
+                appointmentId: temp.id,
+                appointmentDate: temp.appointmentDate,
+                patientId: temp.patientId,
+            });
         }
     }
 
@@ -113,22 +134,27 @@ class HPIContent extends React.Component<Props, State> {
 
         apiClient
             .post('/appointment', {
-                ...getHPIFormData(
-                    this.props.additionalSurvey,
-                    this.props.userSurveyState,
-                    {
-                        hpi: this.props.hpi,
-                        chiefComplaints: this.props.chiefComplaints,
-                        familyHistory: this.props.familyHistoryState,
-                        medications: this.props.medicationsState,
-                        medicalHistory: this.props.medicalHistoryState,
-                        patientInformation: this.props.patientInformationState,
-                        surgicalHistory: this.props.surgicalHistory,
-                        userSurvey: this.props.userSurveyState,
-                    }
-                ),
-                clinician_id,
-                institution_id,
+                notes: [
+                    getHPIFormData(
+                        this.props.additionalSurvey,
+                        this.props.userSurveyState,
+                        {
+                            hpi: this.props.hpi,
+                            chiefComplaints: this.props.chiefComplaints,
+                            familyHistory: this.props.familyHistoryState,
+                            medications: this.props.medicationsState,
+                            medicalHistory: this.props.medicalHistoryState,
+                            patientInformation:
+                                this.props.patientInformationState,
+                            surgicalHistory: this.props.surgicalHistory,
+                            userSurvey: this.props.userSurveyState,
+                        }
+                    ),
+                ],
+                clinicianId: clinician_id,
+                institutionId: institution_id,
+                appointmentDate: this.state.appointmentDate,
+                patientId: this.state.patientId,
             })
             .then(() => {
                 let url = `/submission-advance-successful?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
@@ -215,6 +241,13 @@ class HPIContent extends React.Component<Props, State> {
     }
 }
 
+const withAuth = (WrappedComponent: React.ComponentType<any>) => {
+    return (props: any) => {
+        const auth = useAuth();
+        return <WrappedComponent {...props} auth={auth} />;
+    };
+};
+
 interface NextSubmitButtonProps {
     loading: boolean;
     onSubmit: (query: ReadonlyURLSearchParams) => void;
@@ -267,4 +300,4 @@ const mapDispatchToProps = {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-export default connector(HPIContent);
+export default connector(withAuth(HPIContent));

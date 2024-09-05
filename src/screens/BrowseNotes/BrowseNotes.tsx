@@ -77,8 +77,9 @@ export interface AppointmentUser {
     clinicianId: string | null;
     appointmentDate: Date;
     clinicianLastName: string | null;
-    hpiText: string;
+    notes: any;
     institutionId: string | null;
+    patientId: string;
 }
 
 export interface Patient {
@@ -165,11 +166,14 @@ const BrowseNotes = () => {
             );
             const filteredUsers = users.reduce(
                 (acc: AppointmentUser[], current) => {
-                    const x = acc.find((item) => item.id === current.id);
+                    const x = acc.find(
+                        (item) => item.patientId === current.patientId
+                    );
                     if (!x) {
                         return acc.concat([current]);
                     } else {
-                        if (!current.hpiText.includes('No history')) {
+                        const temp = JSON.parse(current.notes[0].hpi);
+                        if (!temp.hpi_text.includes('No history')) {
                             const index = acc.indexOf(x);
                             acc[index] = current;
                         }

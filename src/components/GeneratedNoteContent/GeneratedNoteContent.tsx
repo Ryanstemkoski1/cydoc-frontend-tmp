@@ -14,10 +14,12 @@ const GeneratedNoteContent = ({
     selectedAppointment,
     user,
 }: GeneratedNoteContentProps) => {
-    const { patient, institutionId, appointmentDate, hpiText } =
+    const { patient, institutionId, appointmentDate, notes } =
         selectedAppointment;
 
     const { firstName, middleName, lastName, dob } = patient;
+
+    const hpiText = JSON.parse(notes[0].hpi).hpi_text;
 
     const link = `${window.location.origin}/hpi/patient-advance?institution_id=${institutionId}`;
 

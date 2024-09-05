@@ -1,5 +1,5 @@
 import invariant from 'tiny-invariant';
-import { getFromApi } from './api';
+import { getFromApi, postToApi, putToApi } from './api';
 import { CognitoUser } from 'auth/cognito';
 import { AppointmentUser } from '@screens/BrowseNotes/BrowseNotes';
 
@@ -50,6 +50,26 @@ export const getInstitutionClinicians = async (
     const response = await getFromApi(
         `/institution/${institutionId}/clinicians`,
         'getInstitutionClinicians',
+        cognitoUser
+    );
+
+    return response || [];
+};
+
+export const updateAppointment = async (
+    institutionId: string,
+    appointmentId: string,
+    appointmentDate: string,
+    cognitoUser: CognitoUser | null
+) => {
+    invariant(institutionId, '[getInstitution] missing institutionId');
+
+    const response = await putToApi(
+        `/institution/${institutionId}/appointments/${appointmentId}`,
+        'updateAppointment',
+        {
+            appointmentDate: appointmentDate,
+        },
         cognitoUser
     );
 

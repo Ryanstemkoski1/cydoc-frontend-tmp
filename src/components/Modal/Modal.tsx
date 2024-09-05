@@ -58,8 +58,9 @@ const Modal = ({
         };
     }, [showModal]);
 
-    const { patient, hpiText } = selectedAppointment;
+    const { patient, notes } = selectedAppointment;
     const { firstName, middleName, lastName } = patient;
+    const hpiText = JSON.parse(notes[0].hpi).hpi_text;
 
     return (
         <div
@@ -98,12 +99,13 @@ const Modal = ({
                         className={`${style.modal__scroll} scrollbar`}
                         id='copy-notes'
                     >
-                        {hpiText && (
-                            <HpiNote
-                                text={JSON.parse(hpiText)}
-                                isParagraphFormat={isParagraphFormat}
-                            />
-                        )}
+                        {hpiText !== undefined &&
+                            !hpiText.includes('No history') && (
+                                <HpiNote
+                                    text={JSON.parse(hpiText)}
+                                    isParagraphFormat={isParagraphFormat}
+                                />
+                            )}
                     </div>
                 </div>
             </div>
