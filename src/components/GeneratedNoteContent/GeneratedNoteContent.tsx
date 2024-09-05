@@ -19,7 +19,10 @@ const GeneratedNoteContent = ({
 
     const { firstName, middleName, lastName, dob } = patient;
 
-    const hpiText = JSON.parse(notes[0].hpi).hpi_text;
+    const hpiText =
+        notes[0]?.hpi !== undefined
+            ? JSON.parse(notes[0].hpi).hpi_text
+            : undefined;
 
     const link = `${window.location.origin}/hpi/patient-advance?institution_id=${institutionId}`;
 

@@ -60,7 +60,10 @@ const Modal = ({
 
     const { patient, notes } = selectedAppointment;
     const { firstName, middleName, lastName } = patient;
-    const hpiText = JSON.parse(notes[0].hpi).hpi_text;
+    const hpiText =
+        notes[0]?.hpi !== undefined
+            ? JSON.parse(notes[0].hpi).hpi_text
+            : undefined;
 
     return (
         <div
