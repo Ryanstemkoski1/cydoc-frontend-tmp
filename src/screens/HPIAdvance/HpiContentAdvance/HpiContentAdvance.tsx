@@ -30,7 +30,6 @@ import useQuery from '@hooks/useQuery';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
 import MiscBox from '../../EditNote/content/hpi/knowledgegraph/components/MiscBox';
-import useAuth from '@hooks/useAuth';
 
 interface OwnProps {
     notification: {
@@ -40,7 +39,6 @@ interface OwnProps {
         >;
     };
     step?: number; // does not appear to be passed in from parent component correctly
-    auth: any;
 }
 
 interface State {
@@ -241,13 +239,6 @@ class HPIContent extends React.Component<Props, State> {
     }
 }
 
-const withAuth = (WrappedComponent: React.ComponentType<any>) => {
-    return (props: any) => {
-        const auth = useAuth();
-        return <WrappedComponent {...props} auth={auth} />;
-    };
-};
-
 interface NextSubmitButtonProps {
     loading: boolean;
     onSubmit: (query: ReadonlyURLSearchParams) => void;
@@ -300,4 +291,4 @@ const mapDispatchToProps = {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-export default connector(withAuth(HPIContent));
+export default connector(HPIContent);
