@@ -41,11 +41,19 @@ const NavBlock = () => {
         if (pathname === '/') {
             setNavTitle('Home');
         } else if (pathname === '/hpi/patient-advance') {
-            const { legalFirstName, legalLastName, dateOfBirth } =
-                additionalSurvey;
+            const {
+                legalFirstName,
+                legalMiddleName,
+                legalLastName,
+                dateOfBirth,
+            } = additionalSurvey;
+
+            const legalName = legalMiddleName
+                ? `${legalFirstName} ${legalMiddleName} ${legalLastName}`
+                : `${legalFirstName} ${legalLastName}`;
 
             setNavTitle(
-                `Form for ${legalFirstName} ${legalLastName}     DOB: ${formatDate(dateOfBirth)}`
+                `Form for ${legalName}     DOB: ${formatDate(dateOfBirth)}`
             );
         } else {
             setNavTitle(currentRoute?.label || ''); // Provide a default value of an empty string
