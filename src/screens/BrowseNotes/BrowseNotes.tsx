@@ -164,26 +164,27 @@ const BrowseNotes = () => {
                 user?.institutionId,
                 cognitoUser
             );
-            const filteredUsers = users.reduce(
-                (acc: AppointmentUser[], current) => {
-                    const x = acc.find(
-                        (item) => item.patientId === current.patientId
-                    );
-                    if (!x) {
-                        return acc.concat([current]);
-                    } else {
-                        const temp = JSON.parse(current.notes[0].hpi);
-                        if (!temp.hpi_text.includes('No history')) {
-                            const index = acc.indexOf(x);
-                            acc[index] = current;
-                        }
-                        return acc;
-                    }
-                },
-                []
-            );
+            // const filteredUsers = users.reduce(
+            //     (acc: AppointmentUser[], current) => {
+            //         const x = acc.find(
+            //             (item) => item.patientId === current.patientId
+            //         );
+            //         if (!x) {
+            //             return acc.concat([current]);
+            //         } else {
+            //             const temp = JSON.parse(current.notes[0].hpi);
+            //             if (!temp.hpi_text.includes('No history')) {
+            //                 const index = acc.indexOf(x);
+            //                 acc[index] = current;
+            //             }
+            //             return acc;
+            //         }
+            //     },
+            //     []
+            // );
 
-            setUsers(filteredUsers);
+            // setUsers(filteredUsers);
+            setUsers(users);
             dispatch(setLoadingStatus(false));
         } catch (err) {
             setUsers([]);
