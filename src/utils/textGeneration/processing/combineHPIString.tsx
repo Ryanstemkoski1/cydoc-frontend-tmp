@@ -126,7 +126,7 @@ export function compareAndCombine(strA: string, strB: string, n: number = 3) {
  * - Returns null if `strB` contains the words 'not' or 'denies' after the matching words.
  * - Future enhancements may include additional checks (e.g., specific phrases, string length).
  */
-function isCombineable(strA: string, strB: string, n: number = 2) {
+function isCombineable(strA: string, strB: string, n: number = 3) {
     // Split both strings into words, trimming any leading/trailing spaces.
     const splitA = strA.trim().split(' ');
     const splitB = strB.trim().split(' ');
