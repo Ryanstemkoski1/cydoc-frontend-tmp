@@ -1,12 +1,14 @@
 import { HPIPatientQueryParams } from '@constants/enums/hpi.patient.enums';
 import axios from 'axios';
 import NavigationButton from '@components/tools/NavigationButton/NavigationButton';
-import { graphClientURL, apiClient } from '@constants/api';
 import { favChiefComplaints } from 'classes/institution.class';
 import React, { useCallback } from 'react';
 import Masonry from 'react-masonry-css';
 import { ConnectedProps, connect } from 'react-redux';
-import { setChiefComplaint } from '@redux/actions/chiefComplaintsActions';
+import {
+    setChiefComplaint,
+    setNotesChiefComplaint,
+} from '@redux/actions/chiefComplaintsActions';
 import { processKnowledgeGraph } from '@redux/actions/hpiActions';
 import { saveHpiHeader } from '@redux/actions/hpiHeadersActions';
 import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
@@ -29,8 +31,14 @@ import { NotificationTypeEnum } from '@components/tools/Notification/Notificatio
 import useQuery from '@hooks/useQuery';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import { log } from '@modules/logging';
+import { apiClient, graphClientURL } from '@constants/api';
+import { FilledFormHpiState } from '@constants/hpiEnums';
+import ButtonSave from '@components/ButtonSave/ButtonSave';
+import { postFilledForm } from '@modules/filled-form-api';
+import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
 
 interface OwnProps {
+    formContent: FilledFormHpiState;
     notification: {
         setNotificationMessage: React.Dispatch<React.SetStateAction<string>>;
         setNotificationType: React.Dispatch<
@@ -46,6 +54,7 @@ interface State {
     searchVal: string;
     activeIndex: number;
     loading: boolean;
+    saveFormLoading: boolean;
 }
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -59,6 +68,7 @@ class HPIContent extends React.Component<Props, State> {
             searchVal: '',
             activeIndex: 0, //misc notes box active
             loading: false,
+            saveFormLoading: false,
         };
     }
 
@@ -73,6 +83,15 @@ class HPIContent extends React.Component<Props, State> {
         ) {
             const data = hpiHeaders;
             data.then((res) => this.props.saveHpiHeader(res.data));
+        }
+    }
+
+    componentDidUpdate(prevProps: Readonly<Props>): void {
+        if (
+            Object.keys(this.props.formContent.nodes).length !==
+            Object.keys(prevProps.formContent.nodes).length
+        ) {
+            this.props.processKnowledgeGraph(this.props.formContent);
         }
     }
 
@@ -213,6 +232,38 @@ class HPIContent extends React.Component<Props, State> {
             return filterResults;
         };
 
+        const handleOnSave = async () => {
+            //temp constants for saveFilledFormToDb
+            const appointmentId = '660e8400-e29b-41d4-a716-446622444411';
+            const appointmentTemplateStepId =
+                '660e8400-e29b-41d4-a716-446622444413';
+            const formCategory = 'diabetes';
+            const status = 'inProgress';
+            //temp constants for saveFilledFormToDb
+
+            // Please replace hard-coded constants values to the dynamic values
+
+            const formContent = this.props.hpi;
+            // Save filled_form to Database
+            this.setState({
+                saveFormLoading: true,
+            });
+            try {
+                await postFilledForm({
+                    appointmentId,
+                    appointmentTemplateStepId,
+                    formCategory,
+                    formContent,
+                    status,
+                });
+            } catch (error) {
+                console.error('Error saving data:', error);
+            }
+            this.setState({
+                saveFormLoading: false,
+            });
+        };
+
         // each step correlates to a different tab
         const step = this.props.step;
         // number of positive diseases, which is also the number of steps
@@ -282,6 +333,11 @@ class HPIContent extends React.Component<Props, State> {
                                     prevStep={this.props.back}
                                 />
                             )}
+                            <ButtonSave
+                                text='Save'
+                                handleOnSave={handleOnSave}
+                                loading={this.state.saveFormLoading}
+                            />
                             <NextSubmitButton
                                 loading={this.state.loading}
                                 onBack={this.props.back}
@@ -360,6 +416,7 @@ const mapDispatchToProps = {
     processKnowledgeGraph,
     saveHpiHeader,
     setChiefComplaint,
+    setNotesChiefComplaint,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

@@ -35,15 +35,15 @@ function traverseNodes(
     while (stack.length) {
         const currNode = stack.pop();
         if (!currNode) continue;
-        if (nodes[currNode].text != 'nan') nodesArr = [...nodesArr, currNode];
+        if (nodes[currNode]?.text != 'nan') nodesArr = [...nodesArr, currNode];
 
         let childNodes = graph[currNode]
-            .slice(0, cutOff - (totalNodes.length - currNodes.length))
+            ?.slice(0, cutOff - (totalNodes.length - currNodes.length))
             .reverse();
 
         const isValidResponseResult = isHPIResponseValid(
-            nodes[currNode].response,
-            nodes[currNode].responseType
+            nodes[currNode]?.response,
+            nodes[currNode]?.responseType
         );
 
         if (
@@ -51,11 +51,11 @@ function traverseNodes(
                 ResponseTypes.SELECTMANY,
                 ResponseTypes.SELECTONE,
                 ResponseTypes.SELECTMANYDENSE,
-            ].includes(nodes[currNode].responseType) &&
+            ].includes(nodes[currNode]?.responseType) &&
             isValidResponseResult
         ) {
             const childNodesToDisplay: string[] = [];
-            const response = nodes[currNode].response as
+            const response = nodes[currNode]?.response as
                 | SelectManyInput
                 | SelectOneInput;
             const validNodeResponse = Object.keys(response).filter(
@@ -76,15 +76,15 @@ function traverseNodes(
 
         const childEdges =
             (totalNodes.length - currNodes.length < cutOff &&
-                nodes[currNode].responseType == ResponseTypes.YES_NO &&
-                nodes[currNode].response == YesNoResponse.Yes) ||
-            (nodes[currNode].responseType == ResponseTypes.NO_YES &&
-                nodes[currNode].response == YesNoResponse.No) ||
-            (nodes[currNode].responseType == ResponseTypes.SELECTMANYDENSE &&
+                nodes[currNode]?.responseType == ResponseTypes.YES_NO &&
+                nodes[currNode]?.response == YesNoResponse.Yes) ||
+            (nodes[currNode]?.responseType == ResponseTypes.NO_YES &&
+                nodes[currNode]?.response == YesNoResponse.No) ||
+            (nodes[currNode]?.responseType == ResponseTypes.SELECTMANYDENSE &&
                 isValidResponseResult) ||
-            (nodes[currNode].responseType == ResponseTypes.SELECTMANY &&
+            (nodes[currNode]?.responseType == ResponseTypes.SELECTMANY &&
                 isValidResponseResult) ||
-            (nodes[currNode].responseType == ResponseTypes.SELECTONE &&
+            (nodes[currNode]?.responseType == ResponseTypes.SELECTONE &&
                 isValidResponseResult)
                 ? childNodes
                 : [];
@@ -130,7 +130,7 @@ export function nodesToDisplayInOrder(
                     ...new Set([
                         ...nodesArr,
                         ...currNodesArr.filter(
-                            (node) => hpi.nodes[node].text != 'nan'
+                            (node) => hpi.nodes[node]?.text != 'nan'
                         ),
                     ]),
                 ];
@@ -156,7 +156,7 @@ export function firstOrderNodes(state: CurrentNoteState) {
                 .reduce((prevVal, node) => {
                     let currNodes = prevVal;
                     const i = currNodes.findIndex((n) => n == node);
-                    if (nodes[node].text == 'nan')
+                    if (nodes[node]?.text == 'nan')
                         currNodes = [
                             ...currNodes.slice(0, i + 1),
                             ...graph[node],
@@ -168,7 +168,7 @@ export function firstOrderNodes(state: CurrentNoteState) {
         }
         firstOrderNodesMap[chiefComplaint] = newNodes.slice().reverse();
         totalNodes = [...totalNodes, ...newNodes].filter(
-            (node) => nodes[node].text != 'nan'
+            (node) => nodes[node]?.text != 'nan'
         );
     });
     return [firstOrderNodesMap, totalNodes];

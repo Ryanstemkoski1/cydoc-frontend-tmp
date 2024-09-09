@@ -15,6 +15,7 @@ import {
     NodeInterface,
     OrderInterface,
     SelectOneInput,
+    FilledFormHpiState,
 } from '@constants/hpiEnums';
 import { v4 } from 'uuid';
 
@@ -230,13 +231,21 @@ export function isSelectOneResponse(value: any): value is SelectOneInput {
 export function hpiReducer(
     state = initialHpiState,
     action: HpiActionTypes
-): HpiState {
+): HpiState | FilledFormHpiState {
     switch (action.type) {
         case HPI_ACTION.PROCESS_KNOWLEDGE_GRAPH: {
             const { graph, nodes, edges, order } = action.payload.graphData,
                 parentNode = order['1'];
             let newState = {
                     ...state,
+                    graph: {
+                        ...state.graph,
+                        ...graph,
+                    },
+                    nodes: {
+                        ...state.nodes,
+                        ...nodes,
+                    },
                     order: {
                         ...state.order,
                         [parentNode]: order,
@@ -248,12 +257,14 @@ export function hpiReducer(
                 if (!currNode || !(currNode in graph)) continue;
                 stack = [
                     ...stack,
-                    ...graph[currNode].map((edge) => edges[edge.toString()].to),
+                    ...graph[currNode]?.map(
+                        (edge) => edges[edge.toString()]?.to
+                    ),
                 ];
                 const childNodes = graph[currNode]
-                        .map((edge: number) => [
-                            edges[edge.toString()].toQuestionOrder.toString(),
-                            edges[edge.toString()].to,
+                        ?.map((edge: number) => [
+                            edges[edge.toString()]?.toQuestionOrder.toString(),
+                            edges[edge.toString()]?.to,
                         ])
                         .sort(
                             (tup1, tup2) =>
@@ -266,7 +277,7 @@ export function hpiReducer(
                     ] as keyof ExpectedResponseInterface;
 
                 // If a node does not exist in the state, then only add new data
-                if (!newState.nodes[currNode]) {
+                if (!newState.nodes[currNode] || nodes) {
                     newState = {
                         ...newState,
                         nodes: {
@@ -520,7 +531,7 @@ export function hpiReducer(
             const { medId, optionSelected } = action.payload;
             if (
                 [ResponseTypes.YES_NO, ResponseTypes.NO_YES].includes(
-                    state.nodes[medId].responseType
+                    state.nodes[medId]?.responseType
                 )
             ) {
                 return updateResponse(

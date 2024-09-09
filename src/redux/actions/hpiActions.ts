@@ -9,18 +9,19 @@ import {
     BodyLocationOptions,
     BodyLocationLRItemType,
     GraphData,
+    FilledFormHpiState,
 } from '@constants/hpiEnums';
 import { UnknownAction } from 'redux';
 
 export interface ProcessKnowledgeGraphAction extends UnknownAction {
     type: HPI_ACTION.PROCESS_KNOWLEDGE_GRAPH;
     payload: {
-        graphData: GraphData;
+        graphData: GraphData | FilledFormHpiState;
     };
 }
 
 export function processKnowledgeGraph(
-    graphData: GraphData
+    graphData: GraphData | FilledFormHpiState
 ): ProcessKnowledgeGraphAction {
     return {
         type: HPI_ACTION.PROCESS_KNOWLEDGE_GRAPH,

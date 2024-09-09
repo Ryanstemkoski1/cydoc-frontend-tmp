@@ -303,11 +303,14 @@ exports[`hpi reducers > handle user actions > handles lab test input actions > h
   "edges": {},
   "graph": {
     "foo1": [
+      3,
       "foo3",
     ],
     "foo2": [],
     "foo3": [],
     "medId": [
+      1,
+      2,
       "foo2",
       "foo1",
     ],
@@ -370,11 +373,14 @@ exports[`hpi reducers > handle user actions > handles lab test input actions > h
   "edges": {},
   "graph": {
     "foo1": [
+      3,
       "foo3",
     ],
     "foo2": [],
     "foo3": [],
     "medId": [
+      1,
+      2,
       "foo2",
       "foo1",
     ],
@@ -437,11 +443,14 @@ exports[`hpi reducers > handle user actions > handles lab test input actions > r
   "edges": {},
   "graph": {
     "foo1": [
+      3,
       "foo3",
     ],
     "foo2": [],
     "foo3": [],
     "medId": [
+      1,
+      2,
       "foo2",
       "foo1",
     ],
@@ -1065,11 +1074,14 @@ exports[`hpi reducers > process knowledge graph > processes knowledge graph 1`] 
   "edges": {},
   "graph": {
     "foo1": [
+      3,
       "foo3",
     ],
     "foo2": [],
     "foo3": [],
     "medId": [
+      1,
+      2,
       "foo2",
       "foo1",
     ],

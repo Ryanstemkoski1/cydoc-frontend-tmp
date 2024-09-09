@@ -153,7 +153,7 @@ export const extractNodes = (
  * return ['condition1', 'condition2']
  */
 export function getNodeConditions(node: ReduxNodeInterface) {
-    const matches = node.text.match(/ONLYIF\[.*]\s/); // get "ONLYIF[**] " part from text;
+    const matches = node?.text.match(/ONLYIF\[.*]\s/); // get "ONLYIF[**] " part from text;
 
     if (!matches) return [];
 

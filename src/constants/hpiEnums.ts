@@ -230,6 +230,13 @@ export interface GraphData {
     order: OrderInterface;
 }
 
+export interface FilledFormHpiState {
+    graph: object;
+    nodes: object;
+    edges: object;
+    order: object;
+}
+
 export interface EdgeInterface {
     from: string;
     to: string;
