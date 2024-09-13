@@ -1,6 +1,6 @@
 'use client';
 
-import { ApiResponse, Institution } from '@cydoc-ai/types';
+import { ApiResponse, Appointment, Institution } from '@cydoc-ai/types';
 import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
 import { HPIPatientQueryParams } from '@constants/enums/hpi.patient.enums';
 import { Institution as InstitutionClass } from 'classes/institution.class';
@@ -37,7 +37,9 @@ import { selectHpiHeaders } from '@redux/reducers/hpiHeadersReducer';
 import useSignInRequired from '@hooks/useSignInRequired';
 import axios from 'axios';
 import { graphClientURL } from '@constants/api';
-import { getInstitutionClinicians } from '@modules/appointment-api';
+import { getAppointmentDetail } from '@modules/appointment-api';
+import useAuth from '@hooks/useAuth';
+import { getFilledForm } from '@modules/filled-form-api';
 
 export interface OnNextClickParams {
     allSelectedChiefComplaints?: string[];
@@ -55,22 +57,29 @@ const HpiAdvance = () => {
     const dispatch = useDispatch();
     const query = useQuery();
     const router = useRouter();
+    const { cognitoUser } = useAuth();
 
-    const institutionId = query?.get(HPIPatientQueryParams.INSTITUTION_ID);
+    const institutionId =
+        query?.get(HPIPatientQueryParams.INSTITUTION_ID) ?? '';
+    const appointmentId = query?.get('appointment_id') ?? '';
 
     const [notificationMessage, setNotificationMessage] = useState('');
     const [notificationType, setNotificationType] = useState(
         NotificationTypeEnum.ERROR
     );
+    const [loading, setLoading] = useState(false);
     const [screenForPatient, setScreenForPatient] =
         useState<ScreenForPatientType>({
             title: '',
             component: null,
         });
     const [institution, setInstitution] = useState<InstitutionClass>();
+
     const userSurveyState = useSelector(selectInitialPatientSurvey);
     const hpiHeaders = useSelector(selectHpiHeaders);
     const activeItem = useSelector(selectActiveItem);
+    const [selectedAppointment, setSelectedAppointment] =
+        useState<Appointment>();
 
     const [institutionConfig, setInstitutionConfig] =
         useState<InstitutionConfig>();
@@ -87,43 +96,58 @@ const HpiAdvance = () => {
     const [hpiName, setHpiName] = useState('');
 
     useEffect(() => {
-        const selectedAppointment = localStorage.getItem('selectedAppointment');
-        if (selectedAppointment) {
-            const temp = JSON.parse(selectedAppointment);
-            const appointmentDate = temp.appointmentDate;
-            const legalFirstName = temp.patient.firstName;
-            const legalLastName = temp.patient.lastName;
-            const legalMiddleName = temp.patient.middleName;
-            const dateOfBirth = temp.patient.dob;
-
-            const reporter = temp.selectedForm.reporter;
-            const title = temp.selectedForm.title;
-
-            setHpiKey(reporter);
-            setHpiName(title);
-            setAppointmentDate(appointmentDate);
-
-            dispatch(
-                updateAdditionalSurveyDetails(
-                    legalFirstName,
-                    legalLastName,
-                    legalMiddleName ? legalMiddleName : '',
-                    '',
-                    dateOfBirth,
-                    0
-                )
+        const fetchAppointment = async () => {
+            const selectedAppointment = await getAppointmentDetail(
+                institutionId,
+                appointmentId,
+                cognitoUser
             );
-        }
+            if (selectedAppointment && selectedAppointment.patient) {
+                setSelectedAppointment(selectedAppointment);
+                const appointmentDate = selectedAppointment.appointmentDate;
+                const legalFirstName = selectedAppointment.patient.firstName;
+                const legalLastName = selectedAppointment.patient.lastName;
+                const legalMiddleName = selectedAppointment.patient.middleName;
+                const dateOfBirth = selectedAppointment.patient.dob;
+                setHpiKey(query.get('form_category')!);
+                setHpiName(query.get('form_name')!);
+                setAppointmentDate(appointmentDate);
+
+                dispatch(
+                    updateAdditionalSurveyDetails(
+                        legalFirstName,
+                        legalLastName,
+                        legalMiddleName ? legalMiddleName : '',
+                        '',
+                        dateOfBirth,
+                        0
+                    )
+                );
+            }
+        };
+        fetchAppointment();
     }, [query, router, dispatch]);
 
     const getData = async (chiefComplaint: string) => {
         if (!chiefComplaint) {
             return;
         }
+        setLoading(true);
         const response = await axios.get(
             graphClientURL + '/graph/category/' + chiefComplaint + '/4'
         );
         dispatch(processKnowledgeGraph(response.data));
+        setLoading(false);
+        const filledForm = await getFilledForm(
+            selectedAppointment?.id || query.get('appointment_id')!,
+            query.get('template_step_id')!,
+            query.get('form_category')!
+        );
+        if (filledForm) {
+            dispatch(
+                processKnowledgeGraph(filledForm.data.filled_form.formContent)
+            );
+        }
     };
 
     useEffect(() => {
@@ -305,15 +329,17 @@ const HpiAdvance = () => {
     return (
         <div className={style.editNote}>
             <div className='centering'>
-                <CommonLayout title={screenForPatient.title}>
-                    {showMainNotificationMessage && (
-                        <Notification
-                            message={notificationMessage}
-                            type={notificationType}
-                        />
-                    )}
-                    {screenForPatient.component}
-                </CommonLayout>
+                {!loading && (
+                    <CommonLayout title={screenForPatient.title}>
+                        {showMainNotificationMessage && (
+                            <Notification
+                                message={notificationMessage}
+                                type={notificationType}
+                            />
+                        )}
+                        {screenForPatient.component}
+                    </CommonLayout>
+                )}
             </div>
         </div>
     );

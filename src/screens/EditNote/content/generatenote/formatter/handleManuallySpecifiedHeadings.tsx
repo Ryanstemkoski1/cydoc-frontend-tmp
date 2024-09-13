@@ -62,6 +62,7 @@ export function extractHeadingsWithNormalText(str: string) {
  * Usage: extractheadingsWithNormalText()
  */
 export function extractHeadings(str: string): string[] {
+    console.log('str', str);
     // Regular expression to match potential headings
     const headingRegex = /([A-Z\s]{8,}:)/g;
     // Extract headings

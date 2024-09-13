@@ -138,6 +138,7 @@ export const extractNodes = (
     let hideChildren: string[] = [];
     for (let i = 1; i < Object.keys(order).length + 1; i++) {
         const node = state.hpi.nodes[order[i.toString()]];
+        if (!node) continue;
         hideChildren = [...hideChildren, ...checkParent(node, state)];
         if (!isEmpty(state, node) && !hideChildren.includes(node.medID)) {
             formattedHpi.push(extractNode(state, node));

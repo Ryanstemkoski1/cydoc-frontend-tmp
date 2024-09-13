@@ -23,15 +23,20 @@ import { selectSurgicalHistoryProcedures } from '@redux/selectors/surgicalHistor
 import { selectChiefComplaintsState } from '@redux/selectors/chiefComplaintsSelectors';
 import MobileDatePicker from '@components/Input/MobileDatePicker';
 import useIsMobile from '@hooks/useIsMobile';
+import { AppointmentTemplate } from '@cydoc-ai/types';
 
 export interface CreatePatientModalProps {
     showModal: boolean;
+    templates: AppointmentTemplate[];
     setShowModal: (value: boolean) => void;
+    onCreatedPatient: () => void;
 }
 
 const CreatePatientModal = ({
     showModal,
+    templates,
     setShowModal,
+    onCreatedPatient,
 }: CreatePatientModalProps) => {
     const dispatch = useDispatch();
     const modalRef = useRef<HTMLDivElement>(null);
@@ -58,8 +63,6 @@ const CreatePatientModal = ({
     const patientInformationState = useSelector(selectPatientInformationState);
     const surgicalHistory = useSelector(selectSurgicalHistoryProcedures);
     const isMobile = useIsMobile();
-
-    const dropdownItems = ['Adult Evaluation'];
 
     const handleClickOutsideModal = (event: MouseEvent<HTMLDivElement>) => {
         if (!modalRef.current?.contains(event.target as HTMLDivElement)) {
@@ -186,6 +189,9 @@ const CreatePatientModal = ({
 
             const patientId = createPatientResult.data.id;
 
+            const selecetedTemplate = templates.find(
+                (template) => template.templateTitle === typeOfAppointment
+            );
             await apiClient.post('/appointment', {
                 notes: [
                     getHPIFormData(additionalSurvey, userSurveyState, {
@@ -203,6 +209,7 @@ const CreatePatientModal = ({
                 institutionId: institution_id,
                 appointmentDate: dateOfAppointment,
                 patientId: patientId,
+                appointmentTemplateId: selecetedTemplate?.id ?? '',
             });
             setShowModal(false);
             setPatientDetails({
@@ -213,6 +220,7 @@ const CreatePatientModal = ({
                 dateOfAppointment: '',
                 typeOfAppointment: '',
             });
+            onCreatedPatient();
         } catch (error) {
             console.error('Error creating patient:', error);
         }
@@ -330,7 +338,7 @@ const CreatePatientModal = ({
                             Appointment type
                         </Typography>
                         <Dropdown
-                            items={dropdownItems}
+                            items={templates.map((t) => t.templateTitle)}
                             value={patientDetails.typeOfAppointment}
                             onChange={onSelected}
                             placeholder='Select'

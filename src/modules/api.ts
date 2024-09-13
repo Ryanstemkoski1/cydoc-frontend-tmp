@@ -137,6 +137,53 @@ export async function putToApi<T>(
     }
 }
 
+export async function deleteFromApi<T>(
+    path: string,
+    description: string,
+    cognitoUser: CognitoUser | null
+): Promise<T | ApiResponse> {
+    const token = await getAuthToken(cognitoUser);
+
+    const url = `${API_URL}${path}`;
+
+    let response;
+    breadcrumb(`puting: ${JSON.stringify(path)}`, 'API', {
+        url,
+        path,
+    });
+
+    try {
+        response = await fetch(url, {
+            ...JSON_HEADER(token, 'DELETE'),
+        });
+        const handledResponse = await handleResponse<T>(response);
+
+        breadcrumb(
+            `PutToApi${response.status} ${description} Response`,
+            'API',
+            {
+                handledResponse,
+                responseStatus: response.status,
+                responseOk: response.ok,
+                responseStatusText: response.statusText,
+            }
+        );
+
+        return handledResponse;
+    } catch (e) {
+        log(`[putToApi] ${description}: ${stringFromError(e)}`, {
+            path,
+            description,
+            response,
+        });
+
+        return {
+            errorMessage:
+                'Unexpected error occurred, check your internet connection',
+        };
+    }
+}
+
 /**
  * gets data from API
  * @param path url to POST to

@@ -1,7 +1,5 @@
 import { HPIPatientQueryParams } from '@constants/enums/hpi.patient.enums';
-import axios from 'axios';
 import NavigationButton from '@components/tools/NavigationButton/NavigationButton';
-import { graphClientURL, apiClient } from '@constants/api';
 import { favChiefComplaints } from 'classes/institution.class';
 import React, { useCallback } from 'react';
 import { ConnectedProps, connect } from 'react-redux';
@@ -30,6 +28,14 @@ import useQuery from '@hooks/useQuery';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
 import MiscBox from '../../EditNote/content/hpi/knowledgegraph/components/MiscBox';
+import ButtonSave from '@components/ButtonSave/ButtonSave';
+import { postFilledForm } from '@modules/filled-form-api';
+import { FormStatus } from '@constants/appointmentTemplatesConstants';
+import { toast } from 'react-toastify';
+import ToastOptions from '@constants/ToastOptions';
+import { addAppointmentNote } from '@modules/appointment-api';
+import { CognitoAuth } from 'auth/cognito';
+import { ApiResponse } from '@cydoc-ai/types';
 
 interface OwnProps {
     notification: {
@@ -48,7 +54,11 @@ interface State {
     institutionId: string;
     appointmentId: string;
     appointmentDate: string;
+    appointmentTemplateId: string;
+    templateStepId: string;
     patientId: string;
+    formCategory: string;
+    saveFormLoading: boolean;
 }
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -58,14 +68,20 @@ type Props = OwnProps & ReduxProps;
 class HPIContent extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
+        const search = window.location.search;
+        const query = new URLSearchParams(search);
         this.state = {
             searchVal: '',
             activeIndex: 0, //misc notes box active
             loading: false,
-            institutionId: '',
-            appointmentId: '',
-            appointmentDate: '',
-            patientId: '',
+            institutionId: query.get('institution_id')!,
+            appointmentId: query.get('appointment_id')!,
+            appointmentTemplateId: query.get('appointment_template_id')!,
+            templateStepId: query.get('template_step_id')!,
+            appointmentDate: query.get('appointment_date')!,
+            patientId: query.get('patient_id')!,
+            formCategory: query.get('form_category')!,
+            saveFormLoading: false,
         };
     }
 
@@ -81,27 +97,7 @@ class HPIContent extends React.Component<Props, State> {
             const data = hpiHeaders;
             data.then((res) => this.props.saveHpiHeader(res.data));
         }
-
-        const selectedAppointment = localStorage.getItem('selectedAppointment');
-        if (selectedAppointment) {
-            const temp = JSON.parse(selectedAppointment);
-            this.setState({
-                institutionId: temp.institutionId,
-                appointmentId: temp.id,
-                appointmentDate: temp.appointmentDate,
-                patientId: temp.patientId,
-            });
-        }
     }
-
-    getData = async (complaint: string) => {
-        const { parentNodes } = this.props.hpiHeaders;
-        const chiefComplaint = Object.keys(parentNodes[complaint])[0];
-        const response = await axios.get(
-            graphClientURL + '/graph/category/' + chiefComplaint + '/4'
-        );
-        this.props.processKnowledgeGraph(response.data);
-    };
 
     shouldShowNextButton = () => {
         const selectChiefComplaints = Object.keys(this.props.chiefComplaints);
@@ -119,62 +115,81 @@ class HPIContent extends React.Component<Props, State> {
         return result;
     };
 
-    onSubmit = (query: ReadonlyURLSearchParams) => {
-        // This is apparently deprecated, remove?
-        const clinician_id =
-            query.get(HPIPatientQueryParams.CLINICIAN_ID) ?? '';
-        const institution_id =
-            query.get(HPIPatientQueryParams.INSTITUTION_ID) ?? '';
+    handleOnSave = async (status = FormStatus.In_Progress) => {
+        const formContent = this.props.hpi;
+        // Save filled_form to Database
+        this.setState({
+            saveFormLoading: true,
+        });
+        try {
+            await postFilledForm({
+                appointmentId: this.state.appointmentId,
+                appointmentTemplateStepId: this.state.templateStepId!,
+                formCategory: this.state.formCategory,
+                formContent,
+                status,
+            });
+            toast.success('Form saved!', ToastOptions.success);
+        } catch (error) {
+            toast.error('Opps! Something went wrong!', ToastOptions.error);
+        }
+        this.setState({
+            saveFormLoading: false,
+        });
+    };
 
-        const { setNotificationMessage, setNotificationType } =
-            this.props.notification;
+    onSubmit = async (_query: ReadonlyURLSearchParams) => {
         this.setState({ loading: true });
+        const user = await CognitoAuth.currentAuthenticatedUser();
 
-        apiClient
-            .post('/appointment', {
-                notes: [
-                    getHPIFormData(
-                        this.props.additionalSurvey,
-                        this.props.userSurveyState,
-                        {
-                            hpi: this.props.hpi,
-                            chiefComplaints: this.props.chiefComplaints,
-                            familyHistory: this.props.familyHistoryState,
-                            medications: this.props.medicationsState,
-                            medicalHistory: this.props.medicalHistoryState,
-                            patientInformation:
-                                this.props.patientInformationState,
-                            surgicalHistory: this.props.surgicalHistory,
-                            userSurvey: this.props.userSurveyState,
-                        }
-                    ),
-                ],
-                clinicianId: clinician_id,
-                institutionId: institution_id,
-                appointmentDate: this.state.appointmentDate,
-                patientId: this.state.patientId,
-            })
-            .then(() => {
-                let url = `/submission-advance-successful?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
+        const hpiData = getHPIFormData(
+            this.props.additionalSurvey,
+            this.props.userSurveyState,
+            {
+                hpi: this.props.hpi,
+                chiefComplaints: this.props.chiefComplaints,
+                familyHistory: this.props.familyHistoryState,
+                medications: this.props.medicationsState,
+                medicalHistory: this.props.medicalHistoryState,
+                patientInformation: this.props.patientInformationState,
+                surgicalHistory: this.props.surgicalHistory,
+                userSurvey: this.props.userSurveyState,
+            }
+        );
 
-                if (clinician_id) {
-                    url += `&${HPIPatientQueryParams.CLINICIAN_ID}=${clinician_id}`;
-                }
+        try {
+            const created = await addAppointmentNote(
+                this.state.institutionId,
+                this.state.appointmentId,
+                hpiData.hpi_text,
+                user
+            );
+
+            if (!created || (created as ApiResponse).errorMessage) {
+                toast.error(
+                    (created as ApiResponse).errorMessage ||
+                        'Something went wrong.',
+                    ToastOptions.error
+                );
+            } else {
+                this.handleOnSave(FormStatus.Finished);
+                const url = `/submission-advance-successful?${HPIPatientQueryParams.INSTITUTION_ID}=${this.state.institutionId}`;
 
                 // Should use router?
                 window.location.href = url;
-            })
-            .catch((_error) => {
-                setNotificationMessage('Failed to submit your questionnaire');
-                setNotificationType(NotificationTypeEnum.ERROR);
-            })
-            .finally(() => {
-                this.setState({ loading: false });
-            });
+            }
+        } catch (error) {
+            toast.error(
+                'Something went wrong, please try again',
+                ToastOptions.error
+            );
+        } finally {
+            this.setState({ loading: false });
+        }
     };
 
     render() {
-        const { chiefComplaints, hpiHeaders, productDefinition } = this.props;
+        const { hpiHeaders, productDefinition } = this.props;
         const { bodySystems, parentNodes } = hpiHeaders;
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
         /* Creates list of body system buttons to add in the front page. 
@@ -224,6 +239,13 @@ class HPIContent extends React.Component<Props, State> {
                             category={this.props.activeItem}
                         />
                     )}
+                    <ButtonSave
+                        text='Save'
+                        handleOnSave={() =>
+                            this.handleOnSave(FormStatus.In_Progress)
+                        }
+                        loading={this.state.saveFormLoading}
+                    />
                     <NextSubmitButton
                         loading={this.state.loading}
                         onSubmit={this.onSubmit}

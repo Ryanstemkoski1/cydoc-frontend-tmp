@@ -19,6 +19,12 @@ export enum FormType {
     Glucose_Management = 'Glucose Management Form',
 }
 
+export enum FormStatus {
+    Not_Started = 'Not Started',
+    In_Progress = 'In Progress',
+    Finished = 'Finished',
+}
+
 export type AppointmentValueType = {
     whoCompletes: string | null;
     form: string | null;

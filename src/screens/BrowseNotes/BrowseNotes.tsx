@@ -18,6 +18,12 @@ import AddIcon from '@mui/icons-material/Add';
 import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
 import CustomTextField from '@components/Input/CustomTextField';
 import useIsMobile from '@hooks/useIsMobile';
+import { getInstitutionAppointmentTemplates } from '@modules/institution-api';
+import { Appointment, AppointmentTemplate } from '@cydoc-ai/types';
+import { toast } from 'react-toastify';
+import ToastOptions from '@constants/ToastOptions';
+import { DiseaseForm } from '@cydoc-ai/types/dist/disease';
+import { hpiHeaders as knowledgegraphAPI } from '@screens/EditNote/content/hpi/knowledgegraph/API';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
     return `${firstName} ${middleName ? middleName : ''} ${lastName}`;
@@ -95,30 +101,43 @@ const BrowseNotes = () => {
     useSignInRequired(); // this route is private, sign in required
     const [date, setDate] = useState(new Date());
     const [dateAdvance, setDateAdvance] = useState('');
-    const [users, setUsers] = useState<AppointmentUser[]>([]);
+    const [users, setUsers] = useState<Appointment[]>([]);
     const { user } = useUser();
     const { cognitoUser } = useAuth();
     const dispatch = useDispatch();
     const definitions = useSelector(selectProductDefinitions);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [showModalAdvance, setShowModalAdvance] = useState<boolean>(false);
-    const [selectedAppointment, setSelectedAppointment] = useState<any>();
+    const [selectedAppointment, setSelectedAppointment] =
+        useState<Appointment>();
+    const [selecetedTemplate, setSelectedTemplate] =
+        useState<AppointmentTemplate>();
     const loadingStatus = useSelector(selectLoadingStatus);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const isMobile = useIsMobile();
+    const [templates, setTemplates] = useState<AppointmentTemplate[]>([]);
+    const [allDiseaseForms, setAllDiseaseForms] = useState<DiseaseForm[]>([]);
 
     useEffect(() => {
         const initialDate = new Date().toISOString().slice(0, 10); // yyyy-mm-dd format
         setDateAdvance(initialDate);
     }, []);
 
+    useEffect(() => {
+        const selectedTemplate = templates.find(
+            (template) =>
+                template.id === selectedAppointment?.appointmentTemplateId
+        );
+        setSelectedTemplate(selectedTemplate);
+    }, [selectedAppointment, templates]);
+
     const handleListItemClick = (index: number, user: any) => {
         setSelectedIndex(index);
         setSelectedAppointment(user);
     };
 
-    const openModal = (user: AppointmentUser) => {
-        setSelectedAppointment(user);
+    const openModal = (appointment: Appointment) => {
+        setSelectedAppointment(appointment);
         setShowModal(true);
     };
 
@@ -164,27 +183,28 @@ const BrowseNotes = () => {
                 user?.institutionId,
                 cognitoUser
             );
-            // const filteredUsers = users.reduce(
-            //     (acc: AppointmentUser[], current) => {
-            //         const x = acc.find(
-            //             (item) => item.patientId === current.patientId
-            //         );
-            //         if (!x) {
-            //             return acc.concat([current]);
-            //         } else {
-            //             const temp = JSON.parse(current.notes[0].hpi);
-            //             if (!temp.hpi_text.includes('No history')) {
-            //                 const index = acc.indexOf(x);
-            //                 acc[index] = current;
-            //             }
-            //             return acc;
-            //         }
-            //     },
-            //     []
-            // );
+            const filteredUsers = users.reduce(
+                (acc: Appointment[], current) => {
+                    const x = acc.find(
+                        (item) => item.patientId === current.patientId
+                    );
+                    if (!x) {
+                        return acc.concat([current]);
+                    } else if (current.notes && current.notes[0].hpi) {
+                        const temp = JSON.parse(current.notes[0].hpi);
+                        if (!temp.hpi_text.includes('No history')) {
+                            const index = acc.indexOf(x);
+                            acc[index] = current;
+                        }
+                        return acc;
+                    } else {
+                        return acc;
+                    }
+                },
+                []
+            );
 
-            // setUsers(filteredUsers);
-            setUsers(users);
+            setUsers(filteredUsers);
             dispatch(setLoadingStatus(false));
         } catch (err) {
             setUsers([]);
@@ -192,9 +212,43 @@ const BrowseNotes = () => {
         }
     }, [cognitoUser, date, dateAdvance, dispatch, user]);
 
+    const loadAllDiseaseForms = useCallback(async () => {
+        try {
+            const response = await knowledgegraphAPI;
+            const diseaseForms = Object.entries(response.data.parentNodes).map(
+                ([key, value]) =>
+                    ({
+                        id: '',
+                        diseaseKey: Object.keys(value as object)?.[0],
+                        diseaseName: key,
+                        isDeleted: false,
+                    }) as DiseaseForm
+            );
+
+            setAllDiseaseForms(diseaseForms);
+        } catch (error: unknown) {
+            toast.error('Something went wrong.', ToastOptions.error);
+        }
+    }, []);
+
+    const loadTemplates = useCallback(async () => {
+        if (!user || !cognitoUser) return;
+        try {
+            const templates = await getInstitutionAppointmentTemplates(
+                user.institutionId,
+                cognitoUser
+            );
+            setTemplates(templates);
+        } catch (error: unknown) {
+            setTemplates([]);
+        }
+    }, [user, cognitoUser]);
+
     useEffect(() => {
         loadPatientHistory();
-    }, [loadPatientHistory]);
+        loadTemplates();
+        loadAllDiseaseForms();
+    }, [loadPatientHistory, loadTemplates, loadAllDiseaseForms]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDateAdvance(e.target.value);
@@ -208,7 +262,7 @@ const BrowseNotes = () => {
         setSelectedAppointment(undefined);
     };
 
-    function renderUsers(users: AppointmentUser[]) {
+    function renderUsers(users: Appointment[]) {
         return (
             <div className={`${style.notesBlock__tableWrapper}`}>
                 <table>
@@ -495,6 +549,8 @@ const BrowseNotes = () => {
                             >
                                 <GeneratedNoteContent
                                     selectedAppointment={selectedAppointment}
+                                    selectedTemplate={selecetedTemplate}
+                                    allDiseaseForms={allDiseaseForms}
                                     user={user}
                                 />
                             </Box>
@@ -524,7 +580,9 @@ const BrowseNotes = () => {
                     </Box>
                     <CreatePatientModal
                         showModal={showModalAdvance}
+                        templates={templates}
                         setShowModal={setShowModalAdvance}
+                        onCreatedPatient={loadPatientHistory}
                     />
                 </>
             )}

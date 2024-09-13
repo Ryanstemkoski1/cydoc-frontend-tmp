@@ -2,10 +2,11 @@ import invariant from 'tiny-invariant';
 import { getFromApi, postToApi, putToApi } from './api';
 import { CognitoUser } from 'auth/cognito';
 import { AppointmentUser } from '@screens/BrowseNotes/BrowseNotes';
+import { Appointment, Note } from '@cydoc-ai/types';
 
 // TODO: add christine's endpoints to shared types library
 interface GetAppointmentResponse {
-    data: AppointmentUser[];
+    data: Appointment[];
 }
 
 export const getAppointment = async (
@@ -21,14 +22,14 @@ export const getAppointment = async (
         cognitoUser
     )) as GetAppointmentResponse;
 
-    return (response?.data || []) as AppointmentUser[];
+    return (response?.data || []) as Appointment[];
 };
 
 export const getAppointmentDetail = async (
     institutionId: string,
     appointmentId: string,
     cognitoUser: CognitoUser | null
-) => {
+): Promise<Appointment> => {
     invariant(institutionId, '[getInstitution] missing institutionId');
     invariant(appointmentId, '[getInstitution] missing appointmentId');
 
@@ -38,7 +39,7 @@ export const getAppointmentDetail = async (
         cognitoUser
     );
 
-    return response || [];
+    return response as Appointment;
 };
 
 export const getInstitutionClinicians = async (
@@ -74,4 +75,26 @@ export const updateAppointment = async (
     );
 
     return response || [];
+};
+
+export const addAppointmentNote = async (
+    institutionId: string,
+    appointmentId: string,
+    hpi: string,
+    cognitoUser: CognitoUser | null
+) => {
+    invariant(institutionId, '[addAppointmentNote] missing institutionId');
+    invariant(appointmentId, '[addAppointmentNote] missing appointmentId');
+    invariant(hpi, '[addAppointmentNote] missing hpi');
+
+    const response = await postToApi<Note>(
+        `/institution/${institutionId}/appointments/${appointmentId}/notes`,
+        'addAppointmentNote',
+        {
+            hpi,
+        },
+        cognitoUser
+    );
+
+    return response;
 };

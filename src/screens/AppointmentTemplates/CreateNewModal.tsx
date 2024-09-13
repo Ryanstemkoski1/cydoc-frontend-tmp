@@ -21,13 +21,24 @@ import { DiseaseForm } from '@cydoc-ai/types/dist/disease';
 import { hpiHeaders as knowledgeGraphAPI } from '@screens/EditNote/content/hpi/knowledgegraph/API';
 import { toast } from 'react-toastify';
 import ToastOptions from '@constants/ToastOptions';
+import { AppointmentTemplate, AppointmentTemplateStep } from '@cydoc-ai/types';
+import {
+    ApiResponse,
+    AppointmentTemplatePostBody,
+} from '@cydoc-ai/types/dist/api';
+import {
+    postInstitutionAppointmentTemplate,
+    updateInstitutionAppointmentTemplate,
+} from '@modules/institution-api';
+import useAuth from '@hooks/useAuth';
+import useUser from '@hooks/useUser';
 
 interface CreateNewModalProps {
     open: boolean;
     handleClose: () => void;
     editAppointmentTempIndex: number | undefined;
-    appointmentTempData: AppointmentTemplateType[];
-    setAppointmentTempData: (data: AppointmentTemplateType[]) => void;
+    appointmentTempData: AppointmentTemplate[];
+    setAppointmentTempData: (data: AppointmentTemplate[]) => void;
 }
 
 const CreateNewModal = ({
@@ -42,7 +53,12 @@ const CreateNewModal = ({
     const [selectedApptValue, setSelectedApptValue] = React.useState<
         AppointmentValueType[]
     >([{ whoCompletes: null, form: null }]);
-    const [allDiseaseForms, setAllDiseaseForms] = useState<string[]>([]);
+    const [allDiseaseForms, setAllDiseaseForms] = useState<DiseaseForm[]>([]);
+    const { cognitoUser } = useAuth();
+    const { user } = useUser();
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const mode = editAppointmentTempIndex === undefined ? 'create' : 'edit';
 
     const loadAllDiseaseForms = useCallback(async () => {
         try {
@@ -57,7 +73,7 @@ const CreateNewModal = ({
                     }) as DiseaseForm
             );
 
-            setAllDiseaseForms(diseaseForms.map((item) => item.diseaseName));
+            setAllDiseaseForms(diseaseForms);
         } catch (error: unknown) {
             toast.error('Something went wrong.', ToastOptions.error);
         }
@@ -71,9 +87,21 @@ const CreateNewModal = ({
         if (editAppointmentTempIndex !== undefined) {
             const editTempData =
                 appointmentTempData[editAppointmentTempIndex - 1];
-            setTitle(editTempData?.header);
-            setSelectedApptValue(editTempData?.body);
-            setStepCount(editTempData?.body.length);
+            setTitle(editTempData?.templateTitle);
+            setSelectedApptValue(
+                (editTempData?.steps || []).map((item) => {
+                    const form = allDiseaseForms.find(
+                        (form) =>
+                            form.diseaseKey === item.formCategory ||
+                            form.diseaseName === item.formCategory
+                    );
+                    return {
+                        whoCompletes: item.completedBy,
+                        form: form?.diseaseName || form?.diseaseKey || null,
+                    };
+                })
+            );
+            setStepCount(editTempData?.steps?.length || 0);
         }
     }, [appointmentTempData, editAppointmentTempIndex]);
 
@@ -120,43 +148,90 @@ const CreateNewModal = ({
         });
     };
 
-    const handleApptTemplateCreate = () => {
-        if (editAppointmentTempIndex !== undefined) {
+    const createPayload = () => {
+        const newTemplateBody: AppointmentTemplatePostBody = {
+            templateTitle: title || 'Undefined Title',
+            steps: selectedApptValue.map((item, index) => {
+                const form = allDiseaseForms.find(
+                    (form) =>
+                        form.diseaseName === item.form ||
+                        form.diseaseKey === item.form
+                );
+                const completedBy = item.whoCompletes || WhoCompletes.Clinician; // default
+                return {
+                    completedBy: completedBy,
+                    formCategory: form?.diseaseKey || '',
+                    stepOrder: index + 1,
+                    required: false, // Default is false?
+                    taskType:
+                        completedBy === WhoCompletes.Cydoc_ai
+                            ? TaskType.Synthesize_All_forms_into_Report
+                            : TaskType.Smart_Form,
+                };
+            }),
+        };
+        return newTemplateBody;
+    };
+
+    const handleApptTemplateCreate = async () => {
+        if (editAppointmentTempIndex !== undefined || !cognitoUser || !user) {
             return;
         }
-
-        const newAppointmentTempData = [
-            ...appointmentTempData,
-            {
-                header: title || 'Undefined Title',
-                body: selectedApptValue,
-            },
-        ];
-
-        setAppointmentTempData(newAppointmentTempData);
+        setLoading(true);
+        const payload = createPayload();
+        try {
+            const respone = await postInstitutionAppointmentTemplate(
+                payload,
+                user.institutionId,
+                cognitoUser
+            );
+            if ((respone as ApiResponse).errorMessage) {
+                toast.error(
+                    (respone as ApiResponse).errorMessage,
+                    ToastOptions.error
+                );
+            }
+        } catch (error: unknown) {
+            toast.error('Something went wrong.', ToastOptions.error);
+        }
 
         setTitle('');
         setStepCount(1);
         setSelectedApptValue([{ whoCompletes: null, form: null }]);
+        setLoading(false);
         handleClose();
     };
 
-    const handleApptTemplateEdit = () => {
-        if (editAppointmentTempIndex === undefined) {
+    const handleApptTemplateEdit = async () => {
+        if (editAppointmentTempIndex === undefined || !user || !cognitoUser) {
             return;
         }
 
-        const newAppointmentTempData = [...appointmentTempData];
-        newAppointmentTempData[editAppointmentTempIndex - 1] = {
-            header: title || 'Undefined Title',
-            body: selectedApptValue,
-        };
-
-        setAppointmentTempData(newAppointmentTempData);
+        setLoading(true);
+        const payload = createPayload();
+        const editingTemplate =
+            appointmentTempData[editAppointmentTempIndex - 1];
+        try {
+            const respone = await updateInstitutionAppointmentTemplate(
+                payload,
+                user.institutionId,
+                editingTemplate.id,
+                cognitoUser
+            );
+            if ((respone as ApiResponse).errorMessage) {
+                toast.error(
+                    (respone as ApiResponse).errorMessage,
+                    ToastOptions.error
+                );
+            }
+        } catch (error: unknown) {
+            toast.error('Something went wrong.', ToastOptions.error);
+        }
 
         setTitle('');
         setStepCount(1);
         setSelectedApptValue([{ whoCompletes: null, form: null }]);
+        setLoading(false);
         handleClose();
     };
 
@@ -170,7 +245,7 @@ const CreateNewModal = ({
             <Box className={style.createNewModalWrapper}>
                 <Box className={style.createNewModalWrapper__header}>
                     <Typography component='p'>
-                        Create an appointment template
+                        {mode === 'create' ? 'Create New' : 'Edit'} Template
                     </Typography>
                     <IconButton onClick={handleClose}>
                         <CloseRoundedIcon />
@@ -235,6 +310,7 @@ const CreateNewModal = ({
                         <Button
                             variant='contained'
                             onClick={handleApptTemplateCreate}
+                            disabled={loading || mode === 'edit'}
                             sx={{
                                 color: 'white',
                                 bgcolor: '#047A9B',
@@ -249,12 +325,13 @@ const CreateNewModal = ({
                         <Button
                             variant='contained'
                             onClick={handleApptTemplateEdit}
+                            disabled={loading || mode === 'create'}
                             sx={{
-                                color: '#047A9B',
-                                bgcolor: '#EAF3F5',
+                                color: 'white',
+                                bgcolor: '#047A9B',
 
                                 '&:hover': {
-                                    bgcolor: '#EAF3F5',
+                                    bgcolor: '#047A9B',
                                 },
                             }}
                         >

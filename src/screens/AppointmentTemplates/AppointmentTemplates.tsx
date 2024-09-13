@@ -1,5 +1,5 @@
 import style from './AppointmentTemplates.module.scss';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Icon } from '@components/Icon';
 import {
     AppointmentTemplateType,
@@ -25,51 +25,23 @@ import CreateNewModal from './CreateNewModal';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import useDimensions from '@hooks/useDimensions';
-
-const ApptTempData: AppointmentTemplateType[] = [
-    {
-        header: 'Annual visit',
-        body: [
-            {
-                whoCompletes: WhoCompletes.Clinician,
-                form: FormType.Diabetes,
-            },
-            {
-                whoCompletes: WhoCompletes.Staff,
-                form: FormType.Evaluation,
-            },
-            {
-                whoCompletes: WhoCompletes.Patient,
-                form: FormType.Symptoms_Today,
-            },
-            {
-                whoCompletes: WhoCompletes.Patient,
-                form: FormType.After_Visit_Survey,
-            },
-        ],
-    },
-    {
-        header: 'Diabetes',
-        body: [
-            {
-                whoCompletes: WhoCompletes.Patient,
-                form: FormType.Form,
-            },
-            {
-                whoCompletes: WhoCompletes.Clinician,
-                form: FormType.Glucose_Management,
-            },
-            {
-                whoCompletes: WhoCompletes.Patient,
-                form: FormType.After_Visit_Survey,
-            },
-        ],
-    },
-];
+import useUser from '@hooks/useUser';
+import {
+    deleteInstitutionAppointmentTemplate,
+    getInstitutionAppointmentTemplates,
+} from '@modules/institution-api';
+import { toast } from 'react-toastify';
+import ToastOptions from '@constants/ToastOptions';
+import useAuth from '@hooks/useAuth';
+import { ApiResponse, AppointmentTemplate } from '@cydoc-ai/types';
+import { hpiHeaders as knowledgegraphAPI } from '@screens/EditNote/content/hpi/knowledgegraph/API';
+import { DiseaseForm } from '@cydoc-ai/types/dist/disease';
 
 const AppointmentTemplatePage = () => {
     const { windowWidth } = useDimensions();
-    const [tempData, setTempData] = useState(ApptTempData);
+    const [loading, setLoading] = useState(false);
+    const [templates, setTemplates] = useState<AppointmentTemplate[]>([]);
+    const [allDiseaseForms, setAllDiseaseForms] = useState<DiseaseForm[]>([]);
     const [viewMoreOpen, setViewMoreOpen] = useState<number>(0);
     const [openedPopover, setOpenedPopover] = useState<number>(0);
     const [createNewOpen, setCreateNewOpen] = useState<boolean>(false);
@@ -77,6 +49,9 @@ const AppointmentTemplatePage = () => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
         null
     );
+    const { user } = useUser();
+    const { cognitoUser } = useAuth();
+
     const [popupPosition, setPopupPosition] = React.useState({
         top: 0,
         left: 0,
@@ -88,6 +63,54 @@ const AppointmentTemplatePage = () => {
     );
 
     const popupId = openedPopover > 0 ? 'edit-apptTemp-popover' : undefined;
+
+    const loadAllDiseaseForms = useCallback(async () => {
+        try {
+            const response = await knowledgegraphAPI;
+            const diseaseForms = Object.entries(response.data.parentNodes).map(
+                ([key, value]) =>
+                    ({
+                        id: '',
+                        diseaseKey: Object.keys(value as object)?.[0],
+                        diseaseName: key,
+                        isDeleted: false,
+                    }) as DiseaseForm
+            );
+
+            setAllDiseaseForms(diseaseForms);
+        } catch (error: unknown) {
+            toast.error('Something went wrong.', ToastOptions.error);
+        }
+    }, []);
+
+    const loadTemplates = useCallback(async () => {
+        if (!user || !cognitoUser) return;
+        try {
+            const templates = await getInstitutionAppointmentTemplates(
+                user.institutionId,
+                cognitoUser
+            );
+            setTemplates(templates);
+        } catch (error: unknown) {
+            toast.error('Something went wrong.', ToastOptions.error);
+            setTemplates([]);
+        }
+    }, [user, cognitoUser]);
+
+    const getFormInfo = (formCategory: string) => {
+        return allDiseaseForms.find((form) => form.diseaseKey === formCategory);
+    };
+
+    const onMount = useCallback(async () => {
+        if (!user || !cognitoUser) return;
+        setLoading(true);
+        await Promise.all([loadTemplates(), loadAllDiseaseForms()]);
+        setLoading(false);
+    }, [user, cognitoUser, loadTemplates, loadAllDiseaseForms]);
+
+    useEffect(() => {
+        onMount();
+    }, [onMount]);
 
     const handleViewMoreOpen = (index: number) => {
         setViewMoreOpen(index);
@@ -101,8 +124,10 @@ const AppointmentTemplatePage = () => {
         setCreateNewOpen(true);
     };
 
-    const handleCreateNewClose = () => {
+    const handleCreateNewClose = async () => {
+        loadTemplates();
         setCreateNewOpen(false);
+        setEditApptTempIndex(undefined);
     };
 
     const handlePopupClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -137,18 +162,37 @@ const AppointmentTemplatePage = () => {
         handleCreateNewOpen();
     };
 
-    const handleApptTemplateDelete = () => {
-        const tempDataTemp = [...tempData];
-        tempDataTemp.splice(openedPopover - 1, 1);
-        setTempData(tempDataTemp);
+    const handleApptTemplateDelete = async () => {
+        const deleteResponse = await deleteInstitutionAppointmentTemplate(
+            user!.institutionId,
+            templates[openedPopover - 1].id,
+            cognitoUser!
+        );
+        if ((deleteResponse as ApiResponse).errorMessage) {
+            toast.error(
+                'Template is in use, cannot be deleted.',
+                ToastOptions.error
+            );
+        }
+        await loadTemplates();
         setOpenedPopover(0);
         handlePopupClose();
     };
 
-    const handleApptTemplateDeleteOnViewMore = () => {
-        const tempDataTemp = [...tempData];
-        tempDataTemp.splice(viewMoreOpen - 1, 1);
-        setTempData(tempDataTemp);
+    const handleApptTemplateDeleteOnViewMore = async () => {
+        const deleteResponse = await deleteInstitutionAppointmentTemplate(
+            user!.institutionId,
+            templates[viewMoreOpen - 1].id,
+            cognitoUser!
+        );
+        console.log(deleteResponse);
+        if ((deleteResponse as ApiResponse).errorMessage) {
+            toast.error(
+                'Template is in use, cannot be deleted.',
+                ToastOptions.error
+            );
+        }
+        await loadTemplates();
         setViewMoreOpen(0);
     };
 
@@ -162,36 +206,40 @@ const AppointmentTemplatePage = () => {
             <Box className={style.viewMoreModalWrapper}>
                 <Box className={style.viewMoreModalWrapper__header}>
                     <Typography component='p'>
-                        {tempData[viewMoreOpen - 1]?.header}
+                        {templates[viewMoreOpen - 1]?.templateTitle}
                     </Typography>
                     <IconButton onClick={handleViewMoreClose}>
                         <CloseRoundedIcon />
                     </IconButton>
                 </Box>
                 <Box className={style.viewMoreModalWrapper__body}>
-                    {tempData[viewMoreOpen - 1]?.body.map((item, idx) => (
-                        <Box
-                            key={idx}
-                            className={style.viewMoreModalWrapper__body__item}
-                        >
-                            <Typography
-                                component='p'
+                    {(templates[viewMoreOpen - 1]?.steps || []).map(
+                        (item, idx) => (
+                            <Box
+                                key={idx}
                                 className={
-                                    style.viewMoreModalWrapper__body__item__title
+                                    style.viewMoreModalWrapper__body__item
                                 }
                             >
-                                {item.whoCompletes}
-                            </Typography>
-                            <Typography
-                                component='p'
-                                className={
-                                    style.viewMoreModalWrapper__body__item__detail
-                                }
-                            >
-                                {item.form}
-                            </Typography>
-                        </Box>
-                    ))}
+                                <Typography
+                                    component='p'
+                                    className={
+                                        style.viewMoreModalWrapper__body__item__title
+                                    }
+                                >
+                                    {item.completedBy}
+                                </Typography>
+                                <Typography
+                                    component='p'
+                                    className={
+                                        style.viewMoreModalWrapper__body__item__detail
+                                    }
+                                >
+                                    {item.formCategory || item.taskType}
+                                </Typography>
+                            </Box>
+                        )
+                    )}
                     <Box
                         className={
                             style.viewMoreModalWrapper__body__viewMoreModalBtn
@@ -256,10 +304,12 @@ const AppointmentTemplatePage = () => {
                 gridTemplateColumns: `repeat(${gridColumns}, 1fr)`,
             }}
         >
-            {tempData.map((temp, index) => (
+            {templates.map((temp, index) => (
                 <Box key={index} className={style.apptTempCard}>
                     <Box className={style.apptTempCard__header}>
-                        <Typography component='p'>{temp.header}</Typography>
+                        <Typography component='p'>
+                            {temp.templateTitle}
+                        </Typography>
                         <IconButton
                             id={`${index + 1}`}
                             onClick={handlePopupClick}
@@ -277,30 +327,33 @@ const AppointmentTemplatePage = () => {
                         <PopoverBox idx={index} />
                     </Box>
                     <Box className={style.apptTempCard__body}>
-                        {temp.body.slice(0, 3).map((item, idx) => (
-                            <Box
-                                key={idx}
-                                className={style.apptTempCard__body__item}
-                            >
-                                <Typography
-                                    component='p'
-                                    className={
-                                        style.apptTempCard__body__item__title
-                                    }
+                        {(temp.steps || []).slice(0, 3).map((item, idx) => {
+                            const formInfo = getFormInfo(item.formCategory);
+                            return (
+                                <Box
+                                    key={idx}
+                                    className={style.apptTempCard__body__item}
                                 >
-                                    {item.whoCompletes}
-                                </Typography>
-                                <Typography
-                                    component='p'
-                                    className={
-                                        style.apptTempCard__body__item__detail
-                                    }
-                                >
-                                    {item.form}
-                                </Typography>
-                            </Box>
-                        ))}
-                        {temp.body.length > 3 && (
+                                    <Typography
+                                        component='p'
+                                        className={
+                                            style.apptTempCard__body__item__title
+                                        }
+                                    >
+                                        {item.completedBy}
+                                    </Typography>
+                                    <Typography
+                                        component='p'
+                                        className={
+                                            style.apptTempCard__body__item__detail
+                                        }
+                                    >
+                                        {formInfo?.diseaseName || item.taskType}
+                                    </Typography>
+                                </Box>
+                            );
+                        })}
+                        {temp.steps && temp.steps.length > 3 && (
                             <Box
                                 className={style.apptTempCard__body__viewMore}
                                 onClick={() => handleViewMoreOpen(index + 1)}
@@ -322,8 +375,8 @@ const AppointmentTemplatePage = () => {
             <CreateNewModal
                 open={createNewOpen}
                 handleClose={handleCreateNewClose}
-                appointmentTempData={tempData}
-                setAppointmentTempData={setTempData}
+                appointmentTempData={templates}
+                setAppointmentTempData={setTemplates}
                 editAppointmentTempIndex={editApptTempIndex}
             />
         </Box>

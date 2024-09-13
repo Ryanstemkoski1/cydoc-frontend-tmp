@@ -1,10 +1,17 @@
-import { ApiResponse, GetMembersResponse, Institution } from '@cydoc-ai/types';
+import {
+    ApiResponse,
+    AppointmentTemplate,
+    AppointmentTemplateStep,
+    GetMembersResponse,
+    Institution,
+} from '@cydoc-ai/types';
 import { DiseaseForm } from '@cydoc-ai/types/dist/disease';
 import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
 import { CognitoUser } from 'auth/cognito';
 import { hpiHeaders as knowledgeGraphAPI } from '@screens/EditNote/content/hpi/knowledgegraph/API';
 import invariant from 'tiny-invariant';
-import { getFromApi, postToApi } from './api';
+import { deleteFromApi, getFromApi, postToApi, putToApi } from './api';
+import { AppointmentTemplatePostBody } from '@cydoc-ai/types/dist/api';
 
 export const getInstitutionMembers = (
     institutionId: string,
@@ -105,4 +112,61 @@ export const getHpiQrCode = async (
     // TODO: add christine's endpoints to shared types library
     // @ts-expect-error we need to add christine's endpoint types to shared lib
     return response?.data?.link;
+};
+
+export const getInstitutionAppointmentTemplates = async (
+    institutionId: string,
+    cognitoUser: CognitoUser
+): Promise<AppointmentTemplate[]> => {
+    invariant(institutionId, '[getInstitution] missing institutionId');
+
+    const resp = await getFromApi<AppointmentTemplate[]>(
+        `/institution/${institutionId}/templates`,
+        'getInstitutionAppointmentTemplates',
+        cognitoUser
+    );
+
+    return resp as AppointmentTemplate[];
+};
+
+export const postInstitutionAppointmentTemplate = async (
+    payload: AppointmentTemplatePostBody,
+    institutionId: string,
+    cognitoUser: CognitoUser
+) => {
+    const resp = await postToApi<AppointmentTemplate>(
+        `/institution/${institutionId}/templates`,
+        'postInstitutionAppointmentTemplate',
+        payload,
+        cognitoUser
+    );
+    return resp;
+};
+
+export const updateInstitutionAppointmentTemplate = async (
+    payload: AppointmentTemplatePostBody,
+    institutionId: string,
+    templateId: string,
+    cognitoUser: CognitoUser
+) => {
+    const resp = await putToApi<AppointmentTemplate>(
+        `/institution/${institutionId}/templates/${templateId}`,
+        'updateInstitutionAppointmentTemplate',
+        payload,
+        cognitoUser
+    );
+    return resp;
+};
+
+export const deleteInstitutionAppointmentTemplate = async (
+    institutionId: string,
+    templateId: string,
+    cognitoUser: CognitoUser
+) => {
+    const resp = await deleteFromApi<AppointmentTemplate>(
+        `/institution/${institutionId}/templates/${templateId}`,
+        'deleteInstitutionAppointmentTemplate',
+        cognitoUser
+    );
+    return resp;
 };

@@ -7,11 +7,12 @@ import { MouseEvent, default as React, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import style from './Modal.module.scss';
 import { Switch } from '@mui/material';
+import { Appointment } from '@cydoc-ai/types';
 
 export interface ModalProps {
     showModal: boolean;
     setShowModal: (value: boolean) => void;
-    selectedAppointment: AppointmentUser;
+    selectedAppointment: Appointment;
 }
 
 const Modal = ({

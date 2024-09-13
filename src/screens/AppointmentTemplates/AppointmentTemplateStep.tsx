@@ -9,11 +9,12 @@ import {
 import SelectPlaceholder from '@components/SelectPlaceholder/SelectPlaceholder';
 import DragIndicatorRoundedIcon from '@mui/icons-material/DragIndicatorRounded';
 import AutocompletePlaceholder from '@components/SelectPlaceholder/AutocompletePlaceholder';
+import { DiseaseForm } from '@cydoc-ai/types/dist/disease';
 
 interface AppointmentTempStepProps {
     idx: number;
     stepCount: number;
-    allDiseaseForms: string[];
+    allDiseaseForms: DiseaseForm[];
     stepTaskType: (idx: number) => string;
     selectedApptValue: AppointmentValueType[];
     handleRemoveSteps: (idx: number) => void;
@@ -79,7 +80,9 @@ const AppointmentTempStep = ({
                                 placeholder='Select specific form'
                                 handleChange={handleApptValues}
                                 value={selectedApptValue[idx].form || ''}
-                                options={allDiseaseForms}
+                                options={allDiseaseForms.map(
+                                    (item) => item.diseaseName
+                                )}
                             />
                         )}
                     </>

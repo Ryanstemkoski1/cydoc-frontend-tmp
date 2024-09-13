@@ -26,7 +26,7 @@ export const getFilledForm = async (
     appointment_id: string,
     appointment_template_step_id: string,
     form_category: string
-) => {
+): Promise<GetFilledFormResponse | null> => {
     invariant(appointment_id, '[getFilledForm] missing appointment_id');
     invariant(
         appointment_template_step_id,
@@ -34,13 +34,15 @@ export const getFilledForm = async (
     );
     invariant(form_category, '[getFilledForm] missing form_category');
 
-    const response = (await getFromApi<GetFilledFormResponse>(
-        `/filled-form/${appointment_id}/${form_category}`,
+    const response = await getFromApi<GetFilledFormResponse>(
+        `/filled-form/${appointment_id}/${appointment_template_step_id}/${form_category}`,
         'getFilledForm',
         null
-    )) as GetFilledFormResponse;
+    );
 
-    return (response || {}) as GetFilledFormResponse;
+    if (!response || !(response as GetFilledFormResponse).data) return null;
+
+    return response as GetFilledFormResponse;
 };
 
 export const postFilledForm = async ({
