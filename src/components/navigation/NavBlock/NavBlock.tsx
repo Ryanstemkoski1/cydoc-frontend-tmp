@@ -40,13 +40,17 @@ const NavBlock = () => {
     useEffect(() => {
         if (pathname === '/') {
             setNavTitle('Home');
-        } else if (pathname === '/hpi/patient-advance') {
+        } else if (pathname === '/hpi/form-advance') {
             const {
                 legalFirstName,
                 legalMiddleName,
                 legalLastName,
                 dateOfBirth,
             } = additionalSurvey;
+
+            if (!legalFirstName || !legalLastName || !dateOfBirth) {
+                return;
+            }
 
             const legalName = legalMiddleName
                 ? `${legalFirstName} ${legalMiddleName} ${legalLastName}`

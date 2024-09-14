@@ -282,34 +282,50 @@ const GeneratedNoteContent = ({
                                     textStyle = { color: '#00000099' };
                             }
 
-                            const params = new URLSearchParams();
-                            params.append('institution_id', institutionId);
-                            params.append(
-                                'appointment_id',
-                                selectedAppointment.id
-                            );
-                            params.append(
-                                'form_category',
-                                item.formCategory || ''
-                            );
-                            params.append('form_name', form?.diseaseName || '');
-                            params.append(
-                                'appointment_template_id',
-                                selectedTemplate.id
-                            );
-                            params.append('template_step_id', item.id);
-                            params.append('appointment_date', appointmentDate);
-                            params.append(
-                                'patient_id',
-                                selectedAppointment.patientId
-                            );
+                            let link;
+                            if (item.completedBy === WhoCompletes.Cydoc_ai) {
+                                link = 'javascript: void(0)'; // Disable link for Cydoc.ai
+                            } else {
+                                const params = new URLSearchParams();
+                                params.append('institution_id', institutionId);
+                                params.append(
+                                    'appointment_id',
+                                    selectedAppointment.id
+                                );
+                                params.append(
+                                    'form_category',
+                                    item.formCategory || ''
+                                );
+                                params.append(
+                                    'form_name',
+                                    form?.diseaseName || ''
+                                );
+                                params.append(
+                                    'appointment_template_id',
+                                    selectedTemplate.id
+                                );
+                                params.append('template_step_id', item.id);
+                                params.append(
+                                    'appointment_date',
+                                    appointmentDate
+                                );
+                                params.append(
+                                    'patient_id',
+                                    selectedAppointment.patientId
+                                );
 
-                            const link = `${window.location.origin}/hpi/form-advance?${params.toString()}`;
+                                link = `${window.location.origin}/hpi/form-advance?${params.toString()}`;
+                            }
 
                             return (
                                 <a
                                     key={index}
-                                    target='_blank'
+                                    target={
+                                        item.completedBy ===
+                                        WhoCompletes.Cydoc_ai
+                                            ? '_self'
+                                            : '_blank'
+                                    }
                                     rel='noreferrer'
                                     href={link}
                                 >

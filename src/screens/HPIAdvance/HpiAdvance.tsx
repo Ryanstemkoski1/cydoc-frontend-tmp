@@ -112,7 +112,6 @@ const HpiAdvance = () => {
                 setHpiKey(query.get('form_category')!);
                 setHpiName(query.get('form_name')!);
                 setAppointmentDate(appointmentDate);
-
                 dispatch(
                     updateAdditionalSurveyDetails(
                         legalFirstName,

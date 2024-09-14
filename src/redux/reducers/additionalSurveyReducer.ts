@@ -109,7 +109,7 @@ export function additionalSurveyReducer(
             state.socialSecurityNumber = action?.payload.socialSecurityNumber;
             state.dateOfBirth = action.payload?.dateOfBirth;
             state.initialSurveyState = action?.payload?.initialSurveyState;
-            return state;
+            return { ...state };
         case UPDATE_ADDITIONAL_DETAILS.UPDATE_CC_DESCRIPTION:
             state.complaintsDescription = action.payload?.complaintsDescription;
             return state;

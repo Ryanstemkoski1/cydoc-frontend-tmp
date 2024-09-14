@@ -1,7 +1,4 @@
-import {
-    AppointmentUser,
-    formatFullName,
-} from '@screens/BrowseNotes/BrowseNotes';
+import { formatFullName } from '@screens/BrowseNotes/BrowseNotes';
 import HpiNote from '@screens/EditNote/content/generatenote/notesections/HPINote';
 import { MouseEvent, default as React, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
@@ -62,8 +59,8 @@ const Modal = ({
     const { patient, notes } = selectedAppointment;
     const { firstName, middleName, lastName } = patient;
     const hpiText =
-        notes[0]?.hpi !== undefined
-            ? JSON.parse(notes[0].hpi).hpi_text
+        notes && notes[0]?.hpi !== undefined
+            ? JSON.parse(notes[0].hpi)
             : undefined;
 
     return (
@@ -103,13 +100,12 @@ const Modal = ({
                         className={`${style.modal__scroll} scrollbar`}
                         id='copy-notes'
                     >
-                        {hpiText !== undefined &&
-                            !hpiText.includes('No history') && (
-                                <HpiNote
-                                    text={JSON.parse(hpiText)}
-                                    isParagraphFormat={isParagraphFormat}
-                                />
-                            )}
+                        {hpiText !== undefined && hpiText.length > 0 && (
+                            <HpiNote
+                                text={hpiText}
+                                isParagraphFormat={isParagraphFormat}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

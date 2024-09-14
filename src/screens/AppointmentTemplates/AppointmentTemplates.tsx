@@ -9,6 +9,7 @@ import {
 import {
     Box,
     Button,
+    CircularProgress,
     IconButton,
     List,
     ListItem,
@@ -185,7 +186,6 @@ const AppointmentTemplatePage = () => {
             templates[viewMoreOpen - 1].id,
             cognitoUser!
         );
-        console.log(deleteResponse);
         if ((deleteResponse as ApiResponse).errorMessage) {
             toast.error(
                 'Template is in use, cannot be deleted.',
@@ -296,6 +296,14 @@ const AppointmentTemplatePage = () => {
             </List>
         </Popover>
     );
+
+    if (loading) {
+        return (
+            <Box sx={{ display: 'flex' }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
 
     return (
         <Box
