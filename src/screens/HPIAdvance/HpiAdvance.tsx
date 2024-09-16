@@ -10,12 +10,7 @@ import Notification, {
 } from '@components/tools/Notification/Notification';
 import useQuery from '@hooks/useQuery';
 import useSelectedChiefComplaints from '@hooks/useSelectedChiefComplaints';
-import {
-    InstitutionConfigResponse,
-    getInstitution,
-    getInstitutionConfig,
-    validateDiseaseForm,
-} from 'modules/institution-api';
+import { getInstitution } from 'modules/institution-api';
 import { log } from 'modules/logging';
 import { hpiHeaders as knowledgeGraphAPI } from '@screens/EditNote/content/hpi/knowledgegraph/API';
 import React, { useEffect, useMemo, useState } from 'react';

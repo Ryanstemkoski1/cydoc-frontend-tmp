@@ -193,18 +193,6 @@ const CreatePatientModal = ({
                 (template) => template.templateTitle === typeOfAppointment
             );
             await apiClient.post('/appointment', {
-                notes: [
-                    getHPIFormData(additionalSurvey, userSurveyState, {
-                        hpi: hpi,
-                        chiefComplaints: chiefComplaints,
-                        familyHistory: familyHistoryState,
-                        medications: medicationsState,
-                        medicalHistory: medicalHistoryState,
-                        patientInformation: patientInformationState,
-                        surgicalHistory: surgicalHistory,
-                        userSurvey: userSurveyState,
-                    }),
-                ],
                 clinicianId: clinician_id,
                 institutionId: institution_id,
                 appointmentDate: dateOfAppointment,

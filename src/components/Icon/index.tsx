@@ -7,6 +7,7 @@ import Encrypted from './icons/encrypted.svg';
 import IDCard from './icons/idCard.svg';
 import LogOut from './icons/logout.svg';
 import UserGroup from './icons/userGroup.svg';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 const iconRegistry = {
     editPencil: EditPencil,
@@ -17,6 +18,7 @@ const iconRegistry = {
     idCard: IDCard,
     logout: LogOut,
     userGroup: UserGroup,
+    uploadLogo: AddPhotoAlternateIcon,
 };
 
 export type IconType = keyof typeof iconRegistry;

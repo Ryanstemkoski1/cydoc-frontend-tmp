@@ -33,7 +33,8 @@ export async function postToApi<T>(
         | Pick<
               InstitutionConfig,
               'showDefaultForm' | 'diseaseForm' | 'showChiefComplaints'
-          >,
+          >
+        | FormData,
     cognitoUser: CognitoUser | null
 ): Promise<T | ApiResponse> {
     const token = await getAuthToken(cognitoUser);

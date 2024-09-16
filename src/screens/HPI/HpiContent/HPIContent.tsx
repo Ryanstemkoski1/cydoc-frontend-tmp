@@ -33,9 +33,9 @@ import { ReadonlyURLSearchParams } from 'next/navigation';
 import { log } from '@modules/logging';
 import { apiClient, graphClientURL } from '@constants/api';
 import { FilledFormHpiState } from '@constants/hpiEnums';
-import ButtonSave from '@components/ButtonSave/ButtonSave';
 import { postFilledForm } from '@modules/filled-form-api';
 import { selectProductDefinitions } from '@redux/selectors/productDefinitionSelector';
+import { sanitizeString } from '@utils/string';
 
 interface OwnProps {
     formContent: FilledFormHpiState;
@@ -120,7 +120,7 @@ class HPIContent extends React.Component<Props, State> {
         return result;
     };
 
-    onSubmit = (query: ReadonlyURLSearchParams) => {
+    onSubmit = async (query: ReadonlyURLSearchParams) => {
         // This is apparently deprecated, remove?
         const clinician_id =
             query.get(HPIPatientQueryParams.CLINICIAN_ID) ?? '';
@@ -131,24 +131,44 @@ class HPIContent extends React.Component<Props, State> {
             this.props.notification;
         this.setState({ loading: true });
 
+        // first create patient
+        const {
+            legalFirstName: first_name = '',
+            legalMiddleName: middle_name = '',
+            legalLastName: last_name = '',
+            dateOfBirth: date_of_birth = '',
+            socialSecurityNumber: last_4_ssn = '',
+        } = this.props.additionalSurvey;
+
+        const patient = await apiClient.post('/patient', {
+            firstName: sanitizeString(first_name),
+            middleNname: sanitizeString(middle_name),
+            lastName: sanitizeString(last_name),
+            dob: date_of_birth,
+            ssnLastFourDigit: last_4_ssn,
+        });
+
+        const hpiData = getHPIFormData(
+            this.props.additionalSurvey,
+            this.props.userSurveyState,
+            {
+                hpi: this.props.hpi,
+                chiefComplaints: this.props.chiefComplaints,
+                familyHistory: this.props.familyHistoryState,
+                medications: this.props.medicationsState,
+                medicalHistory: this.props.medicalHistoryState,
+                patientInformation: this.props.patientInformationState,
+                surgicalHistory: this.props.surgicalHistory,
+                userSurvey: this.props.userSurveyState,
+            }
+        );
         apiClient
             .post('/appointment', {
-                ...getHPIFormData(
-                    this.props.additionalSurvey,
-                    this.props.userSurveyState,
-                    {
-                        hpi: this.props.hpi,
-                        chiefComplaints: this.props.chiefComplaints,
-                        familyHistory: this.props.familyHistoryState,
-                        medications: this.props.medicationsState,
-                        medicalHistory: this.props.medicalHistoryState,
-                        patientInformation: this.props.patientInformationState,
-                        surgicalHistory: this.props.surgicalHistory,
-                        userSurvey: this.props.userSurveyState,
-                    }
-                ),
-                clinician_id,
-                institution_id,
+                appointmentDate: hpiData.appointment_date,
+                notes: [hpiData.hpi_text],
+                patientId: patient.data.id,
+                clinicianId: clinician_id,
+                institutionId: institution_id,
             })
             .then(() => {
                 let url = `/submission-successful?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
@@ -333,11 +353,6 @@ class HPIContent extends React.Component<Props, State> {
                                     prevStep={this.props.back}
                                 />
                             )}
-                            <ButtonSave
-                                text='Save'
-                                handleOnSave={handleOnSave}
-                                loading={this.state.saveFormLoading}
-                            />
                             <NextSubmitButton
                                 loading={this.state.loading}
                                 onBack={this.props.back}

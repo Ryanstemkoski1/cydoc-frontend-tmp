@@ -1,26 +1,28 @@
 import {
     ApiResponse,
     AppointmentTemplate,
-    AppointmentTemplateStep,
+    DbUser,
     GetMembersResponse,
     Institution,
 } from '@cydoc-ai/types';
 import { DiseaseForm } from '@cydoc-ai/types/dist/disease';
 import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
-import { CognitoUser } from 'auth/cognito';
+import { CognitoUser, getAuthToken } from 'auth/cognito';
 import { hpiHeaders as knowledgeGraphAPI } from '@screens/EditNote/content/hpi/knowledgegraph/API';
 import invariant from 'tiny-invariant';
 import { deleteFromApi, getFromApi, postToApi, putToApi } from './api';
 import { AppointmentTemplatePostBody } from '@cydoc-ai/types/dist/api';
+import { API_URL } from './environment';
+import { ProductType } from '@constants/FormPreferencesConstant';
 
 export const getInstitutionMembers = (
     institutionId: string,
     cognitoUser: CognitoUser | null
-): Promise<GetMembersResponse> => {
+): Promise<DbUser[] | ApiResponse> => {
     invariant(institutionId, '[getInstitutionMembers] missing institutionId');
 
-    return getFromApi<GetMembersResponse>(
-        `/institution/${institutionId}/members`,
+    return getFromApi<DbUser[]>(
+        `/institution/${institutionId}/clinicians`,
         'getInstitutionMembers',
         cognitoUser
     );
@@ -71,30 +73,78 @@ export const getInstitutionConfig = async (
 ): Promise<InstitutionConfigResponse | ApiResponse> => {
     invariant(institutionId, '[getInstitution] missing institutionId');
 
-    return getFromApi<InstitutionConfigResponse>(
-        `/institution-config/${institutionId}`,
-        'getInstitutionConfig',
-        null // no authentication on get institution
+    const graphResponse = await knowledgeGraphAPI;
+    const allDiseaseForms = Object.entries(graphResponse.data.parentNodes).map(
+        ([key, value]) =>
+            ({
+                id: '',
+                diseaseKey: Object.keys(value as object)?.[0],
+                diseaseName: key,
+                isDeleted: false,
+            }) as DiseaseForm
     );
+
+    const institution = (await getFromApi<Institution>(
+        `/institution/${institutionId}/public`,
+        'getInstitution',
+        null // no authentication on get institution
+    )) as Institution;
+    const { intakeProductSettings, intakePinnedForms = [] } = institution;
+    invariant(intakeProductSettings, 'Intake product settings is required');
+
+    const config: InstitutionConfig = {
+        id: intakeProductSettings.id,
+        name: institution.name,
+        institutionId: institution.id,
+        showChiefComplaints: intakeProductSettings.showChiefComplaints,
+        showDefaultForm: intakeProductSettings.showDefaultForms,
+        product: institution.product as ProductType,
+        diseaseForm: intakePinnedForms.map((item) => {
+            const form = allDiseaseForms.find(
+                (form) => form.diseaseKey === item.formCategory
+            );
+            return {
+                id: item.id,
+                diseaseKey: item.formCategory,
+                diseaseName: form?.diseaseName || '',
+                isDeleted: false,
+            };
+        }),
+    };
+
+    return {
+        config,
+    };
 };
 
 export const updateInstitutionConfig = async (
     updatedInstitutionConfig: InstitutionConfig,
+    product: string,
     cognitoUser: CognitoUser | null
-): Promise<InstitutionConfigResponse | ApiResponse> => {
+): Promise<{ status: string } | ApiResponse> => {
     const { showChiefComplaints, showDefaultForm, diseaseForm, institutionId } =
         updatedInstitutionConfig;
 
-    return postToApi<InstitutionConfigResponse>(
-        `/institution-config/${institutionId}`,
+    const response = await putToApi<{ status: string } | ApiResponse>(
+        `/institution/${institutionId}`,
         'updateInstitutionConfig',
         {
-            showChiefComplaints,
-            showDefaultForm,
-            diseaseForm,
+            product: product,
+            intakeProductSettings: {
+                showChiefComplaints: showChiefComplaints,
+                showDefaultForms: showDefaultForm,
+            },
+            intakePinnedForms: diseaseForm
+                .filter((form) => !form.isDeleted)
+                .map((item) => {
+                    return {
+                        formCategory: item.diseaseKey,
+                    };
+                }),
         },
         cognitoUser
     );
+    return response;
 };
 
 export const getHpiQrCode = async (
@@ -169,4 +219,20 @@ export const deleteInstitutionAppointmentTemplate = async (
         cognitoUser
     );
     return resp;
+};
+
+export const uploadInstitutionLogo = async (
+    institutionId: string,
+    form: FormData,
+    cognitoUser: CognitoUser
+) => {
+    const token = await getAuthToken(cognitoUser);
+    const resp = await fetch(`${API_URL}/institution/${institutionId}/logo`, {
+        method: 'POST',
+        headers: {
+            Authorization: token || '',
+        },
+        body: form,
+    });
+    return resp.json();
 };

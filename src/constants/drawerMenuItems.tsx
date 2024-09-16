@@ -58,6 +58,11 @@ export const practiceAdminMenuItems: MenuItem[] = [
         label: 'Subscription',
         icon: <Icon type='awardStar' />,
     },
+    {
+        href: '/logo-settings',
+        label: 'Logo Settings',
+        icon: <Icon type='uploadLogo' />,
+    },
 ];
 
 export const accountMenuItems: MenuItem[] = [

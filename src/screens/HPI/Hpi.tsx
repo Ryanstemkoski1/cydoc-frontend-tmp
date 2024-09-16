@@ -459,26 +459,15 @@ const HPI = () => {
 
     useEffect(() => {
         if (!institutionId) {
-            router.replace('/');
+            // router.replace('/');
             return;
         }
 
         const fetchInstitution = async () => {
             dispatch(setLoadingStatus(true));
             try {
-                const validatedInstitution = (await getInstitution(
-                    institutionId
-                )) as { detail: Institution };
                 const getInstitutionConfigResponse =
                     await getInstitutionConfig(institutionId);
-
-                if (!(validatedInstitution as ApiResponse).errorMessage) {
-                    const { id, name } = validatedInstitution.detail;
-                    setInstitution(new InstitutionClass({ id, name }));
-                } else {
-                    log(`HPI error fetching institution`);
-                    router.replace('/');
-                }
 
                 if (
                     !(getInstitutionConfigResponse as ApiResponse).errorMessage
@@ -486,6 +475,9 @@ const HPI = () => {
                     const result = (
                         getInstitutionConfigResponse as InstitutionConfigResponse
                     ).config;
+
+                    const { id, name } = result;
+                    setInstitution(new InstitutionClass({ id, name }));
 
                     const validationDiseaseFormResult =
                         await validateDiseaseForm(result);

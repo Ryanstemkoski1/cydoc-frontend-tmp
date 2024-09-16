@@ -13,7 +13,6 @@ import { NotificationTypeEnum } from '@components/tools/Notification/Notificatio
 import { OnNextClickParams } from '../Hpi';
 import { RootState } from '@redux/store';
 import { GraphData } from '@constants/hpiEnums';
-import { getFilledForm } from '@modules/filled-form-api';
 //Component that manages the content displayed based on the activeItem prop
 // and records the information the user enters as state
 
@@ -60,44 +59,6 @@ class NotePage extends Component<Props, State> {
         ) {
             processSurveyGraph(initialQuestions);
         }
-
-        const handleFetchFilledForm = async () => {
-            //temp constants for fetchFilledFormToDb
-            const getAppointmentId = '660e8400-e29b-41d4-a716-446622444411';
-            const appointmentTemplateStepId =
-                '660e8400-e29b-41d4-a716-446622444413';
-            const getFormCategory = 'diabetes';
-            //temp constants for fetchFilledFormToDb
-
-            // Please replace hard-coded constants values to the dynamic values
-            try {
-                const formData = await getFilledForm(
-                    getAppointmentId,
-                    appointmentTemplateStepId,
-                    getFormCategory
-                );
-
-                this.setState({
-                    isLoad: true,
-                    formContent: formData.data.filled_form.formContent,
-                });
-
-                return formData.data.filled_form.formContent;
-            } catch (error) {
-                this.setState({
-                    isLoad: true,
-                    formContent: {
-                        graph: {},
-                        nodes: {},
-                        edges: {},
-                        order: {},
-                    },
-                });
-                console.error('---Error getting filled_form data---:', error);
-            }
-        };
-
-        this.state.isLoad == false && handleFetchFilledForm();
     }
 
     setStickyHeaders() {

@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Container } from 'semantic-ui-react';
 import './ManagerDashboard.css';
-import { DbUser } from '@cydoc-ai/types';
+import { ApiResponse, DbUser } from '@cydoc-ai/types';
 import { getInstitutionMembers } from '@modules/institution-api';
 import useUser from '@hooks/useUser';
 import { log } from '@modules/logging';
@@ -34,8 +34,10 @@ const ManagerDashboard = () => {
         () =>
             user?.institutionId &&
             getInstitutionMembers(user?.institutionId, cognitoUser).then(
-                ({ members, errorMessage }) => {
-                    if (errorMessage?.length) {
+                (response) => {
+                    const errorMessage = (response as ApiResponse).errorMessage;
+                    const members = (response as DbUser[]) || [];
+                    if (errorMessage) {
                         log(`[getInstitutionMembers] errror: ${errorMessage}`, {
                             members,
                             errorMessage,

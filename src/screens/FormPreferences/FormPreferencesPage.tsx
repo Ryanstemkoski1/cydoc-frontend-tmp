@@ -195,6 +195,11 @@ const FormPreferencesPage = () => {
         const newInstitutionConfig = (response as InstitutionConfigResponse)
             .config;
         setInstitutionConfig(newInstitutionConfig);
+        // depends on the product type, we will set the product definition file on action
+        if (newInstitutionConfig.product) {
+            localStorage.setItem('productType', newInstitutionConfig.product);
+            dispatch(setProductDefinitionAction(newInstitutionConfig.product));
+        }
     }, []);
 
     const onMount = useCallback(async () => {
@@ -216,10 +221,6 @@ const FormPreferencesPage = () => {
         if (!user) return null;
         try {
             setLoading(true);
-
-            // depends on the product type, we will set the product definition file on action
-            localStorage.setItem('productType', productType);
-            dispatch(setProductDefinitionAction(productType));
 
             const { showDefaultForm, diseaseForm, institutionId } =
                 institutionConfig;
@@ -253,20 +254,20 @@ const FormPreferencesPage = () => {
                 diseaseForm: newDiseaseForm,
             };
 
-            response = await updateInstitutionConfig(
+            const updateResponse = await updateInstitutionConfig(
                 updatedInstitutionConfig,
+                productType,
                 cognitoUser
             );
 
-            if ((response as ApiResponse).errorMessage) {
+            if (
+                (updateResponse as ApiResponse).errorMessage ||
+                (updateResponse as { status: string }).status !== 'success'
+            ) {
                 throw new Error();
             }
-
-            setInstitutionConfig(
-                (response as InstitutionConfigResponse).config
-            );
-
             toast.success('Updated Successfully', ToastOptions.success);
+            await loadInstitutionConfig(user.institutionId);
         } catch (error: unknown) {
             toast.error('Failed', ToastOptions.error);
         } finally {
