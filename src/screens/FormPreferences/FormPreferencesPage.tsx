@@ -53,7 +53,9 @@ import { setProductDefinitionAction } from '@redux/actions/productDefinitionActi
 
 const defaultInstitutionConfig: InstitutionConfig = {
     diseaseForm: [],
-    id: -1,
+    id: '-1',
+    name: '',
+    product: ProductType.SMART_PATIENT_INTAKE_FORM,
     institutionId: '-1',
     showDefaultForm: false,
     showChiefComplaints: false,
