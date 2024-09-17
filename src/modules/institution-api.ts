@@ -236,3 +236,23 @@ export const uploadInstitutionLogo = async (
     });
     return resp.json();
 };
+
+export const updateInstitutionInfo = async (
+    institutionId: string,
+    payload: Partial<Institution>,
+    cognitoUser: CognitoUser
+) => {
+    const token = await getAuthToken(cognitoUser);
+    const resp = await fetch(`${API_URL}/institution/${institutionId}/`, {
+        method: 'PUT',
+        headers: {
+            Authorization: token || '',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+    });
+    if (resp.status !== 200) {
+        throw new Error('Unable to update institution info');
+    }
+    return resp.json();
+};

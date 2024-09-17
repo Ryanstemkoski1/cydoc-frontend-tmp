@@ -1,6 +1,7 @@
 'use client';
 
 import { Icon } from '@components/Icon';
+import CustomTextField from '@components/Input/CustomTextField';
 import ToastOptions from '@constants/ToastOptions';
 import { Institution } from '@cydoc-ai/types';
 import useAuth from '@hooks/useAuth';
@@ -8,12 +9,20 @@ import useSignInRequired from '@hooks/useSignInRequired';
 import useUser from '@hooks/useUser';
 import {
     getInstitution,
+    updateInstitutionInfo,
     uploadInstitutionLogo,
 } from '@modules/institution-api';
-import { Box, Button, CircularProgress } from '@mui/material';
-import { margin } from '@mui/system';
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    CircularProgress,
+    Typography,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { Divider } from 'semantic-ui-react';
 
 export default function DrawerMenu() {
     useSignInRequired();
@@ -24,7 +33,7 @@ export default function DrawerMenu() {
     const { cognitoUser } = useAuth();
     const [logoUrl, setLogoUrl] = useState('');
     const [selecetedFile, setSelectedFile] = useState<File | null>(null);
-    const [uploading, setUploading] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
 
     const CYDOC_LOGO = '/images/cydoc-logo.svg';
 
@@ -32,6 +41,7 @@ export default function DrawerMenu() {
         setLoading(true);
         const institution = await getInstitution(user!.institutionId);
         setInstitution(institution);
+        setLogoUrl(institution.logo || CYDOC_LOGO);
         setLoading(false);
     };
 
@@ -40,14 +50,6 @@ export default function DrawerMenu() {
             fetchInstitution();
         }
     }, [user]);
-
-    useEffect(() => {
-        if (institution && institution.logo) {
-            setLogoUrl(institution.logo);
-        } else {
-            setLogoUrl(CYDOC_LOGO);
-        }
-    }, [institution]);
 
     const onFileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
@@ -63,8 +65,25 @@ export default function DrawerMenu() {
 
     const onSave = async () => {
         if (!cognitoUser || !institution) return;
+        setSubmitting(true);
+
+        try {
+            await updateInstitutionInfo(
+                institution.id,
+                {
+                    name: institution.name,
+                },
+                cognitoUser
+            );
+            toast.success(
+                'Your Clinic name has been updated',
+                ToastOptions.success
+            );
+        } catch (error) {
+            toast.error('Update Clinic name failed.', ToastOptions.error);
+        }
+
         if (selecetedFile) {
-            setUploading(true);
             const formData = new FormData();
             formData.append(`logo`, selecetedFile, selecetedFile.name);
             try {
@@ -78,19 +97,18 @@ export default function DrawerMenu() {
                     toast.error('Upload failed.', ToastOptions.error);
                 } else {
                     toast.success(
-                        'Your logo has been updated.',
+                        'Your logo has been updated. Reload the page to see the changes.',
                         ToastOptions.success
                     );
                     setSelectedFile(null);
                     setLogoUrl(response['logo_url']);
-                    location.reload();
                 }
             } catch (error) {
                 toast.error('Upload failed.', ToastOptions.error);
             } finally {
-                setUploading(false);
             }
         }
+        setSubmitting(false);
     };
 
     if (loading) {
@@ -117,63 +135,123 @@ export default function DrawerMenu() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     height: '100%',
+                    width: '100%',
                 }}
             >
-                <div
-                    style={{
-                        height: '200px',
-                        width: '200px',
-                        position: 'relative',
-                    }}
-                >
-                    <img src={logoUrl} width={200} height={200} alt='logo' />
-                    <input
-                        accept='image/*'
-                        style={{
-                            display: 'none',
-                            position: 'absolute',
-                            bottom: 0,
-                            right: -20,
-                        }}
-                        id='raised-button-file'
-                        multiple
-                        type='file'
-                    />
-                    <label htmlFor='raised-button-file'>
-                        <Button
-                            sx={{
-                                position: 'absolute',
-                                bottom: 0,
-                                right: -20,
-                            }}
-                            component='label'
+                <Card sx={{ width: { xs: '90%', md: 500 }, height: 450 }}>
+                    <CardContent>
+                        <Typography
+                            sx={{ color: 'text.secondary', margin: '1rem 0' }}
+                            align='center'
+                            gutterBottom
+                            variant='h4'
+                            component='div'
                         >
-                            <Icon type='editPencil' />
-                            <input
-                                type='file'
-                                hidden
-                                id='file'
-                                onChange={(event) => {
-                                    onFileSelected(event);
+                            Clinic Logo
+                        </Typography>
+                        <Divider />
+
+                        <div
+                            style={{
+                                height: '100%',
+                                width: '100%',
+                                borderRadius: '50%',
+                                marginTop: '2rem',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flexDirection: 'column',
+                                padding: '1rem',
+                            }}
+                        >
+                            <div
+                                style={{
+                                    position: 'relative',
+                                    width: '100px',
+                                    height: '100px',
                                 }}
-                            ></input>
-                        </Button>
-                    </label>
-                </div>
-                {selecetedFile && (
-                    <Button
-                        onClick={() => {
-                            onSave();
-                        }}
-                        variant='contained'
-                        sx={margin({
-                            marginTop: '10px',
-                        })}
-                        disabled={uploading}
-                    >
-                        {uploading ? 'Uploading' : 'Upload'}
-                    </Button>
-                )}
+                            >
+                                <img
+                                    src={logoUrl}
+                                    width={100}
+                                    height={100}
+                                    alt='logo'
+                                    style={{
+                                        objectFit: 'contain',
+                                        borderRadius: '50%',
+                                        border: '1px solid #ccc',
+                                    }}
+                                />
+                                <input
+                                    accept='image/*'
+                                    style={{
+                                        display: 'none',
+                                    }}
+                                    id='raised-button-file'
+                                    multiple
+                                    type='file'
+                                />
+                                <label htmlFor='raised-button-file'>
+                                    <Button
+                                        sx={{
+                                            position: 'absolute',
+                                            bottom: -10,
+                                            right: -30,
+                                        }}
+                                        component='label'
+                                    >
+                                        <Icon type='editPencil' />
+                                        <input
+                                            type='file'
+                                            hidden
+                                            id='file'
+                                            onChange={(event) => {
+                                                onFileSelected(event);
+                                            }}
+                                        ></input>
+                                    </Button>
+                                </label>
+                            </div>
+
+                            <div style={{ marginTop: '2rem', width: '100%' }}>
+                                <CustomTextField
+                                    label='Clinic Name'
+                                    required={true}
+                                    aria-label='Clinic Name'
+                                    name='Clinic Name'
+                                    placeholder='Clinic Name'
+                                    value={institution.name}
+                                    onChange={(
+                                        e: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                        setInstitution({
+                                            ...institution,
+                                            name: e.target.value,
+                                        });
+                                    }}
+                                />
+                            </div>
+
+                            <Button
+                                onClick={() => {
+                                    onSave();
+                                }}
+                                variant='contained'
+                                sx={{
+                                    marginTop: '2rem',
+                                    alignSelf: 'flex-end',
+                                    borderRadius: '5rem',
+                                    background: '#007A9A',
+                                    padding: '0.5rem 2rem',
+                                    cursor: 'pointer',
+                                }}
+                                disabled={submitting}
+                            >
+                                {submitting ? 'Saving' : 'Save'}
+                            </Button>
+                        </div>
+                    </CardContent>
+                </Card>
             </Box>
         )
     );

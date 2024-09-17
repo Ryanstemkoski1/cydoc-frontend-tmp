@@ -31,7 +31,7 @@ import {
 } from '@constants/drawerMenuItems';
 import { getInstitution } from '@modules/institution-api';
 import { Institution } from '@cydoc-ai/types';
-import { fontSize, width } from '@mui/system';
+import { borderRadius, fontSize, width } from '@mui/system';
 import useIsMobile from '@hooks/useIsMobile';
 import { setProductDefinitionAction } from '@redux/actions/productDefinitionAction';
 
@@ -199,6 +199,10 @@ export default function DrawerMenu() {
                                 <Image
                                     height={32}
                                     width={32}
+                                    style={{
+                                        borderRadius: '50%',
+                                        border: '1px solid #ccc',
+                                    }}
                                     alt='Cydoc'
                                     src={
                                         institution?.logo ||
@@ -242,6 +246,10 @@ export default function DrawerMenu() {
                                         <Image
                                             height={54}
                                             width={54}
+                                            style={{
+                                                borderRadius: '50%',
+                                                border: '1px solid #ccc',
+                                            }}
                                             src={institution.logo}
                                             alt={institution.name}
                                         />
