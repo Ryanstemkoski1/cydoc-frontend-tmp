@@ -14,8 +14,19 @@
   margin: 20px 0;
   width: 100%;
 }
+
 .note-text {
    text-align: center;
    padding-left: 15px;
    padding-right: 15px; 
+}
+
+@media screen and (max-width: 700px) {
+  .ui.container.active-tab-container {
+      margin: 20px 10px !important;
+  }
+
+  .ui.container.active-tab-container div {
+    border-radius: 8px;
+  }
 }

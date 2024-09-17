@@ -9,4 +9,5 @@ export interface ProductDefinitions {
     useAdvancedReportTextGeneration: boolean;
     displayedNodesCutOff: number;
     showMiscNotesBox: boolean;
+    showClinicQRCodeAndLink: boolean;
 }
