@@ -153,7 +153,7 @@
 }
 .sticky-sub-nav {
     z-index: 2;
-    top: 0;
+    top: 82px;
     position: sticky;
 }
 
@@ -254,15 +254,7 @@
     color: #367898;
 }
 
-@media screen and (max-width: 991px) {
-    .sticky-sub-nav {
-        top: 121px;
-    }
-}
 @media screen and (max-width: 767px) {
-    .sticky-sub-nav {
-        top: 106px;
-    }
     .patient-view-content {
         padding: 0 16px 10px;
     }
