@@ -138,19 +138,8 @@ export default function DrawerMenu() {
                     width: '100%',
                 }}
             >
-                <Card sx={{ width: { xs: '90%', md: 500 }, height: 450 }}>
+                <Card sx={{ width: { xs: '90%', md: 500 } }}>
                     <CardContent>
-                        <Typography
-                            sx={{ color: 'text.secondary', margin: '1rem 0' }}
-                            align='center'
-                            gutterBottom
-                            variant='h4'
-                            component='div'
-                        >
-                            Clinic Logo
-                        </Typography>
-                        <Divider />
-
                         <div
                             style={{
                                 height: '100%',
@@ -164,17 +153,37 @@ export default function DrawerMenu() {
                                 padding: '1rem',
                             }}
                         >
+                            <div style={{ width: '100%' }}>
+                                <CustomTextField
+                                    label='Clinic Name'
+                                    required={true}
+                                    aria-label='Clinic Name'
+                                    name='Clinic Name'
+                                    placeholder='Clinic Name'
+                                    value={institution.name}
+                                    onChange={(
+                                        e: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                        setInstitution({
+                                            ...institution,
+                                            name: e.target.value,
+                                        });
+                                    }}
+                                />
+                            </div>
+
                             <div
                                 style={{
                                     position: 'relative',
-                                    width: '100px',
-                                    height: '100px',
+                                    width: '150px',
+                                    height: '150px',
+                                    marginTop: '2rem',
                                 }}
                             >
                                 <img
                                     src={logoUrl}
-                                    width={100}
-                                    height={100}
+                                    width={'100%'}
+                                    height={'100%'}
                                     alt='logo'
                                     style={{
                                         objectFit: 'contain',
@@ -211,25 +220,6 @@ export default function DrawerMenu() {
                                         ></input>
                                     </Button>
                                 </label>
-                            </div>
-
-                            <div style={{ marginTop: '2rem', width: '100%' }}>
-                                <CustomTextField
-                                    label='Clinic Name'
-                                    required={true}
-                                    aria-label='Clinic Name'
-                                    name='Clinic Name'
-                                    placeholder='Clinic Name'
-                                    value={institution.name}
-                                    onChange={(
-                                        e: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        setInstitution({
-                                            ...institution,
-                                            name: e.target.value,
-                                        });
-                                    }}
-                                />
                             </div>
 
                             <Button
