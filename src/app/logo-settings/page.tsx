@@ -18,17 +18,16 @@ import {
     Card,
     CardContent,
     CircularProgress,
-    Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { Divider } from 'semantic-ui-react';
 
 export default function DrawerMenu() {
     useSignInRequired();
 
     const [loading, setLoading] = useState(false);
     const [institution, setInstitution] = useState<Institution | null>(null);
+    const [newPracticeName, setNewPracticeName] = useState('');
     const { user } = useUser();
     const { cognitoUser } = useAuth();
     const [logoUrl, setLogoUrl] = useState('');
@@ -37,17 +36,18 @@ export default function DrawerMenu() {
 
     const CYDOC_LOGO = '/images/cydoc-logo.svg';
 
-    const fetchInstitution = async () => {
-        setLoading(true);
+    const fetchInstitution = async (isInitial: boolean) => {
+        setLoading(isInitial);
         const institution = await getInstitution(user!.institutionId);
         setInstitution(institution);
+        setNewPracticeName(institution.name);
         setLogoUrl(institution.logo || CYDOC_LOGO);
         setLoading(false);
     };
 
     useEffect(() => {
         if (user) {
-            fetchInstitution();
+            fetchInstitution(true);
         }
     }, [user]);
 
@@ -68,17 +68,20 @@ export default function DrawerMenu() {
         setSubmitting(true);
 
         try {
-            await updateInstitutionInfo(
-                institution.id,
-                {
-                    name: institution.name,
-                },
-                cognitoUser
-            );
-            toast.success(
-                'Your Clinic name has been updated',
-                ToastOptions.success
-            );
+            if (newPracticeName !== institution.name) {
+                await updateInstitutionInfo(
+                    institution.id,
+                    { name: newPracticeName },
+                    cognitoUser
+                );
+
+                fetchInstitution(false);
+
+                toast.success(
+                    'Clinic name updated successfully.',
+                    ToastOptions.success
+                );
+            }
         } catch (error) {
             toast.error('Update Clinic name failed.', ToastOptions.error);
         }
@@ -105,7 +108,6 @@ export default function DrawerMenu() {
                 }
             } catch (error) {
                 toast.error('Upload failed.', ToastOptions.error);
-            } finally {
             }
         }
         setSubmitting(false);
@@ -160,14 +162,11 @@ export default function DrawerMenu() {
                                     aria-label='Practice Name'
                                     name='Practice Name'
                                     placeholder='Practice Name'
-                                    value={institution.name}
+                                    value={newPracticeName}
                                     onChange={(
                                         e: React.ChangeEvent<HTMLInputElement>
                                     ) => {
-                                        setInstitution({
-                                            ...institution,
-                                            name: e.target.value,
-                                        });
+                                        setNewPracticeName(e.target.value);
                                     }}
                                 />
                             </div>
