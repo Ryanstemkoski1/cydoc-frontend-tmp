@@ -61,6 +61,7 @@ const customComponentProps = {
 const customInputStyle = {
     '& .MuiOutlinedInput-root': {
         padding: '14px 12px',
+        borderRadius: '10px',
 
         '& .MuiAutocomplete-endAdornment': {
             right: '10px',
@@ -91,7 +92,7 @@ interface AutocompleteProps {
     handleChange: (
         idx: number,
         newValue: string,
-        type: 'whoCompletes' | 'form'
+        type?: 'whoCompletes' | 'form'
     ) => void;
 }
 
@@ -103,8 +104,6 @@ const AutocompletePlaceholder = ({
     options,
     handleChange,
 }: AutocompleteProps) => {
-    const newOptions = [...options, value];
-
     const handleAutocompleteChange = (
         event: SyntheticEvent<Element, Event>
     ) => {
@@ -118,7 +117,7 @@ const AutocompletePlaceholder = ({
             disableClearable
             includeInputInList
             value={value}
-            options={newOptions.sort()}
+            options={options.sort()}
             onChange={handleAutocompleteChange}
             popupIcon={<KeyboardArrowDownRoundedIcon />}
             className={style.autocompletePlaceholder}

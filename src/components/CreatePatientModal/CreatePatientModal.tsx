@@ -24,6 +24,7 @@ import { selectChiefComplaintsState } from '@redux/selectors/chiefComplaintsSele
 import MobileDatePicker from '@components/Input/MobileDatePicker';
 import useIsMobile from '@hooks/useIsMobile';
 import { AppointmentTemplate } from '@cydoc-ai/types';
+import AutocompletePlaceholder from '@components/SelectPlaceholder/AutocompletePlaceholder';
 
 export interface CreatePatientModalProps {
     showModal: boolean;
@@ -119,11 +120,11 @@ const CreatePatientModal = ({
         dispatch(initialSurveyAddDateOrPlace('8', todayDate));
     };
 
-    const onSelected = (value: string) => {
+    const onSelected = (idx: number, newValue: string) => {
         setErrorMessage('');
         setPatientDetails({
             ...patientDetails,
-            typeOfAppointment: value,
+            typeOfAppointment: newValue,
         });
     };
 
@@ -325,14 +326,17 @@ const CreatePatientModal = ({
                         >
                             Appointment type
                         </Typography>
-                        <Dropdown
-                            items={templates.map((t) => t.templateTitle)}
-                            value={patientDetails.typeOfAppointment}
-                            onChange={onSelected}
-                            placeholder='Select'
-                            canEnterNewValue={false}
-                            resetValueAfterClick={true}
-                        />
+                        <Box sx={{ width: '100%' }}>
+                            <AutocompletePlaceholder
+                                idx={0}
+                                type='form'
+                                options={templates.map((t) => t.templateTitle)}
+                                value={patientDetails.typeOfAppointment}
+                                handleChange={onSelected}
+                                placeholder='Select'
+                            />
+                        </Box>
+
                         {errorMessage && (
                             <div
                                 className={
