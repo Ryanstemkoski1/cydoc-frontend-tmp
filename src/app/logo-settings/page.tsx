@@ -155,11 +155,11 @@ export default function DrawerMenu() {
                         >
                             <div style={{ width: '100%' }}>
                                 <CustomTextField
-                                    label='Clinic Name'
+                                    label='Practice Name'
                                     required={true}
-                                    aria-label='Clinic Name'
-                                    name='Clinic Name'
-                                    placeholder='Clinic Name'
+                                    aria-label='Practice Name'
+                                    name='Practice Name'
+                                    placeholder='Practice Name'
                                     value={institution.name}
                                     onChange={(
                                         e: React.ChangeEvent<HTMLInputElement>

@@ -54,7 +54,7 @@ export const practiceAdminMenuItems: MenuItem[] = [
     },
     {
         href: '/logo-settings',
-        label: 'Logo Settings',
+        label: 'Practice Name & Logo',
         icon: <Icon type='uploadLogo' />,
     },
 ];
