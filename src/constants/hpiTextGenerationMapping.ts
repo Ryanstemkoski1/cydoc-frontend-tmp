@@ -53,6 +53,9 @@ export const PART_OF_SPEECH_CORRECTION_MAP: Map<string, string> = new Map([
     [' hearing things that aren\'t there ', ' auditory hallucinations '],
     [' 0 close friends ', ' no close friends '],
     [' every 1 day ', ' every day '],
+    [' at telehealth ', ' by telehealth '],
+    [' sx SI ', ' suicidal ideation '],
+    [' sx of depression ', ' symptoms of depression '],
 ]);
 
 // Convert Map to an Object with Spaces Removed
