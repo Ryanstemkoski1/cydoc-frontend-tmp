@@ -4,7 +4,6 @@ import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 import QrCode2RoundedIcon from '@mui/icons-material/QrCode2Rounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import CollectionsBookmarkRoundedIcon from '@mui/icons-material/CollectionsBookmarkRounded';
-import ArticleRoundedIcon from '@mui/icons-material/ArticleRounded';
 
 export interface MenuItem {
     label: string;
@@ -33,11 +32,6 @@ export const clinicalWorkflowItems: MenuItem[] = [
 ];
 
 export const practiceAdminMenuItems: MenuItem[] = [
-    {
-        href: '/templates/edit',
-        label: 'Form Templates',
-        icon: <ArticleRoundedIcon />,
-    },
     {
         href: '/appointment-templates',
         label: 'Appointment Templates',
