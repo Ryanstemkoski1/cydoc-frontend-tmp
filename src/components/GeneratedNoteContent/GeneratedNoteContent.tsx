@@ -14,6 +14,7 @@ import { getFilledForm } from '@modules/filled-form-api';
 import { DiseaseForm } from '@cydoc-ai/types/dist/disease';
 import { HPIText } from '@utils/textGeneration/extraction/getHPIArray';
 import { isArray } from 'lodash';
+import { RCONNELL_ADULT_MEDID } from '@constants/enums/chiefComplaints.enums';
 
 interface GeneratedNoteContentProps {
     selectedAppointment: Appointment;
@@ -38,6 +39,22 @@ const GeneratedNoteContent = ({
     const [formStatuses, setFormStatuses] = useState<{
         [form_category: string]: FormStatus;
     }>({});
+
+    const data1 = {
+        Name: `${firstName} ${middleName ? middleName : ''} ${lastName}`,
+        Age: `${calculateAge(dob)} Years-old`,
+        DOB: formatDate(dob),
+        Education: '-/-',
+        Occupation: '-/-',
+    };
+    const data2 = {
+        'Date of Evaluation': formatDate(appointmentDate),
+        'Referred by': '-/-',
+        Examiners: user.firstName,
+    };
+
+    const [metadata1, setMetadata1] = useState(data1);
+    const [metadata2, setMetadata2] = useState(data2);
 
     const filteredNotes = {};
     for (const note of notes) {
@@ -65,19 +82,6 @@ const GeneratedNoteContent = ({
         (note: Record<string, HPIText>) => note.item
     );
 
-    const data1 = {
-        Name: `${firstName} ${middleName ? middleName : ''} ${lastName}`,
-        Age: `${calculateAge(dob)} Years-old`,
-        DOB: formatDate(dob),
-        Education: 'High School Diploma',
-        Occupation: 'Retail Worker',
-    };
-    const data2 = {
-        'Date of Evaluation': formatDate(appointmentDate),
-        'Referred by': 'Dr. Kate R.',
-        Examiners: 'Dr. Marta J.',
-    };
-
     useEffect(() => {
         const getFilledForms = async () => {
             if (!selectedAppointment || !selectedTemplate?.steps) {
@@ -104,6 +108,84 @@ const GeneratedNoteContent = ({
                     {}
                 );
             setFormStatuses(statuses);
+
+            const rconnellAdultForm = filledForms.find(
+                (form) =>
+                    form &&
+                    form.data.filled_form.formCategory === 'RCONNELL_ADULT'
+            );
+
+            if (rconnellAdultForm) {
+                const formContent =
+                    rconnellAdultForm.data.filled_form.formContent;
+
+                let education = '-/-';
+                let occupation = '-/-';
+                let referredBy = '-/-';
+
+                const nodes = formContent.nodes;
+                const highSchoolEducationNode =
+                    nodes[
+                        RCONNELL_ADULT_MEDID
+                            .Education_High_Scholl_Graduated_YES_NO
+                    ];
+                if (
+                    highSchoolEducationNode &&
+                    highSchoolEducationNode.response
+                ) {
+                    const response = highSchoolEducationNode.response;
+                    if (response.yes) {
+                        education = 'High School';
+                    } else if (response.no) {
+                        education = 'Less than High School';
+                    }
+                }
+
+                const degreeNode = nodes[RCONNELL_ADULT_MEDID.Education_Degree];
+                if (degreeNode && degreeNode.response) {
+                    const response = degreeNode.response;
+                    if (response['graduated from college']) {
+                        education = 'College';
+                    } else if (response['trade school']) {
+                        education = 'Trade School';
+                    } else if (response["an associate's degree"]) {
+                        education = "Associate's Degree";
+                    } else if (response["a bachelor's degree"]) {
+                        education = "Bachelor's Degree";
+                    } else if (response['a doctor degree']) {
+                        education = 'Doctoral Degree';
+                    }
+                }
+
+                const occupationNode = nodes[RCONNELL_ADULT_MEDID.Occupation];
+                if (occupationNode && occupationNode.response) {
+                    occupation = occupationNode.response;
+                }
+
+                const referredByNode = nodes[RCONNELL_ADULT_MEDID.Reffered_By];
+                if (referredByNode && referredByNode.response) {
+                    const response = referredByNode.response;
+                    if (response['primary care physician']) {
+                        referredBy = 'Primary Care Physician';
+                    } else if (response['other']) {
+                        referredBy = 'Other';
+                    }
+                }
+
+                setMetadata1({
+                    ...metadata1,
+                    Education: education,
+                    Occupation: occupation,
+                });
+
+                setMetadata2({
+                    ...metadata2,
+                    'Referred by': referredBy,
+                });
+            } else {
+                setMetadata1({ ...data1 });
+                setMetadata2({ ...data2 });
+            }
         };
 
         getFilledForms();
@@ -188,7 +270,7 @@ const GeneratedNoteContent = ({
                 </Box>
                 <Box className={style.genNoteBody}>
                     <Box className={style.genNoteBody__left}>
-                        {Object.keys(data1).map((item, index) => {
+                        {Object.keys(metadata1).map((item, index) => {
                             return (
                                 <Box
                                     key={index}
@@ -198,14 +280,14 @@ const GeneratedNoteContent = ({
                                         {item ? `${item}:` : ''}
                                     </Typography>
                                     <Typography component={'p'}>
-                                        {data1[item]}
+                                        {metadata1[item]}
                                     </Typography>
                                 </Box>
                             );
                         })}
                     </Box>
                     <Box>
-                        {Object.keys(data2).map((item, index) => {
+                        {Object.keys(metadata2).map((item, index) => {
                             return (
                                 <Box
                                     key={index}
@@ -215,7 +297,7 @@ const GeneratedNoteContent = ({
                                         {item ? `${item}:` : ''}
                                     </Typography>
                                     <Typography component={'p'}>
-                                        {data2[item]}
+                                        {metadata2[item]}
                                     </Typography>
                                 </Box>
                             );

@@ -365,6 +365,9 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
             ResponseTypes.NO_YES,
             ResponseTypes.YES_NO,
         ].includes(hpi.nodes[node]?.responseType);
+        if (!this.state.question) {
+            return null;
+        }
         return (
             <div
                 className={`${style.response} ${

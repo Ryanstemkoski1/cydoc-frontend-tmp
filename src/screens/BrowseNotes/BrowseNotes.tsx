@@ -100,7 +100,8 @@ export interface Patient {
 const BrowseNotes = () => {
     useSignInRequired(); // this route is private, sign in required
     const [date, setDate] = useState(new Date());
-    const [dateAdvance, setDateAdvance] = useState('');
+    const initialDate = new Date().toISOString().slice(0, 10); // yyyy-mm-dd format
+    const [dateAdvance, setDateAdvance] = useState(initialDate);
     const [users, setUsers] = useState<Appointment[]>([]);
     const { user } = useUser();
     const { cognitoUser } = useAuth();
@@ -118,10 +119,7 @@ const BrowseNotes = () => {
     const [templates, setTemplates] = useState<AppointmentTemplate[]>([]);
     const [allDiseaseForms, setAllDiseaseForms] = useState<DiseaseForm[]>([]);
 
-    useEffect(() => {
-        const initialDate = new Date().toISOString().slice(0, 10); // yyyy-mm-dd format
-        setDateAdvance(initialDate);
-    }, []);
+    useEffect(() => {}, []);
 
     useEffect(() => {
         const selectedTemplate = templates.find(
@@ -183,28 +181,9 @@ const BrowseNotes = () => {
                 user?.institutionId,
                 cognitoUser
             );
-            const filteredUsers = users.reduce(
-                (acc: Appointment[], current) => {
-                    const x = acc.find(
-                        (item) => item.patientId === current.patientId
-                    );
-                    if (!x) {
-                        return acc.concat([current]);
-                    } else if (current.notes && current.notes[0].hpi) {
-                        const temp = JSON.parse(current.notes[0].hpi);
-                        if (!temp.hpi_text.includes('No history')) {
-                            const index = acc.indexOf(x);
-                            acc[index] = current;
-                        }
-                        return acc;
-                    } else {
-                        return acc;
-                    }
-                },
-                []
-            );
-
-            setUsers(filteredUsers);
+            setUsers(users);
+            setSelectedAppointment(undefined);
+            setSelectedIndex(null);
             dispatch(setLoadingStatus(false));
         } catch (err) {
             setUsers([]);

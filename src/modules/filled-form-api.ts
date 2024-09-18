@@ -7,7 +7,7 @@ interface GetFilledFormResponse {
     data: {
         filled_form: {
             appointmentId: string;
-            formContent: GraphData;
+            formContent: any;
             status: string;
             formCategory: string;
         };

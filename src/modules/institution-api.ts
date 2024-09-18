@@ -233,6 +233,7 @@ export const uploadInstitutionLogo = async (
             Authorization: token || '',
         },
         body: form,
+        mode: 'cors',
     });
     return resp.json();
 };
