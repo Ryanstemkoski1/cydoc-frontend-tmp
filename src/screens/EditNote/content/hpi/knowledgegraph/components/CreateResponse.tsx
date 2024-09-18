@@ -384,7 +384,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 ) : (
                     <h5>{this.state.question?.trim()}</h5>
                 )}
-                <aside>{this.renderSwitch()}</aside>
+                {this.renderSwitch() && <aside>{this.renderSwitch()}</aside>}
             </div>
         );
     }

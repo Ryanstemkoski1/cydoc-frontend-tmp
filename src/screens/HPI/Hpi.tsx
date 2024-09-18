@@ -597,7 +597,7 @@ const HPI = () => {
     ]);
 
     return (
-        <>
+        <div style={{ width: '100%' }}>
             <div className={style.editNote}>
                 <div className='centering'>
                     <Stepper tabs={currentTabs} onTabChange={onTabChange} />
@@ -693,7 +693,7 @@ const HPI = () => {
                     </div>
                 </>
             </CustomModal>
-        </>
+        </div>
     );
 };
 
