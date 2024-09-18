@@ -120,6 +120,16 @@ export default function DrawerMenu() {
         }
     }, [user]);
 
+    const customClinicalWorkflowItems = useMemo(
+        () =>
+            definitions?.showClinicQRCodeAndLink
+                ? clinicalWorkflowItems
+                : clinicalWorkflowItems.filter(
+                      (item) => item.label !== 'Clinic QR Code & Link'
+                  ),
+        [definitions]
+    );
+
     const drawerWidth = open ? '300px' : '64px';
 
     const onClickLink = (href: string) => {
@@ -301,7 +311,7 @@ export default function DrawerMenu() {
                     >
                         <MenuItemList
                             menuTitle={MenuTitles.CLINICAL_WORKFLOW}
-                            menuItems={clinicalWorkflowItems}
+                            menuItems={customClinicalWorkflowItems}
                         />
                         {!open && <Divider className={style.drawerDivider} />}
                         {isManager && (

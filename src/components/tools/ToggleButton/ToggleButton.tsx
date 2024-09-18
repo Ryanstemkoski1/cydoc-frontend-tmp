@@ -2,7 +2,6 @@ import '@screens/EditNote/content/hpi/knowledgegraph/css/Button.css';
 import React from 'react';
 import { Button } from '@mui/material';
 import style from './ToggleButton.module.scss';
-import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 
 export interface ButtonProps<T = string> {
     active?: boolean;
@@ -71,7 +70,6 @@ export default function ToggleButton<T = string>(props: ButtonProps<T>) {
                 onToggleButtonClick(e, propsWithCondition)
             }
         >
-            {active && <CheckRoundedIcon />}
             <span className={style.toogleButton__title}>
                 {title === 'yes' ? 'Yes' : title === 'no' ? 'No' : title}
             </span>
