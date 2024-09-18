@@ -258,6 +258,12 @@ export default function DrawerMenu() {
                                                 className={
                                                     style.headerWrapper__logoBox__title
                                                 }
+                                                sx={{
+                                                    fontFamily:
+                                                        'Nunito !important',
+                                                    fontWeight:
+                                                        'bold !important',
+                                                }}
                                             >
                                                 {institution?.name || 'Cydoc'}
                                             </Typography>

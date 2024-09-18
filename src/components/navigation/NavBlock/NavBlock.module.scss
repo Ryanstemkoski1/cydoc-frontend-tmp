@@ -22,4 +22,24 @@
         color: rgba($color-black, 0.87);
         white-space: pre;
     }
+
+    &__logoBox {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding-right: 12px;
+
+        p {
+            font-family: $font-family-secondary;
+            font-weight: $font-weight-semibold;
+            color: $color-black;
+            font-size: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            @include max-screen($mobile) {
+                font-size: 20px;
+            }
+        }
+    }
 }
