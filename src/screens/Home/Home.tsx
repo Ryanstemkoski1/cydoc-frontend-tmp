@@ -1,8 +1,17 @@
+'use client';
+
 import React from 'react';
 import style from './Home.module.scss';
+import { useRouter } from 'next/navigation';
+import useUser from '@hooks/useUser';
 
 const Home = () => {
-    return (
+    const { user } = useUser();
+    const router = useRouter();
+
+    return user ? (
+        router.push('/hpi/doctor')
+    ) : (
         <>
             <div className='centering'>
                 <div className={`${style.home} flex`}>
