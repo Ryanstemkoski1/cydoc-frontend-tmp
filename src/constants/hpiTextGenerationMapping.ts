@@ -39,6 +39,32 @@ export const PART_OF_SPEECH_CORRECTION_MAP: Map<string, string> = new Map([
     [' they denies ', ' they deny '],
     [' they reports ', ' they report '],
     [' theys ', ' their '],
+    [' 1 times ', ' once '],
+    [' 1 time ', ' once '],
+    [' 2 times ', ' twice '],
+    [' 2 time ', ' twice '],
+    [' feeling tired during the day ', ' excessive daytime tiredness '],
+    [' having a burst of energy ', ' increased energy '],
+    [
+        ' thoughts racing through your head keeping you awake ',
+        ' racing thoughts ',
+    ],
+    [
+        ' during the day talking more or talking really fast ',
+        ' hyperverbal speech ',
+    ],
+    [
+        ' more risk-taking behavior like driving fast ',
+        ' increased risk-taking ',
+    ],
+    [' more impulsive behavior ', ' increased impulsivity '],
+    [" seeing things that aren't there ", ' visual hallucinations '],
+    [" hearing things that aren't there ", ' auditory hallucinations '],
+    [' 0 close friends ', ' no close friends '],
+    [' every 1 day ', ' every day '],
+    [' at telehealth ', ' by telehealth '],
+    [' sx SI ', ' suicidal ideation '],
+    [' sx of depression ', ' symptoms of depression '],
 ]);
 
 // Convert Map to an Object with Spaces Removed
