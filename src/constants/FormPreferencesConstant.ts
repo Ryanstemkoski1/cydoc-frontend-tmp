@@ -26,8 +26,8 @@ export const ProductRadioLabels = {
         detail: 'Patients complete the Smart Patient Intake Form after scanning a QR code or clicking a link. \nClinicians receive a generated note before a visit, saving 10+ minutes per visit.',
     },
     [ProductType.ADVANCED_REPORT_GENERATION]: {
-        title: 'Advanced Report Generation',
-        detail: 'Clinicians, staff, and/or patients can complete different forms at different times, which will then be compiled into a report.',
+        title: 'Psychology Report Generation',
+        detail: 'Clinicians and staff can complete complex forms at different times, which Cydoc will then synthesize into a detailed report.',
     },
 };
 
