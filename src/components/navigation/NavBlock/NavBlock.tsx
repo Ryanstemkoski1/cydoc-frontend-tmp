@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import { selectDoctorViewState } from '@redux/selectors/userViewSelectors';
 import { Box, Typography } from '@mui/material';
 import { usePathname } from 'next/navigation';
-import Image from 'next/image';
 
 import {
     accountMenuItems,
@@ -26,7 +25,6 @@ const NavBlock = () => {
     const [navTitle, setNavTitle] = useState('');
 
     const isEditNotePage = pathname?.includes('editnote');
-    const isGeneratedNotePage = pathname?.includes('hpi/doctor');
     const isAppointmentTemplatePage = pathname?.includes(
         'appointment-templates'
     );
@@ -77,17 +75,6 @@ const NavBlock = () => {
                 <div className={style.header__note}>
                     <NoteNameMenuItem />
                 </div>
-            )}
-            {isGeneratedNotePage && (
-                <Box className={style.navBlockWrapper__logoBox}>
-                    <Image
-                        height={36}
-                        width={36}
-                        src='/images/cydoc-logo.svg'
-                        alt='Cydoc'
-                    />
-                    <Typography component={'p'}>Cydoc</Typography>
-                </Box>
             )}
             <Typography className={style.typo}>{navTitle}</Typography>
             {isAppointmentTemplatePage && (

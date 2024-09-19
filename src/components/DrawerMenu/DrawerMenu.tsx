@@ -30,9 +30,6 @@ import {
     practiceAdminMenuItems,
 } from '@constants/drawerMenuItems';
 import { getInstitution } from '@modules/institution-api';
-import { Institution } from '@cydoc-ai/types';
-import { borderRadius, fontSize, width } from '@mui/system';
-import useIsMobile from '@hooks/useIsMobile';
 import { setProductDefinitionAction } from '@redux/actions/productDefinitionAction';
 
 const drawerWidth = 240;
@@ -90,9 +87,6 @@ export default function DrawerMenu() {
     const { signOut } = useAuth();
     const { user, isManager } = useUser();
     const [open, setOpen] = React.useState(true);
-    const [institution, setInstitution] = React.useState<Institution | null>(
-        null
-    );
     const dispatch = useDispatch();
 
     const customPracticeAdminMenuItems = useMemo(
@@ -105,20 +99,19 @@ export default function DrawerMenu() {
         [definitions]
     );
 
-    const fetchInstitution = async () => {
-        const institution = await getInstitution(user!.institutionId);
-        setInstitution(institution);
-
-        // depends on the product type, we will set the product definition file on action
-        localStorage.setItem('productType', institution.product);
-        dispatch(setProductDefinitionAction(institution.product));
-    };
-
     useEffect(() => {
+        const fetchInstitution = async () => {
+            const institution = await getInstitution(user!.institutionId);
+
+            // depends on the product type, we will set the product definition file on action
+            localStorage.setItem('productType', institution.product);
+            dispatch(setProductDefinitionAction(institution.product));
+        };
+
         if (user) {
             fetchInstitution();
         }
-    }, [user]);
+    }, [dispatch, user]);
 
     const customClinicalWorkflowItems = useMemo(
         () =>
@@ -209,15 +202,8 @@ export default function DrawerMenu() {
                                 <Image
                                     height={32}
                                     width={32}
-                                    style={{
-                                        borderRadius: '50%',
-                                        border: '1px solid #ccc',
-                                    }}
                                     alt='Cydoc'
-                                    src={
-                                        institution?.logo ||
-                                        '/images/cydoc-logo.svg'
-                                    }
+                                    src={'/images/cydoc-logo.svg'}
                                     onClick={() => router.push('/')}
                                 />
                                 <IconButton
@@ -229,73 +215,24 @@ export default function DrawerMenu() {
                             </Box>
                         ) : (
                             <Box className={style.headerWrapper}>
-                                {!institution || !institution.logo ? (
-                                    <Box
-                                        className={style.headerWrapper__logoBox}
-                                        onClick={() => router.push('/')}
+                                <Box
+                                    className={style.headerWrapper__logoBox}
+                                    onClick={() => router.push('/')}
+                                >
+                                    <Image
+                                        height={54}
+                                        width={54}
+                                        src='/images/cydoc-logo.svg'
+                                        alt='Cydoc'
+                                    />
+                                    <Typography
+                                        className={
+                                            style.headerWrapper__logoBox__title
+                                        }
                                     >
-                                        <Image
-                                            height={54}
-                                            width={54}
-                                            src='/images/cydoc-logo.svg'
-                                            alt='Cydoc'
-                                        />
-                                        <Typography
-                                            className={
-                                                style.headerWrapper__logoBox__title
-                                            }
-                                        >
-                                            {institution?.name || 'Cydoc'}
-                                        </Typography>
-                                    </Box>
-                                ) : (
-                                    <Box
-                                        className={style.headerWrapper__logoBox}
-                                        onClick={() => router.push('/')}
-                                    >
-                                        <Image
-                                            height={54}
-                                            width={54}
-                                            style={{
-                                                borderRadius: '50%',
-                                                border: '1px solid #ccc',
-                                            }}
-                                            src={institution.logo}
-                                            alt={institution.name}
-                                        />
-                                        <div>
-                                            <Typography
-                                                className={
-                                                    style.headerWrapper__logoBox__title
-                                                }
-                                                sx={{
-                                                    fontFamily:
-                                                        'Nunito !important',
-                                                    fontWeight:
-                                                        'bold !important',
-                                                }}
-                                            >
-                                                {institution?.name || 'Cydoc'}
-                                            </Typography>
-                                            <Typography
-                                                className={
-                                                    style.headerWrapper__logoBox__poweredBy
-                                                }
-                                            >
-                                                Powered by
-                                                <span>
-                                                    <Image
-                                                        height={18}
-                                                        width={18}
-                                                        src='/images/cydoc-logo.svg'
-                                                        alt='Cydoc'
-                                                    />
-                                                </span>
-                                                <strong>Cydoc</strong>
-                                            </Typography>
-                                        </div>
-                                    </Box>
-                                )}
+                                        Cydoc
+                                    </Typography>
+                                </Box>
                                 <IconButton
                                     className={style.headerWrapper__iconButton}
                                     onClick={() => setOpen((prev) => !prev)}

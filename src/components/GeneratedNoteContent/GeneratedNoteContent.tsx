@@ -2,10 +2,12 @@
 
 import React, { useEffect, useState } from 'react';
 import style from './GeneratedNoteContent.module.scss';
+import Image from 'next/image';
+
 import HpiNote from '@screens/EditNote/content/generatenote/notesections/HPINote';
 import { toast } from 'react-toastify';
 import { Box, Typography } from '@mui/material';
-import { Appointment, AppointmentTemplate } from '@cydoc-ai/types';
+import { Appointment, AppointmentTemplate, Institution } from '@cydoc-ai/types';
 import {
     FormStatus,
     WhoCompletes,
@@ -15,6 +17,7 @@ import { DiseaseForm } from '@cydoc-ai/types/dist/disease';
 import { HPIText } from '@utils/textGeneration/extraction/getHPIArray';
 import { isArray } from 'lodash';
 import { RCONNELL_ADULT_MEDID } from '@constants/enums/chiefComplaints.enums';
+import { getInstitution } from '@modules/institution-api';
 
 interface GeneratedNoteContentProps {
     selectedAppointment: Appointment;
@@ -39,6 +42,9 @@ const GeneratedNoteContent = ({
     const [formStatuses, setFormStatuses] = useState<{
         [form_category: string]: FormStatus;
     }>({});
+    const [institution, setInstitution] = React.useState<Institution | null>(
+        null
+    );
 
     const data1 = {
         Name: `${firstName} ${middleName ? middleName : ''} ${lastName}`,
@@ -204,6 +210,14 @@ const GeneratedNoteContent = ({
         return age;
     }
 
+    useEffect(() => {
+        const fetchInstitution = async () => {
+            const institution = await getInstitution(user!.institutionId);
+            setInstitution(institution);
+        };
+        fetchInstitution();
+    }, [user]);
+
     function formatDate(date) {
         return new Date(date).toLocaleDateString();
     }
@@ -260,11 +274,50 @@ const GeneratedNoteContent = ({
             </Box>
             <Box className={style.genNoteContent}>
                 <Box className={style.genNoteTitle}>
-                    <Box className={style.genNoteTitle__Icon}>
+                    {/* <Box className={style.genNoteTitle__Icon}>
                         <img src='/images/cydoc-logo.svg' alt='cydoc-logo' />
                         <Typography variant='h1'>Cydoc</Typography>
+                    </Box> */}
+                    <Box className={style.genNoteTitle__logoBox}>
+                        <Image
+                            height={54}
+                            width={54}
+                            style={{
+                                borderRadius: '50%',
+                                border: '1px solid #ccc',
+                            }}
+                            src={institution?.logo || '/images/cydoc-logo.svg'}
+                            alt={institution?.name || 'Cydoc'}
+                        />
+                        <div>
+                            <Typography
+                                className={style.genNoteTitle__logoBox__title}
+                                sx={{
+                                    fontFamily: 'Nunito !important',
+                                    fontWeight: 'bold !important',
+                                }}
+                            >
+                                {institution?.name || 'Cydoc'}
+                            </Typography>
+                            <Typography
+                                className={
+                                    style.genNoteTitle__logoBox__poweredBy
+                                }
+                            >
+                                Powered by
+                                <span>
+                                    <Image
+                                        height={18}
+                                        width={18}
+                                        src='/images/cydoc-logo.svg'
+                                        alt='Cydoc'
+                                    />
+                                </span>
+                                <strong>Cydoc</strong>
+                            </Typography>
+                        </div>
                     </Box>
-                    <Typography component={'p'}>
+                    <Typography component={'p'} sx={{ pt: 2 }}>
                         Psychological Evaluation
                     </Typography>
                 </Box>

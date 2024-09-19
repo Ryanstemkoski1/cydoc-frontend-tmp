@@ -73,6 +73,37 @@
         text-align: center;
         color: $color-black;
     }
+
+    &__logoBox {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+
+        p {
+            font-family: $font-family-secondary;
+            font-weight: $font-weight-semibold;
+            color: $color-black;
+            font-size: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            @include max-screen($mobile) {
+                font-size: 20px;
+            }
+        }
+
+        &__poweredBy {
+            font-size: 12px!important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            font-weight: $font-weight-normal!important;
+            color: #7f8485!important;
+            font-family: $font-family-primary
+        }
+    }
 }
 
 .genNoteBody {
