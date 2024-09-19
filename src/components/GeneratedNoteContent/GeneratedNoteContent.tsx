@@ -50,7 +50,7 @@ const GeneratedNoteContent = ({
     const data2 = {
         'Date of Evaluation': formatDate(appointmentDate),
         'Referred by': '-/-',
-        Examiners: user.firstName,
+        Examiners: user.firstName + ' ' + user.lastName,
     };
 
     const [metadata1, setMetadata1] = useState(data1);
