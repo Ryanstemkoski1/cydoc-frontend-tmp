@@ -459,67 +459,97 @@ const BrowseNotes = () => {
             ) : (
                 <>
                     <Box className={style.notesBlockAdvance}>
-                        <Box className={style.notesBlockAdvance__notesWrap}>
-                            {isMobile ? (
+                        <Box>
+                            <Box className={style.notesBlockAdvance__notesWrap}>
+                                {isMobile ? (
+                                    <Box
+                                        className={` ${style.notesBlockAdvance__header}`}
+                                    >
+                                        <MobileDatePicker
+                                            value={dateAdvance}
+                                            handleChange={(value) =>
+                                                handleMobileChange(value)
+                                            }
+                                        />
+                                    </Box>
+                                ) : (
+                                    <Box
+                                        className={` ${style.notesBlockAdvance__header} flex align-center justify-between`}
+                                    >
+                                        <Box
+                                            className={
+                                                style.notesBlockAdvance__header__dateWrapper
+                                            }
+                                        >
+                                            <CustomTextField
+                                                id='dateOfBirth'
+                                                required={true}
+                                                type='date'
+                                                name='dateOfBirth'
+                                                placeholder='mm/dd/yyyy'
+                                                value={dateAdvance}
+                                                max={new Date()
+                                                    .toJSON()
+                                                    .slice(0, 10)}
+                                                onChange={handleChange}
+                                            />
+                                        </Box>
+                                        <a
+                                            className={` ${style.notesBlockAdvance__header__arrow} flex align-center justify-center`}
+                                            onClick={goBackAdvance}
+                                        >
+                                            <img
+                                                src={'/images/left-arrow.svg'}
+                                                alt='Left arrow'
+                                            />
+                                        </a>
+                                        <a
+                                            className={` ${style.notesBlockAdvance__header__arrow} flex align-center justify-center`}
+                                            onClick={goForwardAdvance}
+                                        >
+                                            <img
+                                                src={'/images/right-arrow.svg'}
+                                                alt='Right arrow'
+                                            />
+                                        </a>
+                                    </Box>
+                                )}
+
                                 <Box
-                                    className={` ${style.notesBlockAdvance__header}`}
+                                    className={` ${style.notesBlockAdvance__content} `}
                                 >
-                                    <MobileDatePicker
-                                        value={dateAdvance}
-                                        handleChange={(value) =>
-                                            handleMobileChange(value)
-                                        }
-                                    />
+                                    {renderUsersAdvance(users)}
                                 </Box>
-                            ) : (
-                                <Box
-                                    className={` ${style.notesBlockAdvance__header} flex align-center justify-between`}
+                            </Box>
+
+                            <Box className={`${style.checkReloadAdvance}`}>
+                                <button
+                                    onClick={loadPatientHistory}
+                                    style={{
+                                        borderStyle: 'none',
+                                        backgroundColor: 'transparent',
+                                        cursor: 'pointer',
+                                    }}
                                 >
                                     <Box
                                         className={
-                                            style.notesBlockAdvance__header__dateWrapper
+                                            style.checkReloadAdvance__inner
                                         }
                                     >
-                                        <CustomTextField
-                                            id='dateOfBirth'
-                                            required={true}
-                                            type='date'
-                                            name='dateOfBirth'
-                                            placeholder='mm/dd/yyyy'
-                                            value={dateAdvance}
-                                            max={new Date()
-                                                .toJSON()
-                                                .slice(0, 10)}
-                                            onChange={handleChange}
+                                        <img
+                                            alt='Refresh'
+                                            style={{
+                                                marginRight: '10px',
+                                                marginLeft: '7px',
+                                            }}
+                                            src={'/images/refresh.png'}
                                         />
+                                        {isMobile ? '' : 'Refresh'}
                                     </Box>
-                                    <a
-                                        className={` ${style.notesBlockAdvance__header__arrow} flex align-center justify-center`}
-                                        onClick={goBackAdvance}
-                                    >
-                                        <img
-                                            src={'/images/left-arrow.svg'}
-                                            alt='Left arrow'
-                                        />
-                                    </a>
-                                    <a
-                                        className={` ${style.notesBlockAdvance__header__arrow} flex align-center justify-center`}
-                                        onClick={goForwardAdvance}
-                                    >
-                                        <img
-                                            src={'/images/right-arrow.svg'}
-                                            alt='Right arrow'
-                                        />
-                                    </a>
-                                </Box>
-                            )}
-
-                            <Box
-                                className={` ${style.notesBlockAdvance__content} `}
-                            >
-                                {renderUsersAdvance(users)}
+                                </button>
                             </Box>
                         </Box>
+
                         {selectedAppointment && (
                             <Box
                                 className={
@@ -534,28 +564,6 @@ const BrowseNotes = () => {
                                 />
                             </Box>
                         )}
-                    </Box>
-                    <Box className={`${style.checkReloadAdvance}`}>
-                        <button
-                            onClick={loadPatientHistory}
-                            style={{
-                                borderStyle: 'none',
-                                backgroundColor: 'transparent',
-                                cursor: 'pointer',
-                            }}
-                        >
-                            <Box className={style.checkReloadAdvance__inner}>
-                                <img
-                                    alt='Refresh'
-                                    style={{
-                                        marginRight: '10px',
-                                        marginLeft: '7px',
-                                    }}
-                                    src={'/images/refresh.png'}
-                                />
-                                {isMobile ? '' : 'Check for new notes'}
-                            </Box>
-                        </button>
                     </Box>
                     <CreatePatientModal
                         showModal={showModalAdvance}
