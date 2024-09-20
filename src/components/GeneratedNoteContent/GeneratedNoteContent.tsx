@@ -299,22 +299,6 @@ const GeneratedNoteContent = ({
                             >
                                 {institution?.name || 'Cydoc'}
                             </Typography>
-                            <Typography
-                                className={
-                                    style.genNoteTitle__logoBox__poweredBy
-                                }
-                            >
-                                Powered by
-                                <span>
-                                    <Image
-                                        height={18}
-                                        width={18}
-                                        src='/images/cydoc-logo.svg'
-                                        alt='Cydoc'
-                                    />
-                                </span>
-                                <strong>Cydoc</strong>
-                            </Typography>
                         </div>
                     </Box>
                     <Typography component={'p'} sx={{ pt: 2 }}>
