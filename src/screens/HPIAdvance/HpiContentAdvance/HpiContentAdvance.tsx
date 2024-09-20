@@ -1,7 +1,9 @@
+'use client';
+
 import { HPIPatientQueryParams } from '@constants/enums/hpi.patient.enums';
 import NavigationButton from '@components/tools/NavigationButton/NavigationButton';
 import { favChiefComplaints } from 'classes/institution.class';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { ConnectedProps, connect } from 'react-redux';
 import {
     setChiefComplaint,
@@ -59,11 +61,14 @@ interface State {
     patientId: string;
     formCategory: string;
     saveFormLoading: boolean;
+    timer: NodeJS.Timeout | undefined;
 }
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
 type Props = OwnProps & ReduxProps;
+
+const AUTO_SAVE_FORM_INTERVAL = 2 * 60 * 1000; // 2 minutes
 
 class HPIContent extends React.Component<Props, State> {
     constructor(props: Props) {
@@ -82,6 +87,7 @@ class HPIContent extends React.Component<Props, State> {
             patientId: query.get('patient_id')!,
             formCategory: query.get('form_category')!,
             saveFormLoading: false,
+            timer: undefined,
         };
     }
 
@@ -97,6 +103,8 @@ class HPIContent extends React.Component<Props, State> {
             const data = hpiHeaders;
             data.then((res) => this.props.saveHpiHeader(res.data));
         }
+
+        this.handleOnSave(FormStatus.In_Progress, true);
     }
 
     shouldShowNextButton = () => {
@@ -115,12 +123,17 @@ class HPIContent extends React.Component<Props, State> {
         return result;
     };
 
-    handleOnSave = async (status = FormStatus.In_Progress) => {
+    handleOnSave = async (status = FormStatus.In_Progress, silent = false) => {
         const formContent = this.props.hpi;
         // Save filled_form to Database
         this.setState({
             saveFormLoading: true,
         });
+
+        if (this.state.timer) {
+            clearTimeout(this.state.timer);
+        }
+
         try {
             await postFilledForm({
                 appointmentId: this.state.appointmentId,
@@ -129,9 +142,18 @@ class HPIContent extends React.Component<Props, State> {
                 formContent,
                 status,
             });
-            toast.success('Form saved!', ToastOptions.success);
+            !silent && toast.success('Form saved!', ToastOptions.success);
+
+            const timer = setTimeout(() => {
+                this.handleOnSave(FormStatus.In_Progress, true);
+            }, AUTO_SAVE_FORM_INTERVAL);
+
+            this.setState({
+                timer,
+            });
         } catch (error) {
-            toast.error('Opps! Something went wrong!', ToastOptions.error);
+            !silent &&
+                toast.error('Opps! Something went wrong!', ToastOptions.error);
         }
         this.setState({
             saveFormLoading: false,

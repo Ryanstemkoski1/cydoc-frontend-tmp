@@ -10,7 +10,6 @@ import {
     Typography,
 } from '@mui/material';
 import {
-    AppointmentTemplateType,
     AppointmentValueType,
     TaskType,
     WhoCompletes,
@@ -21,7 +20,7 @@ import { DiseaseForm } from '@cydoc-ai/types/dist/disease';
 import { hpiHeaders as knowledgeGraphAPI } from '@screens/EditNote/content/hpi/knowledgegraph/API';
 import { toast } from 'react-toastify';
 import ToastOptions from '@constants/ToastOptions';
-import { AppointmentTemplate, AppointmentTemplateStep } from '@cydoc-ai/types';
+import { AppointmentTemplate } from '@cydoc-ai/types';
 import {
     ApiResponse,
     AppointmentTemplatePostBody,

@@ -107,7 +107,7 @@ const AutocompletePlaceholder = ({
     const handleAutocompleteChange = (
         event: SyntheticEvent<Element, Event>
     ) => {
-        handleChange(idx, event.currentTarget.innerHTML, type);
+        handleChange(idx, (event.target as HTMLElement).innerText, type);
     };
 
     return (
