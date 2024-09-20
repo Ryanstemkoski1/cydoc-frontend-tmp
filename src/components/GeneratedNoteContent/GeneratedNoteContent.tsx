@@ -274,18 +274,10 @@ const GeneratedNoteContent = ({
             </Box>
             <Box className={style.genNoteContent}>
                 <Box className={style.genNoteTitle}>
-                    {/* <Box className={style.genNoteTitle__Icon}>
-                        <img src='/images/cydoc-logo.svg' alt='cydoc-logo' />
-                        <Typography variant='h1'>Cydoc</Typography>
-                    </Box> */}
                     <Box className={style.genNoteTitle__logoBox}>
                         <Image
                             height={54}
                             width={54}
-                            style={{
-                                borderRadius: '50%',
-                                border: '1px solid #ccc',
-                            }}
                             src={institution?.logo || '/images/cydoc-logo.svg'}
                             alt={institution?.name || 'Cydoc'}
                         />
@@ -301,7 +293,7 @@ const GeneratedNoteContent = ({
                             </Typography>
                         </div>
                     </Box>
-                    <Typography component={'p'} sx={{ pt: 2 }}>
+                    <Typography component={'p'} sx={{ pt: '8px' }}>
                         Psychological Evaluation
                     </Typography>
                 </Box>

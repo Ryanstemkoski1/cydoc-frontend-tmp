@@ -174,8 +174,8 @@ export default function DrawerMenu() {
                             <div
                                 style={{
                                     position: 'relative',
-                                    width: '150px',
-                                    height: '150px',
+                                    width: '100px',
+                                    height: '100px',
                                     marginTop: '2rem',
                                 }}
                             >
@@ -186,8 +186,6 @@ export default function DrawerMenu() {
                                     alt='logo'
                                     style={{
                                         objectFit: 'contain',
-                                        borderRadius: '50%',
-                                        border: '1px solid #ccc',
                                     }}
                                 />
                                 <input
@@ -203,8 +201,10 @@ export default function DrawerMenu() {
                                     <Button
                                         sx={{
                                             position: 'absolute',
-                                            bottom: -10,
-                                            right: -30,
+                                            bottom: '-32px',
+                                            right: '-36px',
+                                            minWidth: '32px',
+                                            borderRadius: '50%',
                                         }}
                                         component='label'
                                     >
