@@ -2,7 +2,6 @@ import {
     ApiResponse,
     AppointmentTemplate,
     DbUser,
-    GetMembersResponse,
     Institution,
 } from '@cydoc-ai/types';
 import { DiseaseForm } from '@cydoc-ai/types/dist/disease';

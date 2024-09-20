@@ -1,6 +1,6 @@
 'use client';
 
-import { ApiResponse, Appointment, Institution } from '@cydoc-ai/types';
+import { Appointment } from '@cydoc-ai/types';
 import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
 import { HPIPatientQueryParams } from '@constants/enums/hpi.patient.enums';
 import { Institution as InstitutionClass } from 'classes/institution.class';
@@ -25,7 +25,6 @@ import { updateAdditionalSurveyDetails } from '@redux/actions/additionalSurveyAc
 import { initialSurveyAddDateOrPlace } from '@redux/actions/userViewActions';
 import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
-import { loadChiefComplaintsData } from '@utils/loadKnowledgeGraphData';
 import style from './HpiAdvance.module.scss';
 import NewNotePage from './NotePageAdvance/NotePageAdvance';
 import { selectHpiHeaders } from '@redux/reducers/hpiHeadersReducer';
@@ -35,6 +34,7 @@ import { graphClientURL } from '@constants/api';
 import { getAppointmentDetail } from '@modules/appointment-api';
 import useAuth from '@hooks/useAuth';
 import { getFilledForm } from '@modules/filled-form-api';
+import { FormStatus } from '@constants/appointmentTemplatesConstants';
 
 export interface OnNextClickParams {
     allSelectedChiefComplaints?: string[];
@@ -62,7 +62,7 @@ const HpiAdvance = () => {
     const [notificationType, setNotificationType] = useState(
         NotificationTypeEnum.ERROR
     );
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [screenForPatient, setScreenForPatient] =
         useState<ScreenForPatientType>({
             title: '',
@@ -131,7 +131,6 @@ const HpiAdvance = () => {
             graphClientURL + '/graph/category/' + chiefComplaint + '/4'
         );
         dispatch(processKnowledgeGraph(response.data));
-        setLoading(false);
         const filledForm = await getFilledForm(
             selectedAppointment?.id || query.get('appointment_id')!,
             query.get('template_step_id')!,
@@ -142,10 +141,11 @@ const HpiAdvance = () => {
                 processKnowledgeGraph(filledForm.data.filled_form.formContent)
             );
         }
+        setLoading(false);
     };
 
     useEffect(() => {
-        if (!hpiKey) return;
+        if (!hpiKey || !hpiHeaders?.parentNodes) return;
 
         if (!(hpiKey in hpiHeaders?.parentNodes)) {
             console.error(

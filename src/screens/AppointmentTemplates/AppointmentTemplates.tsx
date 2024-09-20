@@ -2,11 +2,6 @@ import style from './AppointmentTemplates.module.scss';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Icon } from '@components/Icon';
 import {
-    AppointmentTemplateType,
-    FormType,
-    WhoCompletes,
-} from '@constants/appointmentTemplatesConstants';
-import {
     Box,
     Button,
     CircularProgress,
