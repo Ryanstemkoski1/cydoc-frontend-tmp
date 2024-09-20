@@ -195,7 +195,7 @@ class HPIContent extends React.Component<Props, State> {
                 );
             } else {
                 this.handleOnSave(FormStatus.Finished);
-                const url = `/submission-advance-successful?${HPIPatientQueryParams.INSTITUTION_ID}=${this.state.institutionId}`;
+                const url = `/hpi/doctor`;
 
                 // Should use router?
                 window.location.href = url;
