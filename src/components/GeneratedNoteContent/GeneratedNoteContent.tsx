@@ -223,11 +223,43 @@ const GeneratedNoteContent = ({
     }
 
     const copyNote = () => {
-        const note = document.getElementById('copy-notes');
+        const note = document.getElementById('copy-content');
         if (note) {
-            navigator.clipboard.writeText(
-                (note as HTMLHeadingElement)?.innerText || ''
-            );
+            function getComputedStyleString(element: HTMLElement): string {
+                const computedStyle = window.getComputedStyle(element);
+                let styleString = '';
+                for (let i = 0; i < computedStyle.length; i++) {
+                    const property = computedStyle[i];
+                    styleString += `${property}: ${computedStyle.getPropertyValue(property)}; `;
+                }
+                return styleString;
+            }
+
+            function inlineStyles(element: HTMLElement): void {
+                const children = element.children;
+                for (let i = 0; i < children.length; i++) {
+                    const child = children[i] as HTMLElement;
+                    child.setAttribute('style', getComputedStyleString(child));
+                    inlineStyles(child); // Recursively inline styles for child elements
+                }
+            }
+
+            const noteElement = document.getElementById(
+                'copy-content'
+            ) as HTMLElement;
+            inlineStyles(noteElement);
+            const htmlContent = noteElement.outerHTML;
+
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const clipboardItem = new ClipboardItem({ 'text/html': blob });
+
+            navigator.clipboard
+                .write([clipboardItem])
+                .then(() => {})
+                .catch((err) => {
+                    console.error('Failed to copy: ', err);
+                });
+
             toast.success('Copied to Clipboard!', {
                 position: 'top-right',
                 autoClose: 2000,
@@ -264,6 +296,106 @@ const GeneratedNoteContent = ({
         }
     }
 
+    const renderBody = (
+        <Box className={style.genNoteContent} id={'copy-content'}>
+            <Box className={style.genNoteTitle}>
+                <Box className={style.genNoteTitle__logoBox}>
+                    <Image
+                        height={54}
+                        width={54}
+                        src={institution?.logo || '/images/cydoc-logo.svg'}
+                        alt={institution?.name || 'Cydoc'}
+                    />
+                    <div>
+                        <Typography
+                            className={style.genNoteTitle__logoBox__title}
+                            sx={{
+                                fontFamily: 'Nunito !important',
+                                fontWeight: 'bold !important',
+                            }}
+                        >
+                            {institution?.name || 'Cydoc'}
+                        </Typography>
+                    </div>
+                </Box>
+                <Typography component={'p'} sx={{ pt: '8px' }}>
+                    Psychological Evaluation
+                </Typography>
+            </Box>
+            <Box className={style.genNoteBody}>
+                <Box className={style.genNoteBody__left}>
+                    {Object.keys(metadata1).map((item, index) => {
+                        return (
+                            <Box
+                                key={index}
+                                className={style.genNoteBody__Item1}
+                            >
+                                <Typography variant='h3'>
+                                    {item ? `${item}:` : ''}
+                                </Typography>
+                                <Typography component={'p'}>
+                                    {metadata1[item]}
+                                </Typography>
+                            </Box>
+                        );
+                    })}
+                </Box>
+                <Box>
+                    {Object.keys(metadata2).map((item, index) => {
+                        return (
+                            <Box
+                                key={index}
+                                className={style.genNoteBody__Item2}
+                            >
+                                <Typography variant='h3'>
+                                    {item ? `${item}:` : ''}
+                                </Typography>
+                                <Typography component={'p'}>
+                                    {metadata2[item]}
+                                </Typography>
+                            </Box>
+                        );
+                    })}
+                </Box>
+                {/* <table>
+                    <tbody>
+                        {Object.keys(metadata1).map((item, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td>{item}</td>
+                                    <td style={{ paddingLeft: '10px' }}>
+                                        {metadata1[item]}
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+                <table>
+                    <tbody>
+                        {Object.keys(metadata2).map((item, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td>{item}</td>
+                                    <td style={{ paddingLeft: '10px' }}>
+                                        {metadata2[item]}
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                        <tr></tr>
+                        <tr></tr>
+                    </tbody>
+                </table> */}
+            </Box>
+            {hpiTexts.length > 0 && (
+                <Box className={style.genNoteDetail} id='copy-notes'>
+                    <HpiNote text={hpiTexts} isParagraphFormat={false} />
+                </Box>
+            )}
+        </Box>
+    );
+
     return (
         <Box>
             <Box className={style.genNoteHeader}>
@@ -272,218 +404,141 @@ const GeneratedNoteContent = ({
                     Copy Note
                 </Box>
             </Box>
-            <Box className={style.genNoteContent}>
-                <Box className={style.genNoteTitle}>
-                    <Box className={style.genNoteTitle__logoBox}>
-                        <Image
-                            height={54}
-                            width={54}
-                            src={institution?.logo || '/images/cydoc-logo.svg'}
-                            alt={institution?.name || 'Cydoc'}
-                        />
-                        <div>
-                            <Typography
-                                className={style.genNoteTitle__logoBox__title}
-                                sx={{
-                                    fontFamily: 'Nunito !important',
-                                    fontWeight: 'bold !important',
-                                }}
-                            >
-                                {institution?.name || 'Cydoc'}
-                            </Typography>
-                        </div>
-                    </Box>
-                    <Typography component={'p'} sx={{ pt: '8px' }}>
-                        Psychological Evaluation
-                    </Typography>
-                </Box>
-                <Box className={style.genNoteBody}>
-                    <Box className={style.genNoteBody__left}>
-                        {Object.keys(metadata1).map((item, index) => {
-                            return (
-                                <Box
-                                    key={index}
-                                    className={style.genNoteBody__Item1}
-                                >
-                                    <Typography variant='h3'>
-                                        {item ? `${item}:` : ''}
-                                    </Typography>
-                                    <Typography component={'p'}>
-                                        {metadata1[item]}
-                                    </Typography>
-                                </Box>
-                            );
-                        })}
-                    </Box>
-                    <Box>
-                        {Object.keys(metadata2).map((item, index) => {
-                            return (
-                                <Box
-                                    key={index}
-                                    className={style.genNoteBody__Item2}
-                                >
-                                    <Typography variant='h3'>
-                                        {item ? `${item}:` : ''}
-                                    </Typography>
-                                    <Typography component={'p'}>
-                                        {metadata2[item]}
-                                    </Typography>
-                                </Box>
-                            );
-                        })}
-                    </Box>
-                </Box>
-                {hpiTexts.length > 0 && (
-                    <Box className={style.genNoteDetail} id='copy-notes'>
-                        <HpiNote text={hpiTexts} isParagraphFormat={false} />
-                    </Box>
+            {renderBody}
+            <Box className={style.genNoteSource}>
+                <Typography variant='h1'>Source Data (Forms)</Typography>
+                {!selectedTemplate?.steps && (
+                    <div className={style.nodata}>
+                        <Typography variant='body2' align='center' paddingY={5}>
+                            No forms found
+                        </Typography>
+                    </div>
                 )}
-                <Box className={style.genNoteSource}>
-                    <Typography variant='h1'>Source Data (Forms)</Typography>
-                    {!selectedTemplate?.steps && (
-                        <div className={style.nodata}>
-                            <Typography
-                                variant='body2'
-                                align='center'
-                                paddingY={5}
+                {selectedTemplate &&
+                    selectedTemplate.steps &&
+                    selectedTemplate.steps.map((item, index) => {
+                        let statusStyle = {};
+                        let dotStyle = {};
+                        let textStyle = {};
+                        const status =
+                            formStatuses[item.formCategory] ||
+                            FormStatus.Not_Started;
+                        const form = allDiseaseForms.find(
+                            (form) => form.diseaseKey === item.formCategory
+                        );
+                        switch (status) {
+                            case FormStatus.Not_Started:
+                                statusStyle = {
+                                    backgroundColor: '#F5F5F5',
+                                };
+                                dotStyle = { backgroundColor: '#7F8485' };
+                                textStyle = { color: '#00000099' };
+                                break;
+                            case FormStatus.Finished:
+                                statusStyle = {
+                                    backgroundColor: '#EAF3F5',
+                                };
+                                dotStyle = { backgroundColor: '#057A9B' };
+                                textStyle = { color: '#057A9B' };
+                                break;
+                            case FormStatus.In_Progress:
+                                statusStyle = {
+                                    backgroundColor: '#EFA7001A',
+                                };
+                                dotStyle = { backgroundColor: '#EFA700' };
+                                textStyle = { color: '#EFA700' };
+                                break;
+                            default:
+                                statusStyle = {
+                                    backgroundColor: '#F5F5F5',
+                                };
+                                dotStyle = { backgroundColor: '#7F8485' };
+                                textStyle = { color: '#00000099' };
+                        }
+
+                        let link;
+                        if (item.completedBy === WhoCompletes.Cydoc_ai) {
+                            link = 'javascript: void(0)'; // Disable link for Cydoc.ai
+                        } else {
+                            const params = new URLSearchParams();
+                            params.append('institution_id', institutionId);
+                            params.append(
+                                'appointment_id',
+                                selectedAppointment.id
+                            );
+                            params.append(
+                                'form_category',
+                                item.formCategory || ''
+                            );
+                            params.append('form_name', form?.diseaseName || '');
+                            params.append(
+                                'appointment_template_id',
+                                selectedTemplate.id
+                            );
+                            params.append('template_step_id', item.id);
+                            params.append('appointment_date', appointmentDate);
+                            params.append(
+                                'patient_id',
+                                selectedAppointment.patientId
+                            );
+
+                            link = `${window.location.origin}/hpi/form-advance?${params.toString()}`;
+                        }
+
+                        return (
+                            <a
+                                key={index}
+                                target={
+                                    item.completedBy === WhoCompletes.Cydoc_ai
+                                        ? '_self'
+                                        : '_blank'
+                                }
+                                rel='noreferrer'
+                                href={link}
                             >
-                                No forms found
-                            </Typography>
-                        </div>
-                    )}
-                    {selectedTemplate &&
-                        selectedTemplate.steps &&
-                        selectedTemplate.steps.map((item, index) => {
-                            let statusStyle = {};
-                            let dotStyle = {};
-                            let textStyle = {};
-                            const status =
-                                formStatuses[item.formCategory] ||
-                                FormStatus.Not_Started;
-                            const form = allDiseaseForms.find(
-                                (form) => form.diseaseKey === item.formCategory
-                            );
-                            switch (status) {
-                                case FormStatus.Not_Started:
-                                    statusStyle = {
-                                        backgroundColor: '#F5F5F5',
-                                    };
-                                    dotStyle = { backgroundColor: '#7F8485' };
-                                    textStyle = { color: '#00000099' };
-                                    break;
-                                case FormStatus.Finished:
-                                    statusStyle = {
-                                        backgroundColor: '#EAF3F5',
-                                    };
-                                    dotStyle = { backgroundColor: '#057A9B' };
-                                    textStyle = { color: '#057A9B' };
-                                    break;
-                                case FormStatus.In_Progress:
-                                    statusStyle = {
-                                        backgroundColor: '#EFA7001A',
-                                    };
-                                    dotStyle = { backgroundColor: '#EFA700' };
-                                    textStyle = { color: '#EFA700' };
-                                    break;
-                                default:
-                                    statusStyle = {
-                                        backgroundColor: '#F5F5F5',
-                                    };
-                                    dotStyle = { backgroundColor: '#7F8485' };
-                                    textStyle = { color: '#00000099' };
-                            }
-
-                            let link;
-                            if (item.completedBy === WhoCompletes.Cydoc_ai) {
-                                link = 'javascript: void(0)'; // Disable link for Cydoc.ai
-                            } else {
-                                const params = new URLSearchParams();
-                                params.append('institution_id', institutionId);
-                                params.append(
-                                    'appointment_id',
-                                    selectedAppointment.id
-                                );
-                                params.append(
-                                    'form_category',
-                                    item.formCategory || ''
-                                );
-                                params.append(
-                                    'form_name',
-                                    form?.diseaseName || ''
-                                );
-                                params.append(
-                                    'appointment_template_id',
-                                    selectedTemplate.id
-                                );
-                                params.append('template_step_id', item.id);
-                                params.append(
-                                    'appointment_date',
-                                    appointmentDate
-                                );
-                                params.append(
-                                    'patient_id',
-                                    selectedAppointment.patientId
-                                );
-
-                                link = `${window.location.origin}/hpi/form-advance?${params.toString()}`;
-                            }
-
-                            return (
-                                <a
-                                    key={index}
-                                    target={
-                                        item.completedBy ===
-                                        WhoCompletes.Cydoc_ai
-                                            ? '_self'
-                                            : '_blank'
-                                    }
-                                    rel='noreferrer'
-                                    href={link}
-                                >
-                                    <Box className={style.genNoteSource__Item}>
-                                        <Box
-                                            className={
-                                                style.genNoteSource__ItemIcon
-                                            }
-                                        >
-                                            <img
-                                                src={getReporterIcon(
-                                                    item.completedBy
-                                                )}
-                                                alt={`${item.completedBy}`}
-                                            />
-                                            <Typography variant='h3'>
-                                                {item.completedBy ===
-                                                WhoCompletes.Cydoc_ai
-                                                    ? item.taskType
-                                                    : form?.diseaseName ||
-                                                      item.formCategory}
-                                            </Typography>
-                                        </Box>
-                                        <Box
-                                            style={statusStyle}
-                                            className={
-                                                style.genNoteSource__ItemStatus
-                                            }
-                                        >
-                                            <Box
-                                                style={dotStyle}
-                                                className={
-                                                    style.genNoteSource__ItemStatus__circle
-                                                }
-                                            />
-                                            <Typography
-                                                component={'p'}
-                                                style={textStyle}
-                                            >
-                                                {status}
-                                            </Typography>
-                                        </Box>
+                                <Box className={style.genNoteSource__Item}>
+                                    <Box
+                                        className={
+                                            style.genNoteSource__ItemIcon
+                                        }
+                                    >
+                                        <img
+                                            src={getReporterIcon(
+                                                item.completedBy
+                                            )}
+                                            alt={`${item.completedBy}`}
+                                        />
+                                        <Typography variant='h3'>
+                                            {item.completedBy ===
+                                            WhoCompletes.Cydoc_ai
+                                                ? item.taskType
+                                                : form?.diseaseName ||
+                                                  item.formCategory}
+                                        </Typography>
                                     </Box>
-                                </a>
-                            );
-                        })}
-                </Box>
+                                    <Box
+                                        style={statusStyle}
+                                        className={
+                                            style.genNoteSource__ItemStatus
+                                        }
+                                    >
+                                        <Box
+                                            style={dotStyle}
+                                            className={
+                                                style.genNoteSource__ItemStatus__circle
+                                            }
+                                        />
+                                        <Typography
+                                            component={'p'}
+                                            style={textStyle}
+                                        >
+                                            {status}
+                                        </Typography>
+                                    </Box>
+                                </Box>
+                            </a>
+                        );
+                    })}
             </Box>
         </Box>
     );
