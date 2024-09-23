@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 import HpiNote from '@screens/EditNote/content/generatenote/notesections/HPINote';
 import { toast } from 'react-toastify';
-import { Box, Typography } from '@mui/material';
+import { Box, Divider, Typography } from '@mui/material';
 import { Appointment, AppointmentTemplate, Institution } from '@cydoc-ai/types';
 import {
     FormStatus,
@@ -323,70 +323,50 @@ const GeneratedNoteContent = ({
                 </Typography>
             </Box>
             <Box className={style.genNoteBody}>
-                <Box className={style.genNoteBody__left}>
-                    {Object.keys(metadata1).map((item, index) => {
-                        return (
-                            <Box
-                                key={index}
-                                className={style.genNoteBody__Item1}
-                            >
-                                <Typography variant='h3'>
-                                    {item ? `${item}:` : ''}
-                                </Typography>
-                                <Typography component={'p'}>
-                                    {metadata1[item]}
-                                </Typography>
-                            </Box>
-                        );
-                    })}
-                </Box>
-                <Box>
-                    {Object.keys(metadata2).map((item, index) => {
-                        return (
-                            <Box
-                                key={index}
-                                className={style.genNoteBody__Item2}
-                            >
-                                <Typography variant='h3'>
-                                    {item ? `${item}:` : ''}
-                                </Typography>
-                                <Typography component={'p'}>
-                                    {metadata2[item]}
-                                </Typography>
-                            </Box>
-                        );
-                    })}
-                </Box>
-                {/* <table>
-                    <tbody>
-                        {Object.keys(metadata1).map((item, index) => {
-                            return (
-                                <tr key={index}>
-                                    <td>{item}</td>
-                                    <td style={{ paddingLeft: '10px' }}>
-                                        {metadata1[item]}
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
                 <table>
                     <tbody>
                         {Object.keys(metadata2).map((item, index) => {
                             return (
                                 <tr key={index}>
-                                    <td>{item}</td>
-                                    <td style={{ paddingLeft: '10px' }}>
-                                        {metadata2[item]}
+                                    <td
+                                        className={
+                                            style.genNoteBody__noteHeading
+                                        }
+                                    >
+                                        {Object.keys(metadata1)[index]} :{' '}
                                     </td>
+                                    <td className='pl-10'>
+                                        {
+                                            metadata1[
+                                                Object.keys(metadata1)[index]
+                                            ]
+                                        }
+                                    </td>
+                                    <td
+                                        className={`
+                                            ${style.genNoteBody__noteHeading} pl-30
+                                        `}
+                                    >
+                                        {item} :{' '}
+                                    </td>
+                                    <td className='pl-10'>{metadata2[item]}</td>
                                 </tr>
                             );
                         })}
-                        <tr></tr>
-                        <tr></tr>
+                        <tr>
+                            <td className={style.genNoteBody__noteHeading}>
+                                Education:{' '}
+                            </td>
+                            <td className='pl-10'>{metadata1['Education']}</td>
+                        </tr>
+                        <tr>
+                            <td className={style.genNoteBody__noteHeading}>
+                                Occupation:{' '}
+                            </td>
+                            <td className='pl-10'>{metadata1['Occupation']}</td>
+                        </tr>
                     </tbody>
-                </table> */}
+                </table>
             </Box>
             {hpiTexts.length > 0 && (
                 <Box className={style.genNoteDetail} id='copy-notes'>

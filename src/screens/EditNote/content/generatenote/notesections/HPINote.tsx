@@ -66,7 +66,8 @@ const HpiNote = ({
         // Display the generated notes as a paragraph:
         if (isAdvancedReport || isParagraphFormat) {
             return (
-                <div key={item.title} style={{ marginBottom: '10px' }}>
+                <div key={item.title}>
+                    <br />
                     <b>{item.title}</b>
                     <br />
                     {headingsAndTexts.map(({ heading, normalText }, index) => (

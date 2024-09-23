@@ -111,8 +111,6 @@
     border-bottom: 2px solid $color-primary-light;
     display: flex;
     flex-wrap: wrap;
-    // align-items: flex-start;
-    // gap: 30px;
 
     @include max-screen($mobile) {
         display: block;
@@ -189,21 +187,26 @@
     }
 
     table {
+        border-collapse: collapse;
+        min-height: 116px;
+
         tbody tr td {
-            padding: 5px 0;
             font-family: $font-family-primary;
             font-size: 14px;
             font-weight: $font-weight-normal;
-            line-height: 20.02px;
-            letter-spacing: 0.17px;
+            line-height: 21px;
+            letter-spacing: 0.15px;
             text-align: left;
             color: rgba($color-black, 0.9);
         }
     }
+
+    &__noteHeading {
+        font-weight: $font-weight-semibold !important;
+    }
 }
 
 .genNoteDetail {
-    padding-top: 14px;
     overflow-y: auto;
     max-height: calc(100vh - 280px);
 }
