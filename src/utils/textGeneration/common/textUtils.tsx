@@ -147,9 +147,11 @@ export const replaceMappedWords = (
             'gi'
         );
         hpiString = hpiString.replace(regex, (match, punctuation) => {
+            // Check if the match is numeric or not
+            const isNotNumbericMatch = isNaN(parseFloat(match[0].trim()));
             // Preserve the original case of the first letter
             const replacement =
-                match[0] === match[0].toUpperCase()
+                isNotNumbericMatch && match[0] === match[0].toUpperCase()
                     ? capitalizeFirstLetter(value)
                     : value;
             return `${replacement}${punctuation}`;
