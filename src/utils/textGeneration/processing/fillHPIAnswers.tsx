@@ -18,16 +18,15 @@ export const fillAnswers = (hpi: HPI): string => {
 
     let hpiString = '';
     sortedKeys.forEach((key) => {
-        let [fillSentence, answer, negAnswer] = hpi[key] || hpi[key.toString()];
-        answer = fullClean(answer);
-        negAnswer = fullClean(negAnswer);
-        fillSentence = fullClean(fillSentence);
+        let fillSentence = hpi[key][0] || hpi[key.toString()][0];
+        const answer = hpi[key][1] || hpi[key.toString()][1];
+        const negAnswer = hpi[key][2] || hpi[key.toString()][2];
 
         // 1. Handle the 'ANSWER' placeholder
-        if (!answer.length)
+        if (!answer.length) {
             // If there's no answer, remove 'ANSWER' from the fillSentence
             fillSentence = removeSentence(fillSentence, 'ANSWER');
-        else if (answer === 'all no') {
+        } else if (answer === 'all no') {
             // If the answer is 'all no', keep everything after 'ANSWER_'.
             // e.g. 'Question 6 reports ANSWER. Question 6 denies NOTANSWER.' --> 'Question 6 denies NOTANSWER.'
             fillSentence = fillSentence.substring(
@@ -98,7 +97,7 @@ const removeSentence = (fillSentence: string, keyword: string): string => {
     const containsBoth = (sentence: string): boolean =>
         /\bANSWER\b/.test(sentence) && /\bNOTANSWER\b/.test(sentence);
     // Split by period followed by a space but retain the periods in the result
-    return splitByPeriod(fillSentence)
+    return splitByPeriod(fillSentence, true)
         .filter(
             (sentence) =>
                 // Keep the sentence if it doesn't contain the keyword or if
@@ -131,9 +130,9 @@ export const isAnswerWithinQuotes = (sentence: string): boolean => {
  * A Helper Function to check if string has I in it, if so, returns it with quotes around.
  *
  * NOTE: If `fillSentence` contains the keyword 'ANSWER' and is within quotation marks
- * (determined by `isAnswerWithinQuotes`), only capitalizes "i" and trims spaces.
+ * (determined by `isAnswerWithinQuotes`), only capitalizes "i".
  * Otherwise, if "I" is present and `fillSentence` is not in quotes, adds quotes
- * around the string, capitalizes "i", and trims spaces.
+ * around the string, capitalizes "i".
  * e.g. ' I love my cat. ' --> '"I love my cat."'
  *
  * Used in fillAnswers.
@@ -142,17 +141,17 @@ const putQuotesAroundFirstPerson = (
     str: string,
     fillSentence: string
 ): string => {
-    str = ' ' + str + ' ';
     //Check if keyword 'ANSWER' in the fillSentence is within quotation marks
     // not need to add quotation marks.
     if (isAnswerWithinQuotes(fillSentence)) {
         return str.includes(' i ') || str.includes(' I ')
-            ? str.replace(/ i /, ' I ').trim()
-            : str.trim();
+            ? str.replace(/ i /, ' I ')
+            : str;
+    } else {
+        return str.includes(' i ') || str.includes(' I ')
+            ? '" ' + str.replace(/ i /, ' I ') + ' "'
+            : str;
     }
-    return str.includes(' i ') || str.includes(' I ')
-        ? '"' + str.replace(/ i /, ' I ').trim() + '"'
-        : str.trim();
 };
 
 /**
