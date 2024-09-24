@@ -1,6 +1,7 @@
 @import '../../assets/scss/variables.scss';
 
 .editNote {
+    width: 100%;
     padding: 50px 0 20px;
 
     @include max-screen($tablet) {
