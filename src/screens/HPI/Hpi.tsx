@@ -26,7 +26,13 @@ import {
 import { log } from 'modules/logging';
 import { hpiHeaders as knowledgeGraphAPI } from '@screens/EditNote/content/hpi/knowledgegraph/API';
 import initialQuestions from '@screens/EditNote/content/patientview/constants/initialQuestions';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { updateActiveItem } from '@redux/actions/activeItemActions';
@@ -104,6 +110,7 @@ const HPI = () => {
         () => chiefComplaintsForModal.filter((item) => item.isSelected),
         [chiefComplaintsForModal]
     );
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const institutionId = query?.get(HPIPatientQueryParams.INSTITUTION_ID);
 
@@ -504,6 +511,12 @@ const HPI = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
+        if (containerRef.current) {
+            containerRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+            });
+        }
     }, [activeItem, dispatch]);
 
     useEffect(() => {
@@ -597,7 +610,7 @@ const HPI = () => {
     ]);
 
     return (
-        <div style={{ width: '100%' }}>
+        <div style={{ width: '100%' }} ref={containerRef}>
             <div className={style.editNote}>
                 <div className='centering'>
                     <Stepper tabs={currentTabs} onTabChange={onTabChange} />

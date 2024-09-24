@@ -6,18 +6,29 @@ import Image from 'next/image';
 
 import HpiNote from '@screens/EditNote/content/generatenote/notesections/HPINote';
 import { toast } from 'react-toastify';
-import { Box, Divider, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { Appointment, AppointmentTemplate, Institution } from '@cydoc-ai/types';
 import {
     FormStatus,
     WhoCompletes,
 } from '@constants/appointmentTemplatesConstants';
+import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
+import { selectAdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
+import { selectFamilyHistoryState } from '@redux/selectors/familyHistorySelectors';
+import { selectMedicationsState } from '@redux/selectors/medicationsSelectors';
+import { selectMedicalHistoryState } from '@redux/selectors/medicalHistorySelector';
+import { selectPatientInformationState } from '@redux/selectors/patientInformationSelector';
+import { selectSurgicalHistoryProcedures } from '@redux/selectors/surgicalHistorySelectors';
 import { getFilledForm } from '@modules/filled-form-api';
 import { DiseaseForm } from '@cydoc-ai/types/dist/disease';
-import { HPIText } from '@utils/textGeneration/extraction/getHPIArray';
-import { isArray } from 'lodash';
+import {
+    HPIText,
+    WholeNoteReduxValues,
+} from '@utils/textGeneration/extraction/getHPIArray';
 import { RCONNELL_ADULT_MEDID } from '@constants/enums/chiefComplaints.enums';
 import { getInstitution } from '@modules/institution-api';
+import { useSelector } from 'react-redux';
+import getHPIFormData from '@utils/getHPIFormData';
 
 interface GeneratedNoteContentProps {
     selectedAppointment: Appointment;
@@ -31,12 +42,7 @@ const GeneratedNoteContent = ({
     allDiseaseForms,
     user,
 }: GeneratedNoteContentProps) => {
-    const {
-        patient,
-        institutionId,
-        appointmentDate,
-        notes = [],
-    } = selectedAppointment;
+    const { patient, institutionId, appointmentDate } = selectedAppointment;
 
     const { firstName, middleName, lastName, dob } = patient;
     const [formStatuses, setFormStatuses] = useState<{
@@ -61,32 +67,15 @@ const GeneratedNoteContent = ({
 
     const [metadata1, setMetadata1] = useState(data1);
     const [metadata2, setMetadata2] = useState(data2);
+    const [hpiTexts, setHpiTexts] = useState<HPIText[]>([]);
 
-    const filteredNotes = {};
-    for (const note of notes) {
-        const hpi = JSON.parse(note.hpi);
-        if (isArray(hpi)) {
-            for (const item of hpi) {
-                if (!filteredNotes[item.title]) {
-                    filteredNotes[item.title] = {
-                        item: item,
-                        createdAt: new Date(note.createdDate),
-                    };
-                } else {
-                    const createdAt = new Date(note.createdDate);
-                    if (createdAt > filteredNotes[item.title].createdAt) {
-                        filteredNotes[item.title] = {
-                            item: item,
-                            createdAt: new Date(note.createdDate),
-                        };
-                    }
-                }
-            }
-        }
-    }
-    const hpiTexts = Object.values(filteredNotes).map(
-        (note: Record<string, HPIText>) => note.item
-    );
+    const additionalSurvey = useSelector(selectAdditionalSurvey);
+    const userSurveyState = useSelector(selectInitialPatientSurvey);
+    const familyHistoryState = useSelector(selectFamilyHistoryState);
+    const medicationsState = useSelector(selectMedicationsState);
+    const medicalHistoryState = useSelector(selectMedicalHistoryState);
+    const patientInformationState = useSelector(selectPatientInformationState);
+    const surgicalHistory = useSelector(selectSurgicalHistoryProcedures);
 
     useEffect(() => {
         const getFilledForms = async () => {
@@ -94,6 +83,7 @@ const GeneratedNoteContent = ({
                 return;
             }
             const promises = selectedTemplate?.steps
+                .sort((a, b) => a.stepOrder - b.stepOrder)
                 .filter((step) => step.completedBy != WhoCompletes.Cydoc_ai)
                 .map(async (step) => {
                     return getFilledForm(
@@ -102,28 +92,62 @@ const GeneratedNoteContent = ({
                         step.formCategory
                     );
                 });
-            const filledForms = await Promise.all(promises);
-            const statuses = filledForms
+            const filledForms = (await Promise.all(promises))
                 .filter((form) => form && form.data.filled_form)
-                .map((form) => form!.data.filled_form)
-                .reduce(
-                    (acc, form) => ({
-                        ...acc,
-                        [form.formCategory]: form.status,
-                    }),
-                    {}
-                );
+                .map((form) => form!.data.filled_form);
+            const statuses = filledForms.reduce(
+                (acc, form) => ({
+                    ...acc,
+                    [form.formCategory]: form.status,
+                }),
+                {}
+            );
             setFormStatuses(statuses);
 
+            const generatedHpi = filledForms
+                .filter(
+                    (form) =>
+                        statuses[form.formCategory] === FormStatus.Finished ||
+                        statuses[form.formCategory] === FormStatus.In_Progress
+                )
+                .map((form) => {
+                    const hpiState = form.formContent;
+                    const formCategory = form.formCategory;
+                    const formName =
+                        allDiseaseForms.find(
+                            (form) => form.diseaseKey === formCategory
+                        )?.diseaseName || '';
+                    const state: WholeNoteReduxValues = {
+                        hpi: hpiState,
+                        familyHistory: familyHistoryState,
+                        medications: medicationsState,
+                        surgicalHistory: surgicalHistory,
+                        medicalHistory: medicalHistoryState,
+                        patientInformation: patientInformationState,
+                        chiefComplaints: {
+                            [formName]: '',
+                        },
+                        userSurvey: userSurveyState,
+                    };
+                    return getHPIFormData(
+                        additionalSurvey,
+                        userSurveyState,
+                        state
+                    );
+                });
+
+            const hpiTexts = generatedHpi
+                .map((hpi) => JSON.parse(hpi.hpi_text))
+                .flat()
+                .filter((hpi) => !!hpi.title && !!hpi.text.trim()) as HPIText[];
+            setHpiTexts(hpiTexts);
+
             const rconnellAdultForm = filledForms.find(
-                (form) =>
-                    form &&
-                    form.data.filled_form.formCategory === 'RCONNELL_ADULT'
+                (form) => form && form.formCategory === 'RCONNELL_ADULT'
             );
 
             if (rconnellAdultForm) {
-                const formContent =
-                    rconnellAdultForm.data.filled_form.formContent;
+                const formContent = rconnellAdultForm.formContent;
 
                 let education = '-/-';
                 let occupation = '-/-';

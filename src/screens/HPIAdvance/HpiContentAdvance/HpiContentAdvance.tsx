@@ -304,7 +304,9 @@ function NextSubmitButton({
         <NavigationButton
             nextClick={nextClick}
             loading={loading}
-            secondButtonLabel={shouldShowNextButton ? 'Next' : 'Submit'}
+            secondButtonLabel={
+                shouldShowNextButton ? 'Next' : 'Mark as Finished'
+            }
         />
     );
 }

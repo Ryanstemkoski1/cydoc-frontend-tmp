@@ -1,26 +1,15 @@
 import { MouseEvent, default as React, useEffect, useRef } from 'react';
 import style from './CreatePatientModal.module.scss';
 import { Box, Typography } from '@mui/material';
-import Dropdown from '@components/Input/Dropdown';
 import CloseIcon from '@mui/icons-material/Close';
 import CustomTextField from '@components/Input/CustomTextField';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateAdditionalSurveyDetails } from '@redux/actions/additionalSurveyActions';
 import { initialSurveyAddDateOrPlace } from '@redux/actions/userViewActions';
-import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
 import useQuery from '@hooks/useQuery';
 import useUser from '@hooks/useUser';
 import { apiClient } from '@constants/api';
 import { HPIPatientQueryParams } from '@constants/enums/hpi.patient.enums';
-import getHPIFormData from '@utils/getHPIFormData';
-import { selectAdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
-import { selectFamilyHistoryState } from '@redux/selectors/familyHistorySelectors';
-import { selectMedicationsState } from '@redux/selectors/medicationsSelectors';
-import { selectHpiState } from '@redux/selectors/hpiSelectors';
-import { selectMedicalHistoryState } from '@redux/selectors/medicalHistorySelector';
-import { selectPatientInformationState } from '@redux/selectors/patientInformationSelector';
-import { selectSurgicalHistoryProcedures } from '@redux/selectors/surgicalHistorySelectors';
-import { selectChiefComplaintsState } from '@redux/selectors/chiefComplaintsSelectors';
 import MobileDatePicker from '@components/Input/MobileDatePicker';
 import useIsMobile from '@hooks/useIsMobile';
 import { AppointmentTemplate } from '@cydoc-ai/types';
@@ -53,16 +42,6 @@ const CreatePatientModal = ({
 
     const query = useQuery();
     const { user } = useUser();
-
-    const additionalSurvey = useSelector(selectAdditionalSurvey);
-    const userSurveyState = useSelector(selectInitialPatientSurvey);
-    const chiefComplaints = useSelector(selectChiefComplaintsState);
-    const hpi = useSelector(selectHpiState);
-    const familyHistoryState = useSelector(selectFamilyHistoryState);
-    const medicationsState = useSelector(selectMedicationsState);
-    const medicalHistoryState = useSelector(selectMedicalHistoryState);
-    const patientInformationState = useSelector(selectPatientInformationState);
-    const surgicalHistory = useSelector(selectSurgicalHistoryProcedures);
     const isMobile = useIsMobile();
 
     const handleClickOutsideModal = (event: MouseEvent<HTMLDivElement>) => {
