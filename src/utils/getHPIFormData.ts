@@ -17,14 +17,15 @@ function sanitizeString(str: string) {
 export default function getHPIFormData(
     additionalSurvey: AdditionalSurvey,
     userSurvey: UserSurveyState,
-    state: WholeNoteReduxValues
+    state: WholeNoteReduxValues,
+    patientLastName?: string
 ) {
     const {
-        legalFirstName: first_name = '',
-        legalMiddleName: middle_name = '',
-        legalLastName: last_name = '',
-        dateOfBirth: date_of_birth = '',
-        socialSecurityNumber: last_4_ssn = '',
+        legalFirstName: first_name,
+        legalMiddleName: middle_name,
+        legalLastName: last_name,
+        dateOfBirth: date_of_birth,
+        socialSecurityNumber: last_4_ssn,
     } = additionalSurvey;
 
     // Set patientName to the value from additionalSurvey.legalLastName.
@@ -32,9 +33,11 @@ export default function getHPIFormData(
         ...state,
         patientInformation: {
             ...state.patientInformation,
-            patientName: additionalSurvey.legalLastName
-                ? additionalSurvey.legalLastName
-                : '',
+            patientName: patientLastName
+                ? patientLastName
+                : additionalSurvey.legalLastName
+                  ? additionalSurvey.legalLastName
+                  : '',
         },
     };
 

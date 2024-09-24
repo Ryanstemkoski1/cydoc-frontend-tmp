@@ -132,7 +132,8 @@ const GeneratedNoteContent = ({
                     return getHPIFormData(
                         additionalSurvey,
                         userSurveyState,
-                        state
+                        state,
+                        lastName
                     );
                 });
 

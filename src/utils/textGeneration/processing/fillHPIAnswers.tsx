@@ -49,8 +49,16 @@ export const fillAnswers = (hpi: HPI): string => {
             fillSentence = fillSentence.replace(/NOTANSWER/, negAnswer);
         }
 
-        // 3. Handle 'PARAGRAPHBREAK' token
-        fillSentence = fillSentence.replace(/PARAGRAPHBREAK/g, '\n\n');
+        // Check if hpiString ends with newlines, and fillSentence is two newlines characters
+        const addNewLines = !(
+            hpiString.endsWith('\n\n') &&
+            fillSentence.includes('PARAGRAPHBREAK')
+        );
+
+        // 3. Handle 'PARAGRAPHBREAK' token if addNewLines is available
+        fillSentence = addNewLines
+            ? fillSentence.replace(/PARAGRAPHBREAK/g, '\n\n')
+            : fillSentence;
 
         // 4. Handle the incorrect combined puncturation in the fillSentence.
         fillSentence = handleCombinedPunctuation(fillSentence);
@@ -58,6 +66,10 @@ export const fillAnswers = (hpi: HPI): string => {
         // Combines all fillSentence
         hpiString += `${fillSentence} `;
     });
+    // Handle to only allow two new lines at the end of hpistring.
+    hpiString = hpiString
+        .replace(/(\n{3,})$/, '\n\n')
+        .replace(/(\n{1,2})$/, '\n\n');
     return hpiString;
 };
 
