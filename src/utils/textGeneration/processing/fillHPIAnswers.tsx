@@ -51,7 +51,7 @@ export const fillAnswers = (hpi: HPI): string => {
         }
 
         // 3. Handle 'PARAGRAPHBREAK' token
-        fillSentence = fillSentence.replace(/PARAGRAPHBREAK/g, '\n');
+        fillSentence = fillSentence.replace(/PARAGRAPHBREAK/g, '\n\n');
 
         // 4. Handle the incorrect combined puncturation in the fillSentence.
         fillSentence = handleCombinedPunctuation(fillSentence);
