@@ -8,4 +8,5 @@ export const RCONNELL_ADULT_MEDID = {
     Education_Degree: 'RCN0062',
     Occupation: 'RCN0130',
     Reffered_By: 'RCN0006',
+    Prefered_Pronoun: 'RCN0003',
 };
