@@ -34,7 +34,6 @@ import { graphClientURL } from '@constants/api';
 import { getAppointmentDetail } from '@modules/appointment-api';
 import useAuth from '@hooks/useAuth';
 import { getFilledForm } from '@modules/filled-form-api';
-import { FormStatus } from '@constants/appointmentTemplatesConstants';
 
 export interface OnNextClickParams {
     allSelectedChiefComplaints?: string[];

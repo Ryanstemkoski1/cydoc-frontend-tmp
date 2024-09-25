@@ -38,6 +38,7 @@ import ToastOptions from '@constants/ToastOptions';
 import { addAppointmentNote } from '@modules/appointment-api';
 import { CognitoAuth } from 'auth/cognito';
 import { ApiResponse } from '@cydoc-ai/types';
+import { HpiState } from '@redux/reducers/hpiReducer';
 
 interface OwnProps {
     notification: {
@@ -62,6 +63,7 @@ interface State {
     formCategory: string;
     saveFormLoading: boolean;
     timer: NodeJS.Timeout | undefined;
+    currentStatus: FormStatus;
 }
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -88,6 +90,7 @@ class HPIContent extends React.Component<Props, State> {
             formCategory: query.get('form_category')!,
             saveFormLoading: false,
             timer: undefined,
+            currentStatus: query.get('status')! as FormStatus,
         };
     }
 
@@ -104,7 +107,7 @@ class HPIContent extends React.Component<Props, State> {
             data.then((res) => this.props.saveHpiHeader(res.data));
         }
 
-        this.handleOnSave(FormStatus.In_Progress, true);
+        this.handleOnSave(this.state.currentStatus, true);
     }
 
     shouldShowNextButton = () => {
@@ -123,7 +126,33 @@ class HPIContent extends React.Component<Props, State> {
         return result;
     };
 
-    handleOnSave = async (status = FormStatus.In_Progress, silent = false) => {
+    getFormStatus = () => {
+        if (!this.props.hpi) {
+            return FormStatus.Not_Started;
+        }
+        if (this.state.currentStatus === FormStatus.Finished) {
+            return FormStatus.Finished;
+        }
+
+        const nodes = Object.values(this.props.hpi.nodes);
+        const notResponseYet = (node: HpiState['nodes'][string]) => {
+            return (
+                !node.response ||
+                node.response === '' ||
+                (typeof node.response === 'object' &&
+                    Object.keys(node.response).length === 0)
+            );
+        };
+        if (nodes.every(notResponseYet)) {
+            return FormStatus.Not_Started;
+        }
+        if (nodes.every((node) => !notResponseYet(node))) {
+            return FormStatus.Finished;
+        }
+        return FormStatus.In_Progress;
+    };
+
+    handleOnSave = async (status: FormStatus | undefined, silent = false) => {
         const formContent = this.props.hpi;
         // Save filled_form to Database
         this.setState({
@@ -135,17 +164,22 @@ class HPIContent extends React.Component<Props, State> {
         }
 
         try {
-            await postFilledForm({
-                appointmentId: this.state.appointmentId,
-                appointmentTemplateStepId: this.state.templateStepId!,
-                formCategory: this.state.formCategory,
-                formContent,
-                status,
-            });
+            if (!status) {
+                status = this.getFormStatus();
+            }
+            if (status !== FormStatus.Not_Started) {
+                await postFilledForm({
+                    appointmentId: this.state.appointmentId,
+                    appointmentTemplateStepId: this.state.templateStepId!,
+                    formCategory: this.state.formCategory,
+                    formContent,
+                    status,
+                });
+            }
             !silent && toast.success('Form saved!', ToastOptions.success);
 
             const timer = setTimeout(() => {
-                this.handleOnSave(FormStatus.In_Progress, true);
+                this.handleOnSave(this.getFormStatus(), true);
             }, AUTO_SAVE_FORM_INTERVAL);
 
             this.setState({

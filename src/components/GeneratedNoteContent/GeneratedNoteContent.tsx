@@ -19,6 +19,7 @@ import { selectMedicationsState } from '@redux/selectors/medicationsSelectors';
 import { selectMedicalHistoryState } from '@redux/selectors/medicalHistorySelector';
 import { selectPatientInformationState } from '@redux/selectors/patientInformationSelector';
 import { selectSurgicalHistoryProcedures } from '@redux/selectors/surgicalHistorySelectors';
+import { updatePatientPronouns } from '@redux/actions/patientInformationActions';
 import { getFilledForm } from '@modules/filled-form-api';
 import { DiseaseForm } from '@cydoc-ai/types/dist/disease';
 import {
@@ -29,6 +30,7 @@ import { RCONNELL_ADULT_MEDID } from '@constants/enums/chiefComplaints.enums';
 import { getInstitution } from '@modules/institution-api';
 import { useSelector } from 'react-redux';
 import getHPIFormData from '@utils/getHPIFormData';
+import { PatientPronouns } from '@constants/patientInformation';
 
 interface GeneratedNoteContentProps {
     selectedAppointment: Appointment;
@@ -104,45 +106,6 @@ const GeneratedNoteContent = ({
             );
             setFormStatuses(statuses);
 
-            const generatedHpi = filledForms
-                .filter(
-                    (form) =>
-                        statuses[form.formCategory] === FormStatus.Finished ||
-                        statuses[form.formCategory] === FormStatus.In_Progress
-                )
-                .map((form) => {
-                    const hpiState = form.formContent;
-                    const formCategory = form.formCategory;
-                    const formName =
-                        allDiseaseForms.find(
-                            (form) => form.diseaseKey === formCategory
-                        )?.diseaseName || '';
-                    const state: WholeNoteReduxValues = {
-                        hpi: hpiState,
-                        familyHistory: familyHistoryState,
-                        medications: medicationsState,
-                        surgicalHistory: surgicalHistory,
-                        medicalHistory: medicalHistoryState,
-                        patientInformation: patientInformationState,
-                        chiefComplaints: {
-                            [formName]: '',
-                        },
-                        userSurvey: userSurveyState,
-                    };
-                    return getHPIFormData(
-                        additionalSurvey,
-                        userSurveyState,
-                        state,
-                        lastName
-                    );
-                });
-
-            const hpiTexts = generatedHpi
-                .map((hpi) => JSON.parse(hpi.hpi_text))
-                .flat()
-                .filter((hpi) => !!hpi.title && !!hpi.text.trim()) as HPIText[];
-            setHpiTexts(hpiTexts);
-
             const rconnellAdultForm = filledForms.find(
                 (form) => form && form.formCategory === 'RCONNELL_ADULT'
             );
@@ -203,6 +166,19 @@ const GeneratedNoteContent = ({
                     }
                 }
 
+                // Get prefred pronoun
+                let pronoun = PatientPronouns.They;
+                const preferedPronounNode =
+                    nodes[RCONNELL_ADULT_MEDID.Prefered_Pronoun];
+                if (preferedPronounNode && preferedPronounNode.response) {
+                    const response = preferedPronounNode.response;
+                    if (response['she']) {
+                        pronoun = PatientPronouns.She;
+                    } else if (response['he']) {
+                        pronoun = PatientPronouns.He;
+                    }
+                }
+                updatePatientPronouns(pronoun);
                 setMetadata1({
                     ...metadata1,
                     Education: education,
@@ -213,6 +189,56 @@ const GeneratedNoteContent = ({
                     ...metadata2,
                     'Referred by': referredBy,
                 });
+
+                // Generate HPI
+                const generatedHpi = filledForms
+                    .filter(
+                        (form) =>
+                            statuses[form.formCategory] ===
+                                FormStatus.Finished ||
+                            statuses[form.formCategory] ===
+                                FormStatus.In_Progress
+                    )
+                    .map((form) => {
+                        const hpiState = form.formContent;
+                        const formCategory = form.formCategory;
+                        const formName =
+                            allDiseaseForms.find(
+                                (form) => form.diseaseKey === formCategory
+                            )?.diseaseName || '';
+                        const state: WholeNoteReduxValues = {
+                            hpi: hpiState,
+                            familyHistory: familyHistoryState,
+                            medications: medicationsState,
+                            surgicalHistory: surgicalHistory,
+                            medicalHistory: medicalHistoryState,
+                            patientInformation: {
+                                patientName:
+                                    selectedAppointment.patient.firstName +
+                                    ' ' +
+                                    selectedAppointment.patient.lastName,
+                                pronouns: pronoun,
+                            },
+                            chiefComplaints: {
+                                [formName]: '',
+                            },
+                            userSurvey: userSurveyState,
+                        };
+                        return getHPIFormData(
+                            additionalSurvey,
+                            userSurveyState,
+                            state,
+                            lastName
+                        );
+                    });
+
+                const hpiTexts = generatedHpi
+                    .map((hpi) => JSON.parse(hpi.hpi_text))
+                    .flat()
+                    .filter(
+                        (hpi) => !!hpi.title && !!hpi.text.trim()
+                    ) as HPIText[];
+                setHpiTexts(hpiTexts);
             } else {
                 setMetadata1({ ...data1 });
                 setMetadata2({ ...data2 });
@@ -486,6 +512,7 @@ const GeneratedNoteContent = ({
                                 'patient_id',
                                 selectedAppointment.patientId
                             );
+                            params.append('status', status);
 
                             link = `${window.location.origin}/hpi/form-advance?${params.toString()}`;
                         }
